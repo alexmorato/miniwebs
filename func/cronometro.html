@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, orientation=landscape">
+  <title>Cuenta atrás y cronómetro</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #display {
+      font-size: 6rem;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .bigButton {
+      font-size: 2rem;
+      padding: 20px 40px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .bigButton.paused {
+      background-color: #dc3545;
+    }
+
+    .bigButton:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="display">Pulsa para empezar</div>
+  <button id="startButton" class="bigButton">Iniciar</button>
+  <button id="controlButton" class="bigButton" style="display: none;">Pausa</button>
+
+  <script>
+    let display = document.getElementById('display');
+    let startButton = document.getElementById('startButton');
+    let controlButton = document.getElementById('controlButton');
+
+    let countdown = 10;
+    let timer = null;
+    let centiseconds = 0;
+    let seconds = 0;
+    let running = true;
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Wake Lock activo');
+          wakeLock.addEventListener('release', () => {
+            console.log('Wake Lock liberado');
+          });
+        } catch (err) {
+          console.error(`${err.name}, ${err.message}`);
+        }
+      } else {
+        console.log('Wake Lock API no soportada');
+      }
+    }
+
+    async function releaseWakeLock() {
+      if (wakeLock !== null) {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log('Wake Lock liberado manualmente');
+      }
+    }
+
+    function startCountdown() {
+      startButton.style.display = "none";
+      countdown = 10;
+      display.textContent = countdown;
+      timer = setInterval(() => {
+        countdown--;
+        display.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(timer);
+          startChronometer();
+        }
+      }, 1000);
+    }
+
+    function startChronometer() {
+      display.textContent = "0:00";
+      controlButton.style.display = "block";
+      running = true;
+      centiseconds = 0;
+      seconds = 0;
+      timer = setInterval(updateChronometer, 10);
+      requestWakeLock();
+    }
+
+    function updateChronometer() {
+      if (!running) return;
+      centiseconds++;
+      if (centiseconds >= 100) {
+        centiseconds = 0;
+        seconds++;
+      }
+      display.textContent = `${seconds}:${centiseconds.toString().padStart(2, '0')}`;
+    }
+
+    controlButton.addEventListener('click', () => {
+      running = !running;
+      controlButton.textContent = running ? "Pausa" : "Reanudar";
+      controlButton.classList.toggle('paused', !running);
+    });
+
+    startButton.addEventListener('click', () => {
+      startCountdown();
+    });
+  </script>
+
+</body>
+</html>

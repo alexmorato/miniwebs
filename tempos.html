@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizadores</title>
+    <style>
+        @font-face {
+            font-family: "clockicons";
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot");
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot?#iefix") format("embedded-opentype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff2") format("woff2"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff") format("woff"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.ttf") format("truetype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.svg#clockicons") format("svg");
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin: 10px 0;
+        }
+
+        #timer-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #timer-image {
+            max-width: 90vw; /* Limita el ancho máximo al 90% del ancho de la ventana */
+            max-height: 40vh; /* Limita la altura máxima al 90% del alto de la ventana */
+            border-radius: 15px; /* Borde redondeado */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+            object-fit: contain; /* Escala la imagen manteniendo la proporción */
+            transition: transform 0.3s; /* Transición suave */
+        }
+        .timer-info {
+            margin: 10px 0;
+            font-size: 28px;
+        }
+
+        .remaining-time {
+            font-size: 24px;
+            color: #d9534f;
+            font-family: 'clockicons', monospace;
+            font-size: 10vh; /* Ajusta el tamaño según sea necesario */
+            text-align: center;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .controls button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        #final-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+            animation: fadeIn 3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="increaseTextSize()">A+</button>
+        <button onclick="decreaseTextSize()">A-</button>
+        <button onclick="cambiarFondo()">🎨</button>
+        <button onclick="toggleFullScreen()">⛶</button>
+    </div>
+
+    <div id="input-container">
+        <h1>Configurador de Temporizadores</h1>
+        <textarea id="json-input">[
+	{
+		"endTime": "08:00",
+		"text": "🍪 Desayuno 🥛",
+		"imageUrl": "https://img.freepik.com/foto-gratis/nina-desayunando_23-2148179420.jpg"
+	},
+	{
+		"endTime": "08:15",
+		"text": "👗 Vestirse 👟",
+		"imageUrl": "https://img.freepik.com/foto-gratis/muchacha-divertida-que-mira-vestido-rosado-encantador-tienda_7502-4254.jpg"
+	},
+	{
+		"endTime": "08:40",
+		"text": "💇 Peinarse 🪮",
+		"imageUrl": "https://img.freepik.com/fotos-premium/nina-feliz-peinandose-concepto-belleza-e-infancia-chica-sobre-fondo-rosa-aislado-peinando-su-cabello-peine-rosa-su-cabello-rubio_170532-3411.jpg"
+	}
+]</textarea><br>
+        <button onclick="startTimers()">Iniciar Temporizadores</button>
+    </div>
+
+    <div id="timer-container">
+        <img id="timer-image" alt="Imagen del temporizador">
+        <div class="timer-info" id="timer-text"></div>
+        <div class="remaining-time" id="timer-remaining"></div>
+        <button onclick="skipTimerButtonClick()">Acabe Antes</button>
+    </div>
+
+    <div id="final-message" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: green; text-align: center;">
+        No hay más temporizadores ⏰
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0"></script>
+    <script>
+        let timers = [];
+        let currentTimerIndex = 0;
+        let countdownInterval;
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock activado');
+                wakeLock.addEventListener('release', () => {
+                    console.log('Wake Lock liberado');
+                });
+            } catch (err) {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release();
+                wakeLock = null;
+                console.log('Wake Lock liberado manualmente');
+            }
+        }
+
+        function startTimers() {
+            try {
+                const jsonInput = document.getElementById('json-input').value;
+                timers = JSON.parse(jsonInput);
+
+                if (!Array.isArray(timers) || timers.length === 0) {
+                    alert('El JSON debe ser un array con al menos un temporizador.');
+                    return;
+                }
+
+                currentTimerIndex = 0;
+                document.getElementById('input-container').style.display = 'none';
+                requestWakeLock(); // Evitar que la pantalla se apague
+                showTimer();
+            } catch (error) {
+                alert('Error en el formato del JSON. Verifica la sintaxis.');
+            }
+        }
+
+        function calculateRemainingTime(targetTime) {
+            const now = new Date();
+            const [targetHours, targetMinutes] = targetTime.split(':').map(Number);
+
+            const targetDate = new Date();
+            targetDate.setHours(targetHours, targetMinutes, 0, 0);
+
+            if (targetDate <= now) {
+                targetDate.setDate(targetDate.getDate() + 1); // Pasar al siguiente día si la hora ya pasó
+            }
+
+            return targetDate.getTime() - now.getTime();
+        }
+
+        function showTimer() {
+            if (currentTimerIndex >= timers.length) {
+                // Mostrar mensaje final
+                document.getElementById('timer-container').style.display = 'none'; // Ocultar el temporizador
+                document.getElementById('final-message').style.display = 'block'; // Mostrar el mensaje
+                releaseWakeLock(); // Liberar el Wake Lock al finalizar
+                return;
+            }
+
+            const timer = timers[currentTimerIndex];
+            const remainingTime = calculateRemainingTime(timer.endTime);
+
+            document.getElementById('timer-image').src = timer.imageUrl;
+            document.getElementById('timer-text').textContent = timer.text;
+            document.getElementById('timer-container').style.display = 'block';
+
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                const remainingTime = calculateRemainingTime(timer.endTime);
+                console.log(remainingTime);
+
+                if (remainingTime <= 1500) {
+                    clearInterval(countdownInterval);
+                    skipTimer();
+                } else {
+                    updateTimerDisplay(remainingTime);
+                }
+            }, 1000);
+        }
+
+        function formatTimeUnit(unit) {
+            return unit < 10 ? '0' + unit : unit;
+        }
+
+        function updateTimerDisplay(remainingTime) {
+            const seconds = Math.floor((remainingTime / 1000) % 60);
+            const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+            const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+
+            let timeString = "";
+            if (hours > 0) {
+                timeString += `${hours}:`;
+            }
+            timeString += `${formatTimeUnit(minutes)}:${formatTimeUnit(seconds)}`;
+            document.getElementById('timer-remaining').textContent = timeString;
+        }
+
+        function skipTimer() {
+            clearInterval(countdownInterval);
+            currentTimerIndex++;
+            showTimer();
+        }
+
+        function skipTimerButtonClick() {
+            // Efecto de confeti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            skipTimer();
+        }
+
+        function increaseTextSize() {
+            const element = document.getElementById('timer-remaining');
+            const currentSize = window.getComputedStyle(element).fontSize;
+            element.style.fontSize = (parseFloat(currentSize) + 10) + 'px';
+        }
+
+        function decreaseTextSize() {
+            const element = document.getElementById('timer-remaining');
+            const currentSize = window.getComputedStyle(element).fontSize;
+            element.style.fontSize = (parseFloat(currentSize) - 10) + 'px';
+        }
+
+        function cambiarFondo() {
+            const colorAleatorio = generarColorClaro();
+            document.body.style.backgroundColor = colorAleatorio;
+        }
+
+        function generarColorClaro() {
+            // Genera un valor aleatorio para los colores (rojo, verde y azul) entre 200 y 255
+            const r = Math.floor(Math.random() * 56) + 200; // Valores entre 200 y 255
+            const g = Math.floor(Math.random() * 56) + 200; // Valores entre 200 y 255
+            const b = Math.floor(Math.random() * 56) + 200; // Valores entre 200 y 255
+            return `rgb(${r}, ${g}, ${b})`; // Devuelve el color en formato rgb
+        }
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

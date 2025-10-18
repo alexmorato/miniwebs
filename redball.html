@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truco de Magia</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #bola {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        #bola.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="bola"></div>
+
+    <script>
+        const bola = document.getElementById('bola');
+        const velocidad = 500; // Velocidad en píxeles por segundo
+
+        // Función para hacer aparecer la bola con efecto fade-in
+        setTimeout(() => {
+            bola.classList.add('visible');
+        }, 100);
+
+        // Función para mover la bola a una posición aleatoria
+        function moverBola() {
+            const anchoVentana = window.innerWidth;
+            const altoVentana = window.innerHeight;
+
+            const nuevaX = Math.random() * (anchoVentana - bola.offsetWidth);
+            const nuevaY = Math.random() * (altoVentana - bola.offsetHeight);
+
+            const distanciaX = nuevaX - bola.offsetLeft;
+            const distanciaY = nuevaY - bola.offsetTop;
+
+            const distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+            const tiempo = (distancia / velocidad) * 1000; // Tiempo en milisegundos
+
+            bola.style.transition = `left ${tiempo}ms linear, top ${tiempo}ms linear`;
+            bola.style.left = `${nuevaX}px`;
+            bola.style.top = `${nuevaY}px`;
+        }
+
+        // Evento para iniciar el movimiento al hacer clic en la bola
+        bola.addEventListener('click', () => {
+            moverBola();
+        });
+
+        // Evento para mover la bola automáticamente después de llegar a la posición anterior
+        bola.addEventListener('transitionend', () => {
+            moverBola();
+        });
+    </script>
+</body>
+</html>

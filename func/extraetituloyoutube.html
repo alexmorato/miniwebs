@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de JSON para Karaoke</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    #status {
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎵 Generador de JSON para Karaoke</h2>
+
+  <label for="youtubeLink">🔗 Enlace de YouTube:</label>
+  <input type="text" id="youtubeLink" placeholder="https://www.youtube.com/watch?v=AqQMG1V3ySQ">
+
+  <button onclick="generateJSON()">📄 Generar JSON automáticamente</button>
+
+  <div id="status"></div>
+
+  <h3>Resultado:</h3>
+  <pre id="output">{}</pre>
+
+  <script>
+    function extractYouTubeId(url) {
+      const regExp = /^.*(?:youtu\.be\/|v\/|watch\?v=|embed\/)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[1].length === 11 ? match[1] : null;
+    }
+
+    function generateJSON() {
+      const url = document.getElementById("youtubeLink").value.trim();
+      const youtubeId = extractYouTubeId(url);
+      const statusEl = document.getElementById("status");
+      const outputEl = document.getElementById("output");
+
+      if (!youtubeId) {
+        outputEl.textContent = "❌ Enlace de YouTube no válido.";
+        statusEl.textContent = "";
+        return;
+      }
+
+      statusEl.textContent = "🔎 Buscando título en noembed.com...";
+
+      fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${youtubeId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.title) {
+            outputEl.textContent = "❌ No se pudo obtener el título del video.";
+            statusEl.textContent = "";
+            return;
+          }
+
+          const result = {
+            title: data.title,
+            youtubeId: youtubeId
+          };
+
+          outputEl.textContent = JSON.stringify(result, null, 2);
+          statusEl.textContent = "✅ Título encontrado y JSON generado.";
+        })
+        .catch(err => {
+          console.error(err);
+          outputEl.textContent = "❌ Error al conectar con noembed.com.";
+          statusEl.textContent = "";
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronómetro v3</title>
+    <style>
+        @font-face {
+            font-family: "clockicons";
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot");
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot?#iefix") format("embedded-opentype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff2") format("woff2"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff") format("woff"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.ttf") format("truetype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.svg#clockicons") format("svg");
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            position: relative;
+        }
+
+        .timer {
+            text-align: center;
+            color: #333;
+        }
+
+        .timer span {
+            font-size: 20vw;
+            font-family: 'ClockIcons', Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .resize-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .resize-buttons button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .version {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+            }
+
+        .shake {
+            /* Start the shake animation and make the animation last for 0.5 seconds */
+            animation: shake 0.5s;
+
+            /* When the animation is finished, start again */
+            animation-iteration-count: infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="resize-buttons">
+        <button onclick="increaseFontSize()">A+</button>
+        <button onclick="decreaseFontSize()">A-</button>
+        <button onclick="changeColors()">🎨</button>
+        <button onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <div id="timerdiv" class="timer">
+        <span id="stopwatch">00:00</span>
+        <div>
+            <button onclick="startStopwatch()">START</button>
+            <button onclick="stopStopwatch()">STOP</button>
+            <button onclick="resetStopwatch()">RESET</button>
+        </div>
+    </div>
+    <div class="version">v1.0</div>
+
+    <script>
+        let stopwatchElement = document.getElementById('stopwatch');
+        let timerdivElement = document.getElementById('timerdiv');
+        let stopwatch;
+        let elapsedTime = 0;
+        let isRunning = false;
+        let wakeLock = null;
+
+        function formatTime(seconds) {
+            let hrs = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds % 3600) / 60);
+            let secs = seconds % 60;
+
+            if (hrs > 0) {
+                return `${hrs.toString()}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function startStopwatch() {
+            if (isRunning) return;
+            isRunning = true;
+
+            stopwatch = setInterval(() => {
+                elapsedTime++;
+                if (elapsedTime % 60 === 0) {
+                    timerdivElement.classList.add('shake');
+                    setTimeout(() => {
+                        timerdivElement.classList.remove('shake');
+                    }, 1500);
+                }
+                stopwatchElement.textContent = formatTime(elapsedTime);
+            }, 1000);
+
+            requestWakeLock();
+        }
+
+        function stopStopwatch() {
+            clearInterval(stopwatch);
+            isRunning = false;
+            releaseWakeLock();
+        }
+
+        function resetStopwatch() {
+            clearInterval(stopwatch);
+            isRunning = false;
+            elapsedTime = 0;
+            stopwatchElement.textContent = formatTime(elapsedTime);
+            releaseWakeLock();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function increaseFontSize() {
+            const currentSize = parseFloat(window.getComputedStyle(stopwatchElement).fontSize);
+            stopwatchElement.style.fontSize = `${currentSize * 1.1}px`;
+        }
+
+        function decreaseFontSize() {
+            const currentSize = parseFloat(window.getComputedStyle(stopwatchElement).fontSize);
+            stopwatchElement.style.fontSize = `${currentSize * 0.9}px`;
+        }
+
+        function changeColors() {
+            const randomTextColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            const randomBackgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+            stopwatchElement.style.color = randomTextColor;
+            document.body.style.backgroundColor = randomBackgroundColor;
+        }
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock activated');
+                }
+            } catch (err) {
+                console.error(`Wake Lock error: ${err.message}`);
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock) {
+                wakeLock.release()
+                    .then(() => {
+                        wakeLock = null;
+                        console.log('Wake Lock released');
+                    });
+            }
+        }
+
+        // Inicializa el cronómetro
+        stopwatchElement.textContent = formatTime(elapsedTime);
+    </script>
+</body>
+</html>

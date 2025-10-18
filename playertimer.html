@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Timer Control</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .setup {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .game {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+        .player {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            border: 1px solid #000;
+            user-select: none;
+            position: relative;
+        }
+        .player1 {
+            background-color: #ff75d6;
+        }
+        .player2 {
+            background-color: #88f8e9;
+        }
+        #player1,
+        #player2 {
+            box-sizing: border-box; /* Incluir el borde dentro del tamaño del div */
+        }
+
+        .name {
+            position: static; /* Hacer que siga el flujo normal */
+            font-size: 4vw; /* Tamaño del texto más grande */
+            margin-bottom: 60px; /* Separación del tiempo */
+            text-align: center; /* Centrar el nombre */
+        }
+        .active {
+            border: 20px solid red; /* Sin color sólido */
+            background: linear-gradient(90deg, rgb(225, 0, 255), orange, yellow, green); /* Degradado animado */
+            background-clip: padding-box; /* Aplicar el degradado al borde */
+            background-size: 300% 300%; /* Tamaño grande para animación fluida */
+            animation: gradient 2s infinite; /* Animación continua del degradado */
+            box-shadow: 0 0 20px red; /* Resplandor adicional */
+            transition: box-shadow 0.3s ease-in-out, background 0.3s ease-in-out; /* Transiciones suaves */
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%; /* Degradado al inicio */
+            }
+            50% {
+                background-position: 100% 50%; /* Degradado al final */
+            }
+            100% {
+                background-position: 0% 50%; /* Degradado regresa al inicio */
+            }
+        }
+
+        .time-bar {
+            width: 80%;
+            height: 20px;
+            background-color: #ccc;
+            position: absolute;
+            bottom: 40px;
+        }
+        .time-bar-inner {
+            height: 100%;
+            background-color: #76c7c0;
+        }
+        .winner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-size: 2rem; /* Tamaño base del texto */
+            text-align: center; /* Centrar el texto */
+            padding: 20px; /* Añadir margen interno para evitar tocar los bordes */
+            box-sizing: border-box; /* Incluir el padding en el ancho total */
+        }
+
+        #winnerMessage {
+            margin-bottom: 20px; /* Espaciado entre el mensaje y el botón */
+            line-height: 1.5; /* Separación entre líneas */
+        }
+
+        #winnerMessage span {
+            display: block; /* Asegurar que cada parte esté en su propia línea */
+            font-size: 2.5rem; /* Tamaño más grande para el nombre del ganador */
+            font-weight: bold; /* Destacar el nombre del jugador */
+        }
+        .winner button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .control-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            display: flex;
+            gap: 5px;
+        }
+        .control-buttons button {
+            background: none;
+            border: 1px solid black;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        #setupForm button {
+            font-size: 2rem; /* Tamaño grande del texto */
+            padding: 20px 40px; /* Más espacio alrededor del texto */
+            background-color: #4CAF50; /* Color de fondo sólido */
+            color: white; /* Color del texto */
+            border: none; /* Sin bordes adicionales */
+            border-radius: 10px; /* Bordes redondeados */
+            cursor: pointer; /* Mantén el cursor de mano para indicar que es clicable */
+        }
+        #player1TimeDisplay,
+        #player2TimeDisplay {
+            font-size: 10vw; /* Aumentar el tamaño del tiempo restante */
+        }
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none; /* Evita que interfiera con el clic en el botón */
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--confetti-color, #FFD700); /* Color por defecto (oro) */
+            opacity: 0.9;
+            transform: rotate(45deg);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+        #pauseButton {
+            width: 160px; /* Diámetro del botón (2x radio) */
+            height: 160px;
+            border-radius: 80px; /* Hacerlo redondo (radio igual a la mitad del tamaño) */
+            background-color: #f0f0f0; /* Fondo gris claro */
+            border: 2px solid #000; /* Borde negro */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%; /* Centrado vertical */
+            left: 50%; /* Centrado horizontal */
+            transform: translate(-50%, -50%); /* Ajustar posición al centro */
+            z-index: 100; /* Encima de todo */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #pauseButton:active {
+            background-color: #ddd; /* Cambiar color al hacer clic */
+        }
+
+        /* Estilo para el símbolo de pausa */
+        #pauseButton::before,
+        #pauseButton::after {
+            content: '';
+            display: block;
+            width: 20px; /* Ancho de las barras del símbolo */
+            height: 50px; /* Altura de las barras */
+            background-color: #575757; /* Color negro */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        #pauseButton::before {
+            margin-right: 10px; /* Separación de la barra izquierda */
+        }
+
+        #pauseButton::after {
+            margin-left: 10px; /* Separación de la barra derecha */
+        }
+
+        #pauseButton.paused {
+            border: 10px solid red; /* Borde rojo cuando está pausado */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="setup" id="setup">
+    <h1>Introdueix el nom i els temps dels jugadors</h1>
+    <form id="setupForm">
+        <label>
+            Jugador 1 - NOM:
+            <input type="text" id="player1Name" value="Player_1" required>
+        </label>
+        <br><br>
+        <label>
+            Jugador 1 - TEMPS (segons):
+            <input type="number" id="player1Time" value="60" required>
+        </label>
+        <br><br>
+        <label>
+            Jugador 2 - NOM:
+            <input type="text" id="player2Name" value="Player_2" required>
+        </label>
+        <br><br>
+        <label>
+            Jugador 2 - TEMPS (segons):
+            <input type="number" id="player2Time" value="60" required>
+        </label>
+        <br><br>
+        <button type="submit">que comenci el joc!</button>
+    </form>
+</div>
+
+<div class="game" id="game" style="display: none;">
+    <div class="control-buttons">
+        <button onclick="toggleFullscreen()">⛶</button>
+        <button onclick="toggleColors()">🎨</button>
+    </div>    
+    <button id="pauseButton" onclick="togglePause()"></button> <!-- Botón de pausa separado -->
+    <div class="player player1" id="player1">
+        <div class="name" id="player1NameDisplay"></div>
+        <div id="player1TimeDisplay"></div>
+        <div class="time-bar">
+            <div class="time-bar-inner" id="player1TimeBar"></div>
+        </div>
+    </div>
+    <div class="player player2" id="player2">
+        <div class="name" id="player2NameDisplay"></div>
+        <div id="player2TimeDisplay"></div>
+        <div class="time-bar">
+            <div class="time-bar-inner" id="player2TimeBar"></div>
+        </div>
+    </div>
+</div>
+
+<div class="winner" id="winner">
+    <div class="confetti-container" id="confettiContainer"></div> <!-- Contenedor para el confeti -->
+    <div id="winnerMessage"></div>
+    <button onclick="restartGame()">Restart</button>
+</div>
+
+<script>
+    const setupForm = document.getElementById('setupForm');
+    const setupDiv = document.getElementById('setup');
+    const gameDiv = document.getElementById('game');
+    const winnerDiv = document.getElementById('winner');
+    const winnerMessage = document.getElementById('winnerMessage');
+    const player1Div = document.getElementById('player1');
+    const player2Div = document.getElementById('player2');
+    const player1NameDisplay = document.getElementById('player1NameDisplay');
+    const player2NameDisplay = document.getElementById('player2NameDisplay');
+    const player1TimeDisplay = document.getElementById('player1TimeDisplay');
+    const player2TimeDisplay = document.getElementById('player2TimeDisplay');
+    const player1TimeBar = document.getElementById('player1TimeBar');
+    const player2TimeBar = document.getElementById('player2TimeBar');
+
+    let player1Time, player2Time, player1InitialTime, player2InitialTime;
+    let activePlayer = null;
+    let timer;
+
+    setupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const player1Name = document.getElementById('player1Name').value;
+        const player2Name = document.getElementById('player2Name').value;
+
+        player1Time = player1InitialTime = parseInt(document.getElementById('player1Time').value, 10);
+        player2Time = player2InitialTime = parseInt(document.getElementById('player2Time').value, 10);
+
+        player1NameDisplay.textContent = player1Name;
+        player2NameDisplay.textContent = player2Name;
+
+        player1TimeDisplay.textContent = formatTime(player1Time); // Formatear tiempo inicial
+        player2TimeDisplay.textContent = formatTime(player2Time); // Formatear tiempo inicial
+
+        player1TimeBar.style.width = '100%';
+        player2TimeBar.style.width = '100%';
+
+        setupDiv.style.display = 'none';
+        gameDiv.style.display = 'flex';
+    });
+
+    function switchPlayer(player) {
+        if (isPaused) return; // Si está pausado, no cambiar de jugador
+
+        clearInterval(timer);
+
+        // Elimina la clase activa de ambos jugadores
+        player1Div.classList.remove('active');
+        player2Div.classList.remove('active');
+
+        // Cambia al siguiente jugador y aplica la clase activa
+        if (player === 'player1') {
+            activePlayer = 'player2';
+            player2Div.classList.add('active');
+        } else {
+            activePlayer = 'player1';
+            player1Div.classList.add('active');
+        }
+
+        timer = setInterval(() => {
+            if (activePlayer === 'player1') {
+                player1Time--;
+                player1TimeDisplay.textContent = formatTime(player1Time);
+                player1TimeBar.style.width = `${(player1Time / player1InitialTime) * 100}%`;
+
+                if (player1Time <= 0) {
+                    endGame(player2NameDisplay.textContent);
+                }
+            } else if (activePlayer === 'player2') {
+                player2Time--;
+                player2TimeDisplay.textContent = formatTime(player2Time);
+                player2TimeBar.style.width = `${(player2Time / player2InitialTime) * 100}%`;
+
+                if (player2Time <= 0) {
+                    endGame(player1NameDisplay.textContent);
+                }
+            }
+        }, 1000);
+    }
+
+    function endGame(winner) {
+        clearInterval(timer);
+        gameDiv.style.display = 'none';
+        winnerDiv.style.display = 'flex';
+
+        // Mensaje del ganador con dos líneas
+        winnerMessage.innerHTML = `
+            <span>🏆 ${winner} 🏆</span>
+            Felicitats, has guanyat!
+        `;
+
+        // Activar confeti
+        generateConfetti();
+    }
+
+    function restartGame() {
+        // Ocultar la pantalla del ganador y mostrar la configuración inicial
+        winnerDiv.style.display = 'none';
+        setupDiv.style.display = 'flex';
+
+        // Reiniciar las clases de los jugadores (eliminar bordes rojos)
+        player1Div.classList.remove('active');
+        player2Div.classList.remove('active');
+
+        // Restablecer el tiempo inicial y otros valores
+        player1Time = player1InitialTime;
+        player2Time = player2InitialTime;
+        player1TimeDisplay.textContent = `${player1Time}s`;
+        player2TimeDisplay.textContent = `${player2Time}s`;
+        player1TimeBar.style.width = '100%';
+        player2TimeBar.style.width = '100%';
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => {
+                enableWakeLock(); // Activar Wake Lock al entrar en fullscreen
+            }).catch(err => {
+                console.error(`Error al entrar en pantalla completa: ${err}`);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                disableWakeLock(); // Desactivar Wake Lock al salir de fullscreen
+            }).catch(err => {
+                console.error(`Error al salir de pantalla completa: ${err}`);
+            });
+        }
+    }
+
+    function toggleColors() {
+        function getRandomLightColor() {
+            const r = Math.floor(Math.random() * 128 + 128);
+            const g = Math.floor(Math.random() * 128 + 128);
+            const b = Math.floor(Math.random() * 128 + 128);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        const color1 = getRandomLightColor();
+        const color2 = getRandomLightColor();
+
+        player1Div.style.backgroundColor = color1;
+        player2Div.style.backgroundColor = color2;
+    }
+
+    function generateConfetti() {
+        const confettiContainer = document.getElementById('confettiContainer');
+        confettiContainer.innerHTML = ''; // Limpia confeti anterior
+        const colors = ['#FFD700', '#FF4500', '#1E90FF', '#32CD32', '#FF69B4', '#8A2BE2'];
+
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            
+            // Asignar posición inicial y propiedades aleatorias
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            confetti.style.animationDelay = `${Math.random() * 2}s`;
+            confetti.style.setProperty('--confetti-color', colors[Math.floor(Math.random() * colors.length)]);
+            
+            confettiContainer.appendChild(confetti);
+        }
+    }
+
+    function formatTime(timeInSeconds) {
+        let minutes = Math.floor(timeInSeconds / 60);
+        let seconds = timeInSeconds % 60;
+
+        if (timeInSeconds < 60) {
+            // Mostrar solo segundos cuando el tiempo es menos de un minuto
+            return seconds.toString();
+        } else {
+            // Mostrar minutos y segundos
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+    }
+
+    let wakeLock = null;
+
+    async function enableWakeLock() {
+        try {
+            if ('wakeLock' in navigator) {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock activado');
+            } else {
+                console.log('La API de Wake Lock no es compatible con este navegador.');
+            }
+        } catch (err) {
+            console.error('Error al activar Wake Lock:', err);
+        }
+    }
+
+    function disableWakeLock() {
+        if (wakeLock) {
+            wakeLock.release().then(() => {
+                wakeLock = null;
+                console.log('Wake Lock desactivado');
+            });
+        }
+    }
+
+    let isPaused = false; // Bandera para saber si el juego está pausado
+
+    function togglePause() {
+        const pauseButton = document.getElementById('pauseButton');
+        if (isPaused) {
+            // Reanudar el juego
+            isPaused = false;
+            pauseButton.classList.remove('paused'); // Quitar borde rojo
+
+            // Cambiar el borde del jugador activo a rojo
+            if (activePlayer === 'player1') {
+                player1Div.classList.add('active');
+                player1Div.style.borderColor = 'red';
+            } else if (activePlayer === 'player2') {
+                player2Div.classList.add('active');
+                player2Div.style.borderColor = 'red';
+            }
+
+            // Reanudar el temporizador para el jugador activo
+            timer = setInterval(() => {
+                if (activePlayer === 'player1') {
+                    player1Time--;
+                    player1TimeDisplay.textContent = formatTime(player1Time);
+                    player1TimeBar.style.width = `${(player1Time / player1InitialTime) * 100}%`;
+
+                    if (player1Time <= 0) {
+                        endGame(player2NameDisplay.textContent);
+                    }
+                } else if (activePlayer === 'player2') {
+                    player2Time--;
+                    player2TimeDisplay.textContent = formatTime(player2Time);
+                    player2TimeBar.style.width = `${(player2Time / player2InitialTime) * 100}%`;
+
+                    if (player2Time <= 0) {
+                        endGame(player1NameDisplay.textContent);
+                    }
+                }
+            }, 1000);
+        } else {
+            // Pausar el juego
+            isPaused = true;
+
+            pauseButton.classList.add('paused'); // Añadir borde rojo
+            // Detener el temporizador
+            clearInterval(timer);
+
+            // Cambiar el borde del jugador activo a gris
+            if (activePlayer === 'player1') {
+                player1Div.style.borderColor = 'gray';
+            } else if (activePlayer === 'player2') {
+                player2Div.style.borderColor = 'gray';
+            }
+        }
+    }
+
+
+    player1Div.addEventListener('click', () => {
+        if (!isPaused) switchPlayer('player1');
+    });
+
+    player2Div.addEventListener('click', () => {
+        if (!isPaused) switchPlayer('player2');
+    });
+
+    player1Div.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Evitar que el touchstart genere un click adicional
+        switchPlayer('player1');
+    });
+
+    player2Div.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        switchPlayer('player2');
+    });
+</script>
+
+</body>
+</html>

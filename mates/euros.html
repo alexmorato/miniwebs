@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Euros i Cèntims</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      background-color: #f0faff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #0078D7;
+      text-shadow: 2px 2px 0 #fff, 3px 3px 0 #90cdf4;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff, #e7f4ff);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      display: inline-block;
+      margin-bottom: 30px;
+      border: 3px solid #89c9ff;
+    }
+
+    #problema {
+      font-size: 2.2em;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1.3em;
+      color: #0066aa;
+      font-weight: bold;
+    }
+
+    input {
+      width: 120px;
+      padding: 15px;
+      margin: 10px;
+      font-size: 1.8em;
+      text-align: center;
+      border-radius: 15px;
+      border: 3px solid #89c9ff;
+      background-color: #f9feff;
+      color: #333;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00b3ff;
+      background-color: #e9faff;
+    }
+
+    #vistaPrevia {
+      font-size: 2em;
+      font-weight: bold;
+      color: #0078D7;
+      background-color: #e8f9ff;
+      padding: 10px 25px;
+      border-radius: 15px;
+      display: inline-block;
+      margin: 10px 0 20px 0;
+      border: 2px solid #89c9ff;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      min-width: 150px;
+    }
+
+    button {
+      background-color: #ffb703;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 15px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #fb8500;
+      transform: scale(1.05);
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #resultat {
+      font-size: 1.8em;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #historial {
+      width: 90%;
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 1.2em;
+    }
+
+    .entrada {
+      padding: 5px 0;
+    }
+
+    .correcte {
+      color: green;
+      font-weight: bold;
+    }
+
+    .incorrecte {
+      color: red;
+      font-weight: bold;
+    }
+
+    #rondes {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #0066aa;
+      margin-bottom: 15px;
+    }
+
+    /* Popup d’autenticació */
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    #popup .contenidor {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    #popup input {
+      width: 100px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    /* Popup del resumen final */
+  #popupResum {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.4s;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  .contenidorResum {
+    background: linear-gradient(135deg, #fff, #e0f7ff);
+    border: 4px solid #89c9ff;
+    border-radius: 25px;
+    text-align: center;
+    padding: 30px 50px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    width: 80%;
+    max-width: 500px;
+  }
+
+  .contenidorResum h2 {
+    color: #0078D7;
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+
+  .contenidorResum p {
+    font-size: 1.4em;
+    margin: 10px 0;
+  }
+
+  .contenidorResum button {
+    background-color: #ffb703;
+    color: white;
+    font-size: 1.4em;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+  }
+
+  .contenidorResum button:hover {
+    background-color: #fb8500;
+    transform: scale(1.05);
+  }
+  </style>
+</head>
+<body>
+  <h1>💶 Practica amb Euros i Cèntims</h1>
+
+  <div id="rondes">Ronda 0 de 0</div>
+
+  <div class="card">
+    <p id="problema"></p>
+    <div>
+      <label>Euros:</label>
+      <input type="number" id="euros" min="0" placeholder="0">
+      <label>Cèntims:</label>
+      <input type="number" id="centims" min="0" max="99" placeholder="0">
+    </div>
+
+    <!-- 👇 Nova vista prèvia -->
+    <div id="vistaPrevia">💰 0,00 €</div>
+
+    <button onclick="comprovar()">✨ Comprova!</button>
+    <p id="resultat"></p>
+  </div>
+
+  <h2 style="color:#0078D7;">📋 Respostes</h2>
+  <div id="historial"></div>
+
+  <br>
+  <div style="margin-top: 15px;">
+    <button onclick="obrirPopup('reiniciar')">🔁 Reinicia joc</button>
+    <button onclick="obrirPopup('admin')">⚙️ Configuració</button>
+  </div>
+  
+
+  <!-- Popup per demanar la contrasenya -->
+  <div id="popup">
+    <div class="contenidor">
+      <h3>Introdueix la contrasenya per reiniciar</h3>
+      <input type="password" id="clau" inputmode="numeric" placeholder="****">
+      <br><br>
+      <button onclick="comprovarClauIniciaNou()">Acceptar</button>
+      <button onclick="tancarPopup()">Cancel·lar</button>
+      <p id="errorClau" style="color:red; font-weight:bold;"></p>
+    </div>
+  </div>
+
+  <!-- Popup de resumen final -->
+  <div id="popupResum" style="display:none;">
+    <div class="contenidorResum">
+      <h2 id="titolResum"></h2>
+      <p id="rondesResum"></p>
+      <p id="correctesResum"></p>
+      <p id="incorrectesResum"></p>
+      <p id="missatgeResum"></p>
+    <button onclick="reiniciarAmbContrasenya()">🔁 Reinicia joc</button>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const esborrarLocalStorage = params.get("esborrarLocalStorage");
+    const maximRondes = parseInt(params.get("maximRondes")) || Infinity;
+    const nivell = parseInt(params.get("nivell")) || 1;
+    const operacio = params.get("operacio") || "suma";
+
+    if (esborrarLocalStorage == "1") {
+      localStorage.removeItem("historialEuros");
+    }
+
+    let num1, num2, correcte;
+    let ronda = 0;
+    const historial = document.getElementById("historial");
+    let historialData = JSON.parse(localStorage.getItem("historialEuros")) || [];
+    let tempsResposta = 3000;
+    let accioPopup = null; // 🧠 Variable global per saber què s’ha demanat
+
+    function renderRondes() {
+      const total = (maximRondes === Infinity) ? "Infinit" : maximRondes;
+      document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${total}`;
+    }
+
+    function generarQuantitat() {
+      switch (nivell) {
+        case 1: return (Math.floor(Math.random() * 900) + 100) / 100;
+        case 2: return (Math.floor(Math.random() * 9000) + 1000) / 100;
+        case 3: return (Math.floor(Math.random() * 90000) + 10000) / 100;
+        default: return (Math.floor(Math.random() * 900) + 100) / 100;
+      }
+    }
+
+    function nouProblema() {
+      if (ronda >= maximRondes) {
+        mostrarResumFinal();
+        return;
+      }
+
+      habilitarBotoComprovar();
+
+      // 🧮 Generem valors segons nivell i evitem arrossegaments o préstecs
+      do {
+          num1 = generarQuantitat();
+          num2 = generarQuantitat();
+          if (operacio === "resta" && num2 > num1) [num1, num2] = [num2, num1];
+
+          const c1 = Math.round((num1 * 100) % 100); // cèntims num1
+          const c2 = Math.round((num2 * 100) % 100); // cèntims num2
+
+          var invalid =
+          nivell === 1 &&
+          (
+              (operacio === "suma" && c1 + c2 >= 100) || // ❌ suma que passa de 99 cèntims
+              (operacio === "resta" && c1 < c2)          // ❌ resta que necessita préstec
+          );
+
+      } while (invalid);
+
+      // ✅ Calcular resultat correcte
+      correcte = operacio === "suma"
+          ? (num1 + num2).toFixed(2)
+          : (num1 - num2).toFixed(2);
+
+      const signe = operacio === "suma" ? "+" : "−";
+      document.getElementById("problema").innerHTML =
+          `Quant és <span style="color:#008000">${num1.toFixed(2)} €</span> ${signe} <span style="color:#ff6600">${num2.toFixed(2)} €</span> ?`;
+
+      document.getElementById("euros").value = "";
+      document.getElementById("centims").value = "";
+      document.getElementById("resultat").textContent = "";
+      document.getElementById("vistaPrevia").textContent = "💰 0,00 €";
+      renderRondes();
+    }
+
+    function deshabilitarBotoComprovar() {
+      document.querySelector("button[onclick='comprovar()']").disabled = true;
+    }
+
+    function habilitarBotoComprovar() {
+      document.querySelector("button[onclick='comprovar()']").disabled = false;
+    }
+
+    function comprovar() {
+      deshabilitarBotoComprovar();
+
+      let euros = parseInt(document.getElementById("euros").value) || 0;
+      let centims = parseInt(document.getElementById("centims").value) || 0;
+      if (centims >= 100) centims = 99;
+      let resposta = (euros + centims / 100).toFixed(2);
+
+      let correcteRes = (resposta == correcte);
+      ronda++;
+      renderRondes();
+
+      const resultat = document.getElementById("resultat");
+      if (correcteRes) {
+        resultat.textContent = "✅ Correcte! Molt bé!";
+        resultat.style.color = "green";
+        llançarConfeti();
+        
+
+
+    } else {
+        resultat.textContent = `❌ No! La resposta era ${correcte} €`;
+        resultat.style.color = "red";
+      }
+
+      const entrada = { num1: num1.toFixed(2), num2: num2.toFixed(2), resposta, correcte, correcteRes, operacio };
+      historialData.unshift(entrada);
+      localStorage.setItem("historialEuros", JSON.stringify(historialData));
+      renderHistorial();
+
+      setTimeout(() => {
+        nouProblema();
+      }, tempsResposta);
+    }
+
+    function renderHistorial() {
+      historial.innerHTML = "";
+      historialData.forEach(e => {
+        const div = document.createElement("div");
+        div.classList.add("entrada", e.correcteRes ? "correcte" : "incorrecte");
+        const signe = e.operacio === "suma" ? "+" : "-";
+        div.textContent = `${e.correcteRes ? "✅" : "❌"} ${e.num1} € ${signe} ${e.num2} € = ${e.resposta} € (${e.correcteRes ? "Bé!" : "Correcte: " + e.correcte + " €"})`;
+        historial.appendChild(div);
+      });
+    }
+
+    function actualitzarVistaPrevia() {
+      let euros = parseInt(document.getElementById("euros").value) || 0;
+      let centims = parseInt(document.getElementById("centims").value) || 0;
+      if (centims >= 100) centims = 99;
+      const total = (euros + centims / 100).toFixed(2).replace(".", ",");
+      document.getElementById("vistaPrevia").textContent = `💰 ${total} €`;
+    }
+
+    document.getElementById("euros").addEventListener("input", actualitzarVistaPrevia);
+    document.getElementById("centims").addEventListener("input", actualitzarVistaPrevia);
+
+    function obrirPopup(tipus = 'reiniciar') {
+      accioPopup = tipus; // pot ser 'reiniciar' o 'admin'
+      const popup = document.getElementById("popup");
+      if (!popup) {
+        console.error("No s'ha trobat l'element #popup");
+        return;
+      }
+      document.getElementById("clau").value = "";
+      document.getElementById("errorClau").textContent = "";
+      popup.style.display = "flex";
+    }
+
+    function tancarPopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function comprovarClauIniciaNou() {
+      const clau = document.getElementById("clau").value;
+      if (clau === "1234") {
+        tancarPopup();
+
+        if (accioPopup === 'admin') {
+          // 🔐 Si vol anar a l’admin, redirigeix
+          window.location.href = 'eurosadmin.html';
+          return;
+        }
+
+        // 🔁 Si era reiniciar
+        localStorage.removeItem("historialEuros");
+        historialData = [];
+        ronda = 0;
+        renderHistorial();
+        renderRondes();
+        nouProblema();
+        document.getElementById("popupResum").style.display = "none"; // per si estava obert
+      } else {
+        document.getElementById("errorClau").textContent = "❌ Contrasenya incorrecta!";
+      }
+    }
+
+    function llançarConfeti() {
+        // Duración total del confeti entre 0.6s y 1.5s
+        const duracio = 600 + Math.random() * 900;
+        const end = Date.now() + duracio;
+
+        // Colores posibles
+        const paletes = [
+            ['#ffb703', '#fb8500', '#ffd166', '#ff8fab'],
+            ['#90e0ef', '#48cae4', '#00b4d8', '#0077b6'],
+            ['#06d6a0', '#ffd166', '#118ab2', '#ef476f'],
+            ['#ffb5a7', '#fcd5ce', '#f8edeb', '#fec89a']
+        ];
+        const colors = paletes[Math.floor(Math.random() * paletes.length)];
+
+        // Ángulos iniciales (izquierda/derecha)
+        const angle1 = 60 + Math.random() * 10;
+        const angle2 = 120 + Math.random() * 10;
+
+        // Densidad aleatoria (entre 3 y 7 partículas por frame)
+        const densitat = 3 + Math.floor(Math.random() * 5);
+
+        // Efecto continuo con animación
+        (function frame() {
+            confetti({
+            particleCount: densitat,
+            angle: angle1,
+            spread: 55 + Math.random() * 20,
+            origin: { x: 0 },
+            colors: colors
+            });
+            confetti({
+            particleCount: densitat,
+            angle: angle2,
+            spread: 55 + Math.random() * 20,
+            origin: { x: 1 },
+            colors: colors
+            });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+    }
+
+    function mostrarResumFinal() {
+      const total = historialData.length;
+      const correctes = historialData.filter(e => e.correcteRes).length;
+      const incorrectes = total - correctes;
+
+      // 🧮 Porcentaje y mensaje adaptado
+      const percent = (correctes / total) * 100;
+      let missatge, emoji;
+      if (percent >= 90) {
+        missatge = "Ets una superestrella dels euros! 🌟";
+        emoji = "🏆";
+      } else if (percent >= 70) {
+        missatge = "Molt bé! Estàs millorant molt! 😄";
+        emoji = "🥇";
+      } else if (percent >= 50) {
+        missatge = "Ho has fet bé! Segueix practicant 💪";
+        emoji = "🥈";
+      } else {
+        missatge = "No passa res! Demà ho faràs millor! 🌈";
+        emoji = "🥉";
+      }
+
+      // 🎉 Mostrar popup
+      document.getElementById("popupResum").style.display = "flex";
+      document.getElementById("titolResum").textContent = `${emoji} Has acabat el joc!`;
+      document.getElementById("rondesResum").textContent = `🔢 Has fet ${total} rondes`;
+      document.getElementById("correctesResum").textContent = `✅ Correctes: ${correctes}`;
+      document.getElementById("incorrectesResum").textContent = `❌ Incorrectes: ${incorrectes}`;
+      document.getElementById("missatgeResum").textContent = missatge;
+
+      // Confeti final més intens 🎊
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => llançarConfeti(), i * 400);
+      }
+    }
+ 
+    function reiniciarPartida() {
+      ronda = 0;
+      historialData = [];
+      renderHistorial();
+      renderRondes();
+      nouProblema();
+    }
+
+    function reiniciarAmbContrasenya() {
+      // Tanca el popup de resum
+      document.getElementById("popupResum").style.display = "none";
+
+      // Obre el popup de contrasenya existent
+      obrirPopup();
+
+      // Quan es validi correctament la contrasenya, es farà el reinici normal
+      // (ja està definit dins de comprovarClau())
+    }
+
+
+
+
+    renderHistorial();
+    renderRondes();
+    nouProblema();
+  </script>
+</body>
+</html>

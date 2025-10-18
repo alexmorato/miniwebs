@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Administrador de Jocs d'Euros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      background-color: #f0faff;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #0078D7;
+      text-shadow: 1px 1px 0 #fff, 2px 2px 0 #90cdf4;
+    }
+    form {
+      background: linear-gradient(135deg, #ffffff, #e7f4ff);
+      display: inline-block;
+      padding: 30px 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border: 3px solid #89c9ff;
+      text-align: left;
+      max-width: 400px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.2em;
+      color: #0066aa;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 1.1em;
+      border-radius: 10px;
+      border: 2px solid #89c9ff;
+      background-color: #f9feff;
+      transition: 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #00b3ff;
+      background-color: #e9faff;
+    }
+    button {
+      margin-top: 30px;
+      background-color: #0078D7;
+      color: white;
+      font-size: 1.4em;
+      padding: 12px 25px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #005fa3;
+      transform: scale(1.05);
+    }
+    .peu {
+      margin-top: 30px;
+      color: #888;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚙️ Configurador dels Jocs d'Euros</h1>
+
+  <form id="formConfig" onsubmit="obrirJoc(event)">
+    <label for="joc">Selecciona el joc:</label>
+    <select id="joc">
+      <option value="euros.html">💶 Joc 1 - Sumar euros i cèntims</option>
+      <option value="eurosgastar.html">💸 Joc 2 - Gastar diners</option>
+      <option value="eurossuma.html">🪙 Joc 3 - Sumar diners reals (imatges)</option>
+    </select>
+
+    <label for="nivell">Nivell de dificultat:</label>
+    <select id="nivell">
+      <option value="1">🟢 Nivell 1 - Quantitats petites</option>
+      <option value="2">🟡 Nivell 2 - Quantitats mitjanes</option>
+      <option value="3">🔴 Nivell 3 - Quantitats grans</option>
+    </select>
+
+    <label for="operacio">Tipus d’operació (només per al Joc 1):</label>
+    <select id="operacio">
+      <option value="suma">➕ Suma</option>
+      <option value="resta">➖ Resta</option>
+    </select>
+
+    <label for="maximRondes">Nombre de rondes:</label>
+    <input type="number" id="maximRondes" min="1" max="50" value="10">
+
+    <label for="tempsResposta">Temps per mostrar la resposta (ms):</label>
+    <input type="number" id="tempsResposta" min="500" max="10000" value="3000">
+
+    <label for="esborrarLocalStorage">Esborrar historial anterior:</label>
+    <select id="esborrarLocalStorage">
+      <option value="0">❌ No</option>
+      <option value="1">✅ Sí</option>
+    </select>
+
+    <button type="submit">🎮 Inicia el joc</button>
+  </form>
+
+  <div class="peu">© Jocs educatius d'Euros - Ajuntament BCN</div>
+
+  <script>
+    const STORAGE_KEY = "configJocEuros";
+
+    // 🔁 Carrega configuració guardada
+    window.addEventListener("DOMContentLoaded", () => {
+      const guardat = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (guardat) {
+        document.getElementById("joc").value = guardat.joc;
+        document.getElementById("nivell").value = guardat.nivell;
+        document.getElementById("operacio").value = guardat.operacio;
+        document.getElementById("maximRondes").value = guardat.maximRondes;
+        document.getElementById("tempsResposta").value = guardat.tempsResposta;
+        document.getElementById("esborrarLocalStorage").value = guardat.esborrarLocalStorage;
+      }
+    });
+
+    // 🚀 Inicia el joc amb els paràmetres
+    function obrirJoc(event) {
+      event.preventDefault();
+
+      const config = {
+        joc: document.getElementById("joc").value,
+        nivell: document.getElementById("nivell").value,
+        operacio: document.getElementById("operacio").value,
+        maximRondes: document.getElementById("maximRondes").value,
+        tempsResposta: document.getElementById("tempsResposta").value,
+        esborrarLocalStorage: document.getElementById("esborrarLocalStorage").value
+      };
+
+      // 💾 Desa configuració
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+
+      // 🔗 Construeix URL
+      const url = `${config.joc}?nivell=${config.nivell}&operacio=${config.operacio}&maximRondes=${config.maximRondes}&tempsResposta=${config.tempsResposta}&esborrarLocalStorage=${config.esborrarLocalStorage}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>

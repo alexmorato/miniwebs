@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <title>Copiar Data i Hora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+    #datetime {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      display: block;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .copied {
+      color: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Copiar Data i Hora</h1>
+  <span id="datetime"></span>
+  <button onclick="copyDateTime()">Copiar al porta-retalls</button>
+  <div id="message" class="copied"></div>
+
+  <script>
+    function getFormattedDateTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      return `${year}/${month}/${day} ${hours}:${minutes}`;
+    }
+
+    function updateDateTimeDisplay() {
+      document.getElementById('datetime').textContent = getFormattedDateTime();
+    }
+
+    function copyDateTime() {
+      const text = document.getElementById('datetime').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById('message').textContent = "Copiat!";
+      });
+    }
+
+    updateDateTimeDisplay();
+    setInterval(updateDateTimeDisplay, 60000); // Actualitza cada minut
+  </script>
+</body>
+</html>

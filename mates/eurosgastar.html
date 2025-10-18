@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>💸 Joc d'Euros - Gastar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --blau: #0078D7;
+      --blau-clar: #e7f4ff;
+      --groc: #ffb703;
+      --groc-fosc: #fb8500;
+      --gris: #cccccc;
+      --verd: #06d6a0;
+      --vermell: #ef476f;
+    }
+
+    body {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      background-color: #f0faff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: var(--blau);
+      text-shadow: 2px 2px 0 #fff, 3px 3px 0 var(--blau-clar);
+      margin-bottom: 10px;
+    }
+
+    #rondes {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: var(--blau);
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff, var(--blau-clar));
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      display: inline-block;
+      margin-bottom: 30px;
+      border: 3px solid #89c9ff;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .caixes {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .caja {
+      background-color: #fff;
+      border: 3px solid #89c9ff;
+      border-radius: 20px;
+      width: 180px;
+      padding: 20px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .caja:hover {
+      transform: scale(1.05);
+    }
+
+    .caja h3 {
+      margin-bottom: 10px;
+      color: var(--blau);
+    }
+
+    .preu {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .objecte {
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    /* 🎛️ Botons generals */
+    button {
+      border: none;
+      padding: 15px 25px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.4em;
+      margin: 10px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+    }
+
+    #botoSobra, #botoFalta {
+      background-color: var(--gris);
+      color: #333;
+    }
+
+    #botoSobra:hover, #botoFalta:hover {
+      background-color: #bbb;
+    }
+
+    #botoComprovar {
+      background-color: var(--groc);
+      color: white;
+    }
+
+    #botoComprovar:hover:enabled {
+      background-color: var(--groc-fosc);
+      transform: scale(1.05);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .reinici, .admin {
+      background-color: var(--groc);
+      color: white;
+    }
+
+    .reinici:hover, .admin:hover {
+      background-color: var(--groc-fosc);
+      transform: scale(1.05);
+    }
+
+    input {
+      width: 100px;
+      padding: 10px;
+      font-size: 1.4em;
+      text-align: center;
+      border-radius: 10px;
+      border: 2px solid #89c9ff;
+      background-color: #f9feff;
+      margin: 5px;
+    }
+
+    #resultat {
+      font-size: 1.6em;
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 1.5em;
+    }
+
+    #historial {
+      width: 90%;
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 1.1em;
+    }
+
+    #historial div:nth-child(odd) {
+      background-color: #f7faff;
+      border-radius: 8px;
+      padding: 4px 8px;
+    }
+
+    .correcte { color: var(--verd); font-weight: bold; }
+    .incorrecte { color: var(--vermell); font-weight: bold; }
+
+    /* Popup contrasenya */
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    #popup .contenidor {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      margin-top: 25px;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>💸 Joc d'Euros - Gastar</h1>
+    <div id="rondes">Ronda 0 de 0</div>
+
+    <section class="card">
+      <div class="caixes">
+        <div class="caja">
+          <h3>TINC</h3>
+          <p id="tinc" class="preu">0,00 €</p>
+        </div>
+        <div class="caja">
+          <h3>COSTA</h3>
+          <p id="objecte" class="objecte">—</p>
+          <p id="costa" class="preu">0,00 €</p>
+        </div>
+      </div>
+
+      <div>
+        <button id="botoSobra" onclick="seleccionarOpcio('sobra')">💰 EM SOBREN</button>
+        <button id="botoFalta" onclick="seleccionarOpcio('falta')">😕 EM FALTEN</button>
+      </div>
+
+      <div style="margin-top:15px;">
+        <label>Euros:</label>
+        <input type="number" id="euros" min="0" placeholder="0">
+        <label>Cèntims:</label>
+        <input type="number" id="centims" min="0" max="99" placeholder="0">
+      </div>
+
+      <div style="margin-top:15px;">
+        <button id="botoComprovar" onclick="comprovar()" disabled>✨ Comprova!</button>
+        <p id="resultat"></p>
+      </div>
+    </section>
+
+    <h2 style="color:var(--blau);">📋 Respostes</h2>
+    <div id="historial"></div>
+
+    <div style="margin-top:15px;">
+      <button class="reinici" onclick="obrirPopup('reiniciar')">🔁 Reinicia joc</button>
+      <button class="admin" onclick="obrirPopup('admin')">⚙️ Configuració</button>
+    </div>
+  </main>
+
+  <footer>© Joc educatiu d'Euros - Versió millorada</footer>
+
+  <!-- Popup contrasenya -->
+  <div id="popup">
+    <div class="contenidor">
+      <h3>Introdueix la contrasenya</h3>
+      <input type="password" id="clau" inputmode="numeric" placeholder="****">
+      <br><br>
+      <button onclick="comprovarClau()">Acceptar</button>
+      <button onclick="tancarPopup()">Cancel·lar</button>
+      <p id="errorClau" style="color:red; font-weight:bold;"></p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nivell = parseInt(params.get("nivell")) || 1;
+    const maximRondes = parseInt(params.get("maximRondes")) || 10;
+    let ronda = 0, tinc, costa, correcte, sobra, opcioUsuari = null;
+    let historialData = [];
+    let accioPopup = null;
+    let tempsResposta = parseInt(params.get("tempsResposta")) || 3000;
+
+    const objectes = [
+      "Peluix 🧸","Llapis ✏️","Motxilla 🎒","Llibre 📚","Cotxe 🚗","Pilota ⚽","Nina 👧",
+      "Gosset 🐶","Puzle 🧩","Caixa de colors 🎨","Gorra 🧢","Sabates 👟","Samarreta 👕","Vestit 👗",
+      "Xocolatina 🍫","Gelat 🍦","Poma 🍎","Plàtan 🍌","Sandvitx 🥪","Aigua 💧","Caixa sorpresa 🎁",
+      "Patinet 🛴","Bicicleta 🚲","Tablet 💻","Telèfon de joguina 📱","Rellotge ⌚","Llibreta 📒"
+    ];
+
+    function renderRondes() {
+      document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${maximRondes}`;
+    }
+
+    function generarQuantitat(tipus = 'tinc') {
+      let valor = 0;
+
+      switch (nivell) {
+        case 1: // 🟢 Nivell 1
+          const base = [0, 0.25, 0.5, 0.75][Math.floor(Math.random() * 4)];
+          valor = (Math.floor(Math.random() * 10) + 1) + base; // 1–10 €
+          break;
+
+        case 2: // 🟡 Nivell 2
+          valor = (Math.random() * 45 + 5).toFixed(2); // 5–50 €
+          break;
+
+        case 3: // 🔴 Nivell 3
+          valor = (Math.random() * 190 + 10).toFixed(2); // 10–200 €
+          // Si és "costa", fem que sovint sigui proper a "tinc"
+          if (tipus === 'costa' && tinc) {
+            const difer = (Math.random() * 10 - 5).toFixed(2); // +/-5 €
+            valor = Math.max(0.5, (parseFloat(tinc) + parseFloat(difer))).toFixed(2);
+          }
+          break;
+
+        default:
+          valor = (Math.random() * 10 + 1).toFixed(2);
+      }
+
+      return parseFloat(valor);
+    }
+
+    function nouProblema() {
+      if (ronda >= maximRondes) {
+        document.querySelector(".card").innerHTML = `<h2>🎉 Has acabat el joc!</h2><p>Vols jugar un altre cop?</p><button class='reinici' onclick="obrirPopup('reiniciar')">🔁 Reinicia</button>`;
+        return;
+      }
+
+      tinc = generarQuantitat('tinc');
+      costa = generarQuantitat('costa');
+
+      document.getElementById("tinc").textContent = `${tinc.toFixed(2)} €`;
+      document.getElementById("costa").textContent = `${costa.toFixed(2)} €`;
+      document.getElementById("objecte").textContent = objectes[Math.floor(Math.random() * objectes.length)];
+
+      document.getElementById("resultat").textContent = "";
+      document.getElementById("euros").value = "";
+      document.getElementById("centims").value = "";
+      opcioUsuari = null;
+      resetBotons();
+      renderRondes();
+    }
+
+    function seleccionarOpcio(opcio) {
+      opcioUsuari = opcio;
+      document.getElementById("botoSobra").style.backgroundColor = opcio === 'sobra' ? '#06d6a0' : '#cccccc';
+      document.getElementById("botoFalta").style.backgroundColor = opcio === 'falta' ? '#ef476f' : '#cccccc';
+      document.getElementById("botoSobra").style.color = opcio === 'sobra' ? '#fff' : '#333';
+      document.getElementById("botoFalta").style.color = opcio === 'falta' ? '#fff' : '#333';
+      document.getElementById("botoComprovar").disabled = false;
+    }
+
+    function resetBotons() {
+      document.getElementById("botoSobra").style.backgroundColor = '#cccccc';
+      document.getElementById("botoSobra").style.color = '#333';
+      document.getElementById("botoFalta").style.backgroundColor = '#cccccc';
+      document.getElementById("botoFalta").style.color = '#333';
+      document.getElementById("botoComprovar").disabled = true;
+    }
+
+    function comprovar() {
+      if (!opcioUsuari) return;
+
+      document.getElementById("botoComprovar").disabled = true;
+      let euros = parseInt(document.getElementById("euros").value) || 0;
+      let centims = parseInt(document.getElementById("centims").value) || 0;
+      let resposta = (euros + centims/100).toFixed(2);
+
+      let difer = (tinc - costa).toFixed(2);
+      sobra = difer >= 0;
+      correcte = Math.abs(difer).toFixed(2);
+
+      const correcteOpcio = (opcioUsuari === 'sobra' && sobra) || (opcioUsuari === 'falta' && !sobra);
+      const correcteQuant = (resposta == correcte);
+
+      const resultat = document.getElementById("resultat");
+      if (correcteOpcio && correcteQuant) {
+        resultat.textContent = "✅ Correcte! Molt bé!";
+        resultat.style.color = "#06d6a0";
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      } else {
+        resultat.textContent = `❌ No! La resposta era ${sobra ? 'EM SOBREN' : 'EM FALTEN'} ${correcte} €`;
+        resultat.style.color = "#ef476f";
+      }
+
+      historialData.unshift({
+        ronda: ronda + 1,
+        tinc: tinc.toFixed(2),
+        costa: costa.toFixed(2),
+        resposta,
+        correcte,
+        sobra,
+        opcioUsuari,
+        correcteRes: correcteOpcio && correcteQuant
+      });
+
+      renderHistorial();
+      ronda++;
+      resetBotons();
+      setTimeout(nouProblema, tempsResposta);
+    }
+
+    function renderHistorial() {
+      const hist = document.getElementById("historial");
+      hist.innerHTML = "";
+      historialData.forEach(e => {
+        const div = document.createElement("div");
+        div.classList.add(e.correcteRes ? "correcte" : "incorrecte");
+        div.textContent = `${e.correcteRes ? "✅" : "❌"} Tinc ${e.tinc} €, costa ${e.costa} € → ${e.opcioUsuari === 'sobra' ? "EM SOBREN" : "EM FALTEN"} ${e.resposta} € (${e.correcteRes ? "Bé!" : "Correcte: " + (e.sobra ? "EM SOBREN" : "EM FALTEN") + " " + e.correcte + " €"})`;
+        hist.appendChild(div);
+      });
+    }
+
+    function obrirPopup(tipus = 'reiniciar') {
+      accioPopup = tipus;
+      document.getElementById("popup").style.display = "flex";
+      document.getElementById("clau").value = "";
+      document.getElementById("errorClau").textContent = "";
+    }
+
+    function tancarPopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function comprovarClau() {
+      const clau = document.getElementById("clau").value;
+      if (clau === "1234") {
+        tancarPopup();
+        if (accioPopup === "admin") {
+          window.location.href = "eurosadmin.html";
+          return;
+        }
+        historialData = [];
+        ronda = 0;
+        renderHistorial();
+        renderRondes();
+        nouProblema();
+      } else {
+        document.getElementById("errorClau").textContent = "❌ Contrasenya incorrecta!";
+      }
+    }
+
+    renderRondes();
+    nouProblema();
+  </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Karaoke Web</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+    }
+    #search {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .song-list {
+      list-style: none;
+      padding: 0;
+    }
+    .song-list li {
+      background: white;
+      padding: 15px;
+      margin: 5px 0;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .song-list li:hover {
+      background: #e0e0e0;
+    }
+    #player-view {
+      display: none;
+      text-align: center;
+    }
+    #back-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menu-view">
+    <h1>🎤 Lista de Karaoke</h1>
+    <input type="text" id="search" placeholder="Buscar canción..." />
+    <ul id="songList" class="song-list"></ul>
+  </div>
+
+  <div id="player-view">
+    <h1 id="songTitle"></h1>
+    <iframe id="youtubePlayer" width="100%" height="400" src="" frameborder="0" allowfullscreen></iframe>
+    <br />
+    <button id="back-btn">🔙 Volver</button>
+  </div>
+
+  <script>
+    let songs = [];
+
+    fetch("songs.json")
+      .then(res => res.json())
+      .then(data => {
+        songs = data;
+        renderSongs(); // llama al render una vez se cargan
+      })
+      .catch(err => {
+        console.error("Error cargando canciones:", err);
+      });
+
+    const songListEl = document.getElementById("songList");
+    const searchInput = document.getElementById("search");
+    const menuView = document.getElementById("menu-view");
+    const playerView = document.getElementById("player-view");
+    const youtubePlayer = document.getElementById("youtubePlayer");
+    const songTitle = document.getElementById("songTitle");
+
+    function renderSongs(filter = "") {
+      songListEl.innerHTML = "";
+      songs
+        .filter(song => song.title.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(song => {
+          const li = document.createElement("li");
+          li.textContent = song.title;
+          li.onclick = () => playSong(song);
+          songListEl.appendChild(li);
+        });
+    }
+
+    function playSong(song) {
+      menuView.style.display = "none";
+      playerView.style.display = "block";
+      songTitle.textContent = song.title;
+      //youtubePlayer.src = `https://www.youtube.com/embed/${song.youtubeId}?autoplay=1`;
+      youtubePlayer.src = `https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&controls=1&rel=0&modestbranding=1&disablekb=1`;
+    }
+
+    document.getElementById("back-btn").onclick = () => {
+      youtubePlayer.src = "";
+      playerView.style.display = "none";
+      menuView.style.display = "block";
+    };
+
+    searchInput.oninput = (e) => {
+      renderSongs(e.target.value);
+    };
+
+    // Inicial
+    renderSongs();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>💶 Joc d'Euros - Sumar diners reals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      background-color: #f0faff;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #0078D7;
+      text-shadow: 2px 2px 0 #fff, 3px 3px 0 #90cdf4;
+    }
+    .card {
+      background: linear-gradient(135deg, #ffffff, #e7f4ff);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      display: inline-block;
+      margin-bottom: 30px;
+      border: 3px solid #89c9ff;
+    }
+    #imatges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    #imatges img {
+      width: 90px;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #89c9ff;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    #imatges img:hover {
+      transform: scale(1.1);
+    }
+    input {
+      width: 100px;
+      padding: 10px;
+      font-size: 1.4em;
+      text-align: center;
+      border-radius: 10px;
+      border: 2px solid #89c9ff;
+      background-color: #f9feff;
+      margin: 5px;
+    }
+    button {
+      background-color: #ffb703;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.4em;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #fb8500;
+      transform: scale(1.05);
+    }
+    #resultat {
+      font-size: 1.6em;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    #historial {
+      width: 90%;
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 1.1em;
+    }
+    .correcte { color: green; font-weight: bold; }
+    .incorrecte { color: red; font-weight: bold; }
+
+    /* Popup contrasenya */
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    #popup .contenidor {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .reinici, .admin {
+      background-color: #ffb703;
+      color: white;
+    }
+    .reinici:hover, .admin:hover {
+      background-color: #fb8500;
+    }
+  </style>
+</head>
+<body>
+  <h1>💶 Joc d'Euros - Sumar diners reals</h1>
+  <div id="rondes">Ronda 0 de 0</div>
+
+  <div class="card">
+    <div id="imatges"></div>
+
+    <div style="margin-top:10px;">
+      <label>Euros:</label>
+      <input type="number" id="euros" min="0" placeholder="0">
+      <label>Cèntims:</label>
+      <input type="number" id="centims" min="0" max="99" placeholder="0">
+    </div>
+
+    <div style="margin-top:15px;">
+      <button id="botoComprovar" onclick="comprovar()">✨ Comprova!</button>
+      <p id="resultat"></p>
+    </div>
+  </div>
+
+  <h2 style="color:#0078D7;">📋 Respostes</h2>
+  <div id="historial"></div>
+
+  <div style="margin-top:15px;">
+    <button class="reinici" onclick="obrirPopup('reiniciar')">🔁 Reinicia joc</button>
+    <button class="admin" onclick="obrirPopup('admin')">⚙️ Configuració</button>
+  </div>
+
+  <!-- Popup per contrasenya -->
+  <div id="popup">
+    <div class="contenidor">
+      <h3>Introdueix la contrasenya</h3>
+      <input type="password" id="clau" inputmode="numeric" placeholder="****">
+      <br><br>
+      <button onclick="comprovarClau()">Acceptar</button>
+      <button onclick="tancarPopup()">Cancel·lar</button>
+      <p id="errorClau" style="color:red; font-weight:bold;"></p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nivell = parseInt(params.get("nivell")) || 1;
+    const maximRondes = parseInt(params.get("maximRondes")) || 10;
+    let ronda = 0, correcte = 0;
+    let historialData = [];
+    let accioPopup = null;
+    let tempsResposta = parseInt(params.get("tempsResposta")) || 3000;
+
+    const monedes = [
+      { valor: 0.01, img: "1cts.png" }, { valor: 0.02, img: "2cts.png" },
+      { valor: 0.05, img: "5cts.png" }, { valor: 0.10, img: "10cts.png" },
+      { valor: 0.20, img: "20cts.png" }, { valor: 0.50, img: "50cts.png" },
+      { valor: 1, img: "1e.png" }, { valor: 2, img: "2e.png" },
+      { valor: 5, img: "5e.png" }, { valor: 10, img: "10e.png" },
+      { valor: 20, img: "20e.png" }, { valor: 50, img: "50e.png" },
+      { valor: 100, img: "100e.png" }, { valor: 200, img: "200e.png" },
+      { valor: 500, img: "500e.png" }
+    ];
+
+    function renderRondes() {
+      document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${maximRondes}`;
+    }
+
+    function nouProblema() {
+      if (ronda >= maximRondes) {
+        document.querySelector(".card").innerHTML = `<h2>🎉 Has acabat el joc!</h2><p>Vols jugar un altre cop?</p><button class='reinici' onclick="obrirPopup('reiniciar')">🔁 Reinicia</button>`;
+        return;
+      }
+
+      const imatgesContainer = document.getElementById("imatges");
+      imatgesContainer.innerHTML = "";
+      let total = 0;
+
+      const quantitat = Math.floor(Math.random() * 4) + 2; // 2 a 6 imatges
+      const seleccionades = [];
+      for (let i = 0; i < quantitat; i++) {
+        const moneda = monedes[Math.floor(Math.random() * monedes.length)];
+        seleccionades.push(moneda);
+        total += moneda.valor;
+        const img = document.createElement("img");
+        img.src = `assets/${moneda.img}`;
+        img.alt = moneda.valor.toFixed(2);
+        imatgesContainer.appendChild(img);
+      }
+
+      correcte = total.toFixed(2);
+      document.getElementById("resultat").textContent = "";
+      document.getElementById("euros").value = "";
+      document.getElementById("centims").value = "";
+      renderRondes();
+    }
+
+    function comprovar() {
+      let euros = parseInt(document.getElementById("euros").value) || 0;
+      let centims = parseInt(document.getElementById("centims").value) || 0;
+      let resposta = (euros + centims/100).toFixed(2);
+
+      const resultat = document.getElementById("resultat");
+      const correcteRes = resposta == correcte;
+
+      if (correcteRes) {
+        resultat.textContent = "✅ Correcte! Molt bé!";
+        resultat.style.color = "green";
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      } else {
+        resultat.textContent = `❌ No! La resposta era ${correcte} €`;
+        resultat.style.color = "red";
+      }
+
+      historialData.unshift({ ronda: ronda + 1, resposta, correcte, correcteRes });
+      renderHistorial();
+      ronda++;
+      setTimeout(nouProblema, tempsResposta);
+    }
+
+    function renderHistorial() {
+      const hist = document.getElementById("historial");
+      hist.innerHTML = "";
+      historialData.forEach(e => {
+        const div = document.createElement("div");
+        div.classList.add(e.correcteRes ? "correcte" : "incorrecte");
+        div.textContent = `${e.correcteRes ? "✅" : "❌"} Ronda ${e.ronda}: ${e.resposta} € (Correcte: ${e.correcte} €)`;
+        hist.appendChild(div);
+      });
+    }
+
+    function obrirPopup(tipus = 'reiniciar') {
+      accioPopup = tipus;
+      document.getElementById("popup").style.display = "flex";
+      document.getElementById("clau").value = "";
+      document.getElementById("errorClau").textContent = "";
+    }
+    function tancarPopup() { document.getElementById("popup").style.display = "none"; }
+    function comprovarClau() {
+      const clau = document.getElementById("clau").value;
+      if (clau === "1234") {
+        tancarPopup();
+        if (accioPopup === "admin") {
+          window.location.href = "eurosadmin.html";
+          return;
+        }
+        historialData = [];
+        ronda = 0;
+        renderHistorial();
+        renderRondes();
+        nouProblema();
+      } else {
+        document.getElementById("errorClau").textContent = "❌ Contrasenya incorrecta!";
+      }
+    }
+
+    renderRondes();
+    nouProblema();
+  </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador v1</title>
+    <style>
+        @font-face {
+            font-family: "clockicons";
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot");
+            src: url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.eot?#iefix") format("embedded-opentype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff2") format("woff2"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.woff") format("woff"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.ttf") format("truetype"),
+                 url("https://db.onlinewebfonts.com/t/84cb021d5f9af287ffff84b61beef6dc.svg#clockicons") format("svg");
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .counter {
+            text-align: center;
+            color: #333;
+            font-size: 20vw;
+            font-family: 'ClockIcons', Arial, sans-serif;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 30%;
+            margin-top: 2px;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 2rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(2px);
+        }
+
+        .resize-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .resize-buttons button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .version {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .text {
+            font-size: 2rem;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="resize-buttons">
+        <button onclick="increaseFontSize()">A+</button>
+        <button onclick="decreaseFontSize()">A-</button>
+        <button onclick="changeColors()">🎨</button>
+        <button onclick="toggleFullscreen()">⛶</button>
+    </div>
+
+    <div class="counter">
+        <span id="counterValue">0</span>
+    </div>
+
+    <div class="buttons">
+        <button onclick="decrementCounter()">-</button>
+        <button onclick="incrementCounter()">+</button>
+    </div>
+
+    <div class="text" id="statusText">Genial 😀</div>
+
+    <div class="version">v1.0</div>
+
+    <script>
+        let counterValue = 0;
+        const counterElement = document.getElementById('counterValue');
+        const statusTextElement = document.getElementById('statusText');
+
+        function updateStatusText() {
+            if (counterValue === 0) {
+                statusTextElement.textContent = "Genial 😀";
+            } else if (counterValue > 6) {
+                statusTextElement.textContent = "¡Vaya! No puedo mirar 🙈";
+            } else if (counterValue > 4) {
+                statusTextElement.textContent = "Esto se está complicando 😲";
+            } else if (counterValue > 2) {
+                statusTextElement.textContent = "Ánimo tu puedes hacerlo mejor 😘";
+            } else if (counterValue > 0) {
+                statusTextElement.textContent = "Tranqui esto no es nada 😜";
+            }
+        }
+
+        function incrementCounter() {
+            counterValue++;
+            counterElement.textContent = counterValue;
+            updateStatusText();
+        }
+
+        function decrementCounter() {
+            if (counterValue > 0) {
+                counterValue--;
+                counterElement.textContent = counterValue;
+                updateStatusText();
+            }
+        }
+
+        function increaseFontSize() {
+            let currentSize = parseFloat(window.getComputedStyle(counterElement).fontSize);
+            counterElement.style.fontSize = `${currentSize * 1.1}px`;
+        }
+
+        function decreaseFontSize() {
+            let currentSize = parseFloat(window.getComputedStyle(counterElement).fontSize);
+            counterElement.style.fontSize = `${currentSize * 0.9}px`;
+        }
+
+        function changeColors() {
+            const randomTextColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            const randomBackgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            counterElement.style.color = randomTextColor;
+            document.body.style.backgroundColor = randomBackgroundColor;
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
