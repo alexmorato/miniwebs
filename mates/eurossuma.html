@@ -160,6 +160,19 @@
     </div>
   </div>
 
+    <!-- Popup de resum final -->
+  <div id="popupResum" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:9999;">
+    <div class="contenidorResum" style="background:white; padding:30px; border-radius:20px; text-align:center; max-width:400px; box-shadow:0 0 20px rgba(0,0,0,0.3);">
+      <h2 id="titolResum">🎉 Fi del joc!</h2>
+      <p id="rondesResum"></p>
+      <p id="correctesResum"></p>
+      <p id="incorrectesResum"></p>
+      <p id="missatgeResum" style="font-weight:bold; color:#0078D7;"></p>
+      <button onclick="reiniciarAmbContrasenya()" style="background-color:#ffb703; color:white; border:none; padding:12px 25px; border-radius:15px; font-size:1.2em; margin-top:15px; cursor:pointer;">🔁 Reinicia joc</button>
+    </div>
+  </div>
+
+
   <script>
     const params = new URLSearchParams(window.location.search);
     const nivell = parseInt(params.get("nivell")) || 1;
@@ -186,7 +199,7 @@
 
     function nouProblema() {
       if (ronda >= maximRondes) {
-        document.querySelector(".card").innerHTML = `<h2>🎉 Has acabat el joc!</h2><p>Vols jugar un altre cop?</p><button class='reinici' onclick="obrirPopup('reiniciar')">🔁 Reinicia</button>`;
+        mostrarResumFinal();
         return;
       }
 
@@ -194,24 +207,36 @@
       imatgesContainer.innerHTML = "";
       let total = 0;
 
-      const quantitat = Math.floor(Math.random() * 4) + 2; // 2 a 6 imatges
+      // 🧩 Configuració segons nivell
+      let minImgs = 3, maxImgs = 6, maxTotal = 20;
+      if (nivell === 2) { minImgs = 5; maxImgs = 8; maxTotal = 300; }
+      if (nivell === 3) { minImgs = 6; maxImgs = 10; maxTotal = 900; }
+
+      const quantitat = Math.floor(Math.random() * (maxImgs - minImgs + 1)) + minImgs;
       const seleccionades = [];
-      for (let i = 0; i < quantitat; i++) {
+
+      // 🪙 Afegeix imatges fins que s'arribi al límit de valor
+      while (seleccionades.length < quantitat && total < maxTotal) {
         const moneda = monedes[Math.floor(Math.random() * monedes.length)];
+        // Evitem passar-nos del límit
+        if (total + moneda.valor > maxTotal) continue;
         seleccionades.push(moneda);
         total += moneda.valor;
+
         const img = document.createElement("img");
         img.src = `assets/${moneda.img}`;
         img.alt = moneda.valor.toFixed(2);
         imatgesContainer.appendChild(img);
       }
 
+      // ✅ Guarda el valor correcte
       correcte = total.toFixed(2);
       document.getElementById("resultat").textContent = "";
       document.getElementById("euros").value = "";
       document.getElementById("centims").value = "";
       renderRondes();
     }
+
 
     function comprovar() {
       let euros = parseInt(document.getElementById("euros").value) || 0;
@@ -253,7 +278,9 @@
       document.getElementById("clau").value = "";
       document.getElementById("errorClau").textContent = "";
     }
+
     function tancarPopup() { document.getElementById("popup").style.display = "none"; }
+    
     function comprovarClau() {
       const clau = document.getElementById("clau").value;
       if (clau === "1234") {
@@ -272,8 +299,41 @@
       }
     }
 
+    function mostrarResumFinal() {
+      const total = historialData.length;
+      const correctes = historialData.filter(e => e.correcteRes).length;
+      const incorrectes = total - correctes;
+
+      document.getElementById("titolResum").textContent = "🎯 Resum del joc!";
+      document.getElementById("rondesResum").textContent = `Has jugat ${total} rondes.`;
+      document.getElementById("correctesResum").textContent = `✅ Respostes correctes: ${correctes}`;
+      document.getElementById("incorrectesResum").textContent = `❌ Respostes incorrectes: ${incorrectes}`;
+
+      let missatge = "";
+      if (correctes === total) missatge = "🏆 Excel·lent! Ho has encertat tot!";
+      else if (correctes / total >= 0.7) missatge = "👏 Molt bé! Ho has fet genial!";
+      else if (correctes / total >= 0.4) missatge = "🙂 Has millorat molt! Torna-ho a provar!";
+      else missatge = "💪 No et rendeixis! La pràctica fa el mestre!";
+
+      document.getElementById("missatgeResum").textContent = missatge;
+
+      // Mostra el popup
+      document.getElementById("popupResum").style.display = "flex";
+
+      // Una mica de confeti per celebrar
+      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+    }
+
+    function reiniciarAmbContrasenya() {
+      document.getElementById("popupResum").style.display = "none";
+      obrirPopup('reiniciar');
+    }
+
+
+
     renderRondes();
     nouProblema();
+
   </script>
 </body>
 </html>
