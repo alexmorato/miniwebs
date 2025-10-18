@@ -37,23 +37,22 @@
       margin-right: auto;
     }
 
-    #imatges img {
-      border-radius: 10px;
+    /* Imatges de monedes i bitllets: propietats comunes */
+    #imatges img,
+    .monedes,
+    .bitllet {
       border: 2px solid #89c9ff;
       background-color: white;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       transition: transform 0.2s;
+      object-fit: cover;
     }
+
     /* Monedes: rodones i més petites */
     .monedes {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #89c9ff;
-      background-color: white;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
     }
 
     /* Bitllets: rectangulars i més grans */
@@ -61,11 +60,6 @@
       width: 135px;
       height: 80px;
       border-radius: 10px;
-      object-fit: cover;
-      border: 2px solid #89c9ff;
-      background-color: white;
-      box-shadow: 0 0 5px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
     }
 
     #imatges img:hover {
@@ -209,14 +203,14 @@
     let tempsResposta = parseInt(params.get("tempsResposta")) || 3000;
 
     const monedes = [
-      { valor: 0.01, img: "1cts.png" }, { valor: 0.02, img: "2cts.png" },
-      { valor: 0.05, img: "5cts.png" }, { valor: 0.10, img: "10cts.png" },
-      { valor: 0.20, img: "20cts.png" }, { valor: 0.50, img: "50cts.png" },
-      { valor: 1, img: "1e.png" }, { valor: 2, img: "2e.png" },
-      { valor: 5, img: "5e.png" }, { valor: 10, img: "10e.png" },
-      { valor: 20, img: "20e.png" }, { valor: 50, img: "50e.png" },
-      { valor: 100, img: "100e.png" }, { valor: 200, img: "200e.png" },
-      { valor: 500, img: "500e.png" }
+      { valor: 0.01, img: "1cts.jpg" }, { valor: 0.02, img: "2cts.jpg" },
+      { valor: 0.05, img: "5cts.jpg" }, { valor: 0.10, img: "10cts.jpg" },
+      { valor: 0.20, img: "20cts.jpg" }, { valor: 0.50, img: "50cts.jpg" },
+      { valor: 1, img: "1e.jpg" }, { valor: 2, img: "2e.jpg" },
+      { valor: 5, img: "5e.jpg" }, { valor: 10, img: "10e.jpg" },
+      { valor: 20, img: "20e.jpg" }, { valor: 50, img: "50e.jpg" },
+      { valor: 100, img: "100e.jpg" }, { valor: 200, img: "200e.jpg" },
+      { valor: 500, img: "500e.jpg" }
     ];
 
     /**
