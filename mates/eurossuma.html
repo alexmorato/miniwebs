@@ -32,16 +32,42 @@
       justify-content: center;
       gap: 15px;
       margin-bottom: 20px;
+      max-width: 550px; /* 👈 uns 5 elements de 90px + marges */
+      margin-left: auto;
+      margin-right: auto;
     }
+
     #imatges img {
-      width: 90px;
-      height: auto;
       border-radius: 10px;
       border: 2px solid #89c9ff;
       background-color: white;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       transition: transform 0.2s;
     }
+    /* Monedes: rodones i més petites */
+    .monedes {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #89c9ff;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    /* Bitllets: rectangulars i més grans */
+    .bitllet {
+      width: 135px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid #89c9ff;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+    }
+
     #imatges img:hover {
       transform: scale(1.1);
     }
@@ -193,6 +219,46 @@
       { valor: 500, img: "500e.png" }
     ];
 
+    /**
+     * Crea una imatge HTML d'una moneda o bitllet, amb la mida adequada segons el valor.
+     * @param {Object} moneda - Objecte amb {valor, img}
+     * @returns {HTMLImageElement} - Element <img> preparat per afegir al DOM.
+     */
+    function crearImatgeMoneda(moneda) {
+      const img = document.createElement("img");
+      img.src = `assets/${moneda.img}`;
+      img.alt = moneda.valor.toFixed(2);
+
+      // Si és una moneda (cts o ≤ 2€)
+      if (moneda.img.includes("cts") || moneda.valor <= 2) {
+        img.className = "monedes";
+
+        // Escalat segons el valor real (proporció aproximada)
+        let mida = 60; // base
+        switch (moneda.valor) {
+          case 0.01: mida = 45; break;
+          case 0.02: mida = 48; break;
+          case 0.05: mida = 52; break;
+          case 0.10: mida = 55; break;
+          case 0.20: mida = 60; break;
+          case 0.50: mida = 70; break;
+          case 1:    mida = 75; break;
+          case 2:    mida = 80; break;
+        }
+
+        img.style.width = `${mida}px`;
+        img.style.height = `${mida}px`;
+      } 
+      // Si és un bitllet
+      else {
+        img.className = "bitllet";
+        img.style.width = "130px";
+        img.style.height = "70px";
+      }
+
+      return img;
+    }
+
     function renderRondes() {
       document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${maximRondes}`;
     }
@@ -223,10 +289,7 @@
         seleccionades.push(moneda);
         total += moneda.valor;
 
-        const img = document.createElement("img");
-        img.src = `assets/${moneda.img}`;
-        img.alt = moneda.valor.toFixed(2);
-        imatgesContainer.appendChild(img);
+        imatgesContainer.appendChild(crearImatgeMoneda(moneda));
       }
 
       // ✅ Guarda el valor correcte
@@ -249,7 +312,7 @@
       if (correcteRes) {
         resultat.textContent = "✅ Correcte! Molt bé!";
         resultat.style.color = "green";
-        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+        llançarConfeti()
       } else {
         resultat.textContent = `❌ No! La resposta era ${correcte} €`;
         resultat.style.color = "red";
@@ -259,6 +322,47 @@
       renderHistorial();
       ronda++;
       setTimeout(nouProblema, tempsResposta);
+    }
+
+    function llançarConfeti() {
+      // Duración total del confeti entre 0.6s y 1.5s
+      const duracio = 600 + Math.random() * 900;
+      const end = Date.now() + duracio;
+
+      // Colores posibles
+      const paletes = [
+          ['#ffb703', '#fb8500', '#ffd166', '#ff8fab'],
+          ['#90e0ef', '#48cae4', '#00b4d8', '#0077b6'],
+          ['#06d6a0', '#ffd166', '#118ab2', '#ef476f'],
+          ['#ffb5a7', '#fcd5ce', '#f8edeb', '#fec89a']
+      ];
+      const colors = paletes[Math.floor(Math.random() * paletes.length)];
+
+      // Ángulos iniciales (izquierda/derecha)
+      const angle1 = 60 + Math.random() * 10;
+      const angle2 = 120 + Math.random() * 10;
+
+      // Densidad aleatoria (entre 3 y 7 partículas por frame)
+      const densitat = 3 + Math.floor(Math.random() * 5);
+
+      // Efecto continuo con animación
+      (function frame() {
+          confetti({
+          particleCount: densitat,
+          angle: angle1,
+          spread: 55 + Math.random() * 20,
+          origin: { x: 0 },
+          colors: colors
+          });
+          confetti({
+          particleCount: densitat,
+          angle: angle2,
+          spread: 55 + Math.random() * 20,
+          origin: { x: 1 },
+          colors: colors
+          });
+          if (Date.now() < end) requestAnimationFrame(frame);
+      })();
     }
 
     function renderHistorial() {
