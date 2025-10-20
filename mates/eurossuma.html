@@ -201,6 +201,7 @@
     let historialData = [];
     let accioPopup = null;
     let tempsResposta = parseInt(params.get("tempsResposta")) || 3000;
+    let monedesActuals = [];
 
     const monedes = [
       { valor: 0.01, img: "1cts.jpg" }, { valor: 0.02, img: "2cts.jpg" },
@@ -286,6 +287,8 @@
         imatgesContainer.appendChild(crearImatgeMoneda(moneda));
       }
 
+      monedesActuals = seleccionades;
+
       // ✅ Guarda el valor correcte
       correcte = total.toFixed(2);
       document.getElementById("resultat").textContent = "";
@@ -312,7 +315,13 @@
         resultat.style.color = "red";
       }
 
-      historialData.unshift({ ronda: ronda + 1, resposta, correcte, correcteRes });
+      historialData.unshift({
+        ronda: ronda + 1,
+        resposta,
+        correcte,
+        correcteRes,
+        monedes: monedesActuals
+      });
       renderHistorial();
       ronda++;
       setTimeout(nouProblema, tempsResposta);
@@ -362,10 +371,22 @@
     function renderHistorial() {
       const hist = document.getElementById("historial");
       hist.innerHTML = "";
+
       historialData.forEach(e => {
         const div = document.createElement("div");
         div.classList.add(e.correcteRes ? "correcte" : "incorrecte");
-        div.textContent = `${e.correcteRes ? "✅" : "❌"} Ronda ${e.ronda}: ${e.resposta} € (Correcte: ${e.correcte} €)`;
+        div.style.borderBottom = "1px solid #ddd";
+        div.style.padding = "8px 0";
+
+        // 💬 Formatem els valors amb formatValor()
+        const valorsText = e.monedes
+          .map(m => formatValor(m.valor))
+          .join(" + ");
+
+        const text = document.createElement("p");
+        text.textContent = `${e.correcteRes ? "✅" : "❌"} ${valorsText} = ${e.resposta} € (Correcte: ${e.correcte} €)`;
+
+        div.appendChild(text);
         hist.appendChild(div);
       });
     }
@@ -422,6 +443,16 @@
       confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
     }
 
+    function formatValor(valor) {
+      // Si el valor és un enter (ex. 1.00 → 1)
+      if (valor % 1 === 0) {
+        return valor.toLocaleString("ca-ES", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      } 
+      // Si té decimals, mostra sempre 2 (ex. 0.2 → 0,20)
+      return valor.toLocaleString("ca-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+
     function reiniciarAmbContrasenya() {
       document.getElementById("popupResum").style.display = "none";
       obrirPopup('reiniciar');
@@ -431,6 +462,16 @@
 
     renderRondes();
     nouProblema();
+
+    // 🔢 Evitar que els cèntims passin de 99
+    document.getElementById("centims").addEventListener("input", function () {
+      let valor = parseInt(this.value);
+      if (valor > 99) {
+        this.value = 99;
+      } else if (valor < 0 || isNaN(valor)) {
+        this.value = ""; // opcional: neteja si posa coses rares
+      }
+    });
 
   </script>
 </body>
