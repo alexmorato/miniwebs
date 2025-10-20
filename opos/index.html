@@ -5,16 +5,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tests Oposicions</title>
 <style>
-  body { font-family: system-ui, sans-serif; background:#0b1020; color:#e7ecff; margin:0; padding:20px; }
-  h1 { text-align:center; color:#6ae0a7; }
-  select, button { padding:10px; border-radius:8px; border:1px solid #27304a; background:#141a2a; color:#e7ecff; cursor:pointer; }
-  .question-box { background:#141a2a; border:1px solid #27304a; border-radius:16px; padding:16px; margin-top:20px; }
-  .option { display:block; margin:6px 0; }
-  .ok { color:#6ae0a7; font-weight:bold; }
-  .ko { color:#ff6b6b; font-weight:bold; }
-  textarea { width:100%; min-height:150px; background:#0f1526; color:#e7ecff; border-radius:10px; margin-top:10px; padding:10px; font-family:monospace; }
-  .muted{color:#9fb0ff;font-size:12px}
-  #progress {margin-bottom:10px;color:#9fb0ff;font-size:14px}
+  body {
+    font-family: system-ui, sans-serif;
+    background:#0b1020;
+    color:#e7ecff;
+    margin:0;
+    padding:20px;
+    line-height:1.5;
+  }
+
+  h1 {
+    text-align:center;
+    color:#6ae0a7;
+    margin-bottom:10px;
+  }
+
+  /* Els botons ara seran més grans i fàcils de tocar */
+  button {
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    transition:all 0.2s ease;
+    font-size:1rem;
+  }
+
+  .option {
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:14px 16px;
+    margin:8px 0;
+    background:#1b223a;
+    color:#e7ecff;
+    border:1px solid #2a3554;
+  }
+
+  .option:hover,
+  .option:active {
+    background:#24325a;
+    transform:scale(1.01);
+  }
+
+  /* Botó SEGUENT més gran i centrat */
+  #seguentBtn {
+    width:100%;
+    background:linear-gradient(180deg,#2aebad,#21c08d);
+    color:#032217;
+    font-weight:bold;
+    font-size:1.1rem;
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    margin-top:15px;
+  }
+
+  /* Espaiat extra per a pantalles petites */
+  @media (max-width:600px) {
+    body { padding:12px; }
+    .question-box { padding:14px; }
+    .option { font-size:1.05rem; padding:16px; margin:10px 0; }
+    #seguentBtn { font-size:1.2rem; padding:14px; }
+  }
+
+  /* Feedback clar i llegible */
+  .ok { color:#6ae0a7; font-weight:bold; margin-top:8px; }
+  .ko { color:#ff6b6b; font-weight:bold; margin-top:8px; }
+
+  textarea {
+    width:100%;
+    min-height:150px;
+    background:#0f1526;
+    color:#e7ecff;
+    border-radius:10px;
+    margin-top:10px;
+    padding:10px;
+    font-family:monospace;
+    font-size:0.9rem;
+  }
 </style>
 </head>
 <body>
