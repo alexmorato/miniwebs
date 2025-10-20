@@ -15,7 +15,7 @@
     .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
     .card{background:var(--card);border:1px solid #27304a;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
     .card h2{font-size:16px;margin:0 0 10px;color:var(--muted)}
-    textarea{width:100%;min-height:340px;background:#0f1526;border:1px solid #27304a;border-radius:12px;color:var(--ink);padding:12px;line-height:1.45;font-size:14px;resize:vertical}
+    textarea{width:100%;min-height:220px;background:#0f1526;border:1px solid #27304a;border-radius:12px;color:var(--ink);padding:12px;line-height:1.45;font-size:14px;resize:vertical}
     .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
     .controls label{display:flex;gap:8px;align-items:center;background:#0f1526;border:1px solid #27304a;padding:8px 10px;border-radius:10px;color:var(--muted);font-size:13px}
     input[type="text"], input[type="number"]{background:#0f1526;border:1px solid #27304a;border-radius:8px;color:var(--ink);padding:8px 10px;min-width:160px}
@@ -33,24 +33,23 @@
   <div class="wrap">
     <header>
       <h1>JSON → Quizlet · Formatador de tests</h1>
-      <div class="tag">Tema 56 · Backup 3‑2‑1 i ransomware</div>
+      <div class="tag">Tema 56 · Backup 3-2-1 i ransomware</div>
     </header>
 
     <div class="grid">
       <section class="card">
-        <h2>1) Enganxa el teu JSON aquí</h2>
-        <div class="small">Format esperat per a cada pregunta:
-          <span class="mono">{"nivell":"Fàcil 🟢","pregunta":"...","resposta_correcta":"...","respostes_incorrectes":["...","...","..."],"context":"..."}</span>
-        </div>
-        <textarea id="input" placeholder='[
-  {"nivell":"Fàcil 🟢","pregunta":"Quin és l’objectiu del backup?","resposta_correcta":"Garantir la disponibilitat i integritat","respostes_incorrectes":["Reduir costos","Augmentar la velocitat","Evitar el núvol"],"context":"Sense backup no hi ha recuperació."}
-]'></textarea>
+        <h2>1) Carrega o enganxa el teu JSON</h2>
+        <div class="small">Format esperat: {"nivell":"Fàcil 🟢","pregunta":"...","resposta_correcta":"...","respostes_incorrectes":["...","...","..."],"context":"..."}</div>
+        <input type="file" id="fileInput" accept=".json" />
+        <textarea id="input" placeholder='Enganxa aquí el contingut JSON si no carregues fitxer'></textarea>
 
         <div class="controls">
-          <label><input type="checkbox" id="shuffle" checked> Barreja les opcions (A‑D)</label>
-          <label>Seed opcional (repetible): <input type="text" id="seed" placeholder="per ex. tema56-bloc1"/></label>
-          <label><input type="checkbox" id="balance"> Intenta equilibrar A/B/C/D (experimental)</label>
+          <label><input type="checkbox" id="shuffle" checked> Barreja opcions (A-D)</label>
+          <label><input type="checkbox" id="pattern"> Rotació fixa A→B→C→D (ignora aleatori)</label>
+          <label>Seed opcional: <input type="text" id="seed" placeholder="per ex. tema56-bloc1"/></label>
+          <label><input type="checkbox" id="balance"> Equilibrar A/B/C/D (experimental)</label>
         </div>
+
         <div class="btns">
           <button id="convert">Convertir a format Quizlet</button>
           <button id="copy" class="secondary">Copiar resultat</button>
@@ -63,54 +62,44 @@
       <section class="card">
         <h2>2) Resultat (llest per a Quizlet)</h2>
         <textarea id="output" readonly placeholder="Aquí apareixerà el text final…"></textarea>
-        <div class="footer">El format generat segueix: nivell → pregunta → opcions A‑D → ⭐ lletra i literal → 👉 context → <span class="mono">@@@</span></div>
+        <div class="footer">Format: nivell → pregunta → opcions A-D → ⭐ lletra i literal → 👉 context → <span class="mono">@@@</span></div>
       </section>
     </div>
   </div>
 
   <script>
-    // Seedable PRNG (Mulberry32)
     function mulberry32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
     function xhash(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
     function shuffleInPlace(arr, rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor((rng?rng():Math.random())*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}} 
 
-    function toQuizlet(items,{doShuffle=true, seed='', balance=false}={}){
+    function toQuizlet(items,{doShuffle=true, seed='', balance=false, pattern=false}={}){
       const rng = seed ? mulberry32(xhash(seed)) : null;
       let counts = {A:0,B:0,C:0,D:0};
       const letters=['A','B','C','D'];
       const out=[]; let errors=[];
+      let nextPatternIndex = 0;
 
       items.forEach((q,idx)=>{
-        const path = `#${idx+1}`;
-        // Validate
-        if(!q || typeof q!== 'object'){errors.push(`${path}: element invàlid`);return}
+        if(!q || typeof q!== 'object'){errors.push(`#${idx+1}: element invàlid`);return}
         const {nivell,pregunta,resposta_correcta,respostes_incorrectes,context} = q;
         if(!pregunta || !resposta_correcta || !Array.isArray(respostes_incorrectes)){
-          errors.push(`${path}: camps requerits buits`);return
-        }
-        if(respostes_incorrectes.length < 3){errors.push(`${path}: calen 3 respostes incorrectes`);return}
+          errors.push(`#${idx+1}: camps requerits buits`);return}
+
         const wrong = respostes_incorrectes.slice(0,3);
         let options = [resposta_correcta, ...wrong];
+        if(doShuffle && !pattern){shuffleInPlace(options, rng);}
 
-        // Shuffle options
-        if(doShuffle){
+        let correctIdx;
+        if(pattern){ correctIdx = nextPatternIndex % 4; nextPatternIndex++; }
+        else{ correctIdx = options.indexOf(resposta_correcta); }
+
+        if(pattern){
+          const correctAns = resposta_correcta;
           shuffleInPlace(options, rng);
-          if(balance){
-            // Try to nudge the correct answer towards the least-used letter
-            const currentIdx = options.indexOf(resposta_correcta);
-            const sorted = Object.entries(counts).sort((a,b)=>a[1]-b[1]);
-            const targetLetter = sorted[0][0];
-            const targetIdx = letters.indexOf(targetLetter);
-            // 30% chance to swap towards balance to avoid being too deterministic
-            const pick = rng ? rng() : Math.random();
-            if(currentIdx !== targetIdx && pick < 0.3){
-              [options[currentIdx], options[targetIdx]] = [options[targetIdx], options[currentIdx]];
-            }
-          }
+          options.splice(options.indexOf(correctAns),1);
+          options.splice(correctIdx,0,correctAns);
         }
 
-        // Build block
-        const correctIdx = options.indexOf(resposta_correcta);
         const correctLetter = letters[correctIdx];
         counts[correctLetter]++;
         const block = [
@@ -135,15 +124,23 @@
     const output = $('#output');
     const status = $('#status');
 
+    document.getElementById('fileInput').addEventListener('change',function(e){
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = evt => { input.value = evt.target.result; };
+      reader.readAsText(file);
+    });
+
     $('#convert').addEventListener('click',()=>{
       let data;
       try{ data = JSON.parse(input.value.trim()); }
       catch(e){ output.value=''; status.innerHTML=`<span class="bad">❌ JSON invàlid:</span> ${e.message}`; return; }
-      const res = toQuizlet(data, { doShuffle: $('#shuffle').checked, seed: $('#seed').value.trim(), balance: $('#balance').checked });
+      const res = toQuizlet(data, { doShuffle: $('#shuffle').checked, seed: $('#seed').value.trim(), balance: $('#balance').checked, pattern: $('#pattern').checked });
       output.value = res.txt;
       const {A,B,C,D} = res.counts;
       const err = res.errors.length ? ` · <span class="bad">${res.errors.length} errors</span>` : '';
-      status.innerHTML = `<span class="ok">✔️ Convertit</span> · Distribució correctes → A:${A} B:${B} C:${C} D:${D}${err}`;
+      status.innerHTML = `<span class="ok">✔️ Convertit</span> · Distribució → A:${A} B:${B} C:${C} D:${D}${err}`;
     });
 
     $('#copy').addEventListener('click', async ()=>{
@@ -159,7 +156,7 @@
       URL.revokeObjectURL(a.href);
     });
 
-    $('#clear').addEventListener('click',()=>{ input.value=''; output.value=''; status.textContent=''; });
+    $('#clear').addEventListener('click',()=>{ input.value=''; output.value=''; status.textContent=''; document.getElementById('fileInput').value=''; });
   </script>
 </body>
 </html>
