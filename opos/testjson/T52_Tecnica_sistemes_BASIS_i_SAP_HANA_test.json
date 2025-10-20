@@ -1,0 +1,167 @@
+[
+    {
+        "nivell": "Fàcil 🟢",
+        "pregunta": "Quina és la funció principal de SAP BASIS?",
+        "resposta_correcta": "Gestionar la infraestructura tècnica i el rendiment del sistema SAP",
+        "respostes_incorrectes": [
+            "Analitzar dades empresarials",
+            "Crear aplicacions Fiori",
+            "Dissenyar interfícies d'usuari"
+        ],
+        "context": "SAP BASIS és la capa tècnica que connecta l’aplicació amb la base de dades i el sistema operatiu."
+    },
+    {
+        "nivell": "Fàcil 🟢",
+        "pregunta": "SAP HANA és una base de dades de tipus...",
+        "resposta_correcta": "In-memory",
+        "respostes_incorrectes": [
+            "Relacional en disc",
+            "Distribuïda peer-to-peer",
+            "NoSQL"
+        ],
+        "context": "HANA emmagatzema dades a la memòria RAM per millorar el rendiment i permet analítica en temps real."
+    },
+    {
+        "nivell": "Fàcil 🟢",
+        "pregunta": "Quin component de SAP HANA processa consultes SQL?",
+        "resposta_correcta": "Index Server",
+        "respostes_incorrectes": [
+            "Name Server",
+            "Preprocessor Server",
+            "XS Engine"
+        ],
+        "context": "L’Index Server és el nucli de HANA encarregat del processament SQL i la gestió de dades."
+    },
+    {
+        "nivell": "Fàcil 🟢",
+        "pregunta": "Quina transacció s’utilitza per crear i administrar usuaris en SAP?",
+        "resposta_correcta": "SU01",
+        "respostes_incorrectes": [
+            "ST22",
+            "SM21",
+            "SE80"
+        ],
+        "context": "SU01 permet crear, modificar i assignar rols als usuaris dins SAP BASIS."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quin component de SAP HANA administra la topologia del sistema?",
+        "resposta_correcta": "Name Server",
+        "respostes_incorrectes": [
+            "Index Server",
+            "Preprocessor Server",
+            "XS Engine"
+        ],
+        "context": "El Name Server manté la distribució de dades i la configuració del sistema en entorns HANA multinode."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quin sistema s’utilitza per transportar objectes entre entorns SAP (DEV, QAS, PRD)?",
+        "resposta_correcta": "TMS (Transport Management System)",
+        "respostes_incorrectes": [
+            "SAP PI",
+            "SAP BPC",
+            "SAP BW"
+        ],
+        "context": "El TMS permet moure configuracions i desenvolupaments d’un entorn a un altre garantint coherència."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quina eina permet administrar SAP HANA a través d’una interfície web?",
+        "resposta_correcta": "SAP HANA Cockpit",
+        "respostes_incorrectes": [
+            "SAP GUI",
+            "SAP Solution Manager",
+            "SAP BW Workbench"
+        ],
+        "context": "HANA Cockpit és una eina d’administració basada en navegador per monitoritzar i configurar sistemes HANA."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quina diferència principal hi ha entre SAP on HANA i S/4HANA?",
+        "resposta_correcta": "S/4HANA és nadiu per HANA, SAP on HANA només migra la base de dades",
+        "respostes_incorrectes": [
+            "No hi ha cap diferència",
+            "SAP on HANA és més nou",
+            "S/4HANA funciona amb Oracle"
+        ],
+        "context": "S/4HANA està optimitzat per aprofitar les capacitats in-memory de la base de dades HANA."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quin component SAP permet gestionar el cicle de vida de les aplicacions i incidències?",
+        "resposta_correcta": "SAP Solution Manager",
+        "respostes_incorrectes": [
+            "SAP PI",
+            "SAP ERP",
+            "SAP ECC"
+        ],
+        "context": "Solution Manager (SolMan) proporciona funcions per gestió de canvis, proves i suport ITSM."
+    },
+    {
+        "nivell": "Normal 🟡",
+        "pregunta": "Quin tipus de backup desa només els canvis des de la darrera còpia completa en SAP HANA?",
+        "resposta_correcta": "Backup incremental",
+        "respostes_incorrectes": [
+            "Backup complet",
+            "Backup diferencial",
+            "Backup paral·lel"
+        ],
+        "context": "Els backups incrementals optimitzen espai i temps copiant només els canvis respecte la còpia completa."
+    },
+    {
+        "nivell": "Difícil 🔵",
+        "pregunta": "Quin mecanisme de SAP HANA garanteix la persistència de dades després d’una fallada?",
+        "resposta_correcta": "Savepoints i redo logs",
+        "respostes_incorrectes": [
+            "Snapshots i memòria flash",
+            "Replication Server",
+            "Archive Logs"
+        ],
+        "context": "HANA utilitza savepoints periòdics i redo logs per assegurar que les dades es puguin recuperar."
+    },
+    {
+        "nivell": "Difícil 🔵",
+        "pregunta": "Quin component de SAP PI defineix estructures de dades i mapatges?",
+        "resposta_correcta": "Enterprise Service Repository (ESR)",
+        "respostes_incorrectes": [
+            "System Landscape Directory (SLD)",
+            "Integration Directory",
+            "Monitoring Manager"
+        ],
+        "context": "L’ESR defineix interfícies i mapatges per a la integració entre sistemes SAP i no SAP."
+    },
+    {
+        "nivell": "Difícil 🔵",
+        "pregunta": "Quina funció té el System Landscape Directory (SLD)?",
+        "resposta_correcta": "Registrar sistemes tècnics i versions en el paisatge SAP",
+        "respostes_incorrectes": [
+            "Executar mapatges d’interfícies",
+            "Controlar permisos d’usuari",
+            "Desar paràmetres de transport"
+        ],
+        "context": "L’SLD és un catàleg central que descriu sistemes i components de l’entorn SAP PI/PO."
+    },
+    {
+        "nivell": "Difícil 🔵",
+        "pregunta": "Quina eina de SAP permet gestionar proves i control de qualitat del programari?",
+        "resposta_correcta": "Test Suite (dins SAP Solution Manager)",
+        "respostes_incorrectes": [
+            "SAP HANA Studio",
+            "SAP BW",
+            "SAP PI"
+        ],
+        "context": "El mòdul Test Suite de SolMan s’utilitza per planificar i executar proves dins del cicle de vida SAP."
+    },
+    {
+        "nivell": "Difícil 🔵",
+        "pregunta": "En SAP BASIS, quin Work Process gestiona els bloquejos d’objectes per garantir coherència?",
+        "resposta_correcta": "Enqueue Work Process",
+        "respostes_incorrectes": [
+            "Dialog Work Process",
+            "Update Work Process",
+            "Spool Work Process"
+        ],
+        "context": "L’Enqueue WP gestiona els bloquejos per evitar conflictes simultanis en accés a dades."
+    }
+]

@@ -1,7 +1,8 @@
 {
   "files": [
-    "56-Backup321_Ransomware-test.json",
-    "56-Backup321_Ransomware-truefalse.json",
-    "T54-BBDD_NoSql-truefalse.json"
+    "T56-Backup321_Ransomware-test.json",
+    "T56-Backup321_Ransomware-truefalse.json",
+    "T54-BBDD_NoSql-truefalse.json",
+    "T52_Tecnica_sistemes_BASIS_i_SAP_HANA_test.json"
   ]
 }
