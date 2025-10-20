@@ -40,11 +40,17 @@
     border:1px solid #2a3554;
   }
 
+  .option.seleccionada {
+    background: #2a3554;
+    border: 2px solid #6ae0a7;
+    color: #ffffff;
+  }
+
   .option:hover,
   .option:active {
     background:#24325a;
     transform:scale(1.01);
-  }
+  }  
 
   /* Botó SEGUENT més gran i centrat */
   #seguentBtn {
@@ -103,7 +109,6 @@
     <button id="seguentBtn" style="display:none;margin-top:10px;">SEGUENT ➡️</button>
   </div>
 
-  <h3>❌ Historial d’errors</h3>
   <button id="copyHistBtn" style="margin-top:8px;">📋 Copiar historial</button>
   <span id="copyMsg" style="margin-left:10px;color:#6ae0a7;font-size:13px;"></span>
   <textarea id="historial" readonly></textarea>
@@ -151,6 +156,34 @@
   }
 
   llistarTestsDesDeManifests();
+
+  // 🧭 Comprova si hi ha paràmetre ?test= a la URL
+  window.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const testParam = params.get("test");
+    if (testParam) {
+      // Carreguem el test automàticament
+      try {
+        tipusTest = testParam.includes("truefalse") ? "truefalse" : "test";
+        const res = await fetch(testParam);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        testData = await res.json();
+
+        // 🔀 Barregem l'ordre de les preguntes
+        testData.sort(() => Math.random() - 0.5);
+
+        currentIndex = 0;
+        correctes = 0;
+        respostes = 0;
+
+        // Mostra el test directament
+        mostrarPregunta();
+      } catch (e) {
+        alert("No s'ha pogut carregar el test indicat a la URL: " + e.message);
+      }
+    }
+  });
+
 
   loadBtn.addEventListener("click", async ()=>{
     const path = testSelect.value;
@@ -204,7 +237,7 @@
         const btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = val;
-        const expected = (q.resposta_boolen === true || q.resposta_boolen === "true");
+        const expected = (q.resposta_boolean === true || q.resposta_boolean === "true");
         const userVal = (val === "Cert");
         btn.onclick = ()=>comprovarResposta(userVal, expected, q);
         opcionsEl.appendChild(btn);
@@ -216,6 +249,18 @@
     feedbackEl.innerHTML = "";
     const correcte = (userAnswer === correctAnswer);
     respostes++;
+
+    // Elimina qualsevol selecció prèvia
+    Array.from(opcionsEl.querySelectorAll(".option")).forEach(b => {
+      b.disabled = true;
+      b.classList.remove("seleccionada");
+    });
+
+    // Marca la resposta que ha triat l'usuari
+    const botoSeleccionat = Array.from(opcionsEl.querySelectorAll(".option"))
+      .find(b => b.textContent.trim() === (typeof userAnswer === "boolean" ? (userAnswer ? "Cert" : "Fals") : userAnswer));
+    if (botoSeleccionat) botoSeleccionat.classList.add("seleccionada");
+
     if (correcte) {
       correctes++;
       feedbackEl.innerHTML = `<div class='ok'>✅ Correcte!</div><div>${q.context || ""}</div>`;
@@ -223,10 +268,11 @@
       feedbackEl.innerHTML = `<div class='ko'>❌ Incorrecte</div><div>${q.context || ""}</div>`;
       guardarError(q, userAnswer);
     }
+
     actualitzarProgres();
-    Array.from(opcionsEl.querySelectorAll("button")).forEach(b=>b.disabled=true);
     seguentBtn.style.display = "inline-block";
   }
+
 
   seguentBtn.addEventListener("click", ()=>{
     currentIndex++;
@@ -246,7 +292,7 @@
       txt += `Respostes: ${opcions.join(" | ")}\n`;
       txt += `Correcte: ${q.resposta_correcta}\nSeleccionada: ${userAnswer}\n`;
     } else {
-      txt += `Correcte: ${q.resposta_boolen}\nSeleccionada: ${userAnswer}\n`;
+      txt += `Correcte: ${q.resposta_boolean}\nSeleccionada: ${userAnswer}\n`;
     }
     txt += `Context: ${q.context || ""}\n---\n`;
     historialEl.value = txt + historialEl.value;

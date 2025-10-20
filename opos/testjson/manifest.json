@@ -1,6 +1,7 @@
 {
   "files": [
     "56-Backup321_Ransomware-test.json",
-    "56-Backup321_Ransomware-truefalse.json"
+    "56-Backup321_Ransomware-truefalse.json",
+    "T54-BBDD_NoSql-truefalse.json"
   ]
 }

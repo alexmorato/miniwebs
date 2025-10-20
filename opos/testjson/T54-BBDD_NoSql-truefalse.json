@@ -1,0 +1,62 @@
+[
+  {
+    "nivell": "Fàcil",
+    "pregunta": "Les bases de dades NoSQL utilitzen sempre el llenguatge SQL",
+    "resposta_boolean": false,
+    "context": "NoSQL vol dir 'Not Only SQL' i utilitza altres models i llenguatges de consulta."
+  },
+  {
+    "nivell": "Fàcil",
+    "pregunta": "Les bases NoSQL permeten esquemes flexibles sense estructura fixa",
+    "resposta_boolean": true,
+    "context": "Poden adaptar-se a dades diferents sense redissenyar la base."
+  },
+  {
+    "nivell": "Normal",
+    "pregunta": "El teorema CAP estableix que un sistema pot garantir alhora coherència, disponibilitat i tolerància a particions",
+    "resposta_boolean": false,
+    "context": "Només es poden garantir dues d’aquestes tres propietats."
+  },
+  {
+    "nivell": "Fàcil",
+    "pregunta": "Redis és una base de dades NoSQL de tipus clau-valor",
+    "resposta_boolean": true,
+    "context": "Redis emmagatzema dades com parelles clau-valor en memòria."
+  },
+  {
+    "nivell": "Fàcil",
+    "pregunta": "MongoDB és una base de dades relacional",
+    "resposta_boolean": false,
+    "context": "MongoDB és documental i emmagatzema dades en documents JSON o BSON."
+  },
+  {
+    "nivell": "Normal",
+    "pregunta": "Cassandra és un sistema NoSQL orientat a columnes",
+    "resposta_boolean": true,
+    "context": "Està basat en el model BigTable de Google."
+  },
+  {
+    "nivell": "Normal",
+    "pregunta": "Neo4j és una base de dades orientada a grafs",
+    "resposta_boolean": true,
+    "context": "Representa nodes i relacions amb el llenguatge Cypher."
+  },
+  {
+    "nivell": "Fàcil",
+    "pregunta": "Les bases NoSQL són ideals per dades massives i no estructurades",
+    "resposta_boolean": true,
+    "context": "Es fan servir en entorns Big Data i Cloud."
+  },
+  {
+    "nivell": "Normal",
+    "pregunta": "El model ACID és propi de les bases NoSQL",
+    "resposta_boolean": false,
+    "context": "És propi de bases SQL; NoSQL usa el model BASE."
+  },
+  {
+    "nivell": "Normal",
+    "pregunta": "El model BASE accepta coherència eventual",
+    "resposta_boolean": true,
+    "context": "Les rèpliques acaben sent coherents amb el temps."
+  }
+]
