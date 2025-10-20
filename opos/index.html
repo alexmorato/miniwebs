@@ -93,6 +93,10 @@
       const res = await fetch(path);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       testData = await res.json();
+
+      // 🔀 Barregem l'ordre de les preguntes aleatòriament
+      testData.sort(() => Math.random() - 0.5);
+
       currentIndex = 0;
       correctes = 0;
       respostes = 0;
