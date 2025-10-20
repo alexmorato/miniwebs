@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tests Oposicions</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0b1020; color:#e7ecff; margin:0; padding:20px; }
+  h1 { text-align:center; color:#6ae0a7; }
+  select, button { padding:10px; border-radius:8px; border:1px solid #27304a; background:#141a2a; color:#e7ecff; cursor:pointer; }
+  .question-box { background:#141a2a; border:1px solid #27304a; border-radius:16px; padding:16px; margin-top:20px; }
+  .option { display:block; margin:6px 0; }
+  .ok { color:#6ae0a7; font-weight:bold; }
+  .ko { color:#ff6b6b; font-weight:bold; }
+  textarea { width:100%; min-height:150px; background:#0f1526; color:#e7ecff; border-radius:10px; margin-top:10px; padding:10px; font-family:monospace; }
+  .muted{color:#9fb0ff;font-size:12px}
+  #progress {margin-bottom:10px;color:#9fb0ff;font-size:14px}
+</style>
+</head>
+<body>
+  <h1>🧠 Tests Oposicions TIC</h1>
+
+  <div class="muted">Carpetes: <span id="foldersList"></span></div>
+  <div style="margin:8px 0">
+    <label for="testSelect">Selecciona un test:</label>
+    <select id="testSelect"></select>
+    <button id="loadBtn">Carregar test</button>
+  </div>
+
+  <div id="quizArea" class="question-box" style="display:none;">
+    <div id="progress"></div>
+    <div id="nivell"></div>
+    <div id="pregunta" style="margin:10px 0;font-weight:bold;"></div>
+    <div id="opcions"></div>
+    <div id="feedback" style="margin-top:8px"></div>
+    <button id="seguentBtn" style="display:none;margin-top:10px;">SEGUENT ➡️</button>
+  </div>
+
+  <h3>❌ Historial d’errors</h3>
+  <button id="copyHistBtn" style="margin-top:8px;">📋 Copiar historial</button>
+  <span id="copyMsg" style="margin-left:10px;color:#6ae0a7;font-size:13px;"></span>
+  <textarea id="historial" readonly></textarea>
+
+<script>
+  const testFolders = ["testjson"];
+  document.getElementById('foldersList').textContent = testFolders.join(", ");
+
+  const testSelect = document.getElementById("testSelect");
+  const loadBtn = document.getElementById("loadBtn");
+  const quizArea = document.getElementById("quizArea");
+  const nivellEl = document.getElementById("nivell");
+  const preguntaEl = document.getElementById("pregunta");
+  const opcionsEl = document.getElementById("opcions");
+  const feedbackEl = document.getElementById("feedback");
+  const historialEl = document.getElementById("historial");
+  const seguentBtn = document.getElementById("seguentBtn");
+  const progressEl = document.getElementById("progress");
+
+  let testData = [];
+  let currentIndex = 0;
+  let tipusTest = "truefalse";
+  let correctes = 0;
+  let respostes = 0;
+
+  async function llistarTestsDesDeManifests() {
+    testSelect.innerHTML = "";
+    for (const folder of testFolders) {
+      try {
+        const res = await fetch(`${folder}/manifest.json`);
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (!data.files) continue;
+        const og = document.createElement("optgroup");
+        og.label = folder;
+        data.files.forEach(file=>{
+          const opt = document.createElement("option");
+          opt.value = `${folder}/${file}`;
+          opt.textContent = `${folder}/${file}`;
+          og.appendChild(opt);
+        });
+        testSelect.appendChild(og);
+      } catch(e) { console.warn("Error llegint manifest", e); }
+    }
+  }
+
+  llistarTestsDesDeManifests();
+
+  loadBtn.addEventListener("click", async ()=>{
+    const path = testSelect.value;
+    if (!path) { alert("Selecciona un test"); return; }
+    tipusTest = path.includes("truefalse") ? "truefalse" : "test";
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      testData = await res.json();
+      currentIndex = 0;
+      correctes = 0;
+      respostes = 0;
+      mostrarPregunta();
+    } catch(e) {
+      alert("No s'ha pogut carregar el test: " + e.message);
+    }
+  });
+
+  function mostrarPregunta() {
+    if (currentIndex >= testData.length) {
+      quizArea.style.display = "none";
+      const nota = ((correctes / respostes) * 100).toFixed(1);
+      alert(`Has completat el test! ✅\nPuntuació final: ${correctes}/${respostes} (${nota}%)`);
+      return;
+    }
+    quizArea.style.display = "block";
+    seguentBtn.style.display = "none";
+    const q = testData[currentIndex];
+    nivellEl.textContent = q.nivell || "";
+    preguntaEl.textContent = q.pregunta || "";
+    feedbackEl.textContent = "";
+    opcionsEl.innerHTML = "";
+    actualitzarProgres();
+
+    if (tipusTest === "test") {
+      const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+      opcions.sort(()=>Math.random()-0.5);
+      opcions.forEach(opt=>{
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = ()=>comprovarResposta(opt, q.resposta_correcta, q);
+        opcionsEl.appendChild(btn);
+      });
+    } else {
+      ["Cert","Fals"].forEach(val=>{
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = val;
+        const expected = (q.resposta_boolen === true || q.resposta_boolen === "true");
+        const userVal = (val === "Cert");
+        btn.onclick = ()=>comprovarResposta(userVal, expected, q);
+        opcionsEl.appendChild(btn);
+      });
+    }
+  }
+
+  function comprovarResposta(userAnswer, correctAnswer, q) {
+    feedbackEl.innerHTML = "";
+    const correcte = (userAnswer === correctAnswer);
+    respostes++;
+    if (correcte) {
+      correctes++;
+      feedbackEl.innerHTML = `<div class='ok'>✅ Correcte!</div><div>${q.context || ""}</div>`;
+    } else {
+      feedbackEl.innerHTML = `<div class='ko'>❌ Incorrecte</div><div>${q.context || ""}</div>`;
+      guardarError(q, userAnswer);
+    }
+    actualitzarProgres();
+    Array.from(opcionsEl.querySelectorAll("button")).forEach(b=>b.disabled=true);
+    seguentBtn.style.display = "inline-block";
+  }
+
+  seguentBtn.addEventListener("click", ()=>{
+    currentIndex++;
+    mostrarPregunta();
+  });
+
+  function actualitzarProgres() {
+    const total = testData.length;
+    const percent = respostes ? ((correctes / respostes) * 100).toFixed(1) : 0;
+    progressEl.textContent = `Pregunta ${currentIndex + 1} de ${total} — ${percent}% encerts`;
+  }
+
+  function guardarError(q, userAnswer) {
+    let txt = `Nivell: ${q.nivell}\nPregunta: ${q.pregunta}\n`;
+    if (tipusTest === "test") {
+      const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+      txt += `Respostes: ${opcions.join(" | ")}\n`;
+      txt += `Correcte: ${q.resposta_correcta}\nSeleccionada: ${userAnswer}\n`;
+    } else {
+      txt += `Correcte: ${q.resposta_boolen}\nSeleccionada: ${userAnswer}\n`;
+    }
+    txt += `Context: ${q.context || ""}\n---\n`;
+    historialEl.value = txt + historialEl.value;
+  }
+
+  // 🧩 Botó per copiar l’historial al portapapers
+  const copyHistBtn = document.getElementById("copyHistBtn");
+  const copyMsg = document.getElementById("copyMsg");
+
+  copyHistBtn.addEventListener("click", async ()=>{
+    try {
+      await navigator.clipboard.writeText(historialEl.value);
+      copyMsg.textContent = "✅ Copiat!";
+      setTimeout(()=>copyMsg.textContent="",2000);
+    } catch (err) {
+      copyMsg.textContent = "❌ No s'ha pogut copiar";
+    }
+  });
+</script>
+</body>
+</html>

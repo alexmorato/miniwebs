@@ -1,0 +1,662 @@
+[
+  {
+    "pregunta": "Quin és l’objectiu principal d’un sistema de còpies de seguretat?",
+    "resposta_correcta": "Garantir la disponibilitat i la integritat de les dades",
+    "respostes_incorrectes": [
+      "Augmentar la velocitat del sistema",
+      "Reduir el cost de maquinari",
+      "Evitar l’ús del núvol"
+    ],
+    "context": "Els backups asseguren que les dades es puguin recuperar després d’un error, atac o corrupció. Són essencials per garantir la continuïtat dels serveis digitals.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què estableix el model de backup 3-2-1?",
+    "resposta_correcta": "Mantenir tres còpies, en dos suports diferents i una fora del lloc",
+    "respostes_incorrectes": [
+      "Fer tres còpies al mateix disc",
+      "Tenir dues còpies i un mirall RAID",
+      "Fer quatre còpies completes setmanals"
+    ],
+    "context": "El model 3-2-1 garanteix redundància i protecció davant pèrdues o danys físics, assegurant que sempre hi hagi una còpia fora de l’entorn principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "El model 3-2-1-1-0 afegeix al tradicional 3-2-1...",
+    "resposta_correcta": "Una còpia immutable i zero errors a les proves de restauració",
+    "respostes_incorrectes": [
+      "Una còpia sense xifratge",
+      "Un suport addicional al núvol",
+      "Una còpia automàtica diària"
+    ],
+    "context": "Aquest model reforça el 3-2-1 afegint una còpia immutable (no modificable) i validació periòdica de restauració per garantir la fiabilitat total.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin tipus de backup copia totes les dades cada vegada?",
+    "resposta_correcta": "Backup complet",
+    "respostes_incorrectes": [
+      "Backup incremental",
+      "Backup diferencial",
+      "Backup parcial"
+    ],
+    "context": "El backup complet fa una còpia total del conjunt de dades. Encara que sigui lent, és la base sobre la qual es fan els incrementals i diferencials.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què fa un backup incremental?",
+    "resposta_correcta": "Copia només els canvis des de l’últim backup",
+    "respostes_incorrectes": [
+      "Copia totes les dades del sistema",
+      "Copia només els fitxers nous",
+      "Copia cada setmana els fitxers grans"
+    ],
+    "context": "Aquest tipus de còpia és més eficient en espai i temps, però requereix l’últim backup complet per fer una restauració completa.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què és una còpia diferencial?",
+    "resposta_correcta": "Copia els canvis des de l’últim backup complet",
+    "respostes_incorrectes": [
+      "Copia només fitxers nous",
+      "Copia canvis des de l’últim incremental",
+      "Només copia dades del núvol"
+    ],
+    "context": "El backup diferencial s’acumula amb el temps però redueix els passos necessaris per restaurar, en comparació amb els incrementals.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Per què s’han de fer proves de restauració periòdiques?",
+    "resposta_correcta": "Per garantir que les còpies funcionen i es poden recuperar",
+    "respostes_incorrectes": [
+      "Per ocupar menys espai",
+      "Per millorar la velocitat",
+      "Per desconnectar servidors antics"
+    ],
+    "context": "Provar la restauració és l’única manera de verificar que els backups són útils. Sense proves, es pot descobrir massa tard que la còpia era invàlida.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin suport és ideal per còpies a llarg termini i offsite?",
+    "resposta_correcta": "Cintes magnètiques LTO",
+    "respostes_incorrectes": [
+      "Discos SSD",
+      "Memòries USB",
+      "Còpies en RAID"
+    ],
+    "context": "Les cintes LTO ofereixen gran capacitat, durabilitat i baix cost per guardar còpies arxivades o lluny del centre de dades principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin és l’objectiu de mantenir còpies offsite?",
+    "resposta_correcta": "Evitar la pèrdua total de dades en cas de desastre local",
+    "respostes_incorrectes": [
+      "Reduir el consum elèctric",
+      "Fer còpies més ràpides",
+      "Millorar l’accés en xarxa"
+    ],
+    "context": "Una còpia fora de la ubicació física principal permet recuperar dades fins i tot si un incendi, inundació o atac afecta el CPD principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què vol dir que una còpia és immutable?",
+    "resposta_correcta": "Que no es pot modificar ni esborrar fins que expira",
+    "respostes_incorrectes": [
+      "Que està xifrada amb AES-256",
+      "Que es pot modificar un cop al dia",
+      "Que només es guarda al núvol"
+    ],
+    "context": "Les còpies immutables protegeixen contra ransomware i errors humans, ja que impedeixen qualsevol modificació durant el període de retenció.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin és l’objectiu principal d’un sistema de còpies de seguretat? (11)",
+    "resposta_correcta": "Garantir la disponibilitat i la integritat de les dades",
+    "respostes_incorrectes": [
+      "Augmentar la velocitat del sistema",
+      "Reduir el cost de maquinari",
+      "Evitar l’ús del núvol"
+    ],
+    "context": "Els backups asseguren que les dades es puguin recuperar després d’un error, atac o corrupció. Són essencials per garantir la continuïtat dels serveis digitals.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què estableix el model de backup 3-2-1? (12)",
+    "resposta_correcta": "Mantenir tres còpies, en dos suports diferents i una fora del lloc",
+    "respostes_incorrectes": [
+      "Fer tres còpies al mateix disc",
+      "Tenir dues còpies i un mirall RAID",
+      "Fer quatre còpies completes setmanals"
+    ],
+    "context": "El model 3-2-1 garanteix redundància i protecció davant pèrdues o danys físics, assegurant que sempre hi hagi una còpia fora de l’entorn principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "El model 3-2-1-1-0 afegeix al tradicional 3-2-1... (13)",
+    "resposta_correcta": "Una còpia immutable i zero errors a les proves de restauració",
+    "respostes_incorrectes": [
+      "Una còpia sense xifratge",
+      "Un suport addicional al núvol",
+      "Una còpia automàtica diària"
+    ],
+    "context": "Aquest model reforça el 3-2-1 afegint una còpia immutable (no modificable) i validació periòdica de restauració per garantir la fiabilitat total.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin tipus de backup copia totes les dades cada vegada? (14)",
+    "resposta_correcta": "Backup complet",
+    "respostes_incorrectes": [
+      "Backup incremental",
+      "Backup diferencial",
+      "Backup parcial"
+    ],
+    "context": "El backup complet fa una còpia total del conjunt de dades. Encara que sigui lent, és la base sobre la qual es fan els incrementals i diferencials.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què fa un backup incremental? (15)",
+    "resposta_correcta": "Copia només els canvis des de l’últim backup",
+    "respostes_incorrectes": [
+      "Copia totes les dades del sistema",
+      "Copia només els fitxers nous",
+      "Copia cada setmana els fitxers grans"
+    ],
+    "context": "Aquest tipus de còpia és més eficient en espai i temps, però requereix l’últim backup complet per fer una restauració completa.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què és una còpia diferencial? (16)",
+    "resposta_correcta": "Copia els canvis des de l’últim backup complet",
+    "respostes_incorrectes": [
+      "Copia només fitxers nous",
+      "Copia canvis des de l’últim incremental",
+      "Només copia dades del núvol"
+    ],
+    "context": "El backup diferencial s’acumula amb el temps però redueix els passos necessaris per restaurar, en comparació amb els incrementals.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Per què s’han de fer proves de restauració periòdiques? (17)",
+    "resposta_correcta": "Per garantir que les còpies funcionen i es poden recuperar",
+    "respostes_incorrectes": [
+      "Per ocupar menys espai",
+      "Per millorar la velocitat",
+      "Per desconnectar servidors antics"
+    ],
+    "context": "Provar la restauració és l’única manera de verificar que els backups són útils. Sense proves, es pot descobrir massa tard que la còpia era invàlida.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin suport és ideal per còpies a llarg termini i offsite? (18)",
+    "resposta_correcta": "Cintes magnètiques LTO",
+    "respostes_incorrectes": [
+      "Discos SSD",
+      "Memòries USB",
+      "Còpies en RAID"
+    ],
+    "context": "Les cintes LTO ofereixen gran capacitat, durabilitat i baix cost per guardar còpies arxivades o lluny del centre de dades principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Quin és l’objectiu de mantenir còpies offsite? (19)",
+    "resposta_correcta": "Evitar la pèrdua total de dades en cas de desastre local",
+    "respostes_incorrectes": [
+      "Reduir el consum elèctric",
+      "Fer còpies més ràpides",
+      "Millorar l’accés en xarxa"
+    ],
+    "context": "Una còpia fora de la ubicació física principal permet recuperar dades fins i tot si un incendi, inundació o atac afecta el CPD principal.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "pregunta": "Què vol dir que una còpia és immutable? (20)",
+    "resposta_correcta": "Que no es pot modificar ni esborrar fins que expira",
+    "respostes_incorrectes": [
+      "Que està xifrada amb AES-256",
+      "Que es pot modificar un cop al dia",
+      "Que només es guarda al núvol"
+    ],
+    "context": "Les còpies immutables protegeixen contra ransomware i errors humans, ja que impedeixen qualsevol modificació durant el període de retenció.",
+    "nivell": "Fàcil 🟢"
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #1: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #2: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #3: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #4: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #5: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #6: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #7: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #8: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #9: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #10: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #11: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #12: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #13: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #14: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #15: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #16: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #17: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #18: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #19: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Pregunta de nivell normal #20: quin és el propòsit d'una estratègia de backup equilibrada?",
+    "resposta_correcta": "Minimitzar la pèrdua de dades i el temps de recuperació",
+    "respostes_incorrectes": [
+      "Reduir l’espai del servidor",
+      "Eliminar còpies antigues",
+      "Fer còpies sense verificar"
+    ],
+    "context": "Una estratègia de backup equilibrada busca optimitzar els objectius RPO i RTO per mantenir la continuïtat dels serveis sense sobrecarregar recursos."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #1: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #2: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #3: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #4: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #5: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #6: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #7: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #8: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #9: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #10: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #11: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #12: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #13: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #14: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #15: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #16: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #17: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #18: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #19: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Pregunta avançada #20: quin avantatge aporta una arquitectura air-gapped en un sistema de còpies?",
+    "resposta_correcta": "Evita que malware o ransomware afecti les còpies desconnectades",
+    "respostes_incorrectes": [
+      "Accelera la sincronització",
+      "Permet còpies en línia constants",
+      "Redueix la necessitat d’autenticació"
+    ],
+    "context": "Una arquitectura air-gapped manté còpies de seguretat aïllades del sistema principal, eliminant la via d’infecció digital i garantint recuperació fiable fins i tot en atacs globals."
+  }
+]
