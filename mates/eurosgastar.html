@@ -434,6 +434,17 @@
 
     renderRondes();
     nouProblema();
+
+    // 🔢 Evitar que els cèntims passin de 99
+    document.getElementById("centims").addEventListener("input", function () {
+      let valor = parseInt(this.value);
+      if (valor > 99) {
+        this.value = 99;
+      } else if (valor < 0 || isNaN(valor)) {
+        this.value = ""; // opcional: neteja si posa coses rares
+      }
+    });
+    
   </script>
 </body>
 </html>
