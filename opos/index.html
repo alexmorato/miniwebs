@@ -91,13 +91,15 @@
 </style>
 </head>
 <body>
-  <h1>🧠 Tests Oposicions TIC</h1>
+  <h2>🧠 Tests Opos</h2>
 
-  <div class="muted">Carpetes: <span id="foldersList"></span></div>
-  <div style="margin:8px 0">
-    <label for="testSelect">Selecciona un test:</label>
-    <select id="testSelect"></select>
-    <button id="loadBtn">Carregar test</button>
+  <div id="selectorArea">
+    <div class="muted">Carpetes: <span id="foldersList"></span></div>
+    <div style="margin:8px 0">
+      <label for="testSelect">Selecciona un test:</label>
+      <select id="testSelect"></select>
+      <button id="loadBtn">Carregar test</button>
+    </div>
   </div>
 
   <div id="quizArea" class="question-box" style="display:none;">
@@ -188,6 +190,9 @@
   loadBtn.addEventListener("click", async ()=>{
     const path = testSelect.value;
     if (!path) { alert("Selecciona un test"); return; }
+
+    //elimina l'àrea de selecció de test i botó de carrega del test
+    document.getElementById("selectorArea").style.display = "none";
     tipusTest = path.includes("truefalse") ? "truefalse" : "test";
     try {
       const res = await fetch(path);
