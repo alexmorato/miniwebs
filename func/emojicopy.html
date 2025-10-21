@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CopyPaste-feina</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .emoji-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    button {
+      background-color: #fff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #copy-date {
+      grid-column: 1 / -1;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      font-size: 1.3rem;
+      padding: 15px;
+      border: none;
+    }
+
+    #copy-date:hover {
+      background-color: #0056b3;
+    }
+
+    #message {
+      margin-top: 20px;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>💼 CopyPaste</h1>
+  <div class="emoji-container">
+    <button id="copy-date" onclick="copyDate()">📅 Copia data</button>
+    <button onclick="copyEmoji('🚧 Building')">🚧 Building</button>
+    <button onclick="copyEmoji('🚀 Deploy')">🚀 Deploy</button>
+    <button onclick="copyEmoji('✅ OK')">✅ OK</button>
+    <button onclick="copyEmoji('❌ KO')">❌ KO</button>
+    <button onclick="copyEmoji('⚠️ Atenció')">⚠️ Atenció</button>
+    <button onclick="copyEmoji('😱 Espantat')">😱 Espantat</button>
+  </div>
+  <div id="message">Copiat al porta-retalls!</div>
+
+  <script>
+    function showMessage(text) {
+      const msg = document.getElementById('message');
+      msg.style.display = 'block';
+      msg.style.opacity = '1';
+      msg.textContent = text;
+      setTimeout(() => {
+        msg.style.transition = 'opacity 0.5s';
+        msg.style.opacity = '0';
+        setTimeout(() => msg.style.display = 'none', 500);
+      }, 2000);
+    }
+
+    function copyEmoji(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showMessage(`Copiat al porta-retalls: ${text}`);
+      });
+    }
+
+    function copyDate() {
+      const now = new Date();
+      const formatted = now.getFullYear() + '/' +
+        String(now.getMonth() + 1).padStart(2, '0') + '/' +
+        String(now.getDate()).padStart(2, '0') + ' ' +
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0');
+      navigator.clipboard.writeText(formatted).then(() => {
+        showMessage(`Copiat al porta-retalls: ${formatted}`);
+      });
+    }
+  </script>
+</body>
+</html>
