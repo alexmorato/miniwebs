@@ -1,0 +1,134 @@
+[
+  {
+    "nivell": "Fàcil 🟢 | OPOS21_ex. especific #14",
+    "pregunta": "Quan una empresa utilitza un model CPD de Cloud Híbrid, volem dir que:",
+    "resposta_correcta": "Té allotjats els seus sistemes d’informació en diferents proveïdors i també en els seus propis CPDs.",
+    "respostes_incorrectes": [
+      "Només utilitza núvol públic.",
+      "Té tota la infraestructura externalitzada.",
+      "Disposa d’un únic centre de dades centralitzat."
+    ],
+    "context": "El núvol híbrid combina infraestructures pròpies i recursos externs per obtenir flexibilitat i redundància."
+  },
+  {
+    "nivell": "Normal 🟡 | OPOS21_ex. especific #13",
+    "pregunta": "Quan una empresa contracta a un tercer l’accés a un sistema de gestió d’actius en format de pagament per ús (quota d’usuaris simultanis), està fent un contracte de:",
+    "resposta_correcta": "SaaS (Software as a Service).",
+    "respostes_incorrectes": [
+      "PaaS (Platform as a Service).",
+      "IaaS (Infrastructure as a Service).",
+      "DaaS (Data as a Service)."
+    ],
+    "context": "El SaaS ofereix aplicacions completes com a servei, amb pagament per ús i sense gestió d’infraestructura."
+  },
+  {
+    "nivell": "Normal 🟡 | OPOS21_ex. especific #14",
+    "pregunta": "La modalitat de cloud computing on s’ofereix tot el necessari per al desenvolupament i posada en producció d’aplicacions és:",
+    "resposta_correcta": "PaaS (Platform as a Service).",
+    "respostes_incorrectes": [
+      "SaaS (Software as a Service).",
+      "IaaS (Infrastructure as a Service).",
+      "CaaS (Communication as a Service)."
+    ],
+    "context": "El PaaS proporciona entorns de desenvolupament i desplegament sense necessitat de gestionar servidors."
+  },
+  {
+    "nivell": "Normal 🟡 | OPOS19_ex. especific #13",
+    "pregunta": "Quina diferència hi ha entre els models IaaS, PaaS i SaaS?",
+    "resposta_correcta": "IaaS proporciona infraestructura; PaaS plataformes de desenvolupament; SaaS aplicacions al núvol.",
+    "respostes_incorrectes": [
+      "IaaS ofereix aplicacions completes; PaaS gestiona xarxes; SaaS ofereix contenidors.",
+      "IaaS només inclou emmagatzematge; PaaS només entorns web; SaaS només serveis de correu.",
+      "IaaS proporciona hardware físic; PaaS software d’usuari; SaaS màquines virtuals."
+    ],
+    "context": "Són capes de servei dins del model cloud que defineixen el grau de gestió assumit pel proveïdor."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #3 (supòsit 2)",
+    "pregunta": "Per distribuir programari i altres activitats de gestió d’estacions, l’Ajuntament fa servir:",
+    "resposta_correcta": "System Center Configuration Manager (SCCM).",
+    "respostes_incorrectes": [
+      "VMware Horizon.",
+      "Citrix XenApp.",
+      "Active Directory Management Studio."
+    ],
+    "context": "SCCM (ara Microsoft Endpoint Configuration Manager) és clau en models híbrids amb dispositius locals i al núvol."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #4 (supòsit 2)",
+    "pregunta": "Quins tipus de dispositius i sistemes operatius pot gestionar SCCM?",
+    "resposta_correcta": "Equips amb Windows, macOS, Linux/Unix i dispositius mòbils iOS/Android.",
+    "respostes_incorrectes": [
+      "Només equips amb Windows 10.",
+      "Només servidors físics.",
+      "Només sistemes virtualitzats Azure."
+    ],
+    "context": "SCCM permet la gestió unificada d’endpoints en entorns híbrids multi-SO."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #5 (supòsit 2)",
+    "pregunta": "És possible agafar el control remot d’una estació fora de la xarxa corporativa?",
+    "resposta_correcta": "Sí, si té connexió habilitada (VPN o altres mètodes) amb la xarxa corporativa.",
+    "respostes_incorrectes": [
+      "Només des del mateix segment LAN.",
+      "Només amb accés físic.",
+      "No és possible per motius de seguretat."
+    ],
+    "context": "Els accessos remots segurs són essencials en entorns híbrids i de teletreball."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS21_ex. específic #17",
+    "pregunta": "Quines diferències hi ha entre escriptoris virtuals (VDI) i serveis de terminal (RDS)?",
+    "resposta_correcta": "En VDI l’usuari s’autentica a un SO complet; en RDS comparteix sessió dins d’un Windows Server.",
+    "respostes_incorrectes": [
+      "Són exactament el mateix servei.",
+      "RDS sempre requereix connexió VPN.",
+      "VDI només pot funcionar en núvol públic."
+    ],
+    "context": "Són dos models de virtualització usats per integrar entorns on-premises i Cloud."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS21_ex. específic #22",
+    "pregunta": "Utilitzant Microsoft SCCM per desplegar aplicacions remotament, quina afirmació és certa?",
+    "resposta_correcta": "Les aplicacions es poden assignar a usuaris o equips, físics o remots (VPN/VDI).",
+    "respostes_incorrectes": [
+      "Només es poden assignar a usuaris interns.",
+      "Requereixen sempre connexió física LAN.",
+      "Només es poden desplegar aplicacions de Microsoft."
+    ],
+    "context": "Permet unificar el desplegament d’aplicacions on-premises i Cloud des d’una única consola."
+  },
+  {
+    "nivell": "Normal 🟡 | OPOS23_ex. específic #47",
+    "pregunta": "En una arquitectura orientada a serveis (SOA), què és una implementació vàlida?",
+    "resposta_correcta": "Separar frontend (client) i backend (serveis) connectats per APIs.",
+    "respostes_incorrectes": [
+      "Totes les funcions integrades en un sol programa.",
+      "Aplicació web amb accés directe a base de dades.",
+      "Sistema client-servidor sense cap capa de serveis."
+    ],
+    "context": "Els entorns híbrids adopten SOA per interoperar aplicacions entre CPD i Cloud."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS23_ex. específic #20",
+    "pregunta": "Quin pla defineix les accions per assegurar la continuïtat del negoci davant d’interrupcions?",
+    "resposta_correcta": "PCN – Pla de Continuïtat de Negoci.",
+    "respostes_incorrectes": [
+      "DRP – Pla de Recuperació de Desastres.",
+      "Pla d’Emergència d’edifici.",
+      "Pla de Comunicació de Crisis."
+    ],
+    "context": "Els entorns híbrids són fonamentals per a la continuïtat i la recuperació del negoci (DRaaS)."
+  },
+  {
+    "nivell": "Difícil 🔵 | OPOS19_ex. pràctic #19",
+    "pregunta": "Segons l’Esquema Nacional de Seguretat (ENS), quines dimensions de seguretat s’han de valorar en la informació publicada?",
+    "resposta_correcta": "Confidencialitat, integritat, autenticitat i traçabilitat.",
+    "respostes_incorrectes": [
+      "Disponibilitat i rendiment.",
+      "Traçabilitat i latència.",
+      "Còpies de seguretat i accessibilitat."
+    ],
+    "context": "El compliment de l’ENS és obligatori en infraestructures híbrides de l’administració pública."
+  }
+]

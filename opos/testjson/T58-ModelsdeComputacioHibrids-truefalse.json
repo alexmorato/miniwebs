@@ -1,0 +1,122 @@
+[
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Els sistemes híbrids combinen infraestructures locals i serveis al núvol.",
+    "resposta_boolean": true,
+    "context": "Un entorn híbrid integra recursos on-premises i Cloud per aprofitar avantatges de tots dos."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "El model híbrid elimina completament la necessitat de servidors físics.",
+    "resposta_boolean": false,
+    "context": "Encara es mantenen servidors locals per a sistemes crítics o dades sensibles."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "En un model híbrid és possible tenir dades repartides entre el CPD i el núvol.",
+    "resposta_boolean": true,
+    "context": "És una característica bàsica dels models híbrids: flexibilitat en l’ubicació de dades."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "El Cloud bursting permet ampliar temporalment la capacitat del CPD fent ús del núvol.",
+    "resposta_boolean": true,
+    "context": "És una tècnica d’escalabilitat automàtica en models híbrids."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "El model multi-cloud i el model híbrid són exactament el mateix concepte.",
+    "resposta_boolean": false,
+    "context": "El multi-cloud usa diversos proveïdors Cloud; l’híbrid combina Cloud i infraestructura local."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Azure Arc és una solució per gestionar entorns híbrids i multi-núvol.",
+    "resposta_boolean": true,
+    "context": "Azure Arc permet controlar servidors i Kubernetes locals i Cloud des d’un únic panell Azure."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Els serveis SaaS permeten desplegar plataformes de desenvolupament d’aplicacions.",
+    "resposta_boolean": false,
+    "context": "Això correspon a PaaS; SaaS ofereix aplicacions completes com Microsoft 365."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "La latència és un problema potencial en entorns híbrids per la dependència de la xarxa.",
+    "resposta_boolean": true,
+    "context": "Les connexions entre CPD i Cloud poden generar retards perceptibles."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Els sistemes híbrids permeten estratègies de backup seguint el model 3-2-1.",
+    "resposta_boolean": true,
+    "context": "Una còpia pot residir al Cloud com a part d’aquest model de seguretat."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "El RGPD i l’ENS no s’apliquen als entorns híbrids, només als locals.",
+    "resposta_boolean": false,
+    "context": "Les normatives s’apliquen a tots els sistemes que tractin dades personals, locals o al núvol."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "El model híbrid simplifica la gestió dels sistemes i redueix la necessitat d’eines d’observabilitat.",
+    "resposta_boolean": false,
+    "context": "De fet, incrementa la complexitat i requereix eines de monitoratge unificat (ex. Grafana, Prometheus)."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Els costos OPEX es relacionen amb el pagament per ús de recursos al núvol.",
+    "resposta_boolean": true,
+    "context": "OPEX correspon a despeses operatives recurrents com els serveis Cloud."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Un entorn híbrid pot complir el principi de 'Zero Trust' aplicant autenticació i segmentació entre entorns.",
+    "resposta_boolean": true,
+    "context": "El Zero Trust assumeix que cap connexió és segura per defecte, fins i tot dins del CPD."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "El model híbrid impedeix implementar un pla de Disaster Recovery efectiu.",
+    "resposta_boolean": false,
+    "context": "En realitat, és una de les seves principals utilitats: replicar dades al Cloud per recuperació de desastres."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Els estàndards ISO 27017 i 27018 estan orientats exclusivament a seguretat en sistemes locals.",
+    "resposta_boolean": false,
+    "context": "Són estàndards específics per a la seguretat i protecció de dades en serveis Cloud."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "En un model híbrid, la responsabilitat de seguretat és compartida entre l’organització i el proveïdor Cloud.",
+    "resposta_boolean": true,
+    "context": "Cada part s’encarrega de diferents capes: infraestructura, aplicacions, dades i configuració."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Els serveis PaaS ofereixen entorns per desenvolupar aplicacions sense gestionar el sistema operatiu.",
+    "resposta_boolean": true,
+    "context": "El proveïdor PaaS gestiona el SO, middleware i runtime; l’usuari crea el programari."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "AWS Outposts és una solució per desplegar recursos Cloud en un CPD propi.",
+    "resposta_boolean": true,
+    "context": "Permet tenir infraestructura d’AWS instal·lada físicament en entorns locals."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "En un entorn híbrid, el control d’identitat i accés (IAM) no és necessari perquè el Cloud ja és segur per defecte.",
+    "resposta_boolean": false,
+    "context": "La seguretat al Cloud és compartida; l’IAM és essencial per controlar usuaris i permisos."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "L’ús de SD-WAN millora la gestió i la priorització del tràfic entre entorns híbrids.",
+    "resposta_boolean": true,
+    "context": "La SD-WAN optimitza el rendiment de xarxes distribuïdes i gestiona la connectivitat multi-site."
+  }
+]

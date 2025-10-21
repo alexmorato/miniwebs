@@ -5,6 +5,9 @@
     "T56-Backup321_Ransomware-test.json",
     "T56-Backup321_Ransomware-truefalse.json",
     "T57-ContinuitatNegociDR-truefalse.json",
-    "T57-ContinuitatNegociDR-test.json"
+    "T57-ContinuitatNegociDR-test.json",
+    "T58-ModelsdeComputacioHibrids-truefalse.json",
+    "T58-ModelsdeComputacioHibrids-test.json",
+    "T58-ModelsdeComputacioHibrids_OPOSXX-test.json"
   ]
 }

@@ -1,0 +1,642 @@
+[
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Què és un model de computació híbrid?",
+    "resposta_correcta": "Una combinació d'infraestructura local i serveis al núvol interconnectats.",
+    "respostes_incorrectes": [
+      "Un sistema exclusivament basat en núvol públic.",
+      "Un conjunt de servidors físics sense connexió externa.",
+      "Una aplicació que només s'executa en dispositius mòbils."
+    ],
+    "context": "El model híbrid permet integrar recursos locals (on-premises) amb el núvol per obtenir flexibilitat i control."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina és la principal característica dels entorns on-premises?",
+    "resposta_correcta": "L'organització té control total sobre la infraestructura i les dades.",
+    "respostes_incorrectes": [
+      "Els recursos són gestionats completament pel proveïdor del núvol.",
+      "Només s'utilitzen en entorns multi-cloud.",
+      "Totes les dades s'allotgen en sistemes públics."
+    ],
+    "context": "On-premises implica infraestructura pròpia ubicada en el CPD de l'organització."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin model de servei proporciona aplicacions completes accessibles via navegador?",
+    "resposta_correcta": "SaaS (Software as a Service)",
+    "respostes_incorrectes": [
+      "PaaS (Platform as a Service)",
+      "IaaS (Infrastructure as a Service)",
+      "CaaS (Containers as a Service)"
+    ],
+    "context": "SaaS ofereix programari complet com Microsoft 365 o Salesforce."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin avantatge ofereix un model híbrid respecte al model 100% cloud?",
+    "resposta_correcta": "Permet mantenir dades sensibles al CPD mentre es gaudeix d'escalabilitat al núvol.",
+    "respostes_incorrectes": [
+      "Evita completament la necessitat de connexió a Internet.",
+      "Elimina tots els costos operatius de TI.",
+      "No requereix cap manteniment de seguretat."
+    ],
+    "context": "El model híbrid combina seguretat local amb la flexibilitat del núvol."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin tipus de núvol utilitza recursos compartits entre diverses organitzacions?",
+    "resposta_correcta": "Núvol públic",
+    "respostes_incorrectes": [
+      "Núvol privat",
+      "Núvol dedicat",
+      "Núvol confinat"
+    ],
+    "context": "El núvol públic és gestionat per proveïdors com AWS o Azure i compartit entre clients."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina connexió s'utilitza habitualment per unir el CPD local amb el núvol?",
+    "resposta_correcta": "VPN o connexió segura xifrada.",
+    "respostes_incorrectes": [
+      "Bluetooth corporatiu.",
+      "Connexió FTP oberta.",
+      "Canal de comunicació HTTP sense xifrar."
+    ],
+    "context": "Les VPN i túnels IPSec són essencials per a la seguretat en entorns híbrids."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Què és l'IaaS en el context del Cloud?",
+    "resposta_correcta": "Un servei que proporciona servidors, xarxes i emmagatzematge virtualitzats.",
+    "respostes_incorrectes": [
+      "Una eina per editar documents en línia.",
+      "Una aplicació de correu electrònic corporatiu.",
+      "Un model de seguretat per autenticar usuaris."
+    ],
+    "context": "IaaS és el nivell més bàsic de serveis Cloud: infraestructura virtual."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina d'aquestes solucions és pròpia de Microsoft per gestionar entorns híbrids?",
+    "resposta_correcta": "Azure Arc",
+    "respostes_incorrectes": [
+      "AWS Outposts",
+      "Google Anthos",
+      "OpenShift Hybrid"
+    ],
+    "context": "Azure Arc permet gestionar recursos locals i multi-cloud des del portal Azure."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina és una de les principals avantatges del model híbrid?",
+    "resposta_correcta": "L'escalabilitat segons la demanda.",
+    "respostes_incorrectes": [
+      "L'absència total de costos.",
+      "La independència del proveïdor Cloud.",
+      "La impossibilitat de fallades de xarxa."
+    ],
+    "context": "Els entorns híbrids permeten augmentar o reduir recursos segons necessitats."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "En un model híbrid, què és el 'Cloud bursting'?",
+    "resposta_correcta": "L'ús temporal del núvol per absorbir pics de demanda.",
+    "respostes_incorrectes": [
+      "Un procés de còpia de seguretat local.",
+      "Una fallada de connexió entre servidors.",
+      "Una tècnica de xifratge de dades al núvol."
+    ],
+    "context": "El Cloud bursting permet augmentar temporalment la capacitat de càlcul."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina diferència principal hi ha entre núvol híbrid i multi-núvol?",
+    "resposta_correcta": "L’híbrid combina entorns locals i Cloud; el multi-núvol combina diversos proveïdors Cloud.",
+    "respostes_incorrectes": [
+      "El multi-núvol no permet dades locals.",
+      "El híbrid només funciona amb Cloud públic.",
+      "No existeix diferència entre ells."
+    ],
+    "context": "El concepte híbrid inclou l’entorn local, mentre que el multi-núvol només tracta núvols diferents."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin estàndard internacional regula la seguretat dels serveis Cloud?",
+    "resposta_correcta": "ISO/IEC 27017",
+    "respostes_incorrectes": [
+      "ISO 9001",
+      "ITIL v3",
+      "COBIT 2019"
+    ],
+    "context": "L’ISO 27017 defineix controls específics per a la seguretat en serveis Cloud."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina és una eina de monitoratge típicament utilitzada en entorns híbrids?",
+    "resposta_correcta": "Prometheus o Grafana",
+    "respostes_incorrectes": [
+      "MS Paint",
+      "Putty",
+      "WinZip"
+    ],
+    "context": "Prometheus i Grafana permeten recollir i visualitzar mètriques de rendiment multi-entorn."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina tecnologia optimitza la gestió de xarxes distribuïdes en entorns híbrids?",
+    "resposta_correcta": "SD-WAN",
+    "respostes_incorrectes": [
+      "FTP",
+      "SMTP",
+      "POP3"
+    ],
+    "context": "La SD-WAN permet prioritzar i segmentar el tràfic entre seus i Cloud."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina característica descriu millor la governança híbrida?",
+    "resposta_correcta": "Establir polítiques unificades de seguretat, accés i costos.",
+    "respostes_incorrectes": [
+      "Centralitzar tota la infraestructura en un únic servidor.",
+      "Eliminar la necessitat d’autenticació d’usuaris.",
+      "Fer backups manuals cada setmana."
+    ],
+    "context": "La governança defineix normes per gestionar adequadament entorns híbrids."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin servei d’AWS permet instal·lar infraestructura Cloud dins el propi CPD?",
+    "resposta_correcta": "AWS Outposts",
+    "respostes_incorrectes": [
+      "AWS Lambda",
+      "Amazon S3",
+      "Amazon Route 53"
+    ],
+    "context": "AWS Outposts porta el maquinari i serveis d’AWS al teu entorn local."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina és la principal funció d’un Service Mesh com Istio?",
+    "resposta_correcta": "Gestionar comunicacions, seguretat i tràfic entre microserveis.",
+    "respostes_incorrectes": [
+      "Configurar adreces IP automàticament.",
+      "Substituir el sistema operatiu del servidor.",
+      "Crear còpies de seguretat completes del CPD."
+    ],
+    "context": "Un Service Mesh simplifica la seguretat i la gestió de tràfic entre microserveis híbrids."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina funció té l’IAM en un entorn híbrid?",
+    "resposta_correcta": "Gestionar identitats i permisos d’accés als recursos locals i Cloud.",
+    "respostes_incorrectes": [
+      "Crear màquines virtuals automàticament.",
+      "Optimitzar l’ús de CPU i memòria.",
+      "Supervisar el rendiment de la xarxa."
+    ],
+    "context": "L’IAM és clau per al control d’accés en entorns distribuïts."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina afirmació sobre el RGPD és correcta en relació amb el Cloud híbrid?",
+    "resposta_correcta": "S’ha de garantir la protecció de dades personals en qualsevol entorn, local o Cloud.",
+    "respostes_incorrectes": [
+      "Només s’aplica a dades allotjades localment.",
+      "Només és obligatori per empreses privades.",
+      "No afecta als serveis SaaS."
+    ],
+    "context": "El RGPD regula el tractament de dades personals independentment de la ubicació."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin és el principal inconvenient dels models híbrids?",
+    "resposta_correcta": "La seva complexitat de gestió i seguretat.",
+    "respostes_incorrectes": [
+      "No permeten escalabilitat.",
+      "Només funcionen sense connexió a Internet.",
+      "Tenen prohibit l’ús d’autenticació multifactor."
+    ],
+    "context": "L’administració conjunta de diversos entorns augmenta la complexitat."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin avantatge aporta un entorn híbrid al 'Disaster Recovery'?",
+    "resposta_correcta": "Permet mantenir rèpliques de dades i sistemes en el núvol per a recuperació ràpida.",
+    "respostes_incorrectes": [
+      "Elimina la necessitat de backups.",
+      "Només protegeix aplicacions SaaS.",
+      "Només serveix per sistemes locals."
+    ],
+    "context": "El DRaaS és una de les aplicacions més importants del model híbrid."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina norma complementa l’ISO 27017 enfocant-se en la protecció de dades personals al Cloud?",
+    "resposta_correcta": "ISO 27018",
+    "respostes_incorrectes": [
+      "ISO 22301",
+      "ISO 14001",
+      "ISO 90003"
+    ],
+    "context": "L’ISO 27018 se centra en privacitat i protecció de dades personals en entorns de núvol públic."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina tecnologia permet desplegar contenidors en entorns híbrids de manera orquestrada?",
+    "resposta_correcta": "Kubernetes",
+    "respostes_incorrectes": [
+      "Apache Spark",
+      "TensorFlow",
+      "Docker Compose únicament"
+    ],
+    "context": "Kubernetes és el sistema estàndard per orquestrar contenidors en models híbrids i multi-cloud."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En un model híbrid, què significa el concepte 'Zero Trust'?",
+    "resposta_correcta": "Cap connexió ni usuari es considera de confiança per defecte; tot s’ha de verificar.",
+    "respostes_incorrectes": [
+      "Els usuaris interns sempre tenen accés lliure.",
+      "Només aplica a entorns locals.",
+      "És un mètode d’autenticació biomètrica."
+    ],
+    "context": "Zero Trust reforça la seguretat entre entorns Cloud i on-premises."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina solució híbrida d’IBM o Red Hat utilitza Kubernetes com a base?",
+    "resposta_correcta": "OpenShift Hybrid Cloud",
+    "respostes_incorrectes": [
+      "Watson Studio",
+      "Red Hat Firewall",
+      "IBM Secure Edge"
+    ],
+    "context": "OpenShift és una plataforma híbrida per desplegar aplicacions contenitzades."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin tipus de costos s’associen a l’ús de serveis Cloud segons consum?",
+    "resposta_correcta": "OPEX (despeses operatives)",
+    "respostes_incorrectes": [
+      "CAPEX (inversió de capital)",
+      "ROI (retorn de la inversió)",
+      "EBITDA (benefici brut)"
+    ],
+    "context": "Els serveis Cloud es paguen com a despesa recurrent, no com a inversió inicial."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina tecnologia permet una gestió unificada d’aplicacions i Kubernetes locals i Cloud des del portal d’Azure?",
+    "resposta_correcta": "Azure Arc",
+    "respostes_incorrectes": [
+      "Azure Blob",
+      "Azure Sentinel",
+      "Azure Pipeline"
+    ],
+    "context": "Azure Arc és clau en la integració d’entorns híbrids i multi-núvol de Microsoft."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En què consisteix el model de 'shared responsibility' (responsabilitat compartida)?",
+    "resposta_correcta": "La seguretat es divideix entre el proveïdor del Cloud i el client segons el nivell de servei.",
+    "respostes_incorrectes": [
+      "El proveïdor assumeix tota la responsabilitat de seguretat.",
+      "Només el client és responsable de totes les capes.",
+      "No hi ha cap distribució de rols en seguretat."
+    ],
+    "context": "És un principi fonamental del Cloud i especialment crític en entorns híbrids."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina és la principal raó per implementar un model híbrid a l'Administració Pública?",
+    "resposta_correcta": "Mantenir dades sensibles locals i aprofitar la flexibilitat del núvol.",
+    "respostes_incorrectes": [
+      "Eliminar completament la infraestructura local.",
+      "Migrar tots els sistemes a un núvol públic.",
+      "Evitar el compliment del RGPD."
+    ],
+    "context": "El model híbrid permet complir normatives com l’ENS i alhora modernitzar serveis."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina tecnologia utilitza AWS per desplegar entorns híbrids dins del CPD?",
+    "resposta_correcta": "AWS Outposts",
+    "respostes_incorrectes": [
+      "AWS Amplify",
+      "AWS Lambda",
+      "AWS QuickSight"
+    ],
+    "context": "Outposts instal·la maquinari d’AWS al CPD i el gestiona com part del núvol."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin és l’objectiu principal del backup híbrid?",
+    "resposta_correcta": "Mantenir còpies de seguretat tant locals com al núvol per major seguretat.",
+    "respostes_incorrectes": [
+      "Eliminar totes les còpies físiques.",
+      "Evitar els processos de restauració.",
+      "Centralitzar tots els backups al mateix servidor local."
+    ],
+    "context": "El backup híbrid segueix l’estratègia 3-2-1 amb una còpia fora del lloc (Cloud)."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina és la principal funció de la SD-WAN en entorns híbrids?",
+    "resposta_correcta": "Prioritzar i gestionar el tràfic entre seus locals i el núvol de forma intel·ligent.",
+    "respostes_incorrectes": [
+      "Crear màquines virtuals automàticament.",
+      "Desplegar contenidors en el núvol.",
+      "Bloquejar la connexió amb xarxes públiques."
+    ],
+    "context": "La SD-WAN millora la connectivitat i el rendiment de xarxes híbrides."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin proveïdor ofereix Anthos com a plataforma de gestió híbrida?",
+    "resposta_correcta": "Google Cloud",
+    "respostes_incorrectes": [
+      "Microsoft Azure",
+      "Amazon Web Services",
+      "Oracle Cloud"
+    ],
+    "context": "Google Anthos gestiona aplicacions entre Kubernetes locals i Cloud."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin és el principal repte de seguretat en entorns híbrids?",
+    "resposta_correcta": "Garantir una gestió consistent de seguretat entre entorns locals i Cloud.",
+    "respostes_incorrectes": [
+      "Eliminar el xifratge de dades per reduir costos.",
+      "Permetre accés públic a tots els serveis.",
+      "Evitar l’autenticació multifactor (MFA)."
+    ],
+    "context": "Les polítiques de seguretat han de ser coherents entre els diferents entorns."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina és la principal diferència entre CAPEX i OPEX?",
+    "resposta_correcta": "CAPEX és una inversió inicial; OPEX és una despesa recurrent per ús de serveis.",
+    "respostes_incorrectes": [
+      "CAPEX és per serveis Cloud i OPEX per servidors físics.",
+      "CAPEX sempre és més econòmic que OPEX.",
+      "No hi ha diferència, són sinònims."
+    ],
+    "context": "CAPEX implica inversió en maquinari; OPEX, en serveis de pagament per ús."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin mecanisme de seguretat permet validar l'usuari amb múltiples factors?",
+    "resposta_correcta": "MFA (Multi-Factor Authentication)",
+    "respostes_incorrectes": [
+      "SSO (Single Sign-On)",
+      "NAT (Network Address Translation)",
+      "ACL (Access Control List)"
+    ],
+    "context": "L’MFA afegeix una capa addicional d’autenticació en entorns híbrids."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina eina de monitoratge permet visualitzar mètriques d’entorns híbrids?",
+    "resposta_correcta": "Grafana",
+    "respostes_incorrectes": [
+      "Excel",
+      "PuTTY",
+      "Vim"
+    ],
+    "context": "Grafana crea dashboards i panells per observabilitat i rendiment."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és la principal funció d’un 'API Manager' en un entorn híbrid?",
+    "resposta_correcta": "Controlar, protegir i monitorar l’accés a les API entre entorns locals i Cloud.",
+    "respostes_incorrectes": [
+      "Compilar codi font automàticament.",
+      "Desplegar màquines virtuals en el CPD.",
+      "Fer còpies de seguretat de les bases de dades."
+    ],
+    "context": "Els API Managers gestionen l’accés segur a serveis distribuïts entre entorns."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin estàndard del NIST defineix formalment el concepte de Cloud Computing?",
+    "resposta_correcta": "NIST SP 800-145",
+    "respostes_incorrectes": [
+      "NIST SP 500-100",
+      "ISO 27018",
+      "CMMI v3.0"
+    ],
+    "context": "El NIST SP 800-145 estableix definicions per models Cloud, inclòs l’híbrid."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és la principal limitació de la migració a un model híbrid?",
+    "resposta_correcta": "La compatibilitat i integració entre sistemes locals i Cloud.",
+    "respostes_incorrectes": [
+      "La impossibilitat de fer còpies de seguretat.",
+      "La necessitat d’eliminar l’IAM.",
+      "El bloqueig del tràfic entre xarxes internes."
+    ],
+    "context": "Les dependències tecnològiques poden dificultar la integració híbrida."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin és l’objectiu principal d’un Service Mesh com Istio o Linkerd?",
+    "resposta_correcta": "Proporcionar seguretat, observabilitat i control del tràfic entre microserveis.",
+    "respostes_incorrectes": [
+      "Centralitzar la gestió de dominis DNS.",
+      "Monitorar els logs d’un servidor únic.",
+      "Generar informes de facturació Cloud."
+    ],
+    "context": "Els Service Mesh són essencials en entorns híbrids basats en microserveis."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és la millor pràctica per garantir la continuïtat del negoci en un entorn híbrid?",
+    "resposta_correcta": "Implementar plans de Disaster Recovery amb rèplica al Cloud.",
+    "respostes_incorrectes": [
+      "Desactivar els sistemes locals durant el cap de setmana.",
+      "Centralitzar totes les dades en un sol servidor físic.",
+      "Eliminar les còpies fora del CPD per seguretat."
+    ],
+    "context": "El DRaaS al núvol garanteix recuperació ràpida davant incidències crítiques."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina solució de Red Hat permet desplegar aplicacions contenitzades en entorns híbrids?",
+    "resposta_correcta": "OpenShift",
+    "respostes_incorrectes": [
+      "Elastic Stack",
+      "AppDynamics",
+      "Terraform"
+    ],
+    "context": "OpenShift és una plataforma basada en Kubernetes per desplegar aplicacions híbrides."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és una de les principals raons per les quals un entorn híbrid pot requerir un servei CASB (Cloud Access Security Broker)?",
+    "resposta_correcta": "Per monitorar, controlar i assegurar l’ús de serveis Cloud des de dispositius locals.",
+    "respostes_incorrectes": [
+      "Per substituir el sistema operatiu dels servidors on-premises.",
+      "Per automatitzar el desplegament d’aplicacions SaaS.",
+      "Per xifrar automàticament tot el trànsit intern de la xarxa LAN."
+    ],
+    "context": "Els CASB actuen com a punts de control de seguretat entre usuaris i serveis Cloud en models híbrids."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin és l’objectiu principal del concepte de 'Data Sovereignty' en entorns híbrids?",
+    "resposta_correcta": "Garantir que les dades es troben sota la jurisdicció legal del país on s’allotgen.",
+    "respostes_incorrectes": [
+      "Permetre que les dades circulin lliurement per qualsevol país sense restriccions.",
+      "Assegurar que totes les dades es troben encriptades amb AES-128.",
+      "Transferir la propietat de les dades al proveïdor Cloud."
+    ],
+    "context": "La sobirania de dades és essencial per complir amb ENS i RGPD en entorns híbrids."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En un model híbrid, quin element és crític per assegurar la coherència de dades entre entorns?",
+    "resposta_correcta": "L’ús de mecanismes de sincronització o replicació consistents.",
+    "respostes_incorrectes": [
+      "El manteniment de múltiples còpies no sincronitzades.",
+      "L’ús de sistemes d’emmagatzematge independents sense connexió.",
+      "Deshabilitar la replicació entre entorns per evitar conflictes."
+    ],
+    "context": "La sincronització de dades és fonamental per garantir integritat i consistència en entorns híbrids."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina arquitectura és més habitual per desplegar aplicacions híbrides en microserveis?",
+    "resposta_correcta": "Arquitectura basada en contenidors orquestrats per Kubernetes o OpenShift.",
+    "respostes_incorrectes": [
+      "Arquitectura monolítica amb serveis SOAP.",
+      "Arquitectura client-servidor amb FTP integrat.",
+      "Desplegament d’aplicacions en màquines físiques dedicades."
+    ],
+    "context": "Kubernetes i OpenShift són estàndards per desplegar microserveis en models híbrids."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin mecanisme utilitza habitualment Azure per interconnectar de manera privada el CPD amb el núvol?",
+    "resposta_correcta": "ExpressRoute",
+    "respostes_incorrectes": [
+      "Azure LinkVPN",
+      "Virtual Gateway Direct",
+      "HybridPipe Connector"
+    ],
+    "context": "Azure ExpressRoute proporciona connexions privades i de baixa latència entre el CPD i Azure."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En un model híbrid, quina tècnica redueix la dependència d’un únic proveïdor Cloud?",
+    "resposta_correcta": "Dissenyar aplicacions amb arquitectura multi-núvol i APIs estandarditzades.",
+    "respostes_incorrectes": [
+      "Utilitzar exclusivament serveis propietaris d’un proveïdor.",
+      "Desactivar la portabilitat de dades entre entorns.",
+      "Mantenir una sola connexió segura cap al Cloud principal."
+    ],
+    "context": "Les arquitectures independents de proveïdor milloren la portabilitat i resiliència."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és la principal diferència entre una connexió VPN i un enllaç SD-WAN en entorns híbrids?",
+    "resposta_correcta": "La SD-WAN pot prioritzar tràfic i utilitzar múltiples canals de comunicació dinàmics.",
+    "respostes_incorrectes": [
+      "La VPN és més escalable i permet control centralitzat de tràfic.",
+      "La SD-WAN només s’utilitza per xarxes locals LAN.",
+      "No hi ha cap diferència tècnica, només comercial."
+    ],
+    "context": "La SD-WAN afegeix intel·ligència i optimització a la gestió de tràfic en entorns híbrids."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina vulnerabilitat és especialment rellevant en entorns híbrids amb integracions API?",
+    "resposta_correcta": "La manca de validació d’autenticació i permisos en les crides d’API.",
+    "respostes_incorrectes": [
+      "L’ús de protocols TCP/IP estàndard.",
+      "El xifratge en trànsit amb TLS 1.3.",
+      "L’ús de contenidors Docker en mode rootless."
+    ],
+    "context": "Les APIs són un vector d’atac comú i cal autenticar i validar totes les sol·licituds."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Per què és important la latència en un model híbrid?",
+    "resposta_correcta": "Perquè pot afectar el rendiment d’aplicacions distribuïdes entre el CPD i el núvol.",
+    "respostes_incorrectes": [
+      "Perquè redueix l’espai d’emmagatzematge local.",
+      "Perquè afecta només els sistemes de backup.",
+      "Perquè permet una connexió més ràpida sense cables físics."
+    ],
+    "context": "La latència és crítica en aplicacions que depenen d’interaccions temps real."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina mesura de seguretat recomana l’Esquema Nacional de Seguretat (ENS) per entorns híbrids?",
+    "resposta_correcta": "Garantir el control d’identitat i traçabilitat en accessos entre entorns.",
+    "respostes_incorrectes": [
+      "Eliminar la segmentació de xarxa per simplificar connexions.",
+      "Utilitzar contrasenyes estàtiques i compartides.",
+      "Desactivar els sistemes de registre d’incidències."
+    ],
+    "context": "El ENS estableix requisits per autenticació, registre i control d’accés en entorns mixtos."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin protocol o tecnologia s’utilitza habitualment per gestionar la transferència segura de dades entre CPD i Cloud?",
+    "resposta_correcta": "IPSec o TLS per establir canals xifrats de comunicació.",
+    "respostes_incorrectes": [
+      "SMTP amb autenticació bàsica.",
+      "FTP sense xifratge.",
+      "Telnet com a canal administratiu principal."
+    ],
+    "context": "IPSec i TLS garanteixen la confidencialitat i integritat de la comunicació híbrida."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En un entorn híbrid, quina pràctica redueix el risc de desalineació de configuracions entre entorns?",
+    "resposta_correcta": "Utilitzar Infrastructure as Code (IaC) per automatitzar configuracions.",
+    "respostes_incorrectes": [
+      "Configurar manualment cada servidor local i Cloud.",
+      "Utilitzar scripts sense control de versions.",
+      "Realitzar canvis en producció sense proves prèvies."
+    ],
+    "context": "L’IaC permet definir i replicar configuracions d’infraestructura de manera coherent."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Per què és recomanable utilitzar eines d’observabilitat en entorns híbrids?",
+    "resposta_correcta": "Per obtenir visibilitat integral de rendiment i incidents entre entorns locals i Cloud.",
+    "respostes_incorrectes": [
+      "Per substituir els sistemes d’alerta de seguretat.",
+      "Per reduir l’ús d’autenticació multifactor.",
+      "Per afegir latència i complexitat al sistema."
+    ],
+    "context": "L’observabilitat és essencial per identificar ràpidament problemes en entorns distribuïts."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin avantatge aporta l’ús de contenidors en aplicacions híbrides?",
+    "resposta_correcta": "Portabilitat i consistència entre diferents entorns d’execució.",
+    "respostes_incorrectes": [
+      "Redueixen el consum de CPU en un 100%.",
+      "Eliminen la necessitat d’un sistema operatiu base.",
+      "Només funcionen en servidors físics dedicats."
+    ],
+    "context": "Els contenidors permeten desplegar aplicacions de manera coherent entre CPD i Cloud."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina és la millor estratègia per reduir la latència entre aplicacions locals i Cloud?",
+    "resposta_correcta": "Ubicar les càrregues de treball properes als usuaris i usar connexions dedicades d’alta velocitat.",
+    "respostes_incorrectes": [
+      "Centralitzar totes les aplicacions al núvol públic sense anàlisi de rendiment.",
+      "Desactivar l’ús de CDN per simplificar les comunicacions.",
+      "Migrar totes les aplicacions a un únic CPD geogràficament remot."
+    ],
+    "context": "Les connexions dedicades com ExpressRoute o Direct Connect redueixen la latència."
+  }
+]
+
+
