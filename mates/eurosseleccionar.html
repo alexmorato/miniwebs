@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>💰 Joc d'Euros - Selecciona les Monedes Correctes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      background-color: #f0faff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 { color: #0078D7; font-size: 2.5em; }
+    .card {
+      background: linear-gradient(135deg, #ffffff, #e7f4ff);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      display: inline-block;
+      border: 3px solid #89c9ff;
+      margin-bottom: 30px;
+    }
+
+    #monedesContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .moneda {
+      border: 2px solid #89c9ff;
+      background-color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .bitllet {
+      border: 2px solid #89c9ff;
+      background-color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .seleccionada {
+      background-color: #b7fbb7;
+      transform: scale(1.1);
+      border-color: #2ecc71;
+    }
+
+    button {
+      background-color: #ffb703;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    #resultat {
+      font-size: 1.6em;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    #historial {
+      width: 90%;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 1.1em;
+    }
+
+    .correcte { color: green; font-weight: bold; }
+    .incorrecte { color: red; font-weight: bold; }
+
+  </style>
+</head>
+<body>
+  <h1>💰 Selecciona els diners justos!</h1>
+  <div id="rondes">Ronda 0 de 0</div>
+
+  <div class="card">
+    <h2 id="preuObjectiu"></h2>
+    <div id="monedesContainer"></div>
+    <button onclick="comprovar()">✨ Comprova!</button>
+    <p id="resultat"></p>
+  </div>
+
+  <h2 style="color:#0078D7;">📋 Historial</h2>
+  <div id="historial"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nivell = parseInt(params.get("nivell")) || 1;
+    const maximRondes = parseInt(params.get("maximRondes")) || 10;
+    let ronda = 0, preu = 0, total = 0;
+    let seleccionades = [];
+    let historialData = [];
+    let tempsResposta = parseInt(params.get("tempsResposta")) || 4000;
+
+    const monedes = [
+      { valor: 0.01, img: "1cts.png" }, { valor: 0.01, img: "1cts.png" }, { valor: 0.02, img: "2cts.png" },
+      { valor: 0.05, img: "5cts.png" }, { valor: 0.10, img: "10cts.png" },
+      { valor: 0.20, img: "20cts.png" }, { valor: 0.50, img: "50cts.png" },
+      { valor: 1, img: "1e.png" }, { valor: 2, img: "2e.png" },
+      { valor: 5, img: "5e.png" }, { valor: 10, img: "10e.png" },
+      { valor: 20, img: "20e.png" }, { valor: 50, img: "50e.png" },
+      { valor: 100, img: "100e.png" }, { valor: 200, img: "200e.png" }
+    ];
+
+    function renderRondes() {
+      document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${maximRondes}`;
+    }
+
+    function formatValor(valor) {
+      return valor % 1 === 0 
+        ? valor.toLocaleString("ca-ES", { minimumFractionDigits: 0 })
+        : valor.toLocaleString("ca-ES", { minimumFractionDigits: 2 });
+    }
+
+    function nouProblema() {
+        if (ronda >= maximRondes) {
+            document.querySelector(".card").innerHTML = `<h2>🎉 Has acabat el joc!</h2>`;
+            return;
+        }
+
+        // 🔹 Definir configuració per nivell
+        let disponibles;
+        if (nivell === 1) {
+            disponibles = monedes.filter(m => m.valor <= 2); // només monedes petites
+        } else if (nivell === 2) {
+            disponibles = monedes.filter(m => m.valor <= 50); // monedes i bitllets fins a 50€
+        } else {
+            disponibles = monedes; // tots
+        }
+
+        // 🔹 Nombre d'opcions a mostrar
+        const numMostrades = nivell === 1 ? 6 : (nivell === 2 ? 8 : 10);
+
+        // 🔹 Escollim monedes aleatòries sense repetició
+        const monedesMostrades = [];
+        while (monedesMostrades.length < numMostrades && disponibles.length > 0) {
+            const i = Math.floor(Math.random() * disponibles.length);
+            monedesMostrades.push(disponibles.splice(i, 1)[0]);
+        }
+
+        // 🔹 Triem un subconjunt aleatori d’aquestes per formar el preu objectiu
+        const subset = [];
+        let total = 0;
+        const nombreSub = Math.floor(Math.random() * (monedesMostrades.length / 2)) + 1; // almenys 1
+        const copia = [...monedesMostrades];
+
+        for (let i = 0; i < nombreSub && copia.length > 0; i++) {
+            const j = Math.floor(Math.random() * copia.length);
+            const m = copia.splice(j, 1)[0];
+            subset.push(m);
+            total += m.valor;
+        }
+
+        preu = total.toFixed(2);
+
+        // 🔹 Reiniciem estat del joc
+        seleccionades = [];
+        total = 0;
+
+        document.getElementById("preuObjectiu").textContent = `💶 Preu: ${preu} €`;
+        document.getElementById("resultat").textContent = "";
+
+        // 🔹 Mostrem les monedes seleccionables
+        const cont = document.getElementById("monedesContainer");
+        cont.innerHTML = "";
+
+        monedesMostrades.forEach(m => {
+            const img = document.createElement("img");
+            img.src = `assets/${m.img}`;
+            img.alt = m.valor.toFixed(2);
+            img.className = m.valor <= 2 ? "moneda" : "bitllet";
+            img.style.width = m.valor <= 2 ? "70px" : "120px";
+            img.style.height = m.valor <= 2 ? "70px" : "60px";
+            img.addEventListener("click", () => toggleSeleccio(m, img));
+            cont.appendChild(img);
+        });
+
+        renderRondes();
+    }
+
+    function toggleSeleccio(m, img) {
+      const index = seleccionades.indexOf(m);
+      if (index === -1) {
+        seleccionades.push(m);
+        total += m.valor;
+        img.classList.add("seleccionada");
+      } else {
+        seleccionades.splice(index, 1);
+        total -= m.valor;
+        img.classList.remove("seleccionada");
+      }
+    }
+
+    function comprovar() {
+      const resultat = document.getElementById("resultat");
+      const correcte = parseFloat(preu) === parseFloat(total.toFixed(2));
+
+      if (correcte) {
+        resultat.textContent = "✅ Correcte! Molt bé!";
+        resultat.style.color = "green";
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      } else {
+        resultat.textContent = `❌ No eren ${total.toFixed(2)} €`;
+        resultat.style.color = "red";
+      }
+
+      historialData.unshift({
+        ronda: ronda + 1,
+        preu,
+        total: total.toFixed(2),
+        correcte,
+        monedes: seleccionades.map(m => m.valor)
+      });
+
+      renderHistorial();
+      ronda++;
+
+      // 🔹 Reinicia el total abans de començar la nova ronda
+        total = 0;
+
+      setTimeout(nouProblema, tempsResposta);
+    }
+
+    function renderHistorial() {
+      const hist = document.getElementById("historial");
+      hist.innerHTML = "";
+      historialData.forEach(e => {
+        const div = document.createElement("div");
+        div.classList.add(e.correcte ? "correcte" : "incorrecte");
+        const valors = e.monedes.map(v => formatValor(v)).join(" + ");
+        div.textContent = `${e.correcte ? "✅" : "❌"} ${valors} = ${e.total} € (Preu: ${e.preu} €)`;
+        hist.appendChild(div);
+      });
+    }
+
+    renderRondes();
+    nouProblema();
+  </script>
+</body>
+</html>
