@@ -1,8 +1,10 @@
 {
   "files": [
+    "T52_Tecnica_sistemes_BASIS_i_SAP_HANA_test.json",
+    "T54-BBDD_NoSql-truefalse.json",
     "T56-Backup321_Ransomware-test.json",
     "T56-Backup321_Ransomware-truefalse.json",
-    "T54-BBDD_NoSql-truefalse.json",
-    "T52_Tecnica_sistemes_BASIS_i_SAP_HANA_test.json"
+    "T57_continuitat_negoci_dr_truefalse.json",
+    "T57_continuitat_negoci_dr_test.json"
   ]
 }

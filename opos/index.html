@@ -62,7 +62,6 @@
     padding:12px;
     border-radius:12px;
     border:none;
-    margin-top:15px;
   }
 
   /* Espaiat extra per a pantalles petites */
@@ -109,7 +108,11 @@
     <div id="pregunta" style="font-weight:bold;"></div>
     <div id="opcions"></div>
     <div id="feedback" style="margin-top:8px"></div>
-    <button id="seguentBtn" style="display:none;margin-top:10px;">SEGUENT ➡️</button>
+    <div id="botonsNavegacio" style="display:flex;gap:10px;margin-top:10px;">
+      <button id="seguentBtn" style="flex:1;display:none;">SEGUENT ➡️</button>
+      <button id="guardarDubteBtn" title="Guardar la pregunta a l'historial" style="display:none;padding:0 14px;font-size:1.2rem;">💾</button>
+    </div>
+    <span id="guardatMsg" style="color:#6ae0a7;font-size:13px;"></span>
   </div>
 
   <button id="copyHistBtn" style="margin-top:8px;">📋 Copiar historial</button>
@@ -129,6 +132,8 @@
   const feedbackEl = document.getElementById("feedback");
   const historialEl = document.getElementById("historial");
   const seguentBtn = document.getElementById("seguentBtn");
+  const guardarDubteBtn = document.getElementById("guardarDubteBtn");
+  const guardatMsg = document.getElementById("guardatMsg");
   const progressEl = document.getElementById("progress");
 
   let testData = [];
@@ -210,6 +215,8 @@
     }
     quizArea.style.display = "block";
     seguentBtn.style.display = "none";
+    guardarDubteBtn.style.display = "none";
+    guardatMsg.textContent = "";
     const q = testData[currentIndex];
     nivellEl.textContent = q.nivell || "";
     preguntaEl.textContent = q.pregunta || "";
@@ -228,12 +235,12 @@
         opcionsEl.appendChild(btn);
       });
     } else {
-      ["Cert","Fals"].forEach(val=>{
+      ["✅ Cert","❌ Fals"].forEach(val=>{
         const btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = val;
         const expected = (q.resposta_boolean === true || q.resposta_boolean === "true");
-        const userVal = (val === "Cert");
+        const userVal = (val === "✅ Cert");
         btn.onclick = ()=>comprovarResposta(userVal, expected, q);
         opcionsEl.appendChild(btn);
       });
@@ -258,14 +265,17 @@
 
     if (correcte) {
       correctes++;
-      feedbackEl.innerHTML = `<div class='ok'>✅ Correcte!</div><div>${q.context || ""}</div>`;
+      feedbackEl.innerHTML = `<div class='ok'>😊 Correcte!</div><div>${q.context || ""}</div>`;
     } else {
-      feedbackEl.innerHTML = `<div class='ko'>❌ Incorrecte</div><div>${q.context || ""}</div>`;
+      feedbackEl.innerHTML = `<div class='ko'>😡 Incorrecte</div><div>${q.context || ""}</div>`;
       guardarError(q, userAnswer);
     }
 
     actualitzarProgres();
+    // Desactiva opcions i mostra botons
+    Array.from(opcionsEl.querySelectorAll("button")).forEach(b => b.disabled = true);
     seguentBtn.style.display = "inline-block";
+    guardarDubteBtn.style.display = "inline-block";
   }
 
 
@@ -306,6 +316,28 @@
       copyMsg.textContent = "❌ No s'ha pogut copiar";
     }
   });
+
+  // 💾 Botó per guardar pregunta a l'historial encara que sigui correcta
+  guardarDubteBtn.addEventListener("click", ()=>{
+    const q = testData[currentIndex];
+    if (!q) return;
+    let txt = `📘 [Dubte manual]\nNivell: ${q.nivell}\nPregunta: ${q.pregunta}\n`;
+
+    if (tipusTest === "test") {
+      const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+      txt += `Respostes: ${opcions.join(" | ")}\n`;
+      txt += `Correcte: ${q.resposta_correcta}\n`;
+    } else {
+      txt += `Correcte: ${q.resposta_boolen}\n`;
+    }
+    txt += `Context: ${q.context || ""}\n---\n`;
+
+    // Afegim al principi de l'historial
+    historialEl.value = txt + historialEl.value;
+    guardatMsg.textContent = "💾 Guardada a l’historial!";
+    setTimeout(()=> guardatMsg.textContent = "", 2000);
+  });
+
 </script>
 </body>
 </html>
