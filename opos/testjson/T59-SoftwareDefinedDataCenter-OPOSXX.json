@@ -1,0 +1,38 @@
+[
+  {
+    "nivell": "Fàcil 🟢",
+    "fitxer": "OPOS23_preguntes_practic.pdf",
+    "pregunta": "Per tal de definir el nou plec, es defineix que l'estratègia tecnològica corporativa passa per disposar d'un datacenter definit per software. En aquest context, què és un datacenter definit per software?",
+    "resposta_correcta": "Un centre de dades en el qual la infraestructura es virtualitza mitjançant l'abstracció, la creació de grups de recursos i l'automatització.",
+    "respostes_incorrectes": [
+      "Un centre de dades en el qual s'utilitzen únicament servidors físics per emmagatzemar i processar dades.",
+      "Un centre de dades on tots els recursos es troben definits al meta-verso mitjançant un programari.",
+      "Un centre de dades en el qual s'utilitzen únicament dispositius portàtils per emmagatzemar i processar dades."
+    ],
+    "context": "Pregunta conceptual sobre la definició de SDDC. El SDDC implica virtualització completa dels recursos del CPD (càlcul, emmagatzematge, xarxes) amb gestió centralitzada per software i automatització. La clau és la desconnexió entre maquinari físic i la seva gestió lògica."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "fitxer": "OPOS23_preguntes_practic.pdf",
+    "pregunta": "Amb quina tecnologia podem desacoblar el programari d'emmagatzematge del maquinari subjacents i proporcionar una plataforma de gestió comuna i serveis de dades en una infraestructura de TI (tecnologia de la informació)?",
+    "resposta_correcta": "SDS (Software-defined storage).",
+    "respostes_incorrectes": [
+      "VPC (Virtual Private Cloud).",
+      "SDN (Software defined networking).",
+      "Hypervisor."
+    ],
+    "context": "Pregunta sobre un component clau del SDDC: el Software Defined Storage (SDS). Aquesta tecnologia permet gestionar l’emmagatzematge com a servei virtual independent del hardware, amb polítiques de rendiment, disponibilitat i redundància definides per programari."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "fitxer": "OPOS23_preguntes_practic.pdf",
+    "pregunta": "Per tal de donar suport a l'equip, et demanen la revisió de les seccions que descriuen els requisits dels serveis d'emmagatzemament. Uns dels requeriments principals por donar suport a l’emmagatzematge, és la definició d’una xarxa per la transferència de dades entre sistemes informàtics i elements d'emmagatzematge. Sota aquesta definició estem demanant:",
+    "resposta_correcta": "Una Storage Area Network (SAN).",
+    "respostes_incorrectes": [
+      "Una cabina d’objectes S3.",
+      "Una xarxa MPLS (Multiprotocol Label Switching).",
+      "Una connexió privada Lan to Lan."
+    ],
+    "context": "Pregunta aplicada dins del context de virtualització d’emmagatzematge. La SAN és la infraestructura física que suporta el SDS, proporcionant alta velocitat i connectivitat entre servidors i discos. És essencial per implementar un SDDC eficient."
+  }
+]

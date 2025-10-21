@@ -1,0 +1,224 @@
+[
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Un Software Defined Data Center (SDDC) és un centre de dades completament virtualitzat i gestionat per programari.",
+    "resposta_boolean": true,
+    "context": "El SDDC abstrau càlcul, emmagatzematge i xarxes del maquinari físic i els gestiona per software."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Un SDDC elimina completament la necessitat de maquinari físic.",
+    "resposta_boolean": false,
+    "context": "El maquinari encara existeix, però és gestionat i controlat per programari de manera abstracta."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "L’SDN (Software Defined Networking) és el component del SDDC que controla la xarxa.",
+    "resposta_boolean": true,
+    "context": "L’SDN separa el pla de control i el pla de dades per gestionar la xarxa via software."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "El SDS (Software Defined Storage) permet virtualitzar l’emmagatzematge dins del SDDC.",
+    "resposta_boolean": true,
+    "context": "El SDS desacobla la capa d’emmagatzematge del maquinari físic per gestionar-lo com un servei."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "L’SDDC està dissenyat per reduir la velocitat de desplegament dels serveis IT.",
+    "resposta_boolean": false,
+    "context": "Justament al contrari: el SDDC accelera els desplegaments mitjançant automatització i orquestració."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "La infraestructura com a codi (IaC) permet definir i desplegar recursos d’un SDDC de manera automatitzada.",
+    "resposta_boolean": true,
+    "context": "IaC utilitza fitxers declaratius per descriure la infraestructura, facilitant desplegaments repetibles i consistents."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "OpenStack és una plataforma oberta que permet implementar un SDDC.",
+    "resposta_boolean": true,
+    "context": "OpenStack ofereix serveis de computació, xarxa i emmagatzematge virtualitzats."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "L’orquestració és el procés manual de configuració de cada component del SDDC.",
+    "resposta_boolean": false,
+    "context": "L’orquestració és automàtica i centralitzada, no manual."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "El SDDC millora la seguretat gràcies a la microsegmentació.",
+    "resposta_boolean": true,
+    "context": "La microsegmentació permet definir regles específiques per cada màquina virtual o aplicació."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "VMware és un dels principals fabricants de solucions SDDC.",
+    "resposta_boolean": true,
+    "context": "VMware ofereix vSphere, NSX, vSAN i vRealize Suite, components bàsics d’un SDDC comercial."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "SDSec (Software Defined Security) s’encarrega de la virtualització d’emmagatzematge.",
+    "resposta_boolean": false,
+    "context": "SDSec gestiona la seguretat del SDDC, mentre que SDS virtualitza l’emmagatzematge."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "El SDDC pot funcionar com a base per a un Cloud privat o híbrid.",
+    "resposta_boolean": true,
+    "context": "L’SDDC és la infraestructura tècnica que permet desplegar entorns de núvol privat i connectar-los amb núvols públics."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "L’SDN és responsable de virtualitzar les cabines d’emmagatzematge.",
+    "resposta_boolean": false,
+    "context": "SDN controla la xarxa, no l’emmagatzematge. Aquesta tasca correspon al SDS."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "L’orquestració permet aplicar polítiques automàtiques en un SDDC segons regles de negoci.",
+    "resposta_boolean": true,
+    "context": "L’orquestrador centralitza les accions i pot automatitzar respostes segons condicions predefinides."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Un SDDC és sinònim d’un Cloud públic.",
+    "resposta_boolean": false,
+    "context": "El SDDC pot estar en entorns privats, híbrids o públics, però no és sinònim de Cloud públic."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "El maquinari físic és opcional en un SDDC.",
+    "resposta_boolean": false,
+    "context": "El maquinari és necessari; el que canvia és que la seva gestió és definida per programari."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Un dels avantatges principals del SDDC és la reducció de costos operatius.",
+    "resposta_boolean": true,
+    "context": "L’automatització i l’optimització de recursos redueixen costos OPEX."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Terraform és una eina utilitzada per gestionar la infraestructura com a codi dins d’un SDDC.",
+    "resposta_boolean": true,
+    "context": "Terraform permet desplegar i versionar infraestructures mitjançant fitxers declaratius."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "La microsegmentació permet dividir una xarxa física en VLANs més petites.",
+    "resposta_boolean": false,
+    "context": "La microsegmentació actua a nivell de màquina virtual, no a nivell de VLAN física."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "SDSec pot aplicar polítiques de seguretat específiques per aplicació o servei.",
+    "resposta_boolean": true,
+    "context": "El Software Defined Security permet microsegmentar i aplicar regles a nivell granular."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "El controlador SDN és responsable de gestionar el pla de control de la xarxa.",
+    "resposta_boolean": true,
+    "context": "El controlador SDN centralitza les decisions d'encaminament i comunica regles als dispositius de xarxa."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Segment Routing és un protocol utilitzat en SDN per optimitzar rutes dins xarxes MPLS.",
+    "resposta_boolean": true,
+    "context": "Segment Routing simplifica l'encaminament definint camins de trànsit controlats per software."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Un SDDC no pot integrar-se amb serveis com AWS o Azure.",
+    "resposta_boolean": false,
+    "context": "Solucions com VMware Cloud Foundation permeten la integració amb núvols públics."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "L’hipervisor dins d’un SDDC és responsable de la gestió de xarxes virtuals.",
+    "resposta_boolean": false,
+    "context": "L’hipervisor gestiona màquines virtuals; les xarxes són gestionades per SDN."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "La SAN i l’SDS són el mateix concepte dins d’un SDDC.",
+    "resposta_boolean": false,
+    "context": "La SAN és física, mentre que l’SDS és una capa de programari que la gestiona virtualment."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "OpenStack pot gestionar computació, xarxa i emmagatzematge virtuals dins d’un SDDC.",
+    "resposta_boolean": true,
+    "context": "És una plataforma oberta que cobreix totes les capes principals d’un SDDC."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "L’AIOps dins un SDDC serveix per predir errors i optimitzar el rendiment.",
+    "resposta_boolean": true,
+    "context": "AIOps aplica intel·ligència artificial a les operacions de la infraestructura."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "La gestió basada en APIs és essencial per a l’automatització d’un SDDC.",
+    "resposta_boolean": true,
+    "context": "Les APIs permeten que els orquestradors comuniquin i controlin els recursos virtualitzats."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "El SDDC és una tecnologia exclusiva de VMware.",
+    "resposta_boolean": false,
+    "context": "També hi ha solucions d’OpenStack, Microsoft Azure Stack, Nutanix, Cisco, etc."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Kubernetes pot desplegar-se sobre un SDDC per orquestrar contenidors.",
+    "resposta_boolean": true,
+    "context": "El SDDC pot actuar com a infraestructura base sobre la qual s’executen contenidors orquestrats amb Kubernetes."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "L’SDDC només s’aplica a infraestructures locals, no al núvol.",
+    "resposta_boolean": false,
+    "context": "El SDDC pot ser local, al núvol o híbrid; el seu objectiu és unificar la gestió."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "L’enfocament Zero Trust es pot implementar dins d’un SDDC.",
+    "resposta_boolean": true,
+    "context": "El model Zero Trust s’adapta bé a l’SDDC gràcies a la microsegmentació i l’autenticació contínua."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Un SDDC pot utilitzar-se per suportar entorns d’Edge Computing.",
+    "resposta_boolean": true,
+    "context": "Els micro-CPDs virtualitzats (edge) poden funcionar com a extensions del SDDC central."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "La virtualització és suficient per considerar una infraestructura com a SDDC.",
+    "resposta_boolean": false,
+    "context": "A més de virtualització, cal orquestració, automatització i gestió per polítiques."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "L’SDDC és independent del model DevOps i no pot integrar-s’hi.",
+    "resposta_boolean": false,
+    "context": "El SDDC s’integra perfectament amb DevOps per desplegar infraestructura com a codi i pipelines automatitzats."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Els dashboards d’observabilitat dins del SDDC permeten monitorar ús de CPU, memòria i xarxa en temps real.",
+    "resposta_boolean": true,
+    "context": "Eines com vRealize Operations, Grafana o Prometheus proporcionen aquesta visibilitat."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "L’SDDC pot millorar la continuïtat del negoci i la recuperació davant desastres.",
+    "resposta_boolean": true,
+    "context": "Els recursos virtualitzats i automatitzats permeten recuperar sistemes ràpidament després d’un incident."
+  }
+]

@@ -8,6 +8,9 @@
     "T57-ContinuitatNegociDR-test.json",
     "T58-ModelsdeComputacioHibrids-truefalse.json",
     "T58-ModelsdeComputacioHibrids-test.json",
-    "T58-ModelsdeComputacioHibrids_OPOSXX-test.json"
+    "T58-ModelsdeComputacioHibrids_OPOSXX-test.json",
+    "T59-SoftwareDefinedDataCenter-OPOSXX.json",
+    "T59-SoftwareDefinedDataCenter-test.json",
+    "T59-SoftwareDefinedDataCenter-truefalse.json"
   ]
 }

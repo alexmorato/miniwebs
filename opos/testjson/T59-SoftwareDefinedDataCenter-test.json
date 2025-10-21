@@ -1,0 +1,321 @@
+[
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Què és un Software Defined Data Center (SDDC)?",
+    "resposta_correcta": "Un centre de dades on tota la infraestructura (càlcul, xarxa i emmagatzematge) està definida i gestionada per programari.",
+    "respostes_incorrectes": [
+      "Un centre de dades format únicament per servidors físics sense virtualització.",
+      "Un model de desenvolupament d'aplicacions basat en microserveis.",
+      "Una eina per a crear xarxes socials internes dins d'una empresa."
+    ],
+    "context": "Pregunta conceptual bàsica. El SDDC és la virtualització completa d’un CPD: tot s’administra i automatitza per software, sense configuració manual del hardware."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin component del SDDC s’encarrega de virtualitzar els recursos de xarxa?",
+    "resposta_correcta": "SDN (Software Defined Networking).",
+    "respostes_incorrectes": [
+      "SDS (Software Defined Storage).",
+      "HCI (Hyper Converged Infrastructure).",
+      "VLAN (Virtual Local Area Network)."
+    ],
+    "context": "L’SDN separa el pla de control i el pla de dades de la xarxa, permetent definir xarxes, polítiques i rutes via software."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin component permet virtualitzar l’emmagatzematge dins un SDDC?",
+    "resposta_correcta": "SDS (Software Defined Storage).",
+    "respostes_incorrectes": [
+      "SDN (Software Defined Networking).",
+      "SDC (Software Defined Compute).",
+      "SAN (Storage Area Network)."
+    ],
+    "context": "El SDS crea pools d’emmagatzematge virtuals, separant el programari de control del hardware físic."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin avantatge principal ofereix un SDDC respecte un CPD tradicional?",
+    "resposta_correcta": "Permet automatitzar i orquestrar recursos mitjançant programari.",
+    "respostes_incorrectes": [
+      "Redueix la capacitat de gestió dels recursos de xarxa.",
+      "Obliga a mantenir la configuració manual dels servidors.",
+      "Només és aplicable en entorns físics sense virtualització."
+    ],
+    "context": "L’automatització és la clau del SDDC: desplegaments ràpids i sense errors humans."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina empresa és una de les pioneres en solucions SDDC comercials?",
+    "resposta_correcta": "VMware.",
+    "respostes_incorrectes": [
+      "Google.",
+      "Apple.",
+      "Meta."
+    ],
+    "context": "VMware ofereix la suite vSphere + NSX + vSAN + vRealize, que conforma una arquitectura SDDC completa."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin concepte defineix la infraestructura gestionada com a codi?",
+    "resposta_correcta": "IaC (Infrastructure as Code).",
+    "respostes_incorrectes": [
+      "SaaS (Software as a Service).",
+      "IaaS (Infrastructure as a Service).",
+      "API REST."
+    ],
+    "context": "IaC permet definir la infraestructura del SDDC en fitxers declaratius, facilitant desplegaments automatitzats i consistents."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin protocol s’utilitza habitualment per interactuar amb APIs dins un SDDC?",
+    "resposta_correcta": "REST.",
+    "respostes_incorrectes": [
+      "FTP.",
+      "IMAP.",
+      "SNMP."
+    ],
+    "context": "Les APIs REST permeten controlar recursos virtualitzats de manera estàndard i escalable."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quina és una característica clau de l’SDDC?",
+    "resposta_correcta": "Desacoblament entre hardware i programari.",
+    "respostes_incorrectes": [
+      "Dependència directa del maquinari físic.",
+      "Configuració manual de cada dispositiu.",
+      "Centralització sense virtualització."
+    ],
+    "context": "L’SDDC elimina la dependència física: la gestió passa a ser totalment definida per software."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin dels següents components NO forma part del SDDC?",
+    "resposta_correcta": "ERP (Enterprise Resource Planning).",
+    "respostes_incorrectes": [
+      "SDN.",
+      "SDS.",
+      "Virtualització de servidors."
+    ],
+    "context": "L’ERP és aplicació de negoci, no part de la infraestructura virtualitzada del SDDC."
+  },
+  {
+    "nivell": "Fàcil 🟢",
+    "pregunta": "Quin objectiu principal persegueix el SDDC?",
+    "resposta_correcta": "Automatitzar i optimitzar la gestió de la infraestructura TIC.",
+    "respostes_incorrectes": [
+      "Reduir la seguretat de la xarxa.",
+      "Substituir els sistemes Cloud públics.",
+      "Elaborar informes financers."
+    ],
+    "context": "El SDDC busca maximitzar l’agilitat i eficiència dels sistemes IT automatitzant-ne el control."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina tecnologia s’encarrega de definir la seguretat dins del SDDC?",
+    "resposta_correcta": "SDSec (Software Defined Security).",
+    "respostes_incorrectes": [
+      "SDS.",
+      "SDWAN.",
+      "LDAP."
+    ],
+    "context": "SDSec aplica polítiques dinàmiques de seguretat a nivell virtual, com microsegmentació o firewalls definits per programari."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina capa de l’SDDC proporciona orquestració i automatització?",
+    "resposta_correcta": "La capa de gestió i control.",
+    "respostes_incorrectes": [
+      "La capa física.",
+      "La capa de xarxa.",
+      "La capa de virtualització."
+    ],
+    "context": "La capa de control és la que administra, coordina i aplica polítiques sobre tots els recursos virtualitzats."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin benefici aporta l’SDDC en comparació amb una infraestructura tradicional?",
+    "resposta_correcta": "Permet desplegar nous serveis de forma ràpida i flexible.",
+    "respostes_incorrectes": [
+      "Requereix configuracions manuals constants.",
+      "Augmenta el temps d’implantació dels serveis.",
+      "Limita la virtualització de xarxa i emmagatzematge."
+    ],
+    "context": "El SDDC permet desplegaments automàtics amb mínim esforç gràcies a la seva automatització total."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina diferència principal hi ha entre un Data Center tradicional i un SDDC?",
+    "resposta_correcta": "En el SDDC, la infraestructura s’administra mitjançant software i APIs.",
+    "respostes_incorrectes": [
+      "En el SDDC no existeix el maquinari físic.",
+      "En el Data Center tradicional no hi ha emmagatzematge.",
+      "Els dos models són idèntics, només canvia el nom comercial."
+    ],
+    "context": "La clau del SDDC és la gestió programàtica: cada recurs es pot controlar i automatitzar via software."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin és un exemple de plataforma Open Source per implementar un SDDC?",
+    "resposta_correcta": "OpenStack.",
+    "respostes_incorrectes": [
+      "SAP HANA.",
+      "Kubernetes.",
+      "Office 365."
+    ],
+    "context": "OpenStack permet gestionar servidors, xarxes i emmagatzematge com a serveis virtualitzats en una arquitectura SDDC."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin element del SDDC s’encarrega de controlar els fluxos de dades a la xarxa?",
+    "resposta_correcta": "El controlador SDN.",
+    "respostes_incorrectes": [
+      "El servidor DHCP.",
+      "El balançador de càrrega.",
+      "El firewall físic."
+    ],
+    "context": "El controlador SDN és el cervell de la xarxa definida per software: pren decisions i comunica regles als dispositius de xarxa."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina és la funció principal d’un hipervisor dins del SDDC?",
+    "resposta_correcta": "Permetre executar múltiples màquines virtuals sobre un mateix servidor físic.",
+    "respostes_incorrectes": [
+      "Desplegar contenidors Docker.",
+      "Controlar la xarxa MPLS.",
+      "Configurar firewalls de perímetre."
+    ],
+    "context": "L’hipervisor és la base de la virtualització de computació. És la primera capa d’abstracció del maquinari."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina d’aquestes eines s’utilitza habitualment per a orquestració dins d’un SDDC?",
+    "resposta_correcta": "Terraform.",
+    "respostes_incorrectes": [
+      "Wireshark.",
+      "Excel.",
+      "Zabbix."
+    ],
+    "context": "Terraform permet desplegar infraestructura com a codi (IaC), automatitzant la creació i configuració dels recursos virtuals."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quina relació hi ha entre el SDDC i el Cloud híbrid?",
+    "resposta_correcta": "El SDDC és la base tècnica del Cloud privat que pot integrar-se amb núvols públics.",
+    "respostes_incorrectes": [
+      "El SDDC substitueix completament el Cloud públic.",
+      "El SDDC només s’utilitza per a entorns físics.",
+      "El SDDC és una tecnologia exclusiva d’AWS."
+    ],
+    "context": "El SDDC actua com a infraestructura de Cloud privat, fàcilment connectable amb AWS, Azure o GCP."
+  },
+  {
+    "nivell": "Normal 🟡",
+    "pregunta": "Quin avantatge aporta la microsegmentació dins un SDDC?",
+    "resposta_correcta": "Permet definir polítiques de seguretat específiques per a cada màquina virtual.",
+    "respostes_incorrectes": [
+      "Redueix el nombre de xarxes virtuals disponibles.",
+      "Elimina la necessitat d’autenticació.",
+      "Només aplica polítiques globals."
+    ],
+    "context": "La microsegmentació augmenta la seguretat interna: cada aplicació o VM pot tenir regles pròpies i dinàmiques."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina funció realitza l’API Manager dins d’un entorn SDDC?",
+    "resposta_correcta": "Gestiona, controla i supervisa l’accés a les APIs de la infraestructura.",
+    "respostes_incorrectes": [
+      "Emmagatzema dades estructurades.",
+      "Crea màquines virtuals automàticament.",
+      "Administra còpies de seguretat."
+    ],
+    "context": "L’API Manager centralitza la seguretat i ús de les APIs, facilitant la integració amb DevOps i serveis externs."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin mecanisme d’encaminament permet a SDN simplificar les rutes en entorns MPLS moderns?",
+    "resposta_correcta": "Segment Routing.",
+    "respostes_incorrectes": [
+      "EIGRP.",
+      "BGP tradicional.",
+      "Spanning Tree."
+    ],
+    "context": "Segment Routing permet crear rutes definides per software sense mantenir taules complexes en cada node, millorant l’eficiència."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "En un SDDC, què permet l’orquestració basada en polítiques?",
+    "resposta_correcta": "Aplicar automàticament configuracions segons regles de negoci.",
+    "respostes_incorrectes": [
+      "Afegir servidors físics sense virtualització.",
+      "Bloquejar qualsevol canvi automàtic.",
+      "Desactivar la monitorització."
+    ],
+    "context": "Les polítiques automatitzen respostes (per ex., escalar recursos o restringir trànsit) sense intervenció manual."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quin component és essencial per implementar la seguretat zero trust dins d’un SDDC?",
+    "resposta_correcta": "Microsegmentació i autenticació contínua.",
+    "respostes_incorrectes": [
+      "Un únic tallafoc perimetral.",
+      "Ús d’un sol VLAN per a tot el CPD.",
+      "Bloqueig d’accés a totes les APIs."
+    ],
+    "context": "La seguretat Zero Trust requereix autenticació i control de trànsit granular entre components, implementable amb SDSec."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina tecnologia permet integrar el SDDC amb entorns multi-cloud?",
+    "resposta_correcta": "VMware Cloud Foundation.",
+    "respostes_incorrectes": [
+      "Microsoft Office.",
+      "Oracle VirtualBox.",
+      "Cisco Packet Tracer."
+    ],
+    "context": "VMware Cloud Foundation connecta infraestructures privades amb núvols públics (AWS, Azure, Google Cloud)."
+  },
+  {
+    "nivell": "Difícil 🔵",
+    "pregunta": "Quina diferència hi ha entre SDS i SAN dins d’un SDDC?",
+    "resposta_correcta": "El SDS virtualitza i gestiona l’emmagatzematge per programari; la SAN és la xarxa física que connecta els dispositius.",
+    "respostes_incorrectes": [
+      "La SAN substitueix completament el SDS.",
+      "El SDS és un protocol de xarxa.",
+      "La SAN és una tecnologia d’hipervisors."
+    ],
+    "context": "El SDS s’executa sobre la SAN, gestionant recursos d’emmagatzematge de manera abstracta i automatitzada."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Com s’integra Kubernetes dins un entorn SDDC?",
+    "resposta_correcta": "Com a capa superior d’orquestració de contenidors sobre la infraestructura virtualitzada.",
+    "respostes_incorrectes": [
+      "Com a substitut directe del hipervisor.",
+      "Com a sistema d’emmagatzematge de dades.",
+      "Com a gestor de còpies de seguretat."
+    ],
+    "context": "Kubernetes pot desplegar-se sobre l’SDDC per orquestrar aplicacions en contenidors sobre una base de servidors virtualitzats."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Quina tècnica permet optimitzar el rendiment d’una xarxa SDN dins un SDDC?",
+    "resposta_correcta": "Traffic engineering basat en polítiques dinàmiques.",
+    "respostes_incorrectes": [
+      "Encaminament estàtic manual.",
+      "Segmentació física de ports.",
+      "Duplicació de VLANs."
+    ],
+    "context": "El traffic engineering SDN utilitza algoritmes per decidir rutes òptimes segons ús o prioritat, millorant l’eficiència global."
+  },
+  {
+    "nivell": "Avançada 🟣",
+    "pregunta": "Quina funció exerceix l’AIOps dins un SDDC modern?",
+    "resposta_correcta": "Analitzar dades i esdeveniments per predir incidències i optimitzar el rendiment.",
+    "respostes_incorrectes": [
+      "Crear màquines virtuals noves sense control.",
+      "Bloquejar actualitzacions de firmware.",
+      "Eliminar logs automàticament."
+    ],
+    "context": "AIOps aplica IA per monitorar, detectar anomalies i anticipar problemes dins la infraestructura virtualitzada."
+  }
+]
