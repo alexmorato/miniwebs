@@ -4,7 +4,7 @@
     "T54-BBDD_NoSql-truefalse.json",
     "T56-Backup321_Ransomware-test.json",
     "T56-Backup321_Ransomware-truefalse.json",
-    "T57_continuitat_negoci_dr_truefalse.json",
-    "T57_continuitat_negoci_dr_test.json"
+    "T57-ContinuitatNegociDR-truefalse.json",
+    "T57-ContinuitatNegociDR-test.json"
   ]
 }
