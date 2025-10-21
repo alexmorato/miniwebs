@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini CRUD con Restdb.io</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; background: #f8f9fa; }
+    h1 { color: #333; }
+    form, table { background: white; padding: 1em; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 2em; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    button { background: #007bff; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+  <h1>Usuarios (CRUD con Restdb.io)</h1>
+
+  <form id="userForm">
+    <input type="hidden" id="id" />
+    <label>Nombre:</label><br>
+    <input type="text" id="nombre" required><br><br>
+    <label>Email:</label><br>
+    <input type="email" id="email" required><br><br>
+    <label>Edad:</label><br>
+    <input type="number" id="edad" required><br><br>
+    <button type="submit">Guardar</button>
+    <button type="button" onclick="resetForm()">Cancelar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Nombre</th><th>Email</th><th>Edad</th><th>Acciones</th></tr>
+    </thead>
+    <tbody id="usuarios"></tbody>
+  </table>
+
+  <script>
+    const API_KEY = "2937ee0da5e5634fcf1dfbe86cf6a778b5c26";
+    const BASE_URL = "https://opos24-4f99.restdb.io/rest/usuarios"; // <- Cambia TU_BASE
+
+    const headers = {
+      "content-type": "application/json",
+      "x-apikey": API_KEY
+    };
+
+    async function cargarUsuarios() {
+      const res = await fetch(BASE_URL, { headers });
+      const data = await res.json();
+      const tbody = document.getElementById("usuarios");
+      tbody.innerHTML = "";
+      data.forEach(u => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${u.nombre}</td>
+          <td>${u.email}</td>
+          <td>${u.edad}</td>
+          <td>
+            <button onclick="editar('${u._id}','${u.nombre}','${u.email}','${u.edad}')">✏️</button>
+            <button onclick="borrar('${u._id}')">🗑️</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function guardarUsuario(e) {
+      e.preventDefault();
+      const id = document.getElementById("id").value;
+      const user = {
+        nombre: document.getElementById("nombre").value,
+        email: document.getElementById("email").value,
+        edad: Number(document.getElementById("edad").value)
+      };
+
+      if (id) {
+        await fetch(`${BASE_URL}/${id}`, {
+          method: "PUT",
+          headers,
+          body: JSON.stringify(user)
+        });
+      } else {
+        await fetch(BASE_URL, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(user)
+        });
+      }
+
+      resetForm();
+      cargarUsuarios();
+    }
+
+    async function borrar(id) {
+      if (confirm("¿Seguro que quieres eliminar este usuario?")) {
+        await fetch(`${BASE_URL}/${id}`, {
+          method: "DELETE",
+          headers
+        });
+        cargarUsuarios();
+      }
+    }
+
+    function editar(id, nombre, email, edad) {
+      document.getElementById("id").value = id;
+      document.getElementById("nombre").value = nombre;
+      document.getElementById("email").value = email;
+      document.getElementById("edad").value = edad;
+    }
+
+    function resetForm() {
+      document.getElementById("userForm").reset();
+      document.getElementById("id").value = "";
+    }
+
+    document.getElementById("userForm").addEventListener("submit", guardarUsuario);
+    cargarUsuarios();
+  </script>
+</body>
+</html>
