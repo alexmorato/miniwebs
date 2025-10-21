@@ -1,134 +1,86 @@
 [
   {
-    "nivell": "Fàcil 🟢 | OPOS21_ex. especific #14",
-    "pregunta": "Quan una empresa utilitza un model CPD de Cloud Híbrid, volem dir que:",
-    "resposta_correcta": "Té allotjats els seus sistemes d’informació en diferents proveïdors i també en els seus propis CPDs.",
+    "nivell": "Normal 🟡",
+    "fitxer": "OPOS19_preguntes_especific.pdf",
+    "pregunta": "13. Quan una empresa contracta a un tercer l’accés a un sistema de gestió d’actius en format de pagament per ús (per exemple abonant una quantitat per un nombre màxim d’usuaris simultanis) està fent un contracte de:",
+    "resposta_correcta": "B. SaaS.",
     "respostes_incorrectes": [
-      "Només utilitza núvol públic.",
-      "Té tota la infraestructura externalitzada.",
-      "Disposa d’un únic centre de dades centralitzat."
+      "A. PaaS.",
+      "C. IaaS.",
+      "D. Cloud Híbrid."
     ],
-    "context": "El núvol híbrid combina infraestructures pròpies i recursos externs per obtenir flexibilitat i redundància."
+    "context": "Pregunta sobre els models de servei Cloud. SaaS (Software as a Service) implica que l’empresa paga per l’ús d’un programari complet allotjat al núvol. No gestiona la infraestructura ni la plataforma, només l’aplicació."
   },
   {
-    "nivell": "Normal 🟡 | OPOS21_ex. especific #13",
-    "pregunta": "Quan una empresa contracta a un tercer l’accés a un sistema de gestió d’actius en format de pagament per ús (quota d’usuaris simultanis), està fent un contracte de:",
-    "resposta_correcta": "SaaS (Software as a Service).",
+    "nivell": "Fàcil 🟢",
+    "fitxer": "OPOS19_preguntes_especific.pdf",
+    "pregunta": "14. Quan una empresa utilitza a un model CPD de Cloud Híbrid, volem dir que:",
+    "resposta_correcta": "D. Té allotjats els seus sistemes d’informació en diferents proveïdors i també en els seus propis CPDs.",
     "respostes_incorrectes": [
-      "PaaS (Platform as a Service).",
-      "IaaS (Infrastructure as a Service).",
-      "DaaS (Data as a Service)."
+      "A. Està construint un nou CPD que usa tant energia verda com convencional.",
+      "B. Està evolucionant el seu CPD cap a un de molt baix consum i ecològic.",
+      "C. Utilitza només infraestructures, plataformes o aplicacions proveïdes per tercers."
     ],
-    "context": "El SaaS ofereix aplicacions completes com a servei, amb pagament per ús i sense gestió d’infraestructura."
+    "context": "Defineix el concepte de Cloud híbrid: una organització combina infraestructures pròpies (on-premises) amb recursos del núvol públic per obtenir flexibilitat i escalabilitat."
   },
   {
-    "nivell": "Normal 🟡 | OPOS21_ex. especific #14",
-    "pregunta": "La modalitat de cloud computing on s’ofereix tot el necessari per al desenvolupament i posada en producció d’aplicacions és:",
-    "resposta_correcta": "PaaS (Platform as a Service).",
+    "nivell": "Normal 🟡",
+    "fitxer": "OPOS21_preguntes_especific.pdf",
+    "pregunta": "14. La modalitat de cloud computing on s'ofereix tot el necessari per suportar la posada en producció d'aplicacions i serveis web així com també el cicle de vida complet del seu desenvolupament, construcció, test i preproducció és:",
+    "resposta_correcta": "B. PaaS (Platform as a Service).",
     "respostes_incorrectes": [
-      "SaaS (Software as a Service).",
-      "IaaS (Infrastructure as a Service).",
-      "CaaS (Communication as a Service)."
+      "A. IaaS (Infrastructure as a Service).",
+      "C. SaaS (Software as a Service).",
+      "D. CaaS (Communication as a Service)."
     ],
-    "context": "El PaaS proporciona entorns de desenvolupament i desplegament sense necessitat de gestionar servidors."
+    "context": "Pregunta sobre el model PaaS, que ofereix entorns de desenvolupament i desplegament sense necessitat de gestionar servidors. És ideal per a equips de desenvolupament que volen concentrar-se en el codi."
   },
   {
-    "nivell": "Normal 🟡 | OPOS19_ex. especific #13",
-    "pregunta": "Quina diferència hi ha entre els models IaaS, PaaS i SaaS?",
-    "resposta_correcta": "IaaS proporciona infraestructura; PaaS plataformes de desenvolupament; SaaS aplicacions al núvol.",
+    "nivell": "Difícil 🔵",
+    "fitxer": "OPOS21_preguntes_especific.pdf",
+    "pregunta": "20. Quin dels següents plans estableix un mètode per crear i validar les accions a seguir per assegurar la continuïtat de les operacions de processos de negoci abans, durant i després d'esdeveniments disruptius?",
+    "resposta_correcta": "D. Pla de Continuïtat de Negoci.",
     "respostes_incorrectes": [
-      "IaaS ofereix aplicacions completes; PaaS gestiona xarxes; SaaS ofereix contenidors.",
-      "IaaS només inclou emmagatzematge; PaaS només entorns web; SaaS només serveis de correu.",
-      "IaaS proporciona hardware físic; PaaS software d’usuari; SaaS màquines virtuals."
+      "A. Pla de Recuperació de Desastres.",
+      "B. Pla d’Emergència d’edifici o lloc de treball.",
+      "C. Pla de Comunicació de Crisi."
     ],
-    "context": "Són capes de servei dins del model cloud que defineixen el grau de gestió assumit pel proveïdor."
+    "context": "Pregunta sobre la gestió de la continuïtat del negoci. El Pla de Continuïtat de Negoci (PCN) defineix procediments per mantenir operatius els serveis essencials davant interrupcions, complementant el DRP (Disaster Recovery Plan) que se centra en la recuperació tècnica."
   },
   {
-    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #3 (supòsit 2)",
-    "pregunta": "Per distribuir programari i altres activitats de gestió d’estacions, l’Ajuntament fa servir:",
-    "resposta_correcta": "System Center Configuration Manager (SCCM).",
+    "nivell": "Difícil 🔵",
+    "fitxer": "OPOS21_preguntes_practic.pdf",
+    "pregunta": "20. Els servidors corporatius on-premise no tenen capacitat per hostatjar aquest lloc web, però l’Ajuntament disposa d’un contracte amb un cloud públic amb diferents opcions de servei. Quina creus que seria la millor solució per poder sortir a temps amb el web?",
+    "resposta_correcta": "B. Disposar d’un Platform as a Service (PaaS) en el cloud públic.",
     "respostes_incorrectes": [
-      "VMware Horizon.",
-      "Citrix XenApp.",
-      "Active Directory Management Studio."
+      "A. Disposar d’un Infrastructure as a Service (IaaS) en el cloud públic.",
+      "C. Disposar d’un Software as a Service (SaaS) en el cloud públic.",
+      "D. Demanar que s’ampliï la capacitat de la infraestructura on-premise, donat que els serveis en cloud no són prou segurs."
     ],
-    "context": "SCCM (ara Microsoft Endpoint Configuration Manager) és clau en models híbrids amb dispositius locals i al núvol."
+    "context": "Cas pràctic sobre elecció de model Cloud. El PaaS és la millor opció per desplegar ràpidament aplicacions web sense gestionar servidors ni xarxes, aprofitant l’escalabilitat del núvol públic."
   },
   {
-    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #4 (supòsit 2)",
-    "pregunta": "Quins tipus de dispositius i sistemes operatius pot gestionar SCCM?",
-    "resposta_correcta": "Equips amb Windows, macOS, Linux/Unix i dispositius mòbils iOS/Android.",
+    "nivell": "Difícil 🔵",
+    "fitxer": "OPOS23_preguntes_practic.pdf",
+    "pregunta": "16. Per tal de definir el nou plec, es defineix que l'estratègia tecnològica corporativa passa per disposar d'un datacenter definit per software. En aquest context, què és un datacenter definit per software?",
+    "resposta_correcta": "A. Un centre de dades en el qual la infraestructura es virtualitza mitjançant l'abstracció, la creació de grups de recursos i l'automatització.",
     "respostes_incorrectes": [
-      "Només equips amb Windows 10.",
-      "Només servidors físics.",
-      "Només sistemes virtualitzats Azure."
+      "B. Un centre de dades en el qual s'utilitzen únicament servidors físics per emmagatzemar i processar dades.",
+      "C. Un centre de dades on tots els recursos es troben definits al meta-verso mitjançant un programari.",
+      "D. Un centre de dades en el qual s'utilitzen únicament dispositius portàtils per emmagatzemar i processar dades."
     ],
-    "context": "SCCM permet la gestió unificada d’endpoints en entorns híbrids multi-SO."
+    "context": "Pregunta sobre Software Defined Data Center (SDDC), que forma part dels models híbrids. Virtualitza computació, emmagatzematge i xarxa, permetent automatitzar i integrar amb núvols públics."
   },
   {
-    "nivell": "Difícil 🔵 | OPOS21_ex. pràctic #5 (supòsit 2)",
-    "pregunta": "És possible agafar el control remot d’una estació fora de la xarxa corporativa?",
-    "resposta_correcta": "Sí, si té connexió habilitada (VPN o altres mètodes) amb la xarxa corporativa.",
+    "nivell": "Difícil 🔵",
+    "fitxer": "OPOS23_preguntes_practic.pdf",
+    "pregunta": "17. Amb quina tecnologia podem desacoblar el programari d'emmagatzematge del maquinari subjacents i proporcionar una plataforma de gestió comuna i serveis de dades en una infraestructura de TI (tecnologia de la informació)?",
+    "resposta_correcta": "D. SDS (Software-defined storage).",
     "respostes_incorrectes": [
-      "Només des del mateix segment LAN.",
-      "Només amb accés físic.",
-      "No és possible per motius de seguretat."
+      "A. VPC (Virtual Private Cloud).",
+      "B. SDN (Software defined networking).",
+      "C. Hypervisor."
     ],
-    "context": "Els accessos remots segurs són essencials en entorns híbrids i de teletreball."
-  },
-  {
-    "nivell": "Difícil 🔵 | OPOS21_ex. específic #17",
-    "pregunta": "Quines diferències hi ha entre escriptoris virtuals (VDI) i serveis de terminal (RDS)?",
-    "resposta_correcta": "En VDI l’usuari s’autentica a un SO complet; en RDS comparteix sessió dins d’un Windows Server.",
-    "respostes_incorrectes": [
-      "Són exactament el mateix servei.",
-      "RDS sempre requereix connexió VPN.",
-      "VDI només pot funcionar en núvol públic."
-    ],
-    "context": "Són dos models de virtualització usats per integrar entorns on-premises i Cloud."
-  },
-  {
-    "nivell": "Difícil 🔵 | OPOS21_ex. específic #22",
-    "pregunta": "Utilitzant Microsoft SCCM per desplegar aplicacions remotament, quina afirmació és certa?",
-    "resposta_correcta": "Les aplicacions es poden assignar a usuaris o equips, físics o remots (VPN/VDI).",
-    "respostes_incorrectes": [
-      "Només es poden assignar a usuaris interns.",
-      "Requereixen sempre connexió física LAN.",
-      "Només es poden desplegar aplicacions de Microsoft."
-    ],
-    "context": "Permet unificar el desplegament d’aplicacions on-premises i Cloud des d’una única consola."
-  },
-  {
-    "nivell": "Normal 🟡 | OPOS23_ex. específic #47",
-    "pregunta": "En una arquitectura orientada a serveis (SOA), què és una implementació vàlida?",
-    "resposta_correcta": "Separar frontend (client) i backend (serveis) connectats per APIs.",
-    "respostes_incorrectes": [
-      "Totes les funcions integrades en un sol programa.",
-      "Aplicació web amb accés directe a base de dades.",
-      "Sistema client-servidor sense cap capa de serveis."
-    ],
-    "context": "Els entorns híbrids adopten SOA per interoperar aplicacions entre CPD i Cloud."
-  },
-  {
-    "nivell": "Difícil 🔵 | OPOS23_ex. específic #20",
-    "pregunta": "Quin pla defineix les accions per assegurar la continuïtat del negoci davant d’interrupcions?",
-    "resposta_correcta": "PCN – Pla de Continuïtat de Negoci.",
-    "respostes_incorrectes": [
-      "DRP – Pla de Recuperació de Desastres.",
-      "Pla d’Emergència d’edifici.",
-      "Pla de Comunicació de Crisis."
-    ],
-    "context": "Els entorns híbrids són fonamentals per a la continuïtat i la recuperació del negoci (DRaaS)."
-  },
-  {
-    "nivell": "Difícil 🔵 | OPOS19_ex. pràctic #19",
-    "pregunta": "Segons l’Esquema Nacional de Seguretat (ENS), quines dimensions de seguretat s’han de valorar en la informació publicada?",
-    "resposta_correcta": "Confidencialitat, integritat, autenticitat i traçabilitat.",
-    "respostes_incorrectes": [
-      "Disponibilitat i rendiment.",
-      "Traçabilitat i latència.",
-      "Còpies de seguretat i accessibilitat."
-    ],
-    "context": "El compliment de l’ENS és obligatori en infraestructures híbrides de l’administració pública."
+    "context": "Pregunta sobre Software Defined Storage, part essencial dels entorns híbrids. Permet gestionar de manera centralitzada l’emmagatzematge independentment del maquinari, integrant solucions on-prem i Cloud."
   }
 ]
