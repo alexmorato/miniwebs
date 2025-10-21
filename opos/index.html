@@ -91,7 +91,8 @@
 </style>
 </head>
 <body>
-  <h2>🧠 Tests Opos</h2>
+  <h2 id="h2Opos">🧠 Tests Opos</h2>
+  <div><span id="testName" style="color: #83eded;"></span></div>
 
   <div id="selectorArea">
     <div class="muted">Carpetes: <span id="foldersList"></span></div>
@@ -104,8 +105,8 @@
 
   <div id="quizArea" class="question-box" style="display:none;">
     <div id="progress"></div>
-    <div id="nivell"></div>
-    <div id="pregunta" style="margin:10px 0;font-weight:bold;"></div>
+    <div id="nivell" style="margin-top: 10px;"></div>
+    <div id="pregunta" style="font-weight:bold;"></div>
     <div id="opcions"></div>
     <div id="feedback" style="margin-top:8px"></div>
     <button id="seguentBtn" style="display:none;margin-top:10px;">SEGUENT ➡️</button>
@@ -165,51 +166,40 @@
     const testParam = params.get("test");
     if (testParam) {
       // Carreguem el test automàticament
-      try {
-        tipusTest = testParam.includes("truefalse") ? "truefalse" : "test";
-        const res = await fetch(testParam);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        testData = await res.json();
+      carregaTest(testParam);
+    }
+  });
 
-        // 🔀 Barregem l'ordre de les preguntes
+  loadBtn.addEventListener("click", async ()=>{
+    const path = testSelect.value;
+    carregaTest(path);
+  });
+
+  function carregaTest(path) {
+    tipusTest = path.includes("truefalse") ? "truefalse" : "test";
+    return fetch(path)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        testData = data;
+        //elimina l'àrea de selecció de test i botó de carrega del test
+        document.getElementById("selectorArea").style.display = "none";
+        document.getElementById("h2Opos").style.display = "none";
+        document.getElementById("testName").textContent = `${path}`;
+        // 🔀 Barregem l'ordre de les preguntes aleatòriament
         testData.sort(() => Math.random() - 0.5);
 
         currentIndex = 0;
         correctes = 0;
         respostes = 0;
-
-        // Mostra el test directament
         mostrarPregunta();
-      } catch (e) {
-        alert("No s'ha pogut carregar el test indicat a la URL: " + e.message);
-      }
-    }
-  });
-
-
-  loadBtn.addEventListener("click", async ()=>{
-    const path = testSelect.value;
-    if (!path) { alert("Selecciona un test"); return; }
-
-    //elimina l'àrea de selecció de test i botó de carrega del test
-    document.getElementById("selectorArea").style.display = "none";
-    tipusTest = path.includes("truefalse") ? "truefalse" : "test";
-    try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      testData = await res.json();
-
-      // 🔀 Barregem l'ordre de les preguntes aleatòriament
-      testData.sort(() => Math.random() - 0.5);
-
-      currentIndex = 0;
-      correctes = 0;
-      respostes = 0;
-      mostrarPregunta();
-    } catch(e) {
-      alert("No s'ha pogut carregar el test: " + e.message);
-    }
-  });
+      })
+      .catch(e => {
+        alert("No s'ha pogut carregar el test: " + e.message);
+      });
+  }
 
   function mostrarPregunta() {
     if (currentIndex >= testData.length) {
