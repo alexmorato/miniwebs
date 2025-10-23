@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRUD Usuarios - Restdb.io</title>
+  <title>Buscador y filtros - Restdb.io</title>
   <style>
     :root {
       --primary: #007bff;
       --bg: #f8f9fa;
       --card: #fff;
-      --radius: 12px;
       --shadow: 0 2px 6px rgba(0,0,0,0.1);
+      --radius: 12px;
     }
 
     body {
       font-family: system-ui, sans-serif;
       background: var(--bg);
+      color: #333;
       margin: 0;
       padding: 1rem;
-      color: #333;
     }
 
     h1 {
       text-align: center;
       color: var(--primary);
+      margin-bottom: 1rem;
     }
 
     form {
@@ -35,9 +36,9 @@
     }
 
     label {
+      font-weight: 600;
       display: block;
       margin-top: 0.5rem;
-      font-weight: 600;
     }
 
     input {
@@ -51,18 +52,13 @@
 
     button {
       background: var(--primary);
-      color: white;
+      color: #fff;
       border: none;
-      padding: 0.6rem 1rem;
       border-radius: 8px;
-      cursor: pointer;
+      padding: 0.6rem 1rem;
       font-size: 1rem;
+      cursor: pointer;
       margin-top: 0.8rem;
-    }
-
-    button.cancel {
-      background: #6c757d;
-      margin-left: 0.5rem;
     }
 
     table {
@@ -76,21 +72,15 @@
 
     th, td {
       padding: 0.8rem;
-      text-align: left;
       border-bottom: 1px solid #eee;
+      text-align: left;
     }
 
     th {
       background: #f0f0f0;
     }
 
-    td button {
-      padding: 0.4rem 0.6rem;
-      font-size: 0.9rem;
-      margin-right: 0.25rem;
-    }
-
-    /* ✅ Diseño responsive */
+    /* Responsive table */
     @media (max-width: 700px) {
       table, thead, tbody, th, td, tr {
         display: block;
@@ -121,33 +111,28 @@
         font-weight: bold;
         color: #555;
       }
-
-      td button {
-        margin-top: 0.5rem;
-      }
     }
   </style>
 </head>
 <body>
-  <h1>Usuarios 👥</h1>
+  <h1>🔍 Buscador de Usuarios</h1>
 
-  <form id="userForm">
-    <input type="hidden" id="id" />
-    <label>Nombre:</label>
-    <input type="text" id="nombre" required>
-    <label>Email:</label>
-    <input type="email" id="email" required>
-    <label>Edad:</label>
-    <input type="number" id="edad" required>
-    <div>
-      <button type="submit">💾 Guardar</button>
-      <button type="button" class="cancel" onclick="resetForm()">Cancelar</button>
-    </div>
+  <form id="filterForm">
+    <label>Buscar por nombre:</label>
+    <input type="text" id="nombre" placeholder="Ej: Juan, Ana...">
+
+    <label>Edad mínima:</label>
+    <input type="number" id="edadMin" placeholder="Ej: 20">
+
+    <label>Edad máxima:</label>
+    <input type="number" id="edadMax" placeholder="Ej: 40">
+
+    <button type="submit">Filtrar</button>
   </form>
 
   <table>
     <thead>
-      <tr><th>Nombre</th><th>Email</th><th>Edad</th><th>Acciones</th></tr>
+      <tr><th>Nombre</th><th>Email</th><th>Edad</th></tr>
     </thead>
     <tbody id="usuarios"></tbody>
   </table>
@@ -155,79 +140,62 @@
   <script>
     const API_KEY = "68f811cb7f34ed7c2c200b92";
     const BASE_URL = "https://opos24-4f99.restdb.io/rest/usuarios"; // <- Cambia TU_BASE
-
     const headers = {
       "content-type": "application/json",
       "x-apikey": API_KEY
     };
 
-    async function cargarUsuarios() {
-      const res = await fetch(BASE_URL, { headers });
+    async function cargarUsuarios(filtros = {}) {
+      let query = {};
+
+      // Construir objeto de búsqueda dinámico
+      if (filtros.nombre) {
+        query.nombre = { "$regex": filtros.nombre, "$options": "i" };
+      }
+
+      if (filtros.edadMin || filtros.edadMax) {
+        query.edad = {};
+        if (filtros.edadMin) query.edad.$gte = Number(filtros.edadMin);
+        if (filtros.edadMax) query.edad.$lte = Number(filtros.edadMax);
+      }
+
+      const url = `${BASE_URL}?q=${encodeURIComponent(JSON.stringify(query))}&sort=nombre`;
+
+      const res = await fetch(url, { headers });
       const data = await res.json();
+
+      mostrarUsuarios(data);
+    }
+
+    function mostrarUsuarios(data) {
       const tbody = document.getElementById("usuarios");
       tbody.innerHTML = "";
+
+      if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="3">❌ No se encontraron resultados</td></tr>`;
+        return;
+      }
+
       data.forEach(u => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td data-label="Nombre">${u.nombre}</td>
           <td data-label="Email">${u.email}</td>
           <td data-label="Edad">${u.edad}</td>
-          <td data-label="Acciones">
-            <button onclick="editar('${u._id}','${u.nombre}','${u.email}','${u.edad}')">✏️</button>
-            <button onclick="borrar('${u._id}')">🗑️</button>
-          </td>`;
+        `;
         tbody.appendChild(tr);
       });
     }
 
-    async function guardarUsuario(e) {
+    document.getElementById("filterForm").addEventListener("submit", e => {
       e.preventDefault();
-      const id = document.getElementById("id").value;
-      const user = {
-        nombre: document.getElementById("nombre").value,
-        email: document.getElementById("email").value,
-        edad: Number(document.getElementById("edad").value)
-      };
+      const nombre = document.getElementById("nombre").value.trim();
+      const edadMin = document.getElementById("edadMin").value;
+      const edadMax = document.getElementById("edadMax").value;
+      cargarUsuarios({ nombre, edadMin, edadMax });
+    });
 
-      if (id) {
-        await fetch(`${BASE_URL}/${id}`, {
-          method: "PUT",
-          headers,
-          body: JSON.stringify(user)
-        });
-      } else {
-        await fetch(BASE_URL, {
-          method: "POST",
-          headers,
-          body: JSON.stringify(user)
-        });
-      }
-
-      resetForm();
-      cargarUsuarios();
-    }
-
-    async function borrar(id) {
-      if (confirm("¿Seguro que quieres eliminar este usuario?")) {
-        await fetch(`${BASE_URL}/${id}`, { method: "DELETE", headers });
-        cargarUsuarios();
-      }
-    }
-
-    function editar(id, nombre, email, edad) {
-      document.getElementById("id").value = id;
-      document.getElementById("nombre").value = nombre;
-      document.getElementById("email").value = email;
-      document.getElementById("edad").value = edad;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function resetForm() {
-      document.getElementById("userForm").reset();
-      document.getElementById("id").value = "";
-    }
-
-    document.getElementById("userForm").addEventListener("submit", guardarUsuario);
+    // Carga inicial
     cargarUsuarios();
   </script>
 </body>
