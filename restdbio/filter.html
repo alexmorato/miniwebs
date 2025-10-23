@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buscador y filtros - Restdb.io</title>
+  <title>Buscador avanzado - Restdb.io</title>
   <style>
     :root {
       --primary: #007bff;
@@ -61,6 +61,11 @@
       margin-top: 0.8rem;
     }
 
+    button.secondary {
+      background: #6c757d;
+      margin-left: 0.5rem;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -80,16 +85,34 @@
       background: #f0f0f0;
     }
 
-    /* Responsive table */
+    /* Spinner */
+    #spinner {
+      display: none;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
     @media (max-width: 700px) {
       table, thead, tbody, th, td, tr {
         display: block;
       }
-
-      thead {
-        display: none;
-      }
-
+      thead { display: none; }
       tr {
         margin-bottom: 1rem;
         background: var(--card);
@@ -97,7 +120,6 @@
         box-shadow: var(--shadow);
         padding: 0.8rem;
       }
-
       td {
         border: none;
         display: flex;
@@ -105,7 +127,6 @@
         align-items: center;
         padding: 0.4rem 0;
       }
-
       td::before {
         content: attr(data-label);
         font-weight: bold;
@@ -115,11 +136,14 @@
   </style>
 </head>
 <body>
-  <h1>🔍 Buscador de Usuarios</h1>
+  <h1>🔍 Buscador avanzado de Usuarios</h1>
 
   <form id="filterForm">
-    <label>Buscar por nombre:</label>
+    <label>Buscar por nombre (contiene):</label>
     <input type="text" id="nombre" placeholder="Ej: Juan, Ana...">
+
+    <label>Empieza por:</label>
+    <input type="text" id="empieza" placeholder="Ej: A, J...">
 
     <label>Edad mínima:</label>
     <input type="number" id="edadMin" placeholder="Ej: 20">
@@ -128,7 +152,14 @@
     <input type="number" id="edadMax" placeholder="Ej: 40">
 
     <button type="submit">Filtrar</button>
+    <button type="button" class="secondary" onclick="limpiarFiltros()">Limpiar</button>
   </form>
+
+  <!-- Spinner -->
+  <div id="spinner">
+    <div class="loader"></div>
+    <p>Cargando resultados...</p>
+  </div>
 
   <table>
     <thead>
@@ -137,66 +168,98 @@
     <tbody id="usuarios"></tbody>
   </table>
 
-  <script>
-    const API_KEY = "68f811cb7f34ed7c2c200b92";
-    const BASE_URL = "https://opos24-4f99.restdb.io/rest/usuarios"; // <- Cambia TU_BASE
-    const headers = {
-      "content-type": "application/json",
-      "x-apikey": API_KEY
-    };
+<script>
+  let API_KEY = "";
+  let BASE_URL = "";
 
-    async function cargarUsuarios(filtros = {}) {
-      let query = {};
+  // Cargar configuración desde config.json
+  async function cargarConfig() {
+    try {
+      const res = await fetch("./config/config.json");
+      if (!res.ok) throw new Error("No se pudo cargar config.json");
+      const config = await res.json();
 
-      // Construir objeto de búsqueda dinámico
-      if (filtros.nombre) {
-        query.nombre = { "$regex": filtros.nombre, "$options": "i" };
-      }
+      API_KEY = config.API_KEY;
+      BASE_URL = config.BASE_URL;
 
-      if (filtros.edadMin || filtros.edadMax) {
-        query.edad = {};
-        if (filtros.edadMin) query.edad.$gte = Number(filtros.edadMin);
-        if (filtros.edadMax) query.edad.$lte = Number(filtros.edadMax);
-      }
+      // Iniciar la app cuando se cargan las credenciales
+      cargarUsuarios();
+    } catch (error) {
+      console.error("Error cargando configuración:", error);
+      alert("⚠️ No se pudo cargar el archivo de configuración");
+    }
+  }
 
+  const headers = () => ({
+    "content-type": "application/json",
+    "x-apikey": API_KEY
+  });
+
+  async function cargarUsuarios(filtros = {}) {
+    mostrarSpinner(true);
+    let query = {};
+
+    if (filtros.nombre) query.nombre = { "$regex": filtros.nombre, "$options": "i" };
+    if (filtros.empieza) query.nombre = { "$regex": "^" + filtros.empieza, "$options": "i" };
+    if (filtros.edadMin || filtros.edadMax) {
+      query.edad = {};
+      if (filtros.edadMin) query.edad.$gte = Number(filtros.edadMin);
+      if (filtros.edadMax) query.edad.$lte = Number(filtros.edadMax);
+    }
+
+    try {
       const url = `${BASE_URL}?q=${encodeURIComponent(JSON.stringify(query))}&sort=nombre`;
-
-      const res = await fetch(url, { headers });
+      const res = await fetch(url, { headers: headers() });
       const data = await res.json();
-
       mostrarUsuarios(data);
+    } catch (err) {
+      console.error(err);
+      alert("Error al cargar los datos");
+    } finally {
+      mostrarSpinner(false);
+    }
+  }
+
+  function mostrarUsuarios(data) {
+    const tbody = document.getElementById("usuarios");
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="3">❌ No se encontraron resultados</td></tr>`;
+      return;
     }
 
-    function mostrarUsuarios(data) {
-      const tbody = document.getElementById("usuarios");
-      tbody.innerHTML = "";
-
-      if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="3">❌ No se encontraron resultados</td></tr>`;
-        return;
-      }
-
-      data.forEach(u => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td data-label="Nombre">${u.nombre}</td>
-          <td data-label="Email">${u.email}</td>
-          <td data-label="Edad">${u.edad}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    document.getElementById("filterForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const nombre = document.getElementById("nombre").value.trim();
-      const edadMin = document.getElementById("edadMin").value;
-      const edadMax = document.getElementById("edadMax").value;
-      cargarUsuarios({ nombre, edadMin, edadMax });
+    data.forEach(u => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td data-label="Nombre">${u.nombre}</td>
+        <td data-label="Email">${u.email}</td>
+        <td data-label="Edad">${u.edad}</td>
+      `;
+      tbody.appendChild(tr);
     });
+  }
 
-    // Carga inicial
+  function mostrarSpinner(show) {
+    document.getElementById("spinner").style.display = show ? "block" : "none";
+  }
+
+  document.getElementById("filterForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const nombre = document.getElementById("nombre").value.trim();
+    const empieza = document.getElementById("empieza").value.trim();
+    const edadMin = document.getElementById("edadMin").value;
+    const edadMax = document.getElementById("edadMax").value;
+    cargarUsuarios({ nombre, empieza, edadMin, edadMax });
+  });
+
+  function limpiarFiltros() {
+    document.getElementById("filterForm").reset();
     cargarUsuarios();
-  </script>
+  }
+
+  // ✅ Iniciar aplicación
+  cargarConfig();
+</script>
 </body>
 </html>
