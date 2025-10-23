@@ -199,8 +199,8 @@
     mostrarSpinner(true);
     let query = {};
 
-    if (filtros.nombre) query.nombre = { "$regex": filtros.nombre, "$options": "i" };
-    if (filtros.empieza) query.nombre = { "$regex": "^" + filtros.empieza, "$options": "i" };
+    if (filtros.nombre) query.nombre = { "$regex": filtros.nombre};
+    if (filtros.empieza) query.nombre = { "$regex": "^" + filtros.empieza };
     if (filtros.edadMin || filtros.edadMax) {
       query.edad = {};
       if (filtros.edadMin) query.edad.$gte = Number(filtros.edadMin);

@@ -126,10 +126,39 @@
         margin-top: 0.5rem;
       }
     }
+
+    /* 🔄 Spinner */
+    #spinner {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid var(--primary);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
   <h1>Usuarios 👥</h1>
+
+  <div id="spinner">
+    <div class="loader"></div>
+  </div>
 
   <form id="userForm">
     <input type="hidden" id="id" />
@@ -156,18 +185,25 @@
     let API_KEY = "";
     let BASE_URL = "";
 
+    function mostrarSpinner(show) {
+      document.getElementById("spinner").style.display = show ? "flex" : "none";
+    }
+
     async function cargarConfig() {
       try {
+        mostrarSpinner(true);
         const res = await fetch("./config/config.json");
         if (!res.ok) throw new Error("No se pudo cargar config.json");
         const config = await res.json();
         API_KEY = config.API_KEY;
         BASE_URL = config.BASE_URL;
 
-        cargarUsuarios(); // Llamar una vez que se cargan las credenciales
+        await cargarUsuarios(); // Llamar después de tener la configuración
       } catch (err) {
         console.error("Error al cargar configuración:", err);
         alert("⚠️ No se pudo cargar el archivo de configuración");
+      } finally {
+        mostrarSpinner(false);
       }
     }
 
@@ -177,22 +213,31 @@
     });
 
     async function cargarUsuarios() {
-      const res = await fetch(BASE_URL, { headers: headers() });
-      const data = await res.json();
-      const tbody = document.getElementById("usuarios");
-      tbody.innerHTML = "";
-      data.forEach(u => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td data-label="Nombre">${u.nombre}</td>
-          <td data-label="Email">${u.email}</td>
-          <td data-label="Edad">${u.edad}</td>
-          <td data-label="Acciones">
-            <button onclick="editar('${u._id}','${u.nombre}','${u.email}','${u.edad}')">✏️</button>
-            <button onclick="borrar('${u._id}')">🗑️</button>
-          </td>`;
-        tbody.appendChild(tr);
-      });
+      try {
+        mostrarSpinner(true);
+        const res = await fetch(BASE_URL, { headers: headers() });
+        const data = await res.json();
+        const tbody = document.getElementById("usuarios");
+        tbody.innerHTML = "";
+
+        data.forEach(u => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td data-label="Nombre">${u.nombre}</td>
+            <td data-label="Email">${u.email}</td>
+            <td data-label="Edad">${u.edad}</td>
+            <td data-label="Acciones">
+              <button onclick="editar('${u._id}','${u.nombre}','${u.email}','${u.edad}')">✏️</button>
+              <button onclick="borrar('${u._id}')">🗑️</button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Error al cargar usuarios:", err);
+        alert("Error al cargar los usuarios");
+      } finally {
+        mostrarSpinner(false);
+      }
     }
 
     async function guardarUsuario(e) {
@@ -204,28 +249,43 @@
         edad: Number(document.getElementById("edad").value)
       };
 
-      if (id) {
-        await fetch(`${BASE_URL}/${id}`, {
-          method: "PUT",
-          headers: headers(),
-          body: JSON.stringify(user)
-        });
-      } else {
-        await fetch(BASE_URL, {
-          method: "POST",
-          headers: headers(),
-          body: JSON.stringify(user)
-        });
-      }
+      try {
+        mostrarSpinner(true);
+        if (id) {
+          await fetch(`${BASE_URL}/${id}`, {
+            method: "PUT",
+            headers: headers(),
+            body: JSON.stringify(user)
+          });
+        } else {
+          await fetch(BASE_URL, {
+            method: "POST",
+            headers: headers(),
+            body: JSON.stringify(user)
+          });
+        }
 
-      resetForm();
-      cargarUsuarios();
+        resetForm();
+        await cargarUsuarios();
+      } catch (err) {
+        console.error("Error al guardar usuario:", err);
+        alert("No se pudo guardar el usuario");
+      } finally {
+        mostrarSpinner(false);
+      }
     }
 
     async function borrar(id) {
-      if (confirm("¿Seguro que quieres eliminar este usuario?")) {
+      if (!confirm("¿Seguro que quieres eliminar este usuario?")) return;
+      try {
+        mostrarSpinner(true);
         await fetch(`${BASE_URL}/${id}`, { method: "DELETE", headers: headers() });
-        cargarUsuarios();
+        await cargarUsuarios();
+      } catch (err) {
+        console.error("Error al borrar usuario:", err);
+        alert("No se pudo eliminar el usuario");
+      } finally {
+        mostrarSpinner(false);
       }
     }
 
