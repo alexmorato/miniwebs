@@ -1,0 +1,81 @@
+[
+{"nivell":"Fàcil 🟢","pregunta":"Un CPD és una infraestructura dedicada exclusivament a emmagatzemar còpies de seguretat.","resposta_boolean":false,"context":"Un CPD allotja sistemes, servidors, comunicacions i serveis crítics; les còpies són només una part."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Els nivells TIER mesuren la disponibilitat i redundància d’un CPD.","resposta_boolean":true,"context":"Els TIER estableixen categories de disponibilitat i capacitat de manteniment segons la norma Uptime Institute."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Un CPD Tier I no té cap redundància en la seva infraestructura elèctrica ni de refrigeració.","resposta_boolean":true,"context":"Tier I és el nivell més bàsic, amb un sol camí de subministrament i sense manteniment simultani."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Un CPD Tier IV és mantenible simultàniament però no tolerant a fallades.","resposta_boolean":false,"context":"Tier IV és tolerant a fallades, pot perdre un sistema complet sense afectar la càrrega."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Els gasos FM200 o Novec 1230 s’utilitzen per apagar incendis en un CPD.","resposta_boolean":true,"context":"Són gasos inerts que no danyen els components electrònics."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Un SAI manté l’energia durant períodes llargs de diverses hores.","resposta_boolean":false,"context":"El SAI només cobreix minuts, fins que entra el generador."},
+
+{"nivell":"Fàcil 🟢","pregunta":"El sistema HVAC controla la temperatura i humitat del CPD.","resposta_boolean":true,"context":"HVAC regula condicions ambientals per evitar sobreescalfament i condensació."},
+
+{"nivell":"Fàcil 🟢","pregunta":"El PUE ideal és proper a 1.","resposta_boolean":true,"context":"Com més proper a 1, més eficiència energètica (menys energia gastada fora dels equips IT)."}, 
+
+{"nivell":"Fàcil 🟢","pregunta":"L’aigua és el millor agent per apagar focs en un CPD.","resposta_boolean":false,"context":"L’aigua danyaria l’equipament; s’utilitzen gasos inerts o sistemes VESDA."},
+
+{"nivell":"Fàcil 🟢","pregunta":"El control d’accés i videovigilància formen part de la seguretat física del CPD.","resposta_boolean":true,"context":"Són mesures de protecció contra intrusions i incidents físics."},
+
+{"nivell":"Normal 🟡","pregunta":"Un CPD Tier II és capaç de suportar manteniments sense interrupció del servei.","resposta_boolean":false,"context":"Només els Tier III o superiors permeten manteniment simultani."},
+
+{"nivell":"Normal 🟡","pregunta":"El Tier III té redundància N+1 i és mantenible simultàniament.","resposta_boolean":true,"context":"Aquesta és la seva principal característica segons TIA-942."},
+
+{"nivell":"Normal 🟡","pregunta":"El Tier IV requereix redundància 2N o 2(N+1).","resposta_boolean":true,"context":"Té dues vies completes i independents d’alimentació i refrigeració."},
+
+{"nivell":"Normal 🟡","pregunta":"Un PUE alt indica millor eficiència energètica.","resposta_boolean":false,"context":"Un PUE baix és millor; valors propers a 1 indiquen major eficiència."},
+
+{"nivell":"Normal 🟡","pregunta":"El DCiE és l’invers del PUE i mostra l’eficiència del CPD en percentatge.","resposta_boolean":true,"context":"DCiE = 1/PUE; indica quina proporció d’energia arriba als equips IT."},
+
+{"nivell":"Normal 🟡","pregunta":"El BMS serveix per controlar els sistemes IT del CPD.","resposta_boolean":false,"context":"El BMS controla la infraestructura física (clima, electricitat, alarmes)."}, 
+
+{"nivell":"Normal 🟡","pregunta":"El DCIM permet monitorar en temps real l’energia, l’espai i el rendiment del CPD.","resposta_boolean":true,"context":"És una eina de gestió integral d’infraestructura del centre de dades."},
+
+{"nivell":"Normal 🟡","pregunta":"La humitat relativa recomanada en un CPD és d’entre el 45% i el 55%.","resposta_boolean":true,"context":"Aquests valors eviten electricitat estàtica i condensació."},
+
+{"nivell":"Normal 🟡","pregunta":"El free cooling consisteix en utilitzar aire exterior fred per refrigerar el CPD.","resposta_boolean":true,"context":"Aquesta tècnica redueix notablement el consum energètic del sistema HVAC."},
+
+{"nivell":"Normal 🟡","pregunta":"El Tier IV és el nivell més utilitzat a les administracions públiques.","resposta_boolean":false,"context":"Normalment s’utilitzen Tier III, suficient per disponibilitat alta i cost raonable."},
+
+{"nivell":"Difícil 🔵","pregunta":"Un CPD de tipus colocation és el mateix que un CPD cloud.","resposta_boolean":false,"context":"Colocation és físic i compartit; cloud és virtualitzat i gestionat pel proveïdor."},
+
+{"nivell":"Difícil 🔵","pregunta":"El RTO mesura el temps màxim per recuperar un servei després d’un incident.","resposta_boolean":true,"context":"Forma part dels paràmetres del pla de recuperació (DRP)."}, 
+
+{"nivell":"Difícil 🔵","pregunta":"El RPO indica l’antiguitat màxima de les dades que poden perdre’s.","resposta_boolean":true,"context":"És el punt de recuperació de dades definint la pèrdua acceptable."},
+
+{"nivell":"Difícil 🔵","pregunta":"La norma ISO/IEC 27001 regula l’eficiència energètica dels CPD.","resposta_boolean":false,"context":"ISO 27001 tracta la seguretat de la informació, no l’energia."},
+
+{"nivell":"Difícil 🔵","pregunta":"La norma ENS és obligatòria per als CPD de les administracions públiques espanyoles.","resposta_boolean":true,"context":"L’Esquema Nacional de Seguretat s’aplica a tots els sistemes TIC públics."},
+
+{"nivell":"Difícil 🔵","pregunta":"Els passadissos freds i calents serveixen per millorar l’eficiència de la refrigeració.","resposta_boolean":true,"context":"Separar fluxos d’aire fred i calent evita recirculacions i estalvia energia."},
+
+{"nivell":"Difícil 🔵","pregunta":"Un sistema RAID només augmenta el rendiment i no millora la seguretat de les dades.","resposta_boolean":false,"context":"RAID proporciona redundància per tolerància a fallades i també pot millorar rendiment."},
+
+{"nivell":"Difícil 🔵","pregunta":"Un CPD sense circuits A i B és tolerant a fallades.","resposta_boolean":false,"context":"Sense doble via hi ha un punt únic de fallada, inacceptable en Tier III o IV."},
+
+{"nivell":"Difícil 🔵","pregunta":"El MTBF i el MTTR s’utilitzen per calcular la disponibilitat d’un sistema.","resposta_boolean":true,"context":"Disponibilitat = MTBF / (MTBF + MTTR)."}, 
+
+{"nivell":"Difícil 🔵","pregunta":"El DRP s’activa abans del desastre per evitar-lo.","resposta_boolean":false,"context":"S’activa després de l’incident per recuperar sistemes i dades."},
+
+{"nivell":"Avançada 🟣","pregunta":"ISO/IEC 22237 cobreix disseny, construcció i operació dels centres de dades.","resposta_boolean":true,"context":"És l’estàndard internacional més complet per a CPDs."},
+
+{"nivell":"Avançada 🟣","pregunta":"Un PUE de 3 indica un CPD molt eficient.","resposta_boolean":false,"context":"Un PUE de 3 significa que només un terç de l’energia arriba als equips IT, molt ineficient."},
+
+{"nivell":"Avançada 🟣","pregunta":"El concepte 2(N+1) implica doble infraestructura totalment independent més redundància extra.","resposta_boolean":true,"context":"És el nivell màxim de seguretat i disponibilitat."},
+
+{"nivell":"Avançada 🟣","pregunta":"El sistema VESDA és un tipus d’extintor automàtic per gasos.","resposta_boolean":false,"context":"VESDA és un sistema de detecció precoç de fum mitjançant aspiració, no d’extinció."},
+
+{"nivell":"Avançada 🟣","pregunta":"El free cooling pot reduir el consum del sistema HVAC sense canviar l’equip IT.","resposta_boolean":true,"context":"És una estratègia d’eficiència energètica molt usada en Green Data Centers."},
+
+{"nivell":"Avançada 🟣","pregunta":"Els CPD Edge estan pensats per reduir latència i apropar el processament a l’usuari.","resposta_boolean":true,"context":"L’Edge s’utilitza per IoT, 5G i sistemes amb temps de resposta crítics."},
+
+{"nivell":"Avançada 🟣","pregunta":"Un CPD amb Tier III pot mantenir-se operatiu encara que perdi tota una línia elèctrica.","resposta_boolean":false,"context":"Només Tier IV és tolerant a fallades totals; Tier III permet manteniment, no fallida completa."},
+
+{"nivell":"Avançada 🟣","pregunta":"El manteniment simultani permet fer tasques sense aturar càrregues crítiques.","resposta_boolean":true,"context":"És una característica dels CPD Tier III i Tier IV."},
+
+{"nivell":"Avançada 🟣","pregunta":"L’indicador PUE pot expressar-se en percentatge d’eficiència directa.","resposta_boolean":false,"context":"PUE és una relació numèrica; l’eficiència percentual és DCiE = 1/PUE."},
+
+{"nivell":"Avançada 🟣","pregunta":"Els CPD modulars són menys segurs que els tradicionals.","resposta_boolean":false,"context":"Els CPD modulars poden ser tan segurs o més, amb mòduls preconfigurats i redundants."}
+]

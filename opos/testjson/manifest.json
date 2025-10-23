@@ -11,6 +11,8 @@
     "T58-ModelsdeComputacioHibrids_OPOSXX-test.json",
     "T59-SoftwareDefinedDataCenter-OPOSXX.json",
     "T59-SoftwareDefinedDataCenter-test.json",
-    "T59-SoftwareDefinedDataCenter-truefalse.json"
+    "T59-SoftwareDefinedDataCenter-truefalse.json",
+    "T60-CentresDeProcessamentDeDades-test.json",
+    "T60-CentresDeProcessamentDeDades-truefalse.json"
   ]
 }

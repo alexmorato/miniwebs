@@ -1,0 +1,98 @@
+[
+{"nivell":"Fàcil 🟢","pregunta":"Quina és la funció principal d’un Centre de Processament de Dades (CPD)?","resposta_correcta":"Garantir la disponibilitat, seguretat i continuïtat dels serveis TIC.","respostes_incorrectes":["Servir únicament com a magatzem de còpies de seguretat.","Executar aplicacions mòbils.","Proporcionar connectivitat Wi-Fi a la xarxa corporativa."],"context":"Pregunta bàsica sobre la funció essencial d’un CPD dins una organització."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin nivell TIER té un CPD bàsic sense redundància?","resposta_correcta":"Tier I","respostes_incorrectes":["Tier II","Tier III","Tier IV"],"context":"El Tier I és el més senzill segons l’Uptime Institute, amb una única via elèctrica i de refrigeració."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin element s’utilitza per mantenir l’energia uns minuts en cas de tall elèctric?","resposta_correcta":"SAI (Sistema d’Alimentació Ininterrompuda)","respostes_incorrectes":["Grup electrògen","Transformador d’aïllament","Bateria de climatització"],"context":"El SAI permet mantenir l’alimentació breument fins que entra en funcionament el generador."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quina temperatura recomanada té un CPD segons ASHRAE?","resposta_correcta":"22 °C ± 2 °C","respostes_incorrectes":["15 °C ± 1 °C","30 °C ± 3 °C","18 °C ± 5 °C"],"context":"La temperatura recomanada per a servidors és d’uns 22 graus per equilibrar estabilitat i eficiència."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin agent s’utilitza normalment per apagar un incendi en un CPD?","resposta_correcta":"Gas inert (FM200 o Novec 1230)","respostes_incorrectes":["Aigua a pressió","Escuma mecànica","Aire comprimit"],"context":"Els gasos inerts no danyen l’electrònica, a diferència de l’aigua o l’escuma."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin TIER és mantenible simultàniament?","resposta_correcta":"Tier III","respostes_incorrectes":["Tier I","Tier II","Tier IV"],"context":"El Tier III permet realitzar manteniments sense aturar les càrregues crítiques."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Què significa l’acrònim PUE?","resposta_correcta":"Power Usage Effectiveness","respostes_incorrectes":["Power Unit Efficiency","Public Utility Exchange","Processing Unit Energy"],"context":"El PUE és la mètrica més usada per avaluar l’eficiència energètica d’un CPD."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin valor de PUE indica més eficiència?","resposta_correcta":"Un valor proper a 1","respostes_incorrectes":["Un valor superior a 3","Un valor proper a 5","Un valor proper a 10"],"context":"Com més pròxim a 1 sigui el PUE, més eficient és el consum energètic del CPD."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quin és l’objectiu del sistema HVAC al CPD?","resposta_correcta":"Mantenir temperatura i humitat estables.","respostes_incorrectes":["Proporcionar ventilació natural.","Filtrar pols a l’aire.","Aportar llum ambiental."],"context":"Els sistemes HVAC regulen la temperatura i humitat per evitar sobreescalfament dels servidors."},
+
+{"nivell":"Fàcil 🟢","pregunta":"Quina norma defineix la infraestructura de telecomunicacions dels CPD?","resposta_correcta":"ANSI/TIA-942","respostes_incorrectes":["ISO/IEC 27001","ISO/IEC 20000","UNE 166000"],"context":"La norma TIA-942 és la referència per al disseny i construcció de CPDs professionals."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin percentatge de disponibilitat anual correspon al Tier IV segons l’Uptime Institute?","resposta_correcta":"99,995%","respostes_incorrectes":["99,671%","99,982%","99,741%"],"context":"Tier IV ofereix el màxim nivell de disponibilitat (unes 30 minuts d’inactivitat anual)."}, 
+
+{"nivell":"Normal 🟡","pregunta":"Quina és la diferència principal entre un Tier III i un Tier IV?","resposta_correcta":"El Tier IV és tolerant a fallades mentre que el Tier III només és mantenible simultàniament.","respostes_incorrectes":["El Tier IV té menys consum elèctric.","El Tier III requereix doble alimentació elèctrica.","El Tier IV utilitza menys espai físic."],"context":"Tier IV permet que el sistema continuï actiu encara que falli tota una línia d’alimentació."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin és el principal objectiu del Pla de Recuperació davant Desastres (DRP)?","resposta_correcta":"Restablir sistemes i dades després d’un desastre.","respostes_incorrectes":["Evitar incidències menors de manteniment.","Millorar la refrigeració del CPD.","Detectar atacs informàtics interns."],"context":"El DRP forma part de la continuïtat de negoci i s’activa després d’un incident greu."},
+
+{"nivell":"Normal 🟡","pregunta":"Què indica el valor RTO?","resposta_correcta":"Temps màxim per recuperar un servei crític.","respostes_incorrectes":["Antiguitat màxima de dades recuperables.","Percentatge d’eficiència energètica.","Temps mig entre fallades."],"context":"El RTO (Recovery Time Objective) és el temps màxim admissible d’interrupció d’un servei."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin element assegura redundància elèctrica al CPD?","resposta_correcta":"Doble línia d’alimentació amb circuits A i B.","respostes_incorrectes":["Un únic SAI d’alta potència.","Un transformador trifàsic.","Un generador de corrent alterna."],"context":"La doble línia d’alimentació evita punts únics de fallada en el subministrament."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin sistema mesura i controla en temps real les condicions del CPD?","resposta_correcta":"DCIM (Data Center Infrastructure Management)","respostes_incorrectes":["HVAC","UPS","LAN Manager"],"context":"El DCIM integra dades de consum, espai, climatització i energia per monitoratge global."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin és l’objectiu del sistema de control BMS?","resposta_correcta":"Gestionar climatització, energia i alarmes de l’edifici.","respostes_incorrectes":["Monitorar només el trànsit de xarxa.","Registrar la presència de personal.","Supervisar aplicacions software."],"context":"El BMS (Building Management System) s’ocupa de la infraestructura física de l’edifici i el CPD."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin nivell TIER té manteniment simultani sense interrupció del servei?","resposta_correcta":"Tier III","respostes_incorrectes":["Tier I","Tier II","Tier IV"],"context":"El Tier III permet mantenir equips sense afectar operacions crítiques."},
+
+{"nivell":"Normal 🟡","pregunta":"Quin és el rang d’humitat recomanat en un CPD?","resposta_correcta":"Entre 45% i 55%","respostes_incorrectes":["Entre 20% i 30%","Entre 60% i 70%","Entre 10% i 20%"],"context":"El control d’humitat evita electricitat estàtica i corrosió dels components."},
+
+{"nivell":"Normal 🟡","pregunta":"Quina és la diferència entre un CPD on-premise i un CPD colocation?","resposta_correcta":"On-premise està dins l’organització; colocation es troba en un centre compartit.","respostes_incorrectes":["On-premise és virtual; colocation és físic.","On-premise només és públic; colocation és privat.","On-premise usa núvol híbrid."],"context":"El model colocation allotja servidors físics en un CPD d’un tercer proveïdor."},
+
+{"nivell":"Normal 🟡","pregunta":"Quina és la funció d’un sistema de failover?","resposta_correcta":"Commutar automàticament cap a un sistema redundant en cas de fallada.","respostes_incorrectes":["Equilibrar càrregues entre servidors.","Mesurar el temps entre fallades.","Reduir el consum de xarxa."],"context":"El failover assegura continuïtat sense interrupció quan un component falla."},
+
+{"nivell":"Normal 🟡","pregunta":"Què mesura el MTBF?","resposta_correcta":"El temps mitjà entre fallades d’un sistema.","respostes_incorrectes":["El temps mitjà de reparació.","El temps màxim d’inactivitat.","El nivell de temperatura del CPD."],"context":"El MTBF és un indicador de fiabilitat; com més alt, més fiable és el sistema."},
+
+{"nivell":"Difícil 🔵","pregunta":"Segons TIA-942, quina característica defineix un CPD de categoria 4 respecte a un de categoria 3?","resposta_correcta":"És tolerant a fallades i suporta la pèrdua total d’un sistema sense interrupció.","respostes_incorrectes":["Només admet un manteniment a l’any.","Requereix menys potència elèctrica.","Només és redundant en climatització."],"context":"La categoria 4 equival a Tier IV; té doble via independent i és completament tolerant a fallades."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quin és l’efecte d’un PUE de 2 en un CPD?","resposta_correcta":"Només el 50% de l’energia es destina a equips IT.","respostes_incorrectes":["És un valor molt eficient.","El CPD té eficiència del 80%.","L’eficiència és superior al d’un PUE de 1,2."],"context":"Si PUE = 2, vol dir que per cada watt IT es gasten dos en total, per tant eficiència 50%."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina és la funció del sistema de detecció VESDA en un CPD?","resposta_correcta":"Detectar fum de manera molt precoç mitjançant aspiració d’aire.","respostes_incorrectes":["Extingir incendis amb gas inert.","Filtrar partícules de pols.","Monitorar humitat relativa."],"context":"VESDA significa Very Early Smoke Detection Apparatus, un sistema de detecció precoç d’incendis."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quin és el principal avantatge d’un CPD modular respecte un tradicional?","resposta_correcta":"És escalable i ràpid d’instal·lar.","respostes_incorrectes":["Té menys eficiència energètica.","Necessita menys manteniment elèctric.","No requereix sistemes de refrigeració."],"context":"Els CPD modulars s’instal·len per blocs, reduint temps i costos d’ampliació."},
+
+{"nivell":"Difícil 🔵","pregunta":"En un pla de continuïtat, quina diferència hi ha entre BCP i DRP?","resposta_correcta":"El BCP cobreix la continuïtat del negoci i el DRP la recuperació tècnica.","respostes_incorrectes":["El DRP és estratègic i el BCP tècnic.","Són equivalents i intercanviables.","El DRP només s’aplica a desastres naturals."],"context":"El DRP és un subconjunt del BCP; un tracta sistemes, l’altre processos de negoci."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina és la característica clau del Tier III respecte Tier II?","resposta_correcta":"Permet manteniment simultani sense aturar càrregues.","respostes_incorrectes":["Té més potència elèctrica.","Només té un camí de distribució.","No permet redundància."],"context":"Tier III té doble camí de distribució i pot mantenir-se sense afectar serveis."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina norma estableix recomanacions de temperatura i humitat per CPD?","resposta_correcta":"ASHRAE TC9.9","respostes_incorrectes":["ISO 27001","ENS","NFPA 75"],"context":"ASHRAE defineix els rangs tècnics recomanats de condicions ambientals en CPDs."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina combinació d’indicadors s’utilitza per mesurar la fiabilitat i manteniment d’un CPD?","resposta_correcta":"MTBF i MTTR","respostes_incorrectes":["RTO i RPO","SLA i PUE","RPO i DCiE"],"context":"MTBF mesura fiabilitat, MTTR mesura el temps per reparar. Junts defineixen disponibilitat real."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina és la relació entre PUE i DCiE?","resposta_correcta":"DCiE és l’invers del PUE.","respostes_incorrectes":["PUE és l’invers del DCiE menys 1.","Són valors independents.","El DCiE és sempre superior al PUE."],"context":"DCiE (Efficiency) = 1/PUE, expressat en percentatge."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina és la finalitat d’una topologia en anell a la xarxa del CPD?","resposta_correcta":"Proporcionar redundància i tolerància a fallades de connexió.","respostes_incorrectes":["Augmentar la latència de xarxa.","Evitar col·lisions Ethernet.","Minimitzar el consum elèctric."],"context":"Les topologies en anell o malla permeten rutes alternatives en cas de trencament de connexió."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quin element assegura el control de temperatura per zones dins el CPD?","resposta_correcta":"Sistemes HVAC segmentats amb passadissos freds i calents.","respostes_incorrectes":["Un sol aire condicionat central.","Un termòstat d’ambient únic.","Un sensor d’humitat a l’entrada."],"context":"El control per passadissos permet millor eficiència i gestió de calor."},
+
+{"nivell":"Difícil 🔵","pregunta":"En un entorn públic, quina norma és obligatòria per la seguretat TIC del CPD?","resposta_correcta":"ENS (Esquema Nacional de Seguretat)","respostes_incorrectes":["ISO 9001","TIA-942","NFPA 76"],"context":"L’ENS defineix requisits de seguretat aplicables a les AAPP espanyoles."},
+
+{"nivell":"Difícil 🔵","pregunta":"Com s’anomena el temps màxim de pèrdua de dades acceptable en un pla de recuperació?","resposta_correcta":"RPO (Recovery Point Objective)","respostes_incorrectes":["RTO","MTTR","BCP"],"context":"El RPO estableix quantes dades es poden perdre sense impacte greu."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina diferència hi ha entre CPD Edge i Cloud?","resposta_correcta":"L’Edge és físic i proper a l’usuari; el Cloud és virtual i remot.","respostes_incorrectes":["L’Edge és més lent.","El Cloud depèn d’energia local.","Són el mateix tipus d’infraestructura."],"context":"L’Edge busca latència mínima; el Cloud, escalabilitat global."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quin mecanisme permet fer manteniments sense aturar càrregues crítiques?","resposta_correcta":"Manteniment simultani (Tier III o superior).","respostes_incorrectes":["Redundància N.","Planificació setmanal.","Consolidació de servidors."],"context":"El manteniment simultani és una propietat clau dels CPD Tier III i IV."},
+
+{"nivell":"Difícil 🔵","pregunta":"Quina és la conseqüència de no tenir circuits A i B separats?","resposta_correcta":"Es crea un punt únic de fallada elèctrica.","respostes_incorrectes":["Augmenta la redundància.","Millora la seguretat.","Redueix el consum elèctric."],"context":"Un sol camí d’alimentació trenca la tolerància a fallades del CPD."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina característica diferencia ISO/IEC 22237 respecte a TIA-942?","resposta_correcta":"Defineix estàndards internacionals de disseny, construcció i operació del CPD.","respostes_incorrectes":["Només regula seguretat lògica i d’accés.","És una norma específica per al cablejat estructurat.","Substitueix la ISO 27001 en seguretat informàtica."],"context":"ISO/IEC 22237 és l’evolució global de TIA-942, cobrint tot el cicle de vida d’un centre de dades."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina diferència hi ha entre redundància N+1 i 2(N+1)?","resposta_correcta":"2(N+1) duplica completament la infraestructura i afegeix redundància extra.","respostes_incorrectes":["N+1 té dues vies completes.","2(N+1) només afegeix un component redundant.","Són conceptes equivalents segons la norma TIA-942."],"context":"2(N+1) és el nivell màxim de seguretat, amb doble infraestructura totalment independent i un extra redundant."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quin és l’objectiu de l’indicador DCiE?","resposta_correcta":"Mesurar el percentatge d’energia que realment usa l’equipament IT.","respostes_incorrectes":["Mesurar la temperatura mitjana de la sala.","Mesurar l’eficiència dels ventiladors HVAC.","Indicar el consum elèctric total del CPD."],"context":"DCiE = 1 / PUE, expressa en % quina part de l’energia total es destina als equips IT."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina és la funció del pla BIA dins la gestió de continuïtat?","resposta_correcta":"Identificar processos crítics i avaluar l’impacte de la seva interrupció.","respostes_incorrectes":["Restablir els sistemes després del desastre.","Repartir tasques dins l’equip tècnic.","Activar la infraestructura redundada."],"context":"El Business Impact Analysis (BIA) determina quins processos són essencials i quant impacta la seva caiguda."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quin tipus de redundància es requereix per obtenir categoria Tier IV segons l’Uptime Institute?","resposta_correcta":"Redundància 2N o 2(N+1) amb camins físics independents.","respostes_incorrectes":["Redundància N+1 simple.","Doble SAI connectat al mateix circuit.","Redundància compartida entre circuits."],"context":"Tier IV exigeix dues vies independents que puguin operar simultàniament en cas de fallada completa d’una d’elles."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina funció té el concepte de manteniment simultani?","resposta_correcta":"Permet substituir components sense interrompre càrregues crítiques.","respostes_incorrectes":["Evita la necessitat de redundància.","Només s’aplica a sistemes de climatització.","Implica parada total per seguretat."],"context":"És un principi fonamental de Tier III i IV per garantir la continuïtat de servei durant tasques planificades."},
+
+{"nivell":"Avançada 🟣","pregunta":"Com es relacionen els indicadors MTBF i MTTR amb la disponibilitat?","resposta_correcta":"Disponibilitat = MTBF / (MTBF + MTTR)","respostes_incorrectes":["Disponibilitat = MTTR / MTBF","Disponibilitat = MTBF × MTTR","No tenen relació matemàtica directa."],"context":"La fórmula combina el temps mitjà entre fallades (fiabilitat) i el de reparació per calcular la disponibilitat teòrica."},
+
+{"nivell":"Avançada 🟣","pregunta":"Per què és recomanable separar el sistema de posada a terra del CPD de la resta de l’edifici?","resposta_correcta":"Per evitar diferències de potencial i soroll elèctric.","respostes_incorrectes":["Per reduir el consum energètic global.","Per millorar la velocitat de transmissió de dades.","Per garantir ventilació natural a les sales."],"context":"Una presa de terra dedicada evita corrents paràsites i protegeix els equips de fluctuacions i descàrregues."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina mesura d’eficiència energètica complementa el PUE i permet comparacions entre CPDs?","resposta_correcta":"DCiE (Data Center Infrastructure Efficiency)","respostes_incorrectes":["RTO","SLA","RPO"],"context":"DCiE és l’invers del PUE i mostra quina part de l’energia total s’aprofita en equips IT."},
+
+{"nivell":"Avançada 🟣","pregunta":"Quina estratègia permet reduir significativament el PUE sense modificar l’equipament IT?","resposta_correcta":"Implementar sistemes de refrigeració per free cooling i control intel·ligent HVAC.","respostes_incorrectes":["Substituir els servidors per portàtils.","Incrementar la potència de les fonts d’alimentació.","Reduir el nombre de circuits elèctrics."],"context":"El free cooling i la gestió intel·ligent de la climatització optimitzen el consum d’energia sense canviar la infraestructura IT."}
+]
+
