@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Beta - Procesador</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #6ae0a7; }
+    .container { max-width: 700px; margin: 40px auto; background: #141a2a; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .question { font-weight: bold; margin: 20px 0 10px; }
+    .option { display: block; width: 100%; text-align: left; padding: 14px 16px; margin: 8px 0; background: #1b223a; color: #e7ecff; border: 1px solid #2a3554; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .option.selected { background: #2a3554; border: 2px solid #6ae0a7; color: #fff; }
+    .option:hover { background: #24325a; }
+    .feedback { margin-top: 10px; font-size: 1rem; }
+    .ok { color: #6ae0a7; font-weight: bold; }
+    .ko { color: #ff6b6b; font-weight: bold; }
+    #nextBtn { width: 100%; background: linear-gradient(180deg,#2aebad,#21c08d); color: #032217; font-weight: bold; font-size: 1.1rem; padding: 12px; border-radius: 12px; border: none; margin-top: 20px; }
+    #progress { margin-bottom: 10px; }
+    #hint { color: #9fb0ff; font-size: 0.95rem; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Test Beta</h1>
+  <div class="container">
+    <div id="progress"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="feedback" class="feedback"></div>
+    <div id="hint"></div>
+    <button id="nextBtn" style="display:none;">Siguiente ➡️</button>
+  </div>
+  <script>
+    let testData = [];
+    let current = 0;
+    let correct = 0;
+    let answered = false;
+
+    async function loadTest() {
+      const res = await fetch('testnotelmjson/testBeta.json');
+      testData = await res.json();
+      current = 0;
+      correct = 0;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      answered = false;
+      const q = testData[current];
+      document.getElementById('progress').textContent = `Pregunta ${current+1} de ${testData.length}`;
+      document.getElementById('question').textContent = q.question;
+      document.getElementById('hint').textContent = '';
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      q.answerOptions.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt.text;
+        btn.onclick = () => selectOption(idx);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function selectOption(idx) {
+      if (answered) return;
+      answered = true;
+      const q = testData[current];
+      const options = document.querySelectorAll('.option');
+      options.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === idx) btn.classList.add('selected');
+      });
+      const selected = q.answerOptions[idx];
+      if (selected.isCorrect) {
+        document.getElementById('feedback').innerHTML = `<span class='ok'>¡Correcto!</span><br>${selected.rationale}`;
+        correct++;
+      } else {
+        document.getElementById('feedback').innerHTML = `<span class='ko'>Incorrecto</span><br>${selected.rationale}`;
+      }
+      document.getElementById('hint').textContent = q.hint ? `Pista: ${q.hint}` : '';
+      document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    document.getElementById('nextBtn').onclick = () => {
+      current++;
+      if (current < testData.length) {
+        showQuestion();
+      } else {
+        document.querySelector('.container').innerHTML = `<h2>¡Test finalizado!</h2><div>Respuestas correctas: ${correct} de ${testData.length}</div>`;
+      }
+    };
+
+    loadTest();
+  </script>
+</body>
+</html>

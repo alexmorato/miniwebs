@@ -95,14 +95,25 @@
 
     carregarManifests();
 
-    startBtn.addEventListener("click", ()=>{
+    startBtn.addEventListener("click", async ()=>{
       const selected = testSelect.value;
       if (!selected) {
         alert("Selecciona un test per començar");
         return;
       }
-      // 🔗 Redirigeix a la pàgina de test amb el paràmetre ?test=
-      window.location.href = `index.html?test=${encodeURIComponent(selected)}`;
+      try {
+        status.textContent = "Carregant test...";
+        const res = await fetch(selected);
+        if (!res.ok) throw new Error("No s'ha pogut carregar el fitxer");
+        const json = await res.text();
+  localStorage.setItem("testfile_content", json);
+  localStorage.setItem("testfile_name", selected);
+  status.textContent = "Test carregat en localStorage.";
+        // Redirigeix després de guardar
+        window.location.href = `index.html?test=${encodeURIComponent(selected)}`;
+      } catch (err) {
+        status.textContent = `⚠️ Error carregant el test: ${err.message}`;
+      }
     });
   </script>
 </body>

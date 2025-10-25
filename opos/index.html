@@ -166,11 +166,35 @@
   llistarTestsDesDeManifests();
 
   // 🧭 Comprova si hi ha paràmetre ?test= a la URL
+
   window.addEventListener("DOMContentLoaded", async () => {
+    // 1. Comprova si hi ha test al localStorage
+    const localTest = localStorage.getItem("testfile_content");
+    if (localTest) {
+      try {
+        const data = JSON.parse(localTest);
+        testData = data;
+        tipusTest = Array.isArray(data) && data[0] && (data[0].hasOwnProperty("resposta_boolean") || data[0].hasOwnProperty("resposta_boolen")) ? "truefalse" : "test";
+        document.getElementById("selectorArea").style.display = "none";
+        document.getElementById("h2Opos").style.display = "none";
+        // Mostrar el nombre del test guardado
+        const testName = localStorage.getItem("testfile_name") || "(Test carregat localment)";
+        document.getElementById("testName").textContent = testName;
+        testData.sort(() => Math.random() - 0.5);
+        currentIndex = 0;
+        correctes = 0;
+        respostes = 0;
+        mostrarPregunta();
+        return;
+      } catch (e) {
+        // Si hay error, sigue con el flujo normal
+        console.warn("Error carregant test de localStorage", e);
+      }
+    }
+    // 2. Si no, mira si hi ha paràmetre ?test= a la URL
     const params = new URLSearchParams(window.location.search);
     const testParam = params.get("test");
     if (testParam) {
-      // Carreguem el test automàticament
       carregaTest(testParam);
     }
   });

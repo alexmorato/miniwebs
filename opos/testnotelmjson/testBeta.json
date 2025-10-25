@@ -1,0 +1,314 @@
+[
+    {
+      "question": "Según la descripción técnica de Wi-Fi 6 y 6E, ¿qué tecnología de modulación permite transmitir más bits en el mismo intervalo de tiempo en comparación con estándares anteriores como Wi-Fi 5?",
+      "answerOptions": [
+        {
+          "text": "OFDM",
+          "rationale": "OFDM es una técnica de modulación utilizada en versiones anteriores de Wi-Fi, pero no es la que introduce la mejora de eficiencia en la transmisión de bits por intervalo de tiempo en Wi-Fi 6.",
+          "isCorrect": false
+        },
+        {
+          "text": "1024-QAM",
+          "rationale": "Esta modulación de amplitud en cuadratura permite codificar más bits por símbolo, lo que resulta en una mayor velocidad de transmisión de datos en condiciones de señal óptimas.",
+          "isCorrect": true
+        },
+        {
+          "text": "MU-MIMO",
+          "rationale": "MU-MIMO es una tecnología que permite al router comunicarse con múltiples dispositivos simultáneamente, mejorando el rendimiento general de la red, pero no se refiere al método de codificación de la señal en sí.",
+          "isCorrect": false
+        },
+        {
+          "text": "OFDMA",
+          "rationale": "OFDMA es una mejora sobre OFDM que permite subdividir un canal para atender a múltiples usuarios a la vez, mejorando la eficiencia y reduciendo la latencia, pero la modulación 1024-QAM es la responsable directa de aumentar la cantidad de bits por símbolo.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Concéntrate en el método que codifica los datos en la onda de radio, no en cómo se gestionan los usuarios o los canales."
+    },
+    {
+      "question": "¿Cuál es la principal diferencia entre una red WLAN configurada en modo 'Infraestructura' y una en modo 'Ad-hoc'?",
+      "answerOptions": [
+        {
+          "text": "El modo Ad-hoc requiere un servidor de autenticación RADIUS, mientras que el modo Infraestructura no.",
+          "rationale": "La necesidad de un servidor RADIUS está relacionada con la seguridad (como en 802.1X) y no con la topología fundamental de la red.",
+          "isCorrect": false
+        },
+        {
+          "text": "El modo Infraestructura utiliza la banda de 5 GHz, mientras que el modo Ad-hoc se limita a la de 2.4 GHz.",
+          "rationale": "Ambos modos de operación pueden funcionar en cualquiera de las bandas de frecuencia soportadas por los dispositivos, la topología no dicta la banda de frecuencia.",
+          "isCorrect": false
+        },
+        {
+          "text": "El modo Infraestructura utiliza un punto de acceso (AP) para centralizar la comunicación, mientras que en Ad-hoc los dispositivos se conectan directamente entre sí.",
+          "rationale": "Esta es la distinción fundamental: la presencia o ausencia de un dispositivo central (AP) que gestione el tráfico de la red.",
+          "isCorrect": true
+        },
+        {
+          "text": "El modo Ad-hoc ofrece mayor cobertura que el modo Infraestructura al eliminar el punto de fallo central.",
+          "rationale": "Por el contrario, el modo Infraestructura generalmente ofrece mayor cobertura, ya que el alcance efectivo es casi el doble de la distancia máxima entre un cliente y el punto de acceso.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Piensa en la necesidad de un dispositivo central que actúe como intermediario en las comunicaciones."
+    },
+    {
+      "question": "El fenómeno conocido como 'Rain Fade' afecta a los radioenlaces. ¿En qué rango de frecuencias se vuelve este efecto particularmente significativo, según la documentación?",
+      "answerOptions": [
+        {
+          "text": "Es igualmente problemático en todas las bandas Wi-Fi comerciales (UHF y SHF).",
+          "rationale": "El texto especifica que el efecto varía considerablemente con la frecuencia, siendo casi despreciable en las bandas más bajas.",
+          "isCorrect": false
+        },
+        {
+          "text": "En frecuencias por debajo de 5 GHz, como la banda Wi-Fi de 2.4 GHz.",
+          "rationale": "La documentación indica explícitamente que la atenuación por lluvia es despreciable para frecuencias inferiores a 5 GHz.",
+          "isCorrect": false
+        },
+        {
+          "text": "En frecuencias a partir de 10 GHz, como las utilizadas en las comunicaciones por satélite en banda Ku.",
+          "rationale": "El texto señala que el efecto crece rápidamente a partir de los 10 GHz, lo que explica por qué las transmisiones de televisión por satélite (que usan la banda Ku, ~14 GHz) se ven afectadas.",
+          "isCorrect": true
+        },
+        {
+          "text": "Principalmente en conexiones ADSL, debido a la humedad en el cableado de cobre.",
+          "rationale": "Los problemas del ADSL con la lluvia se deben al deterioro del cableado físico y la humedad, no al fenómeno de atenuación de ondas de radio conocido como 'Rain Fade'.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Considera cómo la longitud de onda de la señal de radio interactúa con las gotas de agua y a qué tipo de servicio, mencionado en el texto, afecta más."
+    },
+    {
+      "question": "¿Qué innovación clave del futuro estándar Wi-Fi 7 (802.11be) permitirá agregar la conexión simultánea a través de varias bandas de frecuencia para crear un único enlace lógico más rápido y resiliente?",
+      "answerOptions": [
+        {
+          "text": "El uso de canales de 320 MHz.",
+          "rationale": "El aumento del ancho de banda del canal a 320 MHz incrementará la velocidad, pero no describe la agregación de diferentes bandas.",
+          "isCorrect": false
+        },
+        {
+          "text": "La modulación 4096-QAM.",
+          "rationale": "Una modulación más compleja aumenta el caudal de datos en una sola banda, pero no combina múltiples bandas.",
+          "isCorrect": false
+        },
+        {
+          "text": "Multi-Access Point Coordination.",
+          "rationale": "Esta característica mejora la convivencia entre puntos de acceso vecinos, pero no se centra en cómo un solo cliente se conecta al router.",
+          "isCorrect": false
+        },
+        {
+          "text": "La Operación Multi-enlace (MLO).",
+          "rationale": "MLO es la tecnología diseñada específicamente para sumar el caudal de diferentes bandas (ej. 2.4 GHz, 5 GHz, 6 GHz) en una única conexión lógica, mejorando la velocidad y la fiabilidad.",
+          "isCorrect": true
+        }
+      ],
+      "hint": "Busca la característica que se asemeja a cómo las redes móviles modernas combinan sus capacidades para mejorar la conexión."
+    },
+    {
+      "question": "En el contexto de la seguridad de redes Wi-Fi, el estándar 802.11i introdujo un marco de seguridad robusto. ¿Cuál es el rol del 'Autenticador' en una arquitectura 802.1X?",
+      "answerOptions": [
+        {
+          "text": "Es el dispositivo cliente (portátil, smartphone) que inicia la petición de acceso a la red.",
+          "rationale": "El dispositivo cliente que inicia la conexión se denomina 'Solicitante' (Supplicant).",
+          "isCorrect": false
+        },
+        {
+          "text": "Es el servidor central (normalmente RADIUS) que verifica las credenciales del usuario.",
+          "rationale": "El servidor central que gestiona la base de datos de usuarios y valida las credenciales es el 'Servidor de autenticación'.",
+          "isCorrect": false
+        },
+        {
+          "text": "Es el punto de acceso (AP) que actúa como intermediario entre el cliente y el servidor de autenticación.",
+          "rationale": "El punto de acceso funciona como un 'guardia de seguridad' o intermediario, que controla el acceso al puerto de la red y retransmite las credenciales al servidor para su validación.",
+          "isCorrect": true
+        },
+        {
+          "text": "Es el protocolo de encriptación, como TKIP o AES, que cifra los datos una vez autenticado el usuario.",
+          "rationale": "TKIP y AES son protocolos para la encriptación de los datos, no un componente de la arquitectura de autenticación.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Identifica el componente de la red que actúa como puerta de enlace controlada entre el mundo inalámbrico y la red cableada."
+    },
+    {
+      "question": "La tecnología Wi-Fi 6E requiere obligatoriamente el uso de un protocolo de seguridad específico para obtener la certificación. ¿Cuál es este protocolo?",
+      "answerOptions": [
+        {
+          "text": "WPA2 con cifrado AES.",
+          "rationale": "Aunque WPA2 es un estándar de seguridad fuerte, Wi-Fi 6E exige un protocolo más reciente y robusto.",
+          "isCorrect": false
+        },
+        {
+          "text": "OWE (Enhanced Open).",
+          "rationale": "OWE se utiliza para cifrar redes abiertas sin contraseña, proporcionando privacidad, pero no es el estándar obligatorio para redes autenticadas en Wi-Fi 6E.",
+          "isCorrect": false
+        },
+        {
+          "text": "WPA3.",
+          "rationale": "Wi-Fi Alliance exige la certificación WPA3 para los dispositivos Wi-Fi 6E, reforzando el cifrado y la protección contra ataques en comparación con sus predecesores.",
+          "isCorrect": true
+        },
+        {
+          "text": "WEP con clave de 128 bits.",
+          "rationale": "WEP es un protocolo de seguridad obsoleto y vulnerable que fue reemplazado hace mucho tiempo por WPA y sus sucesores.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Piensa en la evolución de los protocolos de 'Acceso Protegido Wi-Fi' y cuál es la versión más reciente mencionada como obligatoria."
+    },
+    {
+      "question": "Al comparar las bandas de frecuencia de 2.4 GHz y 5 GHz, ¿qué afirmación describe correctamente sus características principales?",
+      "answerOptions": [
+        {
+          "text": "La banda de 2.4 GHz ofrece mayor velocidad máxima, pero la de 5 GHz tiene mayor alcance y penetración de obstáculos.",
+          "rationale": "Esta afirmación invierte las propiedades de ambas bandas; la de 5 GHz es más rápida y la de 2.4 GHz tiene mayor alcance.",
+          "isCorrect": false
+        },
+        {
+          "text": "La banda de 5 GHz es más rápida y está menos congestionada, mientras que la de 2.4 GHz tiene mayor alcance y capacidad para superar obstáculos.",
+          "rationale": "Esta descripción se alinea con lo explicado en los textos: 5 GHz prioriza la velocidad y 2.4 GHz la cobertura, debido a las propiedades físicas de sus ondas de radio.",
+          "isCorrect": true
+        },
+        {
+          "text": "Ambas bandas ofrecen la misma velocidad y alcance, pero la de 5 GHz es exclusiva para el estándar 802.11ac y más reciente.",
+          "rationale": "Las características de velocidad y alcance son diferentes. Aunque 802.11ac popularizó los 5 GHz, otros estándares también la utilizan.",
+          "isCorrect": false
+        },
+        {
+          "text": "La banda de 2.4 GHz está menos saturada porque tiene más canales disponibles que la de 5 GHz.",
+          "rationale": "La banda de 2.4 GHz está, de hecho, más saturada y tiene significativamente menos canales no superpuestos que la banda de 5 GHz.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Recuerda la regla general de las ondas de radio: a mayor frecuencia, mayor capacidad de datos pero menor capacidad de penetración."
+    },
+    {
+      "question": "Una de las funciones avanzadas del sistema de gestión de Wi-Fi público de Ubintia es la 'Optimización del ancho de banda'. ¿En qué consiste esta función?",
+      "answerOptions": [
+        {
+          "text": "En bloquear el acceso a páginas web que consumen muchos datos, como las de streaming de vídeo.",
+          "rationale": "El bloqueo de páginas se realiza mediante filtros de contenido inadecuado, que es una función distinta a la gestión del reparto del ancho de banda.",
+          "isCorrect": false
+        },
+        {
+          "text": "En aumentar la potencia de la señal del router para que todos los usuarios reciban la máxima velocidad posible.",
+          "rationale": "La potencia de la señal afecta a la cobertura y la calidad de la conexión, pero la optimización del ancho de banda se refiere a la gestión del tráfico de datos.",
+          "isCorrect": false
+        },
+        {
+          "text": "En realizar un balanceo de la carga, repartiendo de forma equitativa el ancho de banda disponible entre los usuarios conectados.",
+          "rationale": "Esta función asegura que ningún usuario monopolice la conexión, garantizando un servicio más estable y justo para todos los que están conectados a la red pública.",
+          "isCorrect": true
+        },
+        {
+          "text": "En comprimir todos los datos transmitidos a través de la red para reducir su tamaño.",
+          "rationale": "La compresión de datos no se menciona como el mecanismo para la optimización del ancho de banda en este contexto; el enfoque es el reparto equitativo.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "El objetivo de esta función es la equidad en el uso de un recurso compartido y limitado."
+    },
+    {
+      "question": "Según los textos, la Wi-Fi Alliance juega un papel crucial en el ecosistema de la tecnología Wi-Fi. ¿Cuál es su función principal?",
+      "answerOptions": [
+        {
+          "text": "Desarrollar los estándares técnicos fundamentales, como el IEEE 802.11.",
+          "rationale": "El desarrollo de los estándares técnicos es responsabilidad de la organización IEEE (Institute of Electrical and Electronics Engineers), no de la Wi-Fi Alliance.",
+          "isCorrect": false
+        },
+        {
+          "text": "Certificar que los productos de diferentes fabricantes cumplen las normas de interoperabilidad.",
+          "rationale": "La misión de la Wi-Fi Alliance es precisamente garantizar que los dispositivos con el sello 'Wi-Fi CERTIFIED' puedan funcionar juntos sin problemas, promoviendo la compatibilidad.",
+          "isCorrect": true
+        },
+        {
+          "text": "Asignar las bandas de frecuencia de 2.4 GHz, 5 GHz y 6 GHz para su uso a nivel mundial.",
+          "rationale": "La gestión y asignación del espectro radioeléctrico son competencia de organismos reguladores gubernamentales e internacionales, como la FCC en EE.UU. o la CEPT en Europa.",
+          "isCorrect": false
+        },
+        {
+          "text": "Fabricar los routers y puntos de acceso que se utilizan en las redes domésticas y empresariales.",
+          "rationale": "La Wi-Fi Alliance es una organización que promueve y certifica la tecnología, pero no fabrica hardware.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "El nombre de esta organización da una pista sobre su enfoque en la 'fidelidad' o compatibilidad entre equipos."
+    },
+    {
+      "question": "En España, la administración del espectro radioeléctrico es una competencia estatal. ¿Qué documento oficial contiene la atribución de cada banda de frecuencia para los diferentes servicios de radiocomunicaciones?",
+      "answerOptions": [
+        {
+          "text": "El Registro Público de Concesiones.",
+          "rationale": "Este registro detalla las concesiones otorgadas a operadores específicos, pero no es el documento que establece el plan general de uso de todas las frecuencias.",
+          "isCorrect": false
+        },
+        {
+          "text": "La normativa del estándar IEEE 802.11.",
+          "rationale": "El IEEE define estándares técnicos sobre cómo funciona la tecnología, pero no regula la atribución de frecuencias en un país específico.",
+          "isCorrect": false
+        },
+        {
+          "text": "El Cuadro Nacional de Atribución de Frecuencias (CNAF).",
+          "rationale": "El CNAF es la pieza clave que define el uso reservado para cada banda de frecuencia en España, desde 8,3 kHz hasta 3000 GHz.",
+          "isCorrect": true
+        },
+        {
+          "text": "El certificado de la Wi-Fi Alliance.",
+          "rationale": "La Wi-Fi Alliance certifica la interoperabilidad de equipos, pero no tiene autoridad para administrar el espectro radioeléctrico de un país.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "Busca el nombre del plan maestro que organiza el uso del espectro de radio en el territorio español."
+    },
+    {
+      "question": "Las redes inalámbricas se clasifican según su cobertura. ¿A qué categoría pertenece una red basada en tecnología WiMAX, diseñada para ofrecer banda ancha en un área metropolitana?",
+      "answerOptions": [
+        {
+          "text": "WPAN (Wireless Personal Area Network).",
+          "rationale": "Las WPAN, como Bluetooth o Infrarrojos, cubren distancias muy cortas, del orden de unos pocos metros, alrededor de una persona.",
+          "isCorrect": false
+        },
+        {
+          "text": "WLAN (Wireless Local Area Network).",
+          "rationale": "Las WLAN, como el Wi-Fi, tienen un alcance de cientos de metros, cubriendo un hogar, una oficina o un edificio.",
+          "isCorrect": false
+        },
+        {
+          "text": "WMAN (Wireless Metropolitan Area Network).",
+          "rationale": "Las WMAN están diseñadas para cubrir áreas geográficas extensas, como una ciudad o un campus universitario grande, siendo WiMAX un ejemplo principal.",
+          "isCorrect": true
+        },
+        {
+          "text": "WWAN (Wireless Wide Area Network).",
+          "rationale": "Las WWAN son las redes de telefonía móvil (3G, 4G, 5G) que cubren países enteros o incluso continentes.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "La 'M' en el acrónimo de esta categoría se refiere al tipo de área geográfica que cubre."
+    },
+    {
+      "question": "¿Qué requisito de sistema operativo es indispensable para poder utilizar las redes Wi-Fi 6E en la banda de 6 GHz en un ordenador?",
+      "answerOptions": [
+        {
+          "text": "Cualquier versión de Windows 10 Pro.",
+          "rationale": "El texto especifica que las versiones estándar de Windows 10 Pro no son compatibles; se requiere una versión específica o una más reciente.",
+          "isCorrect": false
+        },
+        {
+          "text": "Windows 10 Pro con la última versión de 'Insider' o Windows 11.",
+          "rationale": "Debido a la novedad de la banda de 6 GHz, se necesita un sistema operativo que haya incorporado el soporte para gestionarla, como las versiones más recientes de Windows.",
+          "isCorrect": true
+        },
+        {
+          "text": "Cualquier sistema operativo, siempre que los drivers de la tarjeta de red estén actualizados.",
+          "rationale": "Aunque los drivers actualizados son necesarios, el propio sistema operativo también debe ser compatible y capaz de gestionar la nueva banda de frecuencias.",
+          "isCorrect": false
+        },
+        {
+          "text": "Linux, ya que es el único sistema operativo con soporte nativo para Wi-Fi 6E.",
+          "rationale": "El texto menciona explícitamente la compatibilidad (y falta de ella) en Windows, e indica que se espera que otros sistemas operativos sean compatibles en versiones posteriores.",
+          "isCorrect": false
+        }
+      ],
+      "hint": "La compatibilidad con una tecnología tan nueva requiere no solo el hardware y los controladores, sino también el soporte del núcleo del sistema operativo."
+    }
+  ]
