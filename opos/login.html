@@ -45,23 +45,41 @@
       }
       msgDiv.textContent = 'Comprobando credenciales...';
       try {
-        // Leer API config
-        const config = await fetch('assets/API_config.json').then(r => r.json());
-        const APIKEY = config.API_KEY;
-        const BASE_URL = config.BASE_URL.replace(/\/?$/, '');
-        const url = `${BASE_URL}/opos-usuaris?q={"username":"${name}"}`;
-        const res = await fetch(url, {
-          headers: {
-            'x-apikey': APIKEY
+        // Leer API config y buscar usuario remoto, si falla usar users.json local
+        let user = null;
+        try {
+          const config = await fetch('assets/API_config.json').then(r => r.json());
+          const APIKEY = config.API_KEY;
+          const BASE_URL = config.BASE_URL.replace(/\/?$/, '');
+          const url = `${BASE_URL}/opos-usuaris?q={"username":"${name}"}`;
+          const res = await fetch(url, {
+            headers: {
+              'x-apikey': APIKEY
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.length) user = data[0];
           }
-        });
-        if (!res.ok) throw new Error('Error de conexión con la base de datos');
-        const data = await res.json();
-        if (!data.length) {
+        } catch (e) {
+          // Ignorar error, intentaremos local
+        }
+        if (!user) {
+          // Buscar en users.json local
+          try {
+            const usersData = await fetch('assets/users.json').then(r => r.json());
+            if (usersData && Array.isArray(usersData.users)) {
+              user = usersData.users.find(u => u.name === name);
+            }
+          } catch (e) {
+            msgDiv.textContent = 'Error accediendo a usuarios locales.';
+            return;
+          }
+        }
+        if (!user) {
           msgDiv.textContent = 'Usuario no encontrado.';
           return;
         }
-        const user = data[0];
         // Comprobar password con bcryptjs (asegura compatibilidad con window.bcryptjs o window.bcrypt)
         var bcrypt = window.dcodeIO && window.dcodeIO.bcrypt ? window.dcodeIO.bcrypt : (window.bcryptjs || window.bcrypt);
         if (bcrypt) {
@@ -73,9 +91,16 @@
         if (bcrypt && bcrypt.compareSync(pass, user.password_hash)) {
           localStorage.setItem('oposTest_user', name);
           if (user._id) {
-            localStorage.setItem('oposTest_userid', user._id);
+            localStorage.setItem('user_id', user._id);
           }
-          window.location.href = 'testBeta.html';
+          else if (user.guid) {
+            localStorage.setItem('user_guid', user.guid);
+          }
+          else {
+            msgDiv.textContent = 'Id de usuario no encontrado.';
+            return;
+          }
+          window.location.href = 'init.html';
         } else {
           msgDiv.textContent = 'Contraseña incorrecta.';
         }

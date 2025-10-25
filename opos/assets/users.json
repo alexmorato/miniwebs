@@ -1,0 +1,18 @@
+{
+    "users": [
+        {
+            "guid": "e304cd7b-00c4-4cee-b7e9-911ea34a52a4",
+            "name": "amorato",
+            "role": "administrator",
+            "password_hash": "$2a$12$UjmeNxkbjNZqSVpGsM9eQOER0fRTgz8poBX0IzrySSdxGt.9P4Tqi",
+            "email": "admin@example.com"
+        },
+        {
+            "guid": "b3479f1a-4d86-4910-ab08-ae70fda7a547",
+            "name": "test",
+            "role": "user",
+            "password_hash": "$2a$12$VFRw75JYWB6IRRPjCDnyo.a9LYx7Nx3GXPjC1wERWyzKSzSDhGmwy",
+            "email": "test@example.com"
+        }
+    ]
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carregant preguntes...</title>
+  <title>Selecciona fitxers</title>
   <style>
     body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 0; }
     .center { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
@@ -13,7 +13,6 @@
       border: 1.5px solid #27304a; border-radius: 10px; font-family: monospace; font-size: 1.05rem;
       padding: 18px 14px; margin-bottom: 30px; box-shadow: 0 4px 18px #0002; white-space: pre-wrap; overflow-y: auto;
     }
-    .dots { font-size: 2.5rem; letter-spacing: 0.2em; color: #9fb0ff; min-height: 2.5rem; font-weight: bold; }
     #comencarBtn { width: 100%; max-width: 300px; background: linear-gradient(180deg,#2aebad,#21c08d); color: #032217; font-weight: bold; font-size: 1.1rem; padding: 14px 0; border-radius: 12px; border: none; cursor: pointer; margin-top: 30px; }
     #comencarBtn:disabled { opacity: 0.5; pointer-events: none; }
     #tornarBtn {
@@ -29,25 +28,26 @@
       border: none;
       cursor: pointer;
     }
+    .titulo {
+      text-align: center;
+      color: #6ae0a7;
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
   </style>
 </head>
 <body>
   <div class="center">
-    <div class="msg">Carregant les preguntes<span id="dots"></span></div>
+    <div class="titulo">Selecciona fitxers</div>
     <div class="logbox" id="logbox"></div>
-  <button id="comencarBtn" disabled>començar!</button>
-  <button id="tornarBtn">⬅️ Tornar</button>
+    <button id="comencarBtn" disabled>començar!</button>
+    <button id="tornarBtn">⬅️ Tornar</button>
   </div>
   <script>
-    // Animació de 3 puntets
-    var dots = '';
-    var count = 0;
-    setInterval(() => {
-      count = (count + 1) % 4;
-      dots = '.'.repeat(count);
-      document.getElementById('dots').textContent = dots;
-    }, 400);
-
+    // (Animació de puntets eliminada)
 
     // Log helper
     const logbox = document.getElementById('logbox');
@@ -56,8 +56,7 @@
       logbox.scrollTop = logbox.scrollHeight;
     }
 
-
-    // Obtener temas seleccionados
+    // Obtener temas seleccionats
     let temas = [];
     try {
       temas = JSON.parse(localStorage.getItem('oposTest_temas') || '[]');
@@ -67,7 +66,7 @@
       log('No hi ha temes seleccionats.');
     } else {
       log('Temes seleccionats: ' + temas.join(', '));
-      // Cargar manifest.json y buscar ficheros que empiecen por los temas seleccionados
+      // Cargar manifest.json y buscar ficheros que empiecen por los temas seleccionats
       fetch('testfiles/manifest.json')
         .then(r => r.json())
         .then(manifest => {
@@ -89,9 +88,8 @@
             document.getElementById('tornarBtn').style.display = 'block';
             return;
           }
-            log('Fitxers trobats: ' + encontrados.length);
+          log('Fitxers trobats: ' + encontrados.length);
           // Mostrar un botón por cada fichero encontrado (selección múltiple)
-          const logbox = document.getElementById('logbox');
           const btnsDiv = document.createElement('div');
           btnsDiv.style.marginTop = '18px';
           let seleccionats = [];
@@ -142,53 +140,6 @@
     document.getElementById('comencarBtn').onclick = function() {
       window.location.href = 'test.html';
     };
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carregant preguntes...</title>
-  <style>
-    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 0; }
-    .center {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .msg {
-      font-size: 1.3rem;
-      color: #6ae0a7;
-      margin-bottom: 30px;
-      letter-spacing: 0.5px;
-    }
-    .dots {
-      font-size: 2.5rem;
-      letter-spacing: 0.2em;
-      color: #9fb0ff;
-      min-height: 2.5rem;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <div class="center">
-    <div class="msg">Carregant les preguntes<span id="dots"></span></div>
-  </div>
-  <script>
-    // Animació de 3 puntets
-    let dots = '';
-    let dots2 = '';
-    let count = 0;
-    setInterval(() => {
-      count = (count + 1) % 4;
-      dots = '.'.repeat(count);
-      document.getElementById('dots').textContent = dots;
-    }, 400);
   </script>
 </body>
 </html>

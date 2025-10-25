@@ -56,83 +56,80 @@
       logbox.scrollTop = logbox.scrollHeight;
     }
 
+    // Leer configuración de la API desde assets/API_config.json
+    fetch('assets/API_config.json')
+      .then(r => r.json())
+      .then(config => {
+        const API_KEY = config.API_KEY;
+        // BASE_URL apunta a usuarios, cambiamos a preguntas
+        const API_URL = config.BASE_URL.replace(/usuarios$/, 'preguntas');
 
-    // Obtener temas seleccionados
-    let temas = [];
-    try {
-      temas = JSON.parse(localStorage.getItem('oposTest_temas') || '[]');
-    } catch (e) { temas = []; }
+        // Obtener temas seleccionados
+        let temas = [];
+        try {
+          temas = JSON.parse(localStorage.getItem('oposTest_temas') || '[]');
+        } catch (e) { temas = []; }
 
-    if (!temas.length) {
-      log('No hi ha temes seleccionats.');
-    } else {
-      log('Temes seleccionats: ' + temas.join(', '));
-      // Cargar manifest.json y buscar ficheros que empiecen por los temas seleccionados
-      fetch('testfiles/manifest.json')
-        .then(r => r.json())
-        .then(manifest => {
-          let files = Array.isArray(manifest) ? manifest : manifest.files;
-          if (!Array.isArray(files)) {
-            log('Manifest incorrecte.');
-            return;
-          }
-          // Buscar ficheros que empiecen por algún tema
-          let encontrados = [];
-          temas.forEach(tema => {
-            encontrados = encontrados.concat(files.filter(f => f.startsWith(tema)));
-          });
-          // Eliminar duplicados
-          encontrados = [...new Set(encontrados)];
-          if (!encontrados.length) {
-            log('No s\'ha trobat cap fitxer per als temes seleccionats.');
-            document.getElementById('comencarBtn').disabled = true;
-            document.getElementById('tornarBtn').style.display = 'block';
-            return;
-          }
-            log('Fitxers trobats: ' + encontrados.length);
-          // Mostrar un botón por cada fichero encontrado (selección múltiple)
-          const logbox = document.getElementById('logbox');
-          const btnsDiv = document.createElement('div');
-          btnsDiv.style.marginTop = '18px';
-          let seleccionats = [];
-          encontrados.forEach(fichero => {
-            const btn = document.createElement('button');
-            btn.textContent = fichero;
-            btn.style.display = 'block';
-            btn.style.width = '100%';
-            btn.style.margin = '8px 0';
-            btn.style.background = '#27304a';
-            btn.style.color = '#e7ecff';
-            btn.style.fontSize = '1.08rem';
-            btn.style.border = '1px solid #2a3554';
-            btn.style.borderRadius = '8px';
-            btn.style.padding = '10px 0';
-            btn.style.cursor = 'pointer';
-            btn.onclick = function() {
-              if (seleccionats.includes(fichero)) {
-                // Deseleccionar
-                seleccionats = seleccionats.filter(f => f !== fichero);
-                btn.style.outline = '';
-              } else {
-                // Seleccionar
-                seleccionats.push(fichero);
-                btn.style.outline = '3px solid #6ae0a7';
+        if (!temas.length) {
+          log('No hi ha temes seleccionats.');
+        } else {
+          log('Temes seleccionats: ' + temas.join(', '));
+          // Hacer una petición por cada tema
+          let todasPreguntas = [];
+          let completadas = 0;
+          temas.forEach((tema, idx) => {
+            log(`Consultant preguntes per al tema: ${tema}`);
+            fetch(`${API_URL}?q={\"tema\":\"${tema}\"}`,
+              {
+                headers: {
+                  'x-apikey': API_KEY
+                }
               }
-              // Guardar selección múltiple en localStorage
-              localStorage.setItem('oposTest_fitxer', JSON.stringify(seleccionats));
-              // Habilitar o deshabilitar el botón comenzar
-              document.getElementById('comencarBtn').disabled = seleccionats.length === 0;
-            };
-            btnsDiv.appendChild(btn);
+            )
+            .then(resp => {
+              if (!resp.ok) throw new Error('Error HTTP ' + resp.status);
+              return resp.json();
+            })
+            .then(data => {
+              log(`Tema ${tema}: ${data.length} preguntes trobades.`);
+              todasPreguntas = todasPreguntas.concat(data);
+            })
+            .catch(err => {
+              log(`Error carregant preguntes del tema ${tema}: ` + err.message);
+            })
+            .finally(() => {
+              completadas++;
+              if (completadas === temas.length) {
+                // Eliminar duplicados por _id
+                const ids = new Set();
+                const unicas = todasPreguntas.filter(q => {
+                  if (ids.has(q._id)) return false;
+                  ids.add(q._id); return true;
+                });
+                log(`Total preguntes carregades: ${unicas.length}`);
+                // Guardar en localStorage
+                try {
+                  localStorage.setItem('oposTest_preguntes', JSON.stringify(unicas));
+                  log('Preguntes guardades a localStorage.');
+                } catch (e) {
+                  log('Error guardant preguntes a localStorage: ' + e.message);
+                }
+                document.getElementById('comencarBtn').disabled = unicas.length === 0;
+                // Mostrar botón tornar si no hay preguntas
+                var tornarBtn = document.getElementById('tornarBtn');
+                if (unicas.length === 0) {
+                  tornarBtn.style.display = 'block';
+                } else {
+                  tornarBtn.style.display = 'none';
+                }
+              }
+            });
           });
-          logbox.appendChild(btnsDiv);
-          // Deshabilitar comenzar hasta que se seleccione al menos un fichero
-          document.getElementById('comencarBtn').disabled = true;
-        })
-        .catch(() => {
-          log('No s\'ha pogut carregar el manifest de fitxers.');
-        });
-    }
+        }
+      })
+      .catch(err => {
+        log('Error carregant configuració de la API: ' + err.message);
+      });
 
     // Acción del botón tornar
     document.getElementById('tornarBtn').onclick = function() {
