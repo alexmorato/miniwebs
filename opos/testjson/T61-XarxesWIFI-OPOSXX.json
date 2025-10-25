@@ -1,0 +1,92 @@
+[
+{
+"nivell":"Normal 🟡",
+"fitxer":"OPOS19_preguntes_practic.pdf",
+"pregunta":"19. Al darrer moment, i per tal de fomentar la mobilitat, et demanen que instal·lis WiFi per donar connectivitat de dades a telèfons mòbils i altres dispositius. Quina de les següents actuacions és l’adient d’acord amb les característiques de la tecnologia WIFI?",
+"resposta_correcta":"A. Fer un estudi de cobertura, i instal·lar uns Acces Points WiFi connectats per cable a cada armari de planta en funció del resultat de l’estudi.",
+"respostes_incorrectes":[
+"B. Connectar un Acces Point de la planta soterrani per cable en una de les plantes per a què faci de gateway, enllaçar i connectar la resta d’acces points ubicats a cada planta de l’edifici amb tecnologia mesh per disposar de més amplada de banda a tot arreu.",
+"C. Eliminar el cable i passar a tecnologia WiFi tota la insta·lació de llocs de treball i telefonia ja que la ràtio d’ample de banda per usuari serà més alta.",
+"D. El WIFI no es podrà instal·lar a les oficines petites perquè faran de caixa de Faraday."
+],
+"context":"Pregunta directa sobre xarxes Wi-Fi. La resposta correcta implica planificació: fer un estudi de cobertura i cablejar cada punt d’accés segons resultats per garantir rendiment i cobertura òptima en entorns corporatius."
+},
+
+{
+"nivell":"Fàcil 🟢",
+"fitxer":"OPOS19_preguntes_practic.pdf",
+"pregunta":"20. Quan ja has acabat la instal·lació, et comuniquen que s’ha d’hostatjar 3 servidors d’imatge en una petita sala annexa al centre de control que rebran vídeo en streamming tot el dia de les 50 càmeres de seguretat perimetral dels edificis de l’organització. El centre de control disposa d’un enllaç Ethernet de 10 Mbps al CPD. Quina d’aquestes solucions permetrà que els servidors puguin rebre les senyals de vídeo correctament?",
+"resposta_correcta":"B. Aprofitant que hi ha un cable en aquesta sala annexa, muntar un petit armari amb un switch i connectar els servidors.",
+"respostes_incorrectes":[
+"A. Muntar un AP en aquesta sala i connectar els servidors via WiFi.",
+"C. Connectar els servidors a un router 4G.",
+"D. Instal·lar aquestes màquines en el CPD."
+],
+"context":"Pregunta d’optimització de xarxa. Tot i la presència de Wi-Fi, les transmissions de vídeo requereixen connexió cablejada per garantir estabilitat i ample de banda."
+},
+
+{
+"nivell":"Normal 🟡",
+"fitxer":"OPOS23_preguntes_practic.pdf",
+"pregunta":"10. A la xarxa municipal hi ha un element anomenat IPAM (IP Address Management) on una de les seves pestanyes és un servidor DHCP (Dynamic Host Configuration Protocol). Què fa un servidor DHCP?",
+"resposta_correcta":"A. Assigna una IP address i una IP address gateway a les màquines que ho sol·licitin.",
+"respostes_incorrectes":[
+"B. Comprova credencials.",
+"C. Enruta paquets.",
+"D. Fa NAT (Network Address Translation)."
+],
+"context":"DHCP és essencial també per Wi-Fi, ja que permet que els dispositius connectats obtinguin automàticament una adreça IP per comunicar-se amb la xarxa."
+},
+
+{
+"nivell":"Difícil 🔵",
+"fitxer":"OPOS23_preguntes_practic.pdf",
+"pregunta":"11. La xarxa municipal està establerta mitjançant MPLS (Multi Protocol Label Switching), el qual permet establir diverses xarxes totalment estanques i independents entre si. Quin és un concepte relacionat amb la tecnologia L3VPN sobre MPLS?",
+"resposta_correcta":"C. VRF (Virtual Routing Forwarding).",
+"respostes_incorrectes":[
+"A. NAT (Network Address Translation).",
+"B. VPLS (Virtual Private Lan Sevice).",
+"D. Routing Internet Protocol (RIP)."
+],
+"context":"Les VRF permeten crear taules d’encaminament independents dins un mateix equip MPLS, útil per separar tràfics en entorns complexos com Wi-Fi corporatius integrats a MPLS."
+},
+
+{
+"nivell":"Difícil 🔵",
+"fitxer":"OPOS23_preguntes_practic.pdf",
+"pregunta":"12. Quin és un concepte relacionat amb la tecnologia L2VPN sobre MPLS?",
+"resposta_correcta":"B. VPLS (Virtual Private Lan Sevice).",
+"respostes_incorrectes":[
+"A. NAT (Network Address Translation).",
+"C. VRF (Virtual Routing Forwarding).",
+"D. Routing Internet Protocol (RIP)."
+],
+"context":"Les L2VPN permeten transportar trames Ethernet sobre MPLS, mantenint transparència de capa 2. En una xarxa Wi-Fi corporativa, això pot facilitar la integració amb LANs distribuïdes."
+},
+
+{
+"nivell":"Difícil 🔵",
+"fitxer":"OPOS21_preguntes_practic.pdf",
+"pregunta":"18. Per tal de protegir dita connectivitat és obligatori implementar un protocol d’encriptació i d’autenticació de qui es connecta. Quin és el protocol que s’utilitza en aquest tipus de connexions?",
+"resposta_correcta":"C. IPSec en fase 2 i ISAKMP-IKE en fase 1.",
+"respostes_incorrectes":[
+"A. IPSec en fase 1 i ISAKMP en fase 2.",
+"B. IPSec.",
+"D. IPv6."
+],
+"context":"IPSec i ISAKMP proporcionen autenticació i xifratge de connexions VPN, essencials per protegir comunicacions Wi-Fi corporatives o accessos remots segurs."
+},
+
+{
+"nivell":"Normal 🟡",
+"fitxer":"OPOS21_preguntes_practic.pdf",
+"pregunta":"17. Una vegada establert l’arbre que connecta els clients, que en aquest cas són els ordinadors de la guàrdia urbana encarregats de vigilar els carrers i una determinada càmera al carrer, quin seria el camí establert entre aquests dos punts en un primer moment i al cap d’una estona sent el protocol configurat IP PIM SPARSE-MODE?",
+"resposta_correcta":"C. El trànsit passaria pel Rendevouz Point i posteriorment establiria el camí més curt possible entre la font i el consumidor de les imatges.",
+"respostes_incorrectes":[
+"A. En tot moment el trànsit passaria pel Rendevouz Point.",
+"B. En cap moment el trànsit passaria per Rendevouz Point ja que aquest només serveix per establir la senyalització.",
+"D. El trànsit passaria de forma balancejada entre la font-Rendevouz Point-client i el camí directe entre la font-client."
+],
+"context":"Pregunta de multicast. Tot i no ser Wi-Fi, és rellevant perquè les transmissions de vídeo IP (com càmeres sense fils) poden fer ús d’aquest tipus d’encaminament per optimitzar trànsit."
+}
+]
