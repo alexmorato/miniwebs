@@ -158,6 +158,50 @@
       margin-bottom: 30px;
       color: #9fb0ff;
     }
+    .historial-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #27304a;
+    }
+    .historial-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .historial-btn {
+      background: #27304a;
+      color: #e7ecff;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid #2a3554;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .historial-btn:hover {
+      background: #2a3554;
+      border-color: #6ae0a7;
+    }
+    .historial-textarea {
+      width: 100%;
+      min-height: 200px;
+      background: #141a2a;
+      border: 1px solid #27304a;
+      border-radius: 8px;
+      color: #e7ecff;
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 15px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    .historial-title {
+      color: #6ae0a7;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -175,6 +219,16 @@
       <span id="questionCounter"></span>
       <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">Següent →</button>
     </div>
+
+    <div class="historial-section">
+      <div class="historial-title">Historial fallos</div>
+      <div class="historial-buttons">
+        <button class="historial-btn" onclick="copiarHistorial()">📋 Copia</button>
+        <button class="historial-btn" onclick="baixarHistorial()">💾 Baixa</button>
+        <button class="historial-btn" onclick="guardarDubte()">❓ Guardar dubte</button>
+      </div>
+      <textarea class="historial-textarea" id="historialFallos" readonly placeholder="Aquí apareixeran les preguntes fallades..."></textarea>
+    </div>
   </div>
 
   <script>
@@ -182,6 +236,7 @@
     let currentQuestion = 0;
     let answers = [];
     let showingResults = false;
+    let historialFallos = [];
 
     // Cargar preguntas del localStorage
     function loadQuestions() {
@@ -289,6 +344,14 @@
       if (answers[currentQuestion] !== null) return; // No permitir cambiar respuesta
       
       answers[currentQuestion] = optionIndex;
+      
+      // Verificar si la respuesta es incorrecta y guardar en historial
+      const opciones = shuffledOptions[currentQuestion] || preguntes[currentQuestion].answerOptions || [];
+      const selectedOption = opciones[optionIndex];
+      if (selectedOption && !selectedOption.isCorrect) {
+        guardarFalloEnHistorial(currentQuestion, optionIndex);
+      }
+      
       showQuestion(currentQuestion);
     }
 
@@ -444,11 +507,98 @@
       }
     }
 
+    // Guardar fallo en historial
+    function guardarFalloEnHistorial(questionIndex, selectedOptionIndex) {
+      const pregunta = JSON.parse(JSON.stringify(preguntes[questionIndex])); // Deep copy
+      const opciones = shuffledOptions[questionIndex] || pregunta.answerOptions || [];
+      const user_guid = localStorage.getItem('user_guid') || localStorage.getItem('user_id') || 'unknown';
+      
+      // Añadir user_guid a la pregunta
+      pregunta.user_guid = user_guid;
+      
+      // Marcar la opción seleccionada por el usuario
+      if (pregunta.answerOptions) {
+        pregunta.answerOptions.forEach((option, i) => {
+          const shuffledIndex = opciones.findIndex(shuffled => shuffled.text === option.text);
+          if (shuffledIndex === selectedOptionIndex) {
+            option.selectedByUser = true;
+          }
+        });
+      }
+      
+      // Añadir al principio del historial (más nuevo primero)
+      historialFallos.unshift(pregunta);
+      actualizarTextareaHistorial();
+    }
+
+    // Guardar duda actual (independiente de si es correcta o no)
+    function guardarDubte() {
+      if (currentQuestion >= 0 && currentQuestion < preguntes.length) {
+        const userAnswer = answers[currentQuestion];
+        if (userAnswer !== null) {
+          guardarFalloEnHistorial(currentQuestion, userAnswer);
+        } else {
+          // Si no hay respuesta, guardar sin marcar ninguna opción
+          const pregunta = JSON.parse(JSON.stringify(preguntes[currentQuestion]));
+          const user_guid = localStorage.getItem('user_guid') || localStorage.getItem('user_id') || 'unknown';
+          pregunta.user_guid = user_guid;
+          historialFallos.unshift(pregunta);
+          actualizarTextareaHistorial();
+        }
+      }
+    }
+
+    // Actualizar textarea del historial
+    function actualizarTextareaHistorial() {
+      const textarea = document.getElementById('historialFallos');
+      textarea.value = JSON.stringify(historialFallos, null, 2);
+    }
+
+    // Copiar historial al portapapeles
+    function copiarHistorial() {
+      const textarea = document.getElementById('historialFallos');
+      textarea.select();
+      document.execCommand('copy');
+      alert('Historial copiat al portapapers!');
+    }
+
+    // Descargar historial como archivo JSON
+    function baixarHistorial() {
+      const username = localStorage.getItem('oposTest_user') || 'usuario';
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const filename = `Errores_${username}_${timestamp}.json`;
+      
+      const blob = new Blob([JSON.stringify(historialFallos, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
     // Inicializar al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
       if (loadQuestions()) {
         showQuestion(0);
       }
+      // Cargar historial previo si existe
+      try {
+        const historialGuardado = localStorage.getItem('oposTest_historialFallos');
+        if (historialGuardado) {
+          historialFallos = JSON.parse(historialGuardado);
+          actualizarTextareaHistorial();
+        }
+      } catch (e) {
+        console.warn('Error cargando historial previo:', e);
+      }
+    });
+
+    // Guardar historial en localStorage antes de salir
+    window.addEventListener('beforeunload', function() {
+      localStorage.setItem('oposTest_historialFallos', JSON.stringify(historialFallos));
     });
   </script>
 </body>

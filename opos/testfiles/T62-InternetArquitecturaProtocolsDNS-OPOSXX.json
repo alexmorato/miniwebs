@@ -1,0 +1,188 @@
+[
+  {
+    "guid": "7d921e12-2c3b-49ff-8e9e-1db8f5d0a0a1",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "OPOS23_preguntes_especific.pdf",
+    "type": "test",
+    "question": "Fent una equivalència entre l’arquitectura de capes del model TCP/IP i les del model ISO, quina d’aquestes quatre correlacions és la CORRECTA?",
+    "answerOptions": [
+      {
+        "text": "Capes segons model OSI → 7. Aplicació, 6. Presentació, 5. Sessió, 4. Transport, 3. Xarxa, 2. Enllaç de dades, 1. Física | Capes segons model TCP/IP → 4. Aplicació, 3. Transport, 2. Internet, 1. Accés al medi",
+        "isCorrect": true,
+        "rationale": "El model TCP/IP agrupa les tres capes superiors de l’OSI (aplicació, sessió, presentació) en una sola capa d’aplicació. Aquesta és la correspondència correcta entre models."
+      },
+      {
+        "text": "Correlació amb errors entre les capes OSI i TCP/IP intercanviant transport i xarxa.",
+        "isCorrect": false,
+        "rationale": "Intercanviar les capes transport i xarxa és un error conceptual; TCP/IP defineix clarament la capa de transport per sobre de la capa d’Internet."
+      },
+      {
+        "text": "Versió amb capes OSI incompletes.",
+        "isCorrect": false,
+        "rationale": "Les capes OSI són set i no es poden ometre per mantenir la correspondència."
+      },
+      {
+        "text": "Versió amb capes TCP/IP incorrectament alineades amb les OSI.",
+        "isCorrect": false,
+        "rationale": "Aquesta opció no manté la correspondència jeràrquica entre els models OSI i TCP/IP."
+      }
+    ],
+    "hint": "Recorda: el model OSI té 7 capes i el TCP/IP només 4 agrupades."
+  },
+  {
+    "guid": "bcb0b4b7-0c74-49e9-bb8e-2e9a908c29cf",
+    "subjectId": "T62",
+    "level": 1,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "Quin és el procés que es fa servir per sortir a navegar a internet amb una direcció IP pública tenint l'element que vol sortir a navegar una direcció privada com en el de les persones usuàries de la Xarxa Corporativa de l'IMI?",
+    "answerOptions": [
+      {
+        "text": "NAT (Network Address Translation).",
+        "isCorrect": true,
+        "rationale": "NAT tradueix les adreces IP privades en públiques per permetre la connexió a Internet, mantenint la traçabilitat i seguretat."
+      },
+      {
+        "text": "Border Gateway Protocol (BGP).",
+        "isCorrect": false,
+        "rationale": "BGP és un protocol d'encaminament entre sistemes autònoms, no per traduir adreces IP."
+      },
+      {
+        "text": "Open Shortest Path First (OSPF).",
+        "isCorrect": false,
+        "rationale": "OSPF és un protocol de routing intern (IGP), no relacionat amb la traducció d’adreces."
+      },
+      {
+        "text": "Routing Internet Protocol (RIP).",
+        "isCorrect": false,
+        "rationale": "RIP és un protocol d’encaminament antic, sense funcions de traducció d’adreces IP."
+      }
+    ],
+    "hint": "El NAT és essencial per permetre la connexió d’adreces privades a Internet."
+  },
+  {
+    "guid": "5d12df7d-1bb8-4b90-b42d-cf1b2d770d76",
+    "subjectId": "T62",
+    "level": 1,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "L'Ajuntament de Barcelona compta amb adreçament tant públic com privat. El públic es va sol·licitar a RIPE i es paga una quantitat fixa a l'any pel manteniment i gestió del mateix. Quin d'aquests direccionaments és públic?",
+    "answerOptions": [
+      {
+        "text": "212.15.224.5",
+        "isCorrect": true,
+        "rationale": "L’adreça 212.15.224.5 està fora dels rangs privats (10.x.x.x, 172.16-31.x.x, 192.168.x.x) i pertany a un bloc públic assignat per RIPE."
+      },
+      {
+        "text": "10.1.1.1",
+        "isCorrect": false,
+        "rationale": "Forma part del rang privat A (10.0.0.0/8)."
+      },
+      {
+        "text": "172.16.0.1",
+        "isCorrect": false,
+        "rationale": "És del rang privat B (172.16.0.0/12)."
+      },
+      {
+        "text": "192.168.2.2",
+        "isCorrect": false,
+        "rationale": "Pertany al rang privat C (192.168.0.0/16)."
+      }
+    ],
+    "hint": "Només les adreces fora dels rangs reservats privats són públiques."
+  },
+  {
+    "guid": "e08a0c9a-cbcc-4b7c-9818-6722c0a7f987",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "OPOS19_preguntes_especific.pdf",
+    "type": "test",
+    "question": "L’Institut Municipal d’Informàtica de l’Ajuntament de Barcelona té assignat un rang d’adreces TCP/IP públiques d’internet d’ús exclusiu que és el següent (212.15.224.0 – 212.15.255.255). Quantes xarxes TCP/IP de classe C corresponen a aquest rang?",
+    "answerOptions": [
+      {
+        "text": "32",
+        "isCorrect": true,
+        "rationale": "Cada xarxa de classe C conté 256 adreces. El rang donat cobreix 32 subxarxes d’aquest tipus."
+      },
+      {
+        "text": "8160",
+        "isCorrect": false,
+        "rationale": "Aquest valor és exagerat i no correspon al càlcul correcte del nombre de xarxes de classe C."
+      },
+      {
+        "text": "Aquest rang correspon a una classe B.",
+        "isCorrect": false,
+        "rationale": "No és correcte, l’interval 212.x.x.x correspon a classe C, no a B."
+      },
+      {
+        "text": "16",
+        "isCorrect": false,
+        "rationale": "Només representa la meitat del nombre real de subxarxes de classe C en el rang."
+      }
+    ],
+    "hint": "Recorda: cada xarxa de classe C té 256 adreces, incloent broadcast i identificador de xarxa."
+  },
+  {
+    "guid": "f0b2a05c-31a4-4bb4-9d9a-1bbf25f2ee14",
+    "subjectId": "T62",
+    "level": 3,
+    "origin": "OPOS19_preguntes_practic.pdf",
+    "type": "test",
+    "question": "Quin organisme d’àmbit regional és l’encarregat de l’assignació d’adreces d’internet i al que s’haurà d’adreçar aquest Ajuntament per aconseguir un conjunt d’adreces públiques IP de gestió exclusiva, si aquest Ajuntament es troba a Catalunya?",
+    "answerOptions": [
+      {
+        "text": "RIPE NCC (Réseaux IP Européens Network Coordination Centre).",
+        "isCorrect": true,
+        "rationale": "RIPE NCC és el registre regional d’internet per a Europa, Orient Mitjà i part d’Àsia Central, responsable de l’assignació d’adreces IP públiques."
+      },
+      {
+        "text": "APNIC (Acces Point Network Internet Coordination).",
+        "isCorrect": false,
+        "rationale": "APNIC és el registre per a la zona d’Àsia-Pacífic, no per a Europa."
+      },
+      {
+        "text": "CNMC (Comissió Nacional del Mercat i la Competència).",
+        "isCorrect": false,
+        "rationale": "La CNMC regula serveis de telecomunicacions a Espanya, però no assigna adreces IP."
+      },
+      {
+        "text": "IETF (Internet Engineering Task Force).",
+        "isCorrect": false,
+        "rationale": "L’IETF defineix estàndards tècnics, però no gestiona adreces IP."
+      }
+    ],
+    "hint": "Cada regió del món té un registre regional d’internet (RIR); a Europa és RIPE NCC."
+  },
+  {
+    "guid": "22b37c92-72a9-4f72-b8d4-bce42dcb8412",
+    "subjectId": "T62",
+    "level": 3,
+    "origin": "OPOS19_preguntes_practic.pdf",
+    "type": "test",
+    "question": "Què és una interconnexió amb acord de 'peering'?",
+    "answerOptions": [
+      {
+        "text": "És un acord entre organitzacions que, actuant com a ISP i AS, fan un intercanvi de tràfic típicament sense cost entre ells via un IXP (punt d’intercanvi de tràfic de internet).",
+        "isCorrect": true,
+        "rationale": "El peering és una pràctica comuna entre ISPs per intercanviar tràfic de dades de manera directa sense intermediaris, millorant la latència i reduint costos."
+      },
+      {
+        "text": "És una autorització per fer servir adreces IP públiques propietat d’un altre ISP.",
+        "isCorrect": false,
+        "rationale": "Això es refereix a cessió o delegació, no a peering."
+      },
+      {
+        "text": "És el conjunt de dispositius de telecomunicacions que permeten regular el cabdal màxim acordat entre una organització i el seu ISP.",
+        "isCorrect": false,
+        "rationale": "Aquesta descripció s’ajusta més a un acord de servei (SLA) o a la QoS, no al peering."
+      },
+      {
+        "text": "És un servei de monitorització dels enllaços a internet que proporciona seguretat i protecció davant atacs.",
+        "isCorrect": false,
+        "rationale": "Això descriu un servei de seguretat, no un acord d’interconnexió."
+      }
+    ],
+    "hint": "Els acords de peering són essencials per optimitzar el tràfic d’Internet entre grans xarxes."
+  }
+]
