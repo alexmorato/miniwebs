@@ -226,6 +226,7 @@
         <button class="historial-btn" onclick="copiarHistorial()">📋 Copia</button>
         <button class="historial-btn" onclick="baixarHistorial()">💾 Baixa</button>
         <button class="historial-btn" onclick="guardarDubte()">❓ Guardar dubte</button>
+        <button class="historial-btn" onclick="esborrarHistorial()">🗑️ Esborrar</button>
       </div>
       <textarea class="historial-textarea" id="historialFallos" readonly placeholder="Aquí apareixeran les preguntes fallades..."></textarea>
     </div>
@@ -545,6 +546,15 @@
           historialFallos.unshift(pregunta);
           actualizarTextareaHistorial();
         }
+      }
+    }
+
+    // Borrar historial de fallos
+    function esborrarHistorial() {
+      if (confirm('Segur que vols esborrar tot l\'historial de fallos?')) {
+        historialFallos = [];
+        actualizarTextareaHistorial();
+        localStorage.removeItem('oposTest_historialFallos');
       }
     }
 
