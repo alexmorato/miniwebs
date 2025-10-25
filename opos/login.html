@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Test Beta</title>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #6ae0a7; }
+    .container { max-width: 400px; margin: 60px auto; background: #141a2a; border-radius: 16px; padding: 32px 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
+    label { display: block; margin-bottom: 10px; font-size: 1.1rem; color: #9fb0ff; }
+    input[type="text"] { width: 90%; padding: 12px; border-radius: 8px; border: 1px solid #27304a; background: #0b1020; color: #e7ecff; font-size: 1.1rem; margin-bottom: 18px; }
+    button { width: 100%; background: linear-gradient(180deg,#2aebad,#21c08d); color: #032217; font-weight: bold; font-size: 1.1rem; padding: 12px; border-radius: 12px; border: none; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: linear-gradient(180deg,#21c08d,#2aebad); }
+    .msg { color: #ff6b6b; margin-bottom: 10px; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Acceso Test Beta</h1>
+  <div class="container">
+    <form id="loginForm" autocomplete="off">
+  <label for="username">Introduce tu nombre:</label>
+  <input type="text" id="username" name="username" maxlength="32" required autofocus />
+  <label for="password" style="margin-top:10px;">Contraseña:</label>
+  <input type="password" id="password" name="password" maxlength="32" required style="width: 90%; padding: 12px; border-radius: 8px; border: 1px solid #27304a; background: #0b1020; color: #e7ecff; font-size: 1.1rem; margin-bottom: 18px;" />
+  <div class="msg" id="msg"></div>
+  <button type="submit">Entrar</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+      const msgDiv = document.getElementById('msg');
+      msgDiv.textContent = '';
+      if (!name) {
+        msgDiv.textContent = 'Por favor, introduce tu nombre.';
+        return;
+      }
+      if (!pass) {
+        msgDiv.textContent = 'Por favor, introduce la contraseña.';
+        return;
+      }
+      msgDiv.textContent = 'Comprobando credenciales...';
+      try {
+        // Cambia la URL y APIKEY por las de tu base restdb.io
+         const APIKEY = '68f811cb7f34ed7c2c200b92';
+         const url = `https://opos24-4f99.restdb.io/rest/opos-usuaris?q={"username":"${name}"}`;
+        const res = await fetch(url, {
+          headers: {
+            'x-apikey': APIKEY
+          }
+        });
+        if (!res.ok) throw new Error('Error de conexión con la base de datos');
+        const data = await res.json();
+        if (!data.length) {
+          msgDiv.textContent = 'Usuario no encontrado.';
+          return;
+        }
+        const user = data[0];
+        // Comprobar password con bcryptjs (asegura compatibilidad con window.bcryptjs o window.bcrypt)
+        var bcrypt = window.bcryptjs || window.bcrypt;
+        if (bcrypt && bcrypt.compareSync(pass, user.password_hash)) {
+          localStorage.setItem('testBeta_user', name);
+          window.location.href = 'testBeta.html';
+        } else {
+          msgDiv.textContent = 'Contraseña incorrecta.';
+        }
+      } catch (err) {
+        msgDiv.textContent = 'Error: ' + err.message;
+      }
+    };
+  </script>
+</body>
+</html>
