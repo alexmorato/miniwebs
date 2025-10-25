@@ -63,8 +63,8 @@
     function cargarTipoPregunta() {
       tipusPregunta.forEach(tp => {
         const opt = document.createElement('option');
-        opt.value = tp.id || tp.nombre || tp; // id o nombre o valor directo
-        opt.textContent = tp.nombre || tp.id || tp;
+        opt.value = tp.id || tp.nom || tp;
+        opt.textContent = tp.nom || tp.id || tp;
         tipoPreguntaSel.appendChild(opt);
       });
     }
@@ -72,8 +72,8 @@
     function cargarAmbitos() {
       ambits.forEach(a => {
         const opt = document.createElement('option');
-        opt.value = a.id || a.nombre || a;
-        opt.textContent = a.nombre || a.id || a;
+        opt.value = a.id || a.nom || a;
+        opt.textContent = a.nom || a.id || a;
         ambitoSel.appendChild(opt);
       });
     }
@@ -81,11 +81,13 @@
     function cargarTemas() {
       temaSel.innerHTML = '';
       let ambito = ambitoSel.value;
-      let temasFiltrados = ambito ? temes.filter(t => t.ambito === ambito) : temes;
+      let temasFiltrados = ambito
+        ? temes.filter(t => Array.isArray(t.ambit) && t.ambit.map(String).includes(ambito))
+        : temes;
       temasFiltrados.forEach(t => {
         const opt = document.createElement('option');
-        opt.value = t.id || t.nombre || t;
-        opt.textContent = t.nombre || t.id || t;
+        opt.value = t.tema || t.id || t;
+        opt.textContent = t.titol || t.nom || t.tema || t.id || t;
         temaSel.appendChild(opt);
       });
     }
