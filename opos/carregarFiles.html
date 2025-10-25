@@ -37,6 +37,7 @@
       margin-bottom: 10px;
       letter-spacing: 0.5px;
     }
+    /* mini-btn styles moved to the correct place above. */
   </style>
 </head>
 <body>
@@ -89,10 +90,27 @@
             return;
           }
           log('Fitxers trobats: ' + encontrados.length);
+          // Botones seleccionar/deseleccionar todos
+          const controlsDiv = document.createElement('div');
+          controlsDiv.style.display = 'flex';
+          controlsDiv.style.gap = '10px';
+          controlsDiv.style.margin = '8px 0 0 0';
+          controlsDiv.style.justifyContent = 'flex-end';
+            const btnSelectAll = document.createElement('button');
+            btnSelectAll.textContent = 'Seleccionar tots';
+            btnSelectAll.className = 'mini-btn mini-btn-green';
+            const btnDeselectAll = document.createElement('button');
+            btnDeselectAll.textContent = 'Deseleccionar';
+            btnDeselectAll.className = 'mini-btn mini-btn-gray';
+          controlsDiv.appendChild(btnSelectAll);
+          controlsDiv.appendChild(btnDeselectAll);
+          logbox.appendChild(controlsDiv);
+
           // Mostrar un botón por cada fichero encontrado (selección múltiple)
           const btnsDiv = document.createElement('div');
           btnsDiv.style.marginTop = '18px';
           let seleccionats = [];
+          const btnMap = {};
           encontrados.forEach(fichero => {
             const btn = document.createElement('button');
             btn.textContent = fichero;
@@ -116,14 +134,31 @@
                 seleccionats.push(fichero);
                 btn.style.outline = '3px solid #6ae0a7';
               }
-              // Guardar selección múltiple en localStorage
               localStorage.setItem('oposTest_fitxer', JSON.stringify(seleccionats));
-              // Habilitar o deshabilitar el botón comenzar
               document.getElementById('comencarBtn').disabled = seleccionats.length === 0;
             };
             btnsDiv.appendChild(btn);
+            btnMap[fichero] = btn;
           });
           logbox.appendChild(btnsDiv);
+          // Funcionalidad seleccionar todos
+          btnSelectAll.onclick = function() {
+            seleccionats = [...encontrados];
+            encontrados.forEach(fichero => {
+              btnMap[fichero].style.outline = '3px solid #6ae0a7';
+            });
+            localStorage.setItem('oposTest_fitxer', JSON.stringify(seleccionats));
+            document.getElementById('comencarBtn').disabled = seleccionats.length === 0;
+          };
+          // Funcionalidad deseleccionar todos
+          btnDeselectAll.onclick = function() {
+            seleccionats = [];
+            encontrados.forEach(fichero => {
+              btnMap[fichero].style.outline = '';
+            });
+            localStorage.setItem('oposTest_fitxer', JSON.stringify(seleccionats));
+            document.getElementById('comencarBtn').disabled = true;
+          };
           // Deshabilitar comenzar hasta que se seleccione al menos un fichero
           document.getElementById('comencarBtn').disabled = true;
         })
