@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversor de texto escapado a JSON</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
+      background: #f6f8fa;
+      color: #222;
+    }
+    h1 { color: #333; }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      background: #fff;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background: #005fa3; }
+    pre {
+      background: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #status {
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧩 Conversor de texto escapado a JSON</h1>
+  <p>Pega aquí el texto crudo del response (con <code>\\n</code>, <code>\\u0026quot;</code>, etc.):</p>
+  <textarea id="input"></textarea>
+  <div class="buttons">
+    <button id="convertBtn">Convertir a JSON</button>
+    <button id="copyBtn">📋 Copiar JSON</button>
+    <span id="status"></span>
+  </div>
+  <h2>Resultado:</h2>
+  <pre id="output"></pre>
+
+  <script>
+    // Decodificador HTML (&quot;, &#39;, etc.)
+    function htmlUnescape(str) {
+      const temp = document.createElement("textarea");
+      temp.innerHTML = str;
+      return temp.value;
+    }
+
+    // Proceso completo de limpieza
+    function unescapeAndParse(raw) {
+      let step = raw;
+
+      // 1️⃣ Quitar los dobles backslashes (\\n, \\u...)
+      step = step.replace(/\\\\/g, "\\");
+
+      // 2️⃣ Reemplazar secuencias \n reales por saltos de línea
+      step = step.replace(/\\n/g, "\n");
+
+      // 3️⃣ Decodificar unicode (\uXXXX)
+      step = step.replace(/\\u([\dA-F]{4})/gi, (_, g) => String.fromCharCode(parseInt(g, 16)));
+
+      // 4️⃣ Desescapar entidades HTML (&quot;, &#39;, etc.)
+      step = htmlUnescape(step);
+
+      // 5️⃣ Intentar parsear a JSON
+      return JSON.parse(step);
+    }
+
+    const input = document.getElementById("input");
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
+    const copyBtn = document.getElementById("copyBtn");
+
+    document.getElementById("convertBtn").addEventListener("click", () => {
+      try {
+        const jsonData = unescapeAndParse(input.value);
+        output.textContent = JSON.stringify(jsonData, null, 2);
+        status.textContent = "✅ Conversión completada correctamente.";
+      } catch (err) {
+        output.textContent = "❌ Error al convertir: " + err.message;
+        status.textContent = "";
+      }
+    });
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(output.textContent)
+        .then(() => { status.textContent = "📋 JSON copiado al portapapeles."; })
+        .catch(() => { status.textContent = "⚠️ No se pudo copiar."; });
+    });
+  </script>
+</body>
+</html>
