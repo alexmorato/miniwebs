@@ -17,21 +17,48 @@
 <body>
   <h1>Selecciona el Test</h1>
   <div class="container">
-    <label for="tipoPregunta">Tipo de pregunta:</label>
+    <label for="tipoPregunta">Tipus de pregunta:</label>
     <select id="tipoPregunta">
-      <option value="">Todas</option>
+      <option value="">Totes</option>
     </select>
 
-    <label for="ambito">Ámbito:</label>
+    <label for="ambito">Àmbit:</label>
     <select id="ambito">
-      <option value="">Todos</option>
+      <option value="">Tots</option>
     </select>
 
-    <label for="tema">Tema:</label>
-    <select id="tema" multiple size="8"></select>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <label style="margin:0;">Tema:</label>
+        <button id="seleccionaTotsBtn" type="button" style="font-size:0.95rem;padding:4px 10px;border-radius:6px;background:#27304a;color:#9fb0ff;border:none;cursor:pointer;">Selecciona tots</button>
+        <button id="deseleccionaTotsBtn" type="button" style="font-size:0.95rem;padding:4px 10px;border-radius:6px;background:#27304a;color:#9fb0ff;border:none;cursor:pointer;">Deselecciona tots</button>
+    </div>
+    <div id="temasBotones" style="max-height: 240px; overflow-y: auto; border: 1px solid #27304a; border-radius: 8px; background: #141a2a; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+
   </div>
-  <div class="footer">Menú de selección de test — Oposiciones TIC</div>
+  <div id="seleccioInfo" style="margin:16px 0 8px 0; color:#9fb0ff; font-size:1.05rem;"></div>
+  <button id="comencarBtn" style="width:100%;margin-top:8px;background:linear-gradient(180deg,#2aebad,#21c08d);color:#032217;font-weight:bold;font-size:1.1rem;padding:14px 0;border-radius:12px;border:none;cursor:pointer;opacity:0.5;pointer-events:none;" disabled>Començar</button>
+  <div class="footer">Menú de selecció de test — Oposicions TIC</div>
   <script>
+    document.getElementById('deseleccionaTotsBtn').onclick = function() {
+        // Deselecciona tots els botons de tema visibles
+        Array.from(document.querySelectorAll('#temasBotones .tema-btn')).forEach(btn => {
+        btn.classList.remove('selected');
+        });
+        guardarTemasSeleccionados();
+    };
+    
+    document.getElementById('seleccionaTotsBtn').onclick = function() {
+        // Selecciona tots els botons de tema visibles
+        Array.from(document.querySelectorAll('#temasBotones .tema-btn')).forEach(btn => {
+        if (!btn.classList.contains('selected')) btn.classList.add('selected');
+        });
+        guardarTemasSeleccionados();
+    };
+
+    document.getElementById('comencarBtn').onclick = function() {
+        window.location.href = 'carregar.html';
+    };
+
     // Utilidades para guardar en localStorage con prefijo
     function saveOposTest(key, value) {
       localStorage.setItem('oposTest_' + key, JSON.stringify(value));
@@ -40,7 +67,7 @@
     // Elementos
     const tipoPreguntaSel = document.getElementById('tipoPregunta');
     const ambitoSel = document.getElementById('ambito');
-    const temaSel = document.getElementById('tema');
+    const temasBotones = document.getElementById('temasBotones');
 
     let tipusPregunta = [];
     let ambits = [];
@@ -73,24 +100,68 @@
       ambits.forEach(a => {
         const opt = document.createElement('option');
         opt.value = a.id || a.nom || a;
-        opt.textContent = a.nom || a.id || a;
+        opt.textContent = a.id + ' - ' + a.nom || a.id || a;
         ambitoSel.appendChild(opt);
       });
     }
 
     function cargarTemas() {
-      temaSel.innerHTML = '';
+      temasBotones.innerHTML = '';
       let ambito = ambitoSel.value;
       let temasFiltrados = ambito
         ? temes.filter(t => Array.isArray(t.ambit) && t.ambit.map(String).includes(ambito))
         : temes;
+      const temasGuardados = JSON.parse(localStorage.getItem('oposTest_temas') || '[]');
       temasFiltrados.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.tema || t.id || t;
-        opt.textContent = t.titol || t.nom || t.tema || t.id || t;
-        temaSel.appendChild(opt);
+        const id = t.tema || t.id || t;
+        const label = t.titol || t.nom || t.tema || t.id || t;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = id + ' - ' + label;
+        btn.value = id;
+        btn.style.marginBottom = '4px';
+        btn.style.background = '#1b223a';
+        btn.style.color = '#e7ecff';
+        btn.style.border = '1px solid #2a3554';
+        btn.style.borderRadius = '8px';
+        btn.style.padding = '8px 14px';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.15s';
+        btn.className = 'tema-btn';
+        if (temasGuardados.includes(id)) btn.classList.add('selected');
+        btn.addEventListener('click', function() {
+          btn.classList.toggle('selected');
+          guardarTemasSeleccionados();
+        });
+        temasBotones.appendChild(btn);
       });
     }
+
+    function guardarTemasSeleccionados() {
+      const seleccionados = Array.from(temasBotones.querySelectorAll('button.selected')).map(b => b.value);
+      saveOposTest('temas', seleccionados);
+      actualitzaSeleccioInfo();
+    }
+
+    function actualitzaSeleccioInfo() {
+      const seleccionats = JSON.parse(localStorage.getItem('oposTest_temas') || '[]');
+      const infoDiv = document.getElementById('seleccioInfo');
+      const comencarBtn = document.getElementById('comencarBtn');
+      if (seleccionats.length) {
+        infoDiv.textContent = 'Selecció: ' + seleccionats.join(', ');
+        comencarBtn.disabled = false;
+        comencarBtn.style.opacity = '1';
+        comencarBtn.style.pointerEvents = 'auto';
+      } else {
+        infoDiv.textContent = '';
+        comencarBtn.disabled = true;
+        comencarBtn.style.opacity = '0.5';
+        comencarBtn.style.pointerEvents = 'none';
+      }
+    }
+
+    // Inicialitza l'estat del text quan es carrega la pàgina
+    document.addEventListener('DOMContentLoaded', actualitzaSeleccioInfo);
 
     // Guardar selección en localStorage cada vez que cambia
     tipoPreguntaSel.addEventListener('change', function() {
@@ -99,10 +170,7 @@
     ambitoSel.addEventListener('change', function() {
       saveOposTest('ambito', this.value);
       cargarTemas();
-      saveOposTest('temas', Array.from(temaSel.selectedOptions).map(o=>o.value));
-    });
-    temaSel.addEventListener('change', function() {
-      saveOposTest('temas', Array.from(this.selectedOptions).map(o=>o.value));
+      guardarTemasSeleccionados();
     });
 
     // Guardar selección inicial (por si hay valores por defecto)
@@ -112,9 +180,11 @@
     ambitoSel.addEventListener('change', function() {
       saveOposTest('ambito', this.value);
     });
-    temaSel.addEventListener('change', function() {
-      saveOposTest('temas', Array.from(this.selectedOptions).map(o=>o.value));
-    });
+    // El evento de selección de temas ahora se gestiona con los botones
+  // Estilos para botón seleccionado
+  const style = document.createElement('style');
+  style.textContent = `.tema-btn.selected { background: #2aebad; color: #032217; border: 2.5px solid #1aff4b; box-shadow: 0 0 0 2px #1aff4b55; font-weight: bold; }`;
+  document.head.appendChild(style);
   </script>
 </body>
 </html>
