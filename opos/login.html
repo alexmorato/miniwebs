@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-  <h1>Acceso Test Beta</h1>
+  <h1>Opos Test</h1>
   <div class="container">
     <form id="loginForm" autocomplete="off">
   <label for="username">Introduce tu nombre:</label>
@@ -61,9 +61,18 @@
         }
         const user = data[0];
         // Comprobar password con bcryptjs (asegura compatibilidad con window.bcryptjs o window.bcrypt)
-        var bcrypt = window.bcryptjs || window.bcrypt;
+        var bcrypt = window.dcodeIO && window.dcodeIO.bcrypt ? window.dcodeIO.bcrypt : (window.bcryptjs || window.bcrypt);
+        if (bcrypt) {
+          // Mostrar la contraseña introducida encriptada (hash nuevo, no coincide con el guardado)
+          const salt = bcrypt.genSaltSync(10);
+          const hash = bcrypt.hashSync(pass, salt);
+          console.info('Hash de la contraseña introducida:', hash);
+        }
         if (bcrypt && bcrypt.compareSync(pass, user.password_hash)) {
-          localStorage.setItem('testBeta_user', name);
+          localStorage.setItem('oposTest_user', name);
+          if (user._id) {
+            localStorage.setItem('oposTest_userid', user._id);
+          }
           window.location.href = 'testBeta.html';
         } else {
           msgDiv.textContent = 'Contraseña incorrecta.';

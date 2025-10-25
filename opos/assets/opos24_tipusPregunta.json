@@ -1,0 +1,14 @@
+[
+  {
+    "id": "test",
+    "nom": "Test amb preguntes ABCD"
+  },
+  {
+    "id": "truefalse",
+    "nom": "Cert o Fals"
+  },
+  {
+    "id": "fillgap",
+    "nom": "Omple el buit"
+  }
+]

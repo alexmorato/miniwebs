@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Selección Test Oposiciones</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #6ae0a7; }
+    .container { max-width: 600px; margin: 40px auto; background: #141a2a; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    label { display: block; margin: 18px 0 8px 0; color: #9fb0ff; font-size: 1.1rem; }
+    select, button { padding: 10px; border-radius: 8px; border: 1px solid #27304a; background: #141a2a; color: #e7ecff; cursor: pointer; font-size: 1rem; margin-bottom: 10px; }
+    select { width: 100%; }
+    .footer { text-align: center; font-size: 13px; color: #9fb0ff; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>Selecciona el Test</h1>
+  <div class="container">
+    <label for="tipoPregunta">Tipo de pregunta:</label>
+    <select id="tipoPregunta">
+      <option value="">Todas</option>
+    </select>
+
+    <label for="ambito">Ámbito:</label>
+    <select id="ambito">
+      <option value="">Todos</option>
+    </select>
+
+    <label for="tema">Tema:</label>
+    <select id="tema" multiple size="8"></select>
+  </div>
+  <div class="footer">Menú de selección de test — Oposiciones TIC</div>
+  <script>
+    // Utilidades para guardar en localStorage con prefijo
+    function saveOposTest(key, value) {
+      localStorage.setItem('oposTest_' + key, JSON.stringify(value));
+    }
+
+    // Elementos
+    const tipoPreguntaSel = document.getElementById('tipoPregunta');
+    const ambitoSel = document.getElementById('ambito');
+    const temaSel = document.getElementById('tema');
+
+    let tipusPregunta = [];
+    let ambits = [];
+    let temes = [];
+
+    // Cargar los JSON
+    Promise.all([
+      fetch('assets/opos24_tipusPregunta.json').then(r => r.json()),
+      fetch('assets/opos24_ambits.json').then(r => r.json()),
+      fetch('assets/opos24_temes.json').then(r => r.json())
+    ]).then(([tipusPreguntaData, ambitsData, temesData]) => {
+      tipusPregunta = tipusPreguntaData;
+      ambits = ambitsData;
+      temes = temesData;
+      cargarTipoPregunta();
+      cargarAmbitos();
+      cargarTemas();
+    });
+
+    function cargarTipoPregunta() {
+      tipusPregunta.forEach(tp => {
+        const opt = document.createElement('option');
+        opt.value = tp.id || tp.nombre || tp; // id o nombre o valor directo
+        opt.textContent = tp.nombre || tp.id || tp;
+        tipoPreguntaSel.appendChild(opt);
+      });
+    }
+
+    function cargarAmbitos() {
+      ambits.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.id || a.nombre || a;
+        opt.textContent = a.nombre || a.id || a;
+        ambitoSel.appendChild(opt);
+      });
+    }
+
+    function cargarTemas() {
+      temaSel.innerHTML = '';
+      let ambito = ambitoSel.value;
+      let temasFiltrados = ambito ? temes.filter(t => t.ambito === ambito) : temes;
+      temasFiltrados.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id || t.nombre || t;
+        opt.textContent = t.nombre || t.id || t;
+        temaSel.appendChild(opt);
+      });
+    }
+
+    // Guardar selección en localStorage cada vez que cambia
+    tipoPreguntaSel.addEventListener('change', function() {
+      saveOposTest('tipoPregunta', this.value);
+    });
+    ambitoSel.addEventListener('change', function() {
+      saveOposTest('ambito', this.value);
+      cargarTemas();
+      saveOposTest('temas', Array.from(temaSel.selectedOptions).map(o=>o.value));
+    });
+    temaSel.addEventListener('change', function() {
+      saveOposTest('temas', Array.from(this.selectedOptions).map(o=>o.value));
+    });
+
+    // Guardar selección inicial (por si hay valores por defecto)
+    tipoPreguntaSel.addEventListener('change', function() {
+      saveOposTest('tipoPregunta', this.value);
+    });
+    ambitoSel.addEventListener('change', function() {
+      saveOposTest('ambito', this.value);
+    });
+    temaSel.addEventListener('change', function() {
+      saveOposTest('temas', Array.from(this.selectedOptions).map(o=>o.value));
+    });
+  </script>
+</body>
+</html>

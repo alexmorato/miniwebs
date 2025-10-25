@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "nom": "PMBOK i Gestió"
+  },
+  {
+    "id": 2,
+    "nom": "Serveis i Qualitat ITIL"
+  },
+  {
+    "id": 3,
+    "nom": "Arquitectura i Desenvolupament"
+  },
+  {
+    "id": 4,
+    "nom": "Infraestructura i Xarxes"
+  },
+  {
+    "id": 5,
+    "nom": "Sense Ambit"
+  }
+]
