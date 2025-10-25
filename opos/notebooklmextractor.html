@@ -52,17 +52,132 @@
 </head>
 <body>
   <h1>🧩 Conversor de texto escapado a JSON</h1>
+  <div style="margin-bottom:18px;">
+    <label for="temaSelect"><b>Tema:</b></label>
+    <select id="temaSelect" style="min-width:220px;"></select>
+  </div>
   <p>Pega aquí el texto crudo del response (con <code>\\n</code>, <code>\\u0026quot;</code>, etc.):</p>
   <textarea id="input"></textarea>
   <div class="buttons">
-    <button id="convertBtn">Convertir a JSON</button>
-    <button id="copyBtn">📋 Copiar JSON</button>
-    <span id="status"></span>
+  <button id="convertBtn">Convertir a JSON</button>
+  <button id="copyBtn">📋 Copiar JSON</button>
+  <button id="downloadBtn">📁 Descargar fichero .json</button>
+  <button id="saveBtn">💾 API</button>
+  <span id="status"></span>
   </div>
   <h2>Resultado:</h2>
   <pre id="output"></pre>
 
   <script>
+    // Utilidad para obtener el año actual
+    function getCurrentYear() {
+      return new Date().getFullYear();
+    }
+
+    // Guardar en DB: popup de confirmación
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      const temaSel = document.getElementById('temaSelect');
+      const tema = temaSel ? temaSel.value : '';
+      let jsonData;
+      try {
+        jsonData = JSON.parse(document.getElementById('output').textContent);
+      } catch (e) {
+        alert('El JSON no es válido.');
+        return;
+      }
+      const info = {
+        tema: tema,
+        font: 'notebooklm',
+        any: getCurrentYear(),
+        dades: jsonData
+      };
+      // Mostrar confirmación
+      const msg =
+        '¿Guardar en la base de datos?\n' +
+        'Tema: ' + info.tema + '\n' +
+        'Font: ' + info.font + '\n' +
+        'Any: ' + info.any + '\n' +
+        'Dades: ' + JSON.stringify(info.dades, null, 2).slice(0, 400) + (JSON.stringify(info.dades).length > 400 ? '\n... (truncat)' : '');
+      if (confirm(msg)) {
+        send_question_toDB(info);
+      } else {
+        status.textContent = '❌ Cancel·lat';
+      }
+
+    // Stub para enviar a la base de datos
+    function send_question_toDB(info) {
+      // Leer configuración de la API desde assets/API_config.json
+      fetch('assets/API_config.json')
+        .then(r => r.json())
+        .then(config => {
+          const API_URL = config.BASE_URL.replace(/\/?$/, '') + '/preguntas-notelm';
+          const API_KEY = config.API_KEY;
+          // Recorrer info.dades.quiz si existe y es array
+          if (info && info.dades && Array.isArray(info.dades.quiz)) {
+            let total = info.dades.quiz.length;
+            let guardadas = 0, fallidas = 0;
+            status.textContent = `⏳ Guardant ${total} preguntes...`;
+            info.dades.quiz.forEach((q, idx) => {
+              // Construir objeto a guardar
+              const data = {
+                tema: info.tema,
+                font: info.font,
+                any: info.any,
+                ...q
+              };
+              fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                  'content-type': 'application/json',
+                  'x-apikey': API_KEY,
+                  'cache-control': 'no-cache'
+                },
+                body: JSON.stringify(data)
+              })
+              .then(resp => {
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                return resp.json();
+              })
+              .then(response => {
+                guardadas++;
+                status.textContent = `✅ Guardades: ${guardadas} / ${total}  ❌ Fallides: ${fallidas}`;
+                // console.log('Guardada:', response);
+              })
+              .catch(err => {
+                fallidas++;
+                status.textContent = `✅ Guardades: ${guardadas} / ${total}  ❌ Fallides: ${fallidas}`;
+                // console.error('Error guardant:', err);
+              });
+            });
+          } else {
+            status.textContent = '⚠️ No s\'ha trobat cap array quiz en dades.';
+          }
+        })
+        .catch(() => {
+          status.textContent = '❌ Error carregant configuració de la API.';
+        });
+    }
+    });
+
+    // Cargar temas al iniciar
+    window.addEventListener('DOMContentLoaded', function() {
+      fetch('assets/opos24_temes.json')
+        .then(r => r.json())
+        .then(temes => {
+          const select = document.getElementById('temaSelect');
+          select.innerHTML = '';
+          temes.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.tema;
+            opt.textContent = t.tema + ' - ' + t.titol;
+            select.appendChild(opt);
+          });
+        })
+        .catch(() => {
+          const select = document.getElementById('temaSelect');
+          select.innerHTML = '<option>Error carregant temes</option>';
+        });
+    });
     // Decodificador HTML (&quot;, &#39;, etc.)
     function htmlUnescape(str) {
       const temp = document.createElement("textarea");
@@ -95,15 +210,81 @@
     const status = document.getElementById("status");
     const copyBtn = document.getElementById("copyBtn");
 
+    // Generador simple de GUID
+    function guid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    const downloadBtn = document.getElementById('downloadBtn');
     document.getElementById("convertBtn").addEventListener("click", () => {
       try {
         const jsonData = unescapeAndParse(input.value);
-        output.textContent = JSON.stringify(jsonData, null, 2);
-        status.textContent = "✅ Conversión completada correctamente.";
+        // Si tiene quiz, transformar a formato simplificado
+        if (jsonData && Array.isArray(jsonData.quiz)) {
+          const temaSel = document.getElementById('temaSelect');
+          const tema = temaSel ? temaSel.value : '';
+          const result = jsonData.quiz.map(q => ({
+            guid: guid(),
+            subjectId : tema,
+            origin: 'notebooklm',
+            type: 'test',
+            difficulty: q.difficulty || '', //siempre sera nulo o vacio
+            question: q.question,
+            answerOptions: q.answerOptions.map(opt => ({
+              text: opt.text,
+              isCorrect: opt.isCorrect,
+              rationale: opt.rationale || ''
+            })),
+            hint: q.hint || ''
+          }));
+          output.textContent = JSON.stringify(result, null, 2);
+          status.textContent = `✅ ${result.length} preguntas convertidas.`;
+        } else {
+          output.textContent = JSON.stringify(jsonData, null, 2);
+          status.textContent = "✅ Conversión completada correctamente.";
+        }
       } catch (err) {
         output.textContent = "❌ Error al convertir: " + err.message;
         status.textContent = "";
       }
+    });
+
+
+    downloadBtn.addEventListener('click', function() {
+      let data = output.textContent;
+      if (!data) return;
+      // Nombre: temaId-nombre_sin_caracteres_raros_trim30-test.json
+      const temaSel = document.getElementById('temaSelect');
+      const temaId = temaSel ? temaSel.value : 'tema';
+      // Buscar nombre del tema
+      let temaNombre = '';
+      const opts = temaSel && temaSel.options;
+      if (opts && opts.length) {
+        const opt = opts[temaSel.selectedIndex];
+        if (opt) {
+          temaNombre = opt.textContent.replace(/^\w+\s*-\s*/, '');
+        }
+      }
+      // Limpiar nombre: solo letras, numeros y guion_bajo
+      temaNombre = temaNombre.normalize('NFD').replace(/[^\w\s-]/g, '').replace(/\s+/g, '_').toLowerCase();
+      const MAX_LEN = 45;
+      if (temaNombre.length > MAX_LEN) temaNombre = temaNombre.slice(0, MAX_LEN);
+      const filename = `${temaId}-${temaNombre}-test.json`;
+      // Descargar
+      const blob = new Blob([data], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
     });
 
     copyBtn.addEventListener("click", () => {

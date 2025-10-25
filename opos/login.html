@@ -45,9 +45,11 @@
       }
       msgDiv.textContent = 'Comprobando credenciales...';
       try {
-        // Cambia la URL y APIKEY por las de tu base restdb.io
-         const APIKEY = '68f811cb7f34ed7c2c200b92';
-         const url = `https://opos24-4f99.restdb.io/rest/opos-usuaris?q={"username":"${name}"}`;
+        // Leer API config
+        const config = await fetch('assets/API_config.json').then(r => r.json());
+        const APIKEY = config.API_KEY;
+        const BASE_URL = config.BASE_URL.replace(/\/?$/, '');
+        const url = `${BASE_URL}/opos-usuaris?q={"username":"${name}"}`;
         const res = await fetch(url, {
           headers: {
             'x-apikey': APIKEY
