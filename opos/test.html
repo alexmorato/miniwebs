@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Opos</title>
   <style>
-    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 20px; }
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 10px; }
     .container { max-width: 800px; margin: 0 auto; }
     .header {
       text-align: center;
       color: #6ae0a7;
       font-size: 1.8rem;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
     .progress-bar {
       width: 100%;
       height: 8px;
       background: #27304a;
       border-radius: 4px;
-      margin-bottom: 30px;
+      /* margin-bottom: 30px; */
       overflow: hidden;
     }
     .progress-fill {
@@ -31,7 +31,7 @@
       background: #141a2a;
       border: 1.5px solid #27304a;
       border-radius: 12px;
-      padding: 30px;
+      padding: 15px;
       margin-bottom: 30px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
@@ -41,7 +41,7 @@
       margin-bottom: 15px;
     }
     .question-text {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       line-height: 1.5;
       margin-bottom: 25px;
       color: #e7ecff;
@@ -50,7 +50,7 @@
       background: #27304a;
       border: 2px solid #2a3554;
       border-radius: 10px;
-      padding: 15px 20px;
+      padding: 5px 10px;
       margin: 10px 0;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -99,11 +99,6 @@
       font-size: 0.95rem;
       line-height: 1.4;
       margin-top: 5px;
-    }
-    .answer-letter {
-      font-weight: bold;
-      margin-right: 15px;
-      min-width: 25px;
     }
     .explanation {
       background: #0f1525;
@@ -206,7 +201,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">Test d'Oposicions</div>
+    <div class="header">Estic d'Opos</div>
     
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
@@ -270,7 +265,6 @@
       
       let html = `
         <div class="question-card">
-          <div class="question-number">${index + 1} / ${preguntes.length}</div>
           <div class="question-text">${pregunta.pregunta || pregunta.question || 'Pregunta no disponible'}</div>
       `;
 
@@ -286,7 +280,6 @@
       const userAnswered = answers[index] !== null;
 
       opciones.forEach((option, i) => {
-        const letter = String.fromCharCode(65 + i); // A, B, C, D...
         const isSelected = answers[index] === i;
         let optionClass = 'answer-option';
         
@@ -302,7 +295,6 @@
         
         html += `
           <div class="${optionClass}" onclick="selectAnswer(${i})">
-            <span class="answer-letter">${letter}.</span>
             <div class="option-content">
               <div class="option-text">${option.text}</div>`;
         
@@ -422,13 +414,11 @@
       
       let html = `
         <div class="question-card">
-          <div class="question-number">${index + 1} / ${preguntes.length}</div>
           <div class="question-text">${pregunta.pregunta || pregunta.question}</div>
       `;
 
       const opciones = shuffledOptions[index] || pregunta.answerOptions || [];
       opciones.forEach((option, i) => {
-        const letter = String.fromCharCode(65 + i);
         let className = 'answer-option';
         
         if (option.isCorrect) {
@@ -439,7 +429,6 @@
         
         html += `
           <div class="${className}">
-            <span class="answer-letter">${letter}.</span>
             <div class="option-content">
               <div class="option-text">${option.text}</div>`;
         
