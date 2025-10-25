@@ -24,6 +24,25 @@
   <input type="text" id="username" name="username" maxlength="32" required autofocus />
   <label for="password" style="margin-top:10px;">Contraseña:</label>
   <input type="password" id="password" name="password" maxlength="32" required style="width: 90%; padding: 12px; border-radius: 8px; border: 1px solid #27304a; background: #0b1020; color: #e7ecff; font-size: 1.1rem; margin-bottom: 18px;" />
+  <span style="position:relative; display:inline-block; width:24px; vertical-align:middle; margin-left:-32px; cursor:pointer;" onclick="togglePasswordVisibility()">
+    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:#9fb0ff;">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    </svg>
+  </span>
+  <script>
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('password');
+      const eye = document.getElementById('eyeIcon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        eye.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.293-3.95m3.249-2.608A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.965 9.965 0 01-4.293 5.032M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />';
+      } else {
+        pwd.type = 'password';
+        eye.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
+      }
+    }
+  </script>
   <div class="msg" id="msg"></div>
   <button type="submit">Entrar</button>
     </form>
