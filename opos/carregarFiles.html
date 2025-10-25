@@ -16,7 +16,7 @@
     #comencarBtn { width: 100%; max-width: 300px; background: linear-gradient(180deg,#2aebad,#21c08d); color: #032217; font-weight: bold; font-size: 1.1rem; padding: 14px 0; border-radius: 12px; border: none; cursor: pointer; margin-top: 30px; }
     #comencarBtn:disabled { opacity: 0.5; pointer-events: none; }
     #tornarBtn {
-      display: none;
+  display: block;
       margin-top: 10px;
       width: 100%;
       max-width: 200px;
@@ -173,7 +173,41 @@
     };
 
     document.getElementById('comencarBtn').onclick = function() {
-      window.location.href = 'test.html';
+      // Leer ficheros seleccionados y concatenar preguntas
+      let fitxers = [];
+      try {
+        fitxers = JSON.parse(localStorage.getItem('oposTest_fitxer') || '[]');
+      } catch (e) { fitxers = []; }
+      if (!Array.isArray(fitxers) || !fitxers.length) {
+        alert('No hi ha fitxers seleccionats.');
+        return;
+      }
+      let preguntesTot = [];
+      let filesLoaded = 0;
+      fitxers.forEach(fitxer => {
+        fetch('testfiles/' + fitxer)
+          .then(r => r.json())
+          .then(data => {
+            if (Array.isArray(data)) {
+              preguntesTot = preguntesTot.concat(data);
+            } else if (Array.isArray(data.preguntes)) {
+              preguntesTot = preguntesTot.concat(data.preguntes);
+            }
+            filesLoaded++;
+            if (filesLoaded === fitxers.length) {
+              // Guardar preguntas concatenadas y navegar
+              localStorage.setItem('oposTest_preguntes', JSON.stringify(preguntesTot));
+              window.location.href = 'test.html';
+            }
+          })
+          .catch(() => {
+            filesLoaded++;
+            if (filesLoaded === fitxers.length) {
+              localStorage.setItem('oposTest_preguntes', JSON.stringify(preguntesTot));
+              window.location.href = 'test.html';
+            }
+          });
+      });
     };
   </script>
 </body>
