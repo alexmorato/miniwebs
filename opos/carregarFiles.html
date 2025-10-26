@@ -48,6 +48,39 @@
     <button id="tornarBtn">⬅️ Tornar</button>
   </div>
   <script>
+    // --- Comprobación de usuario con bcryptjs ---
+    async function checkUserAuth() {
+      const user_guid = localStorage.getItem('user_guid');
+      const user_pass = localStorage.getItem('user_pass');
+      if (!user_guid || !user_pass) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        // Buscar usuario en users.json
+        const usersData = await fetch('assets/users.json').then(r => r.json());
+        if (!usersData || !Array.isArray(usersData.users)) throw new Error('No users');
+        const user = usersData.users.find(u => u.guid === user_guid);
+        if (!user) throw new Error('No user');
+        // Esperar a que bcryptjs esté disponible
+        function waitForBcrypt() {
+          return new Promise(resolve => {
+            (function check() {
+              if (window.dcodeIO && window.dcodeIO.bcrypt) resolve(window.dcodeIO.bcrypt);
+              else if (window.bcryptjs) resolve(window.bcryptjs);
+              else if (window.bcrypt) resolve(window.bcrypt);
+              else setTimeout(check, 50);
+            })();
+          });
+        }
+        const bcrypt = await waitForBcrypt();
+        if (!bcrypt.compareSync(user_pass, user.password_hash)) throw new Error('Bad pass');
+      } catch (e) {
+        window.location.href = 'login.html';
+      }
+    }
+    // Ejecutar al cargar
+    document.addEventListener('DOMContentLoaded', checkUserAuth, {once:true});
     // (Animació de puntets eliminada)
 
     // Log helper

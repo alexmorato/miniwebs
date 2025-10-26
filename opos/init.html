@@ -39,6 +39,39 @@
   <button id="comencarBtn" style="width:100%;margin-top:8px;background:linear-gradient(180deg,#2aebad,#21c08d);color:#032217;font-weight:bold;font-size:1.1rem;padding:14px 0;border-radius:12px;border:none;cursor:pointer;opacity:0.5;pointer-events:none;" disabled>Començar</button>
   <div class="footer">Menú de selecció de test — Oposicions TIC</div>
   <script>
+    // --- Comprobación de usuario con bcryptjs ---
+    async function checkUserAuth() {
+      const user_guid = localStorage.getItem('user_guid');
+      const user_pass = localStorage.getItem('user_pass');
+      if (!user_guid || !user_pass) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        // Buscar usuario en users.json
+        const usersData = await fetch('assets/users.json').then(r => r.json());
+        if (!usersData || !Array.isArray(usersData.users)) throw new Error('No users');
+        const user = usersData.users.find(u => u.guid === user_guid);
+        if (!user) throw new Error('No user');
+        // Esperar a que bcryptjs esté disponible
+        function waitForBcrypt() {
+          return new Promise(resolve => {
+            (function check() {
+              if (window.dcodeIO && window.dcodeIO.bcrypt) resolve(window.dcodeIO.bcrypt);
+              else if (window.bcryptjs) resolve(window.bcryptjs);
+              else if (window.bcrypt) resolve(window.bcrypt);
+              else setTimeout(check, 50);
+            })();
+          });
+        }
+        const bcrypt = await waitForBcrypt();
+        if (!bcrypt.compareSync(user_pass, user.password_hash)) throw new Error('Bad pass');
+      } catch (e) {
+        window.location.href = 'login.html';
+      }
+    }
+    // Ejecutar al cargar
+    document.addEventListener('DOMContentLoaded', checkUserAuth, {once:true});
     // --- Lógica para ?tema=... en la URL ---
     function getTemaFromURL() {
       const params = new URLSearchParams(window.location.search);
