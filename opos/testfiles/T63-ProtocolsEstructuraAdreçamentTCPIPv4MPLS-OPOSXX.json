@@ -1,0 +1,92 @@
+[
+  {
+    "guid": "q1-OPOS23-IPv4",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "7. L'Ajuntament de Barcelona compta amb adreçament tant públic com privat. El públic es va sol·licitar a RIPE i es paga una quantitat fixa a l'any pel manteniment i gestió del mateix. Quin d'aquests direccionaments és públic?",
+    "answerOptions": [
+      {"text": "A. 10.1.1.1", "isCorrect": false, "rationale": "10.x.x.x és adreçament privat segons RFC 1918."},
+      {"text": "B. 172.16.0.1", "isCorrect": false, "rationale": "172.16.0.0/12 és rang privat."},
+      {"text": "C. 192.168.2.2", "isCorrect": false, "rationale": "192.168.x.x és adreçament privat."},
+      {"text": "D. 212.15.224.5", "isCorrect": true, "rationale": "Les adreces 212.x.x.x són públiques assignades per RIPE."}
+    ],
+    "hint": "Recorda els rangs d’adreces privades definits per RFC 1918."
+  },
+  {
+    "guid": "q2-OPOS23-ClassC",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "9. Una companya de xarxes ens indica que per instal·lar una nova seu connectada a la xarxa corporativa serà prou amb l'assignació per a aquesta xarxa d'una classe C d'adreçament privat. Quantes adreces IP conté una classe C?",
+    "answerOptions": [
+      {"text": "A. 256", "isCorrect": true, "rationale": "Les adreces IPv4 de classe C utilitzen 8 bits per a hosts (2^8 = 256)."},
+      {"text": "B. 512", "isCorrect": false, "rationale": "No és correcte: correspondria a una màscara més petita."},
+      {"text": "C. 1024", "isCorrect": false, "rationale": "No hi ha tantes adreces per xarxa en classe C."},
+      {"text": "D. 2048", "isCorrect": false, "rationale": "Incorrecte, molt superior al rang possible en una classe C."}
+    ],
+    "hint": "Una classe C usa 8 bits per host."
+  },
+  {
+    "guid": "q3-OPOS23-DHCP",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "10. A la xarxa municipal hi ha un element anomenat IPAM (IP Address Management) on una de les seves pestanyes és un servidor DHCP (Dynamic Host Configuration Protocol). Què fa un servidor DHCP?",
+    "answerOptions": [
+      {"text": "A. Assigna una IP address i una IP address gateway a les màquines que ho sol·licitin.", "isCorrect": true, "rationale": "DHCP assigna IP, màscara, passarel·la i DNS de forma automàtica."},
+      {"text": "B. Comprova credencials.", "isCorrect": false, "rationale": "Això ho faria un servidor d’autenticació, no DHCP."},
+      {"text": "C. Enruta paquets.", "isCorrect": false, "rationale": "Aquesta és la funció d’un router."},
+      {"text": "D. Fa NAT (Network Address Translation).", "isCorrect": false, "rationale": "El NAT el fa un router o firewall, no DHCP."}
+    ],
+    "hint": "DHCP simplifica la configuració IP dels dispositius de la xarxa."
+  },
+  {
+    "guid": "q4-OPOS23-MPLS-L3VPN",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "11. La xarxa municipal està establerta mitjançant MPLS (Multi Protocol Label Switching), el qual permet establir diverses xarxes totalment estanques i independents entre si. Quin és un concepte relacionat amb la tecnologia L3VPN sobre MPLS?",
+    "answerOptions": [
+      {"text": "A. NAT (Network Address Translation).", "isCorrect": false, "rationale": "NAT no és propi de MPLS sinó de traducció d’adreces IP."},
+      {"text": "B. VPLS (Virtual Private Lan Sevice).", "isCorrect": false, "rationale": "VPLS pertany a L2VPN."},
+      {"text": "C. VRF (Virtual Routing Forwarding).", "isCorrect": true, "rationale": "Les L3VPNs de MPLS utilitzen taules VRF per separar el trànsit."},
+      {"text": "D. Routing Internet Protocol (RIP).", "isCorrect": false, "rationale": "RIP és un protocol d’encaminament, no de virtualització."}
+    ],
+    "hint": "L3VPN usa VRFs per mantenir rutes separades per client."
+  },
+  {
+    "guid": "q5-OPOS23-MPLS-L2VPN",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS23_preguntes_practic.pdf",
+    "type": "test",
+    "question": "12. Quin és un concepte relacionat amb la tecnologia L2VPN sobre MPLS?",
+    "answerOptions": [
+      {"text": "A. NAT (Network Address Translation).", "isCorrect": false, "rationale": "NAT no s’utilitza en L2VPN."},
+      {"text": "B. VPLS (Virtual Private Lan Sevice).", "isCorrect": true, "rationale": "L2VPN en MPLS utilitza VPLS per simular LANs sobre la xarxa d’etiquetes."},
+      {"text": "C. VRF (Virtual Routing Forwarding).", "isCorrect": false, "rationale": "VRF és propi de L3VPN."},
+      {"text": "D. Routing Internet Protocol (RIP).", "isCorrect": false, "rationale": "RIP és un protocol d’encaminament IP, no de MPLS."}
+    ],
+    "hint": "L2VPN permet emular una LAN entre seus remotes mitjançant MPLS."
+  },
+  {
+    "guid": "q6-OPOS21-MPLS-FullMesh",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS21_preguntes_practic.pdf",
+    "type": "test",
+    "question": "24. Quin d’aquests elements es recomanaria instal·lar i configurar per tal d’establir la connectivitat I-BGP entre tots els encaminadors PE d’una xarxa MPLS i d’aquesta manera evitar una connectivitat fullmesh entre tots els encaminadors BGP?",
+    "answerOptions": [
+      {"text": "A. Encaminador reflector.", "isCorrect": true, "rationale": "Els route reflectors redueixen la complexitat d’una topologia full-mesh en I-BGP."},
+      {"text": "B. Encaminador P.", "isCorrect": false, "rationale": "Els routers P són del nucli MPLS però no gestionen sessions I-BGP."},
+      {"text": "C. Encaminador ASBR.", "isCorrect": false, "rationale": "ASBR connecta AS diferents, no serveix per evitar full-mesh intern."},
+      {"text": "D. Encaminador Server.", "isCorrect": false, "rationale": "No existeix aquesta figura a MPLS/BGP."}
+    ],
+    "hint": "Recorda que els route reflectors simplifiquen el disseny d’IBGP."
+  }
+]

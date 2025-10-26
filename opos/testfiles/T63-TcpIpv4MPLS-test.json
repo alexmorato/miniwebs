@@ -1,0 +1,415 @@
+[
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440001",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina és la principal funció del protocol IP dins del model TCP/IP?",
+    "answerOptions": [
+      {"text": "A. Enviar fitxers de manera fiable entre dos dispositius.", "isCorrect": false, "rationale": "Això ho fa TCP o FTP, no IP."},
+      {"text": "B. Encapsular dades de nivell físic i gestionar el senyal elèctric.", "isCorrect": false, "rationale": "És funció de la capa física."},
+      {"text": "C. Encaminar paquets sense connexió entre xarxes diferents.", "isCorrect": true, "rationale": "El protocol IP dirigeix paquets entre xarxes sense establir connexió."},
+      {"text": "D. Controlar la congestió i la qualitat del servei.", "isCorrect": false, "rationale": "IP no controla la QoS; això es pot fer amb MPLS o altres mecanismes."}
+    ],
+    "hint": "IP treballa a la capa d'Internet i és no orientat a connexió."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440002",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina de les següents adreces IPv4 pertany al rang d’adreces privades?",
+    "answerOptions": [
+      {"text": "A. 172.20.5.1", "isCorrect": true, "rationale": "El rang 172.16.0.0/12 és privat segons l'RFC 1918."},
+      {"text": "B. 8.8.8.8", "isCorrect": false, "rationale": "És una adreça pública de Google DNS."},
+      {"text": "C. 11.1.1.1", "isCorrect": false, "rationale": "El rang 10.0.0.0/8 és privat, però 11.x.x.x és públic."},
+      {"text": "D. 193.168.1.1", "isCorrect": false, "rationale": "El rang privat és 192.168.x.x, no 193.168.x.x."}
+    ],
+    "hint": "Recorda els tres rangs privats: 10/8, 172.16/12 i 192.168/16."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440003",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quin protocol s’utilitza per traduir una adreça IP a una adreça MAC dins d’una xarxa local?",
+    "answerOptions": [
+      {"text": "A. ICMP", "isCorrect": false, "rationale": "ICMP s’utilitza per missatges de control, no per traduir adreces."},
+      {"text": "B. DNS", "isCorrect": false, "rationale": "DNS tradueix noms de domini en adreces IP, no MAC."},
+      {"text": "C. ARP", "isCorrect": true, "rationale": "ARP (Address Resolution Protocol) resol IP → MAC dins la mateixa LAN."},
+      {"text": "D. DHCP", "isCorrect": false, "rationale": "DHCP assigna IPs, però no resol MACs."}
+    ],
+    "hint": "Aquest protocol funciona dins la LAN per obtenir l’adreça física d’un dispositiu."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440004",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quin és l’objectiu principal del protocol ICMP?",
+    "answerOptions": [
+      {"text": "A. Enviar missatges de control i notificació d’errors entre dispositius.", "isCorrect": true, "rationale": "ICMP informa d’errors i control de connectivitat (com ping)."},
+      {"text": "B. Assignar adreces IP automàticament.", "isCorrect": false, "rationale": "Això ho fa DHCP."},
+      {"text": "C. Codificar dades per seguretat en la transmissió.", "isCorrect": false, "rationale": "El xifrat pertany a protocols com TLS o IPSec."},
+      {"text": "D. Fer la traducció entre IPs públiques i privades.", "isCorrect": false, "rationale": "Això és NAT, no ICMP."}
+    ],
+    "hint": "ICMP és utilitzat per eines com ping i traceroute."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440005",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina diferència principal hi ha entre TCP i UDP?",
+    "answerOptions": [
+      {"text": "A. TCP és més ràpid però menys fiable que UDP.", "isCorrect": false, "rationale": "És al revés: TCP és fiable però més lent."},
+      {"text": "B. UDP és orientat a connexió mentre que TCP no.", "isCorrect": false, "rationale": "TCP és el que estableix connexions, UDP no."},
+      {"text": "C. TCP garanteix lliurament i ordre dels paquets; UDP no.", "isCorrect": true, "rationale": "TCP és fiable i orientat a connexió; UDP és lleuger i sense garanties."},
+      {"text": "D. UDP utilitza ports, TCP no.", "isCorrect": false, "rationale": "Tots dos utilitzen ports per identificar serveis."}
+    ],
+    "hint": "Un és fiable (TCP), l’altre és ràpid (UDP)."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440006",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "En una xarxa MPLS, quin element és responsable d’afegir o eliminar les etiquetes dels paquets?",
+    "answerOptions": [
+      {"text": "A. LSR (Label Switch Router)", "isCorrect": false, "rationale": "Els LSR només commuten paquets basant-se en l’etiqueta."},
+      {"text": "B. LER (Label Edge Router)", "isCorrect": true, "rationale": "El LER és el router de frontera que insereix i elimina les etiquetes MPLS."},
+      {"text": "C. PE (Provider Edge)", "isCorrect": true, "rationale": "El LER també és conegut com a PE, que gestiona les etiquetes d’entrada/sortida."},
+      {"text": "D. P (Provider Router)", "isCorrect": false, "rationale": "El router P és el nucli intern i no manipula etiquetes d’entrada/sortida."}
+    ],
+    "hint": "El router de frontera és qui gestiona l’etiquetatge MPLS."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440007",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quin avantatge principal ofereix MPLS respecte de l’encaminament IP tradicional?",
+    "answerOptions": [
+      {"text": "A. Més seguretat, ja que xifra automàticament tot el trànsit.", "isCorrect": false, "rationale": "MPLS no xifra; només millora l’encaminament i la QoS."},
+      {"text": "B. Menor latència i més eficiència gràcies a l’ús d’etiquetes.", "isCorrect": true, "rationale": "MPLS commuta per etiquetes sense consultar la IP a cada salt."},
+      {"text": "C. Major compatibilitat amb xarxes sense fils.", "isCorrect": false, "rationale": "No té relació amb Wi-Fi."},
+      {"text": "D. Redueix el nombre de protocols necessaris al nivell d’aplicació.", "isCorrect": false, "rationale": "MPLS treballa al nivell de xarxa, no d’aplicació."}
+    ],
+    "hint": "MPLS optimitza el rendiment i la qualitat del trànsit."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440008",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina diferència hi ha entre una L2VPN i una L3VPN en MPLS?",
+    "answerOptions": [
+      {"text": "A. L2VPN funciona a nivell d’enllaç de dades, mentre que L3VPN treballa amb encaminament IP.", "isCorrect": true, "rationale": "L2VPN emula una LAN, L3VPN gestiona rutes IP separades."},
+      {"text": "B. L3VPN s’utilitza per veu i L2VPN per dades.", "isCorrect": false, "rationale": "Les dues poden transportar qualsevol tipus de trànsit."},
+      {"text": "C. L2VPN només permet connexions punt a punt.", "isCorrect": false, "rationale": "També pot oferir topologies multipunt amb VPLS."},
+      {"text": "D. L3VPN no pot coexistir amb IPv6.", "isCorrect": false, "rationale": "MPLS és multiprotocol i suporta IPv4 i IPv6."}
+    ],
+    "hint": "La diferència clau és el nivell del model OSI on opera cadascuna."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440009",
+    "subjectId": "T63",
+    "difficulty": 4,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "En un entorn BGP sobre MPLS, quin mecanisme s’utilitza per evitar una topologia full-mesh entre tots els encaminadors PE?",
+    "answerOptions": [
+      {"text": "A. Route Reflector", "isCorrect": true, "rationale": "Els route reflectors permeten reduir la complexitat d’IBGP sense necessitat de connexions directes entre tots els PE."},
+      {"text": "B. Encaminador P", "isCorrect": false, "rationale": "El router P és intern al nucli i no gestiona sessions IBGP."},
+      {"text": "C. Encaminador ASBR", "isCorrect": false, "rationale": "L’ASBR s’utilitza per connectar AS diferents."},
+      {"text": "D. NAT Gateway", "isCorrect": false, "rationale": "NAT no forma part del disseny de BGP ni MPLS."}
+    ],
+    "hint": "Els route reflectors simplifiquen la topologia IBGP dins d’un AS."
+  }
+
+
+
+  ,
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440010",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina de les següents afirmacions sobre el protocol TCP/IP és correcta?",
+    "answerOptions": [
+      {"text": "A. El model TCP/IP té cinc capes i defineix protocols físics de transmissió.", "isCorrect": false, "rationale": "TCP/IP té quatre capes principals i no especifica la part física."},
+      {"text": "B. TCP/IP és un conjunt de protocols estàndard per a comunicacions a Internet.", "isCorrect": true, "rationale": "El model TCP/IP és la base d'Internet i defineix protocols com IP, TCP i UDP."},
+      {"text": "C. TCP/IP és una implementació del model OSI utilitzada només en xarxes locals.", "isCorrect": false, "rationale": "TCP/IP és independent del model OSI i funciona a Internet i LANs."},
+      {"text": "D. TCP/IP és propietari de Microsoft i només funciona amb Windows.", "isCorrect": false, "rationale": "És un estàndard obert, no propietari."}
+    ],
+    "hint": "El model TCP/IP és la base del funcionament d'Internet."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440011",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "A quina capa del model TCP/IP es troben protocols com HTTP, FTP i SMTP?",
+    "answerOptions": [
+      {"text": "A. Capa d’aplicació", "isCorrect": true, "rationale": "Són protocols que interactuen amb les aplicacions de l’usuari final."},
+      {"text": "B. Capa de transport", "isCorrect": false, "rationale": "La capa de transport gestiona TCP i UDP."},
+      {"text": "C. Capa d’internet", "isCorrect": false, "rationale": "Aquí hi ha IP i ICMP."},
+      {"text": "D. Capa física", "isCorrect": false, "rationale": "La capa física tracta amb el medi de transmissió, no amb aplicacions."}
+    ],
+    "hint": "És la capa on viuen els protocols orientats a l’usuari."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440012",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina d’aquestes IP es considera d’ús especial com a adreça loopback?",
+    "answerOptions": [
+      {"text": "A. 0.0.0.0", "isCorrect": false, "rationale": "0.0.0.0 indica absència d’adreça assignada."},
+      {"text": "B. 255.255.255.255", "isCorrect": false, "rationale": "És l’adreça de broadcast general."},
+      {"text": "C. 127.0.0.1", "isCorrect": true, "rationale": "És la loopback que representa el propi dispositiu."},
+      {"text": "D. 169.254.1.1", "isCorrect": false, "rationale": "És una adreça APIPA automàtica."}
+    ],
+    "hint": "Serveix per comprovar la pròpia pila TCP/IP."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440013",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina funció té el protocol DHCP dins d’una xarxa IP?",
+    "answerOptions": [
+      {"text": "A. Assignar adreces IP de manera automàtica als dispositius clients.", "isCorrect": true, "rationale": "DHCP facilita la configuració IP automàtica d’estacions de treball."},
+      {"text": "B. Monitoritzar la congestió de la xarxa.", "isCorrect": false, "rationale": "Això ho faria un sistema SNMP o NetFlow."},
+      {"text": "C. Resoldre noms de domini a adreces IP.", "isCorrect": false, "rationale": "Això ho fa el protocol DNS."},
+      {"text": "D. Enviar correu electrònic de notificació d’errors de xarxa.", "isCorrect": false, "rationale": "No té cap funció de missatgeria."}
+    ],
+    "hint": "Evita configurar IPs manualment a cada equip."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440014",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina diferència hi ha entre una adreça IP pública i una privada?",
+    "answerOptions": [
+      {"text": "A. Les públiques s’utilitzen a Internet i les privades només a xarxes internes.", "isCorrect": true, "rationale": "Les adreces privades no són rutejables a Internet."},
+      {"text": "B. Les públiques són gratuïtes i les privades de pagament.", "isCorrect": false, "rationale": "Les públiques es lloguen als proveïdors; les privades són lliures."},
+      {"text": "C. Les privades tenen més seguretat incorporada.", "isCorrect": false, "rationale": "No tenen seguretat extra, només restricció d’ús."},
+      {"text": "D. Les privades no poden comunicar-se entre dispositius locals.", "isCorrect": false, "rationale": "Sí poden comunicar-se dins de la mateixa xarxa privada."}
+    ],
+    "hint": "Només les adreces públiques són visibles des d’Internet."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440015",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quina d’aquestes opcions és una característica del protocol UDP?",
+    "answerOptions": [
+      {"text": "A. Orientat a connexió i fiable.", "isCorrect": false, "rationale": "Aquesta és una descripció de TCP."},
+      {"text": "B. Sense connexió, sense control de flux i amb menor latència.", "isCorrect": true, "rationale": "UDP és ràpid i senzill, sense establir connexió ni verificar lliurament."},
+      {"text": "C. Garanteix ordre i lliurament dels paquets.", "isCorrect": false, "rationale": "UDP no garanteix cap d’aquests aspectes."},
+      {"text": "D. Requereix establir una sessió abans de transmetre dades.", "isCorrect": false, "rationale": "UDP envia datagrames directament sense sessió prèvia."}
+    ],
+    "hint": "S’utilitza per transmissió de vídeo o veu, on la velocitat és prioritària."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440016",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "En MPLS, què és una FEC (Forwarding Equivalence Class)?",
+    "answerOptions": [
+      {"text": "A. Un conjunt de paquets que comparteixen el mateix camí i tractament.", "isCorrect": true, "rationale": "FEC agrupa paquets amb característiques similars per tractar-los igual."},
+      {"text": "B. Una etiqueta única assignada a cada paquet IP.", "isCorrect": false, "rationale": "L’etiqueta identifica la FEC, però no és la FEC mateixa."},
+      {"text": "C. Un protocol de transport dins de MPLS.", "isCorrect": false, "rationale": "FEC és un concepte d’encaminament, no un protocol."},
+      {"text": "D. Una adreça privada usada dins d’una VPN MPLS.", "isCorrect": false, "rationale": "FEC no defineix adreces, sinó classificació de trànsit."}
+    ],
+    "hint": "Cada FEC defineix com es tractaran els paquets dins de la xarxa MPLS."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440017",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Com millora MPLS el rendiment respecte a l’encaminament IP tradicional?",
+    "answerOptions": [
+      {"text": "A. Utilitza etiquetes que permeten commutació més ràpida i priorització de trànsit.", "isCorrect": true, "rationale": "Els routers MPLS no analitzen la IP completa sinó l’etiqueta, millorant la velocitat."},
+      {"text": "B. Elimina la necessitat de protocols d’encaminament.", "isCorrect": false, "rationale": "Encara utilitza protocols com OSPF o BGP per distribuir rutes."},
+      {"text": "C. Xifra automàticament el trànsit entre seus.", "isCorrect": false, "rationale": "No ofereix xifrat per defecte."},
+      {"text": "D. Redueix la mida de les capçaleres IP a la meitat.", "isCorrect": false, "rationale": "La mida de la capçalera IP no canvia."}
+    ],
+    "hint": "MPLS substitueix l’encaminament basat en IP per commutació d’etiquetes."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440018",
+    "subjectId": "T63",
+    "difficulty": 4,
+    "origin": "OPOS24_gpt",
+    "type": "test",
+    "question": "Quin mecanisme s’utilitza en MPLS per oferir qualitat de servei (QoS)?",
+    "answerOptions": [
+      {"text": "A. Assignació de prioritats a les etiquetes MPLS segons la classe de servei.", "isCorrect": true, "rationale": "MPLS pot marcar etiquetes amb nivells de prioritat per garantir QoS."},
+      {"text": "B. Comprimir paquets IP per reduir el retard.", "isCorrect": false, "rationale": "La compressió no forma part del mecanisme QoS."},
+      {"text": "C. Reenviar els paquets sempre pel camí més curt.", "isCorrect": false, "rationale": "La QoS pot forçar camins no més curts per mantenir prioritat."},
+      {"text": "D. Dividir el trànsit segons l’adreça MAC.", "isCorrect": false, "rationale": "MPLS treballa amb etiquetes, no amb adreces MAC."}
+    ],
+    "hint": "MPLS pot classificar el trànsit per tipus de servei i assignar prioritats."
+  }
+  
+
+
+  ,
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440101",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "El protocol ____ és responsable d'encaminar paquets entre xarxes sense establir una connexió prèvia.",
+    "answerOptions": [
+      {"text": "IP", "isCorrect": true, "rationale": "El protocol IP s'encarrega de l'encaminament de paquets sense connexió."},
+      {"text": "TCP", "isCorrect": false, "rationale": "TCP és orientat a connexió, no d'encaminament."},
+      {"text": "UDP", "isCorrect": false, "rationale": "UDP és de transport, no d'encaminament."},
+      {"text": "ARP", "isCorrect": false, "rationale": "ARP resol adreces dins la LAN, no entre xarxes."}
+    ],
+    "hint": "És el protocol base d'Internet, situat a la capa d'Internet del model TCP/IP."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440102",
+    "subjectId": "T63",
+    "difficulty": 1,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "L'adreça especial ____ permet fer proves de connexió amb el propi dispositiu, mentre que ____ s'utilitza per difusió a tots els equips de la xarxa.",
+    "answerOptions": [
+      {"text": "127.0.0.1 / 255.255.255.255", "isCorrect": true, "rationale": "127.0.0.1 és loopback; 255.255.255.255 és broadcast."},
+      {"text": "0.0.0.0 / 127.0.0.1", "isCorrect": false, "rationale": "0.0.0.0 indica absència d’adreça, no prova local."},
+      {"text": "10.0.0.1 / 8.8.8.8", "isCorrect": false, "rationale": "Són adreces privades i públiques, no especials de prova."},
+      {"text": "255.255.255.0 / 192.168.0.1", "isCorrect": false, "rationale": "255.255.255.0 és una màscara, no una adreça IP vàlida."}
+    ],
+    "hint": "Una és de prova local i l’altra és la difusió màxima a tota la xarxa."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440103",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "El protocol ____ tradueix una adreça IP a una adreça física (MAC) dins d'una xarxa local.",
+    "answerOptions": [
+      {"text": "ARP", "isCorrect": true, "rationale": "ARP (Address Resolution Protocol) converteix IP → MAC dins d’una LAN."},
+      {"text": "DNS", "isCorrect": false, "rationale": "DNS tradueix noms a IPs."},
+      {"text": "ICMP", "isCorrect": false, "rationale": "ICMP envia missatges d’error, no resol adreces."},
+      {"text": "DHCP", "isCorrect": false, "rationale": "DHCP assigna IPs, però no resol MACs."}
+    ],
+    "hint": "Funciona només dins la mateixa LAN i utilitza difusió."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440104",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "Les adreces privades del rang ____ no són rutejables a Internet i s’utilitzen dins de xarxes internes.",
+    "answerOptions": [
+      {"text": "10.0.0.0/8, 172.16.0.0/12 i 192.168.0.0/16", "isCorrect": true, "rationale": "Aquests tres rangs són reservats per a ús privat segons RFC 1918."},
+      {"text": "8.8.8.0/24, 1.1.1.0/24 i 212.0.0.0/8", "isCorrect": false, "rationale": "Són adreces públiques assignades a proveïdors."},
+      {"text": "127.0.0.0/8", "isCorrect": false, "rationale": "És el rang de loopback, no d’adreçament privat."},
+      {"text": "224.0.0.0/4", "isCorrect": false, "rationale": "És un rang d’adreces multicast."}
+    ],
+    "hint": "Són els tres blocs privats definits per l’RFC 1918."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440105",
+    "subjectId": "T63",
+    "difficulty": 2,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "TCP és un protocol ____ mentre que UDP és un protocol ____.",
+    "answerOptions": [
+      {"text": "orientat a connexió / no orientat a connexió", "isCorrect": true, "rationale": "TCP estableix connexions, UDP envia datagrames directament."},
+      {"text": "no orientat a connexió / orientat a connexió", "isCorrect": false, "rationale": "És l’invers del correcte."},
+      {"text": "de xarxa / d’aplicació", "isCorrect": false, "rationale": "Ambdós són protocols de transport."},
+      {"text": "segur / xifrat", "isCorrect": false, "rationale": "Cap dels dos garanteix xifrat per defecte."}
+    ],
+    "hint": "Un estableix una sessió i controla errors; l’altre no."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440106",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "En una xarxa MPLS, els paquets són identificats per una ____ en lloc de per una adreça IP.",
+    "answerOptions": [
+      {"text": "etiqueta (label)", "isCorrect": true, "rationale": "MPLS utilitza etiquetes per commutar paquets ràpidament."},
+      {"text": "adreça MAC", "isCorrect": false, "rationale": "Les MAC són pròpies de la capa d’enllaç, no de MPLS."},
+      {"text": "ID de sessió TCP", "isCorrect": false, "rationale": "TCP no s’utilitza en MPLS per etiquetar paquets."},
+      {"text": "port lògic", "isCorrect": false, "rationale": "Els ports identifiquen serveis, no camins de xarxa."}
+    ],
+    "hint": "És el número que cada router MPLS llegeix per decidir el camí."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440107",
+    "subjectId": "T63",
+    "difficulty": 3,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "En MPLS, el dispositiu que afegeix o elimina etiquetes als paquets s’anomena ____.",
+    "answerOptions": [
+      {"text": "LER (Label Edge Router)", "isCorrect": true, "rationale": "El LER treballa a la frontera de la xarxa MPLS i gestiona les etiquetes."},
+      {"text": "LSR (Label Switch Router)", "isCorrect": false, "rationale": "El LSR només reenvia paquets amb etiquetes ja assignades."},
+      {"text": "P-router", "isCorrect": false, "rationale": "El router P pertany al nucli MPLS i no afegeix ni treu etiquetes."},
+      {"text": "Gateway NAT", "isCorrect": false, "rationale": "NAT no intervé en MPLS."}
+    ],
+    "hint": "És el router de frontera que interactua amb la xarxa IP convencional."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440108",
+    "subjectId": "T63",
+    "difficulty": 4,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "Una FEC (Forwarding Equivalence Class) és un grup de paquets que comparteixen ____ i reben el mateix tractament dins la xarxa MPLS.",
+    "answerOptions": [
+      {"text": "camí i polítiques d’encaminament", "isCorrect": true, "rationale": "Tots els paquets d’una FEC segueixen el mateix Label Switched Path."},
+      {"text": "protocols de transport", "isCorrect": false, "rationale": "Les FEC no depenen del protocol TCP o UDP."},
+      {"text": "adreces MAC idèntiques", "isCorrect": false, "rationale": "Les MAC no defineixen una FEC."},
+      {"text": "el mateix port TCP", "isCorrect": false, "rationale": "Els ports no intervenen en la classificació MPLS."}
+    ],
+    "hint": "És la base de la commutació per etiquetes i defineix un comportament comú per fluxos similars."
+  },
+  {
+    "guid": "550e8400-e29b-41d4-a716-446655440109",
+    "subjectId": "T63",
+    "difficulty": 4,
+    "origin": "OPOS24_gpt",
+    "type": "fillgap",
+    "question": "El mecanisme QoS dins MPLS permet assignar diferents ____ als paquets per garantir prioritats de trànsit.",
+    "answerOptions": [
+      {"text": "classes de servei (CoS)", "isCorrect": true, "rationale": "MPLS marca paquets segons la seva classe de servei per gestionar prioritats."},
+      {"text": "adreces IP", "isCorrect": false, "rationale": "Les IP no determinen la prioritat en MPLS."},
+      {"text": "ports UDP", "isCorrect": false, "rationale": "Els ports són de transport, no per priorització."},
+      {"text": "etiquetes DNS", "isCorrect": false, "rationale": "DNS no participa en QoS ni en MPLS."}
+    ],
+    "hint": "Pensa en com MPLS pot distingir trànsit de veu i vídeo respecte al de dades normals."
+  }
+]
