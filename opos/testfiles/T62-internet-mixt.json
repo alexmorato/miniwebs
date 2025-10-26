@@ -1,0 +1,852 @@
+[
+  {
+    "guid": "a128a7f5-111f-4b2e-8ff1-9478d2e3b9f0",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El protocol DNS utilitza exclusivament el port 53 sobre UDP per totes les seves comunicacions.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "Tot i que DNS usa UDP/53 habitualment, també utilitza TCP/53 per a transferències de zona o respostes grans."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "DNS pot operar tant amb UDP com amb TCP; limitar-se a UDP és incorrecte."
+      }
+    ],
+    "hint": "Quan la resposta DNS és molt gran o cal seguretat, s’utilitza TCP."
+  },
+  {
+    "guid": "f417cb3a-35c4-4a21-97f9-d45b1e7a42ee",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El protocol HTTPS utilitza SSL/TLS a la capa de xarxa per xifrar les comunicacions.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "HTTPS funciona sobre TCP i TLS, a la capa de transport, no a la capa de xarxa."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "TLS opera entre la capa de transport i aplicació, no a la capa de xarxa."
+      }
+    ],
+    "hint": "TLS està just a sobre de TCP, abans de l’aplicació."
+  },
+  {
+    "guid": "1f06b821-9044-4f44-b95a-08d7a8c28c1d",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Les adreces IPv6 utilitzen NAT per connectar-se a Internet de manera segura.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "IPv6 no necessita NAT perquè disposa d’un espai d’adreces pràcticament il·limitat; cada dispositiu pot tenir IP global."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "El NAT és característic d’IPv4, no d’IPv6."
+      }
+    ],
+    "hint": "IPv6 elimina el NAT, no el necessita."
+  },
+  {
+    "guid": "e1c4b118-5c5b-4a02-9330-bd8a2c7adcd2",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El protocol TCP és més ràpid que UDP perquè estableix connexions fiables.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "TCP és fiable però més lent que UDP, ja que necessita establir connexió i controlar errors."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "UDP és més ràpid perquè no verifica ni ordena paquets."
+      }
+    ],
+    "hint": "Fiabilitat i velocitat sovint són inversament proporcionals."
+  },
+  {
+    "guid": "9f22c4a3-897b-44e8-9a0e-dcf7a35e6c63",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El DNSSEC garanteix la confidencialitat i el xifrat de totes les consultes DNS.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "DNSSEC autentica la informació DNS però no la xifra; per xifrar cal utilitzar DoH o DoT."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "DNSSEC només assegura autenticitat i integritat."
+      }
+    ],
+    "hint": "Autenticitat ≠ Confidencialitat."
+  },
+  {
+    "guid": "0b4fa54e-3e41-4b94-b8a1-d4c4b8b787e7",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Els servidors DNS autoritatius sempre realitzen consultes recursives per trobar l’adreça IP d’un domini.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "Els servidors autoritatius només responen amb les dades que gestionen; les consultes recursives les fan els resolvers recursius."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "Només els resolvers recursius fan cerques completes; els autoritatius no."
+      }
+    ],
+    "hint": "Autoritatiu = sap la resposta. Recursiu = la busca."
+  },
+  {
+    "guid": "e32c07ff-cd64-4b6b-b0ff-3a34b90f3e80",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Les capes del model TCP/IP són cinc: aplicació, transport, xarxa, enllaç i física.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "El model TCP/IP té quatre capes: aplicació, transport, Internet i accés. La divisió en cinc pertany a OSI o a versions educatives, no estàndard."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "El model real i reconegut per l’IETF és de quatre capes."
+      }
+    ],
+    "hint": "A l’examen, sempre 4 capes."
+  },
+  {
+    "guid": "1b98dc1b-c3b5-4e0b-b623-47b0452dce41",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El protocol IP garanteix la correcta entrega dels paquets a l’ordre en què s’han enviat.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "IP és un protocol sense connexió i no garanteix ordre ni lliurament; això ho gestiona TCP."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "IP envia paquets de forma independent sense control d’ordre."
+      }
+    ],
+    "hint": "IP = lliurament millor esforç, no fiabilitat."
+  },
+  {
+    "guid": "2d283eb4-65e1-4b88-8c6f-85c98ceccf9a",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "El protocol DHCP opera a la capa de xarxa del model TCP/IP.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "DHCP és un protocol d’aplicació; utilitza UDP per funcionar, però no pertany a la capa de xarxa."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "Pertany a la capa d’aplicació, no a la de xarxa."
+      }
+    ],
+    "hint": "DHCP = capa d’aplicació, port 67/68 UDP."
+  },
+  {
+    "guid": "3fcb7c8e-fd91-4d80-9f46-02e07039cb33",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Totes les adreces IP que comencen per 172 són privades.",
+    "answerOptions": [
+      {
+        "text": "Cert",
+        "isCorrect": false,
+        "rationale": "Només el rang 172.16.0.0 fins 172.31.255.255 és privat; la resta són públiques."
+      },
+      {
+        "text": "Fals",
+        "isCorrect": true,
+        "rationale": "Només 172.16–172.31 és privat, no totes les 172.x."
+      }
+    ],
+    "hint": "Només 172.16–172.31 són privades."
+  },
+
+
+
+
+
+
+
+
+  
+  {
+    "guid": "f61c9e88-9e6c-48d1-9d7a-871dfb10a251",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol que s’utilitza per traduir noms de domini en adreces IP és ________.",
+    "answerOptions": [
+      {
+        "text": "DNS (Domain Name System)",
+        "isCorrect": true,
+        "rationale": "El DNS és el sistema encarregat de convertir noms de domini en adreces IP numèriques."
+      },
+      {
+        "text": "DHCP",
+        "isCorrect": false,
+        "rationale": "DHCP assigna IPs automàticament, però no tradueix noms de domini."
+      },
+      {
+        "text": "FTP",
+        "isCorrect": false,
+        "rationale": "FTP és per transferir fitxers, no per resoldre noms."
+      },
+      {
+        "text": "SMTP",
+        "isCorrect": false,
+        "rationale": "SMTP és per enviar correu electrònic, no per traduir noms."
+      }
+    ],
+    "hint": "Servei que evita haver de recordar números IP."
+  },
+  {
+    "guid": "8d8a8c93-19d1-42a9-b58c-98b5b4722207",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol que assigna automàticament una adreça IP a un dispositiu és ________.",
+    "answerOptions": [
+      {
+        "text": "DHCP (Dynamic Host Configuration Protocol)",
+        "isCorrect": true,
+        "rationale": "DHCP permet configurar automàticament IP, passarel·la i DNS als dispositius."
+      },
+      {
+        "text": "DNS",
+        "isCorrect": false,
+        "rationale": "DNS tradueix noms, no assigna IPs."
+      },
+      {
+        "text": "HTTP",
+        "isCorrect": false,
+        "rationale": "HTTP és per comunicació web, no per configuració IP."
+      },
+      {
+        "text": "ICMP",
+        "isCorrect": false,
+        "rationale": "ICMP és per diagnòstic de xarxa, no per configuració."
+      }
+    ],
+    "hint": "Aquest protocol dóna IPs dinàmiques automàticament."
+  },
+  {
+    "guid": "b51d7c73-d4f1-4a22-9ea2-158b48e4a841",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol utilitzat per transferir fitxers entre un client i un servidor és ________.",
+    "answerOptions": [
+      {
+        "text": "FTP (File Transfer Protocol)",
+        "isCorrect": true,
+        "rationale": "FTP s’utilitza per pujar o baixar fitxers entre dispositius a través d’una xarxa."
+      },
+      {
+        "text": "DNS",
+        "isCorrect": false,
+        "rationale": "DNS serveix per resoldre noms de domini, no per transferir fitxers."
+      },
+      {
+        "text": "SMTP",
+        "isCorrect": false,
+        "rationale": "SMTP és per enviar correu electrònic, no fitxers genèrics."
+      },
+      {
+        "text": "SNMP",
+        "isCorrect": false,
+        "rationale": "SNMP serveix per monitoritzar dispositius de xarxa."
+      }
+    ],
+    "hint": "És el protocol que permet pujar o baixar arxius d’un servidor."
+  },
+  {
+    "guid": "5e96f3f3-743f-465c-b109-1825589e27ee",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol que utilitza el port 80 per defecte és ________.",
+    "answerOptions": [
+      {
+        "text": "HTTP (HyperText Transfer Protocol)",
+        "isCorrect": true,
+        "rationale": "HTTP és el protocol utilitzat per transferir pàgines web i opera normalment al port 80."
+      },
+      {
+        "text": "HTTPS",
+        "isCorrect": false,
+        "rationale": "HTTPS utilitza el port 443."
+      },
+      {
+        "text": "FTP",
+        "isCorrect": false,
+        "rationale": "FTP usa el port 21."
+      },
+      {
+        "text": "DNS",
+        "isCorrect": false,
+        "rationale": "DNS usa el port 53."
+      }
+    ],
+    "hint": "Protocol web sense xifrat, port 80."
+  },
+  {
+    "guid": "f35e4791-231b-4c56-8ef3-f2326a512ae7",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol segur utilitzat per navegar per Internet amb xifrat és ________.",
+    "answerOptions": [
+      {
+        "text": "HTTPS (HTTP Secure)",
+        "isCorrect": true,
+        "rationale": "HTTPS és HTTP amb una capa de seguretat TLS/SSL que xifra la comunicació."
+      },
+      {
+        "text": "HTTP",
+        "isCorrect": false,
+        "rationale": "HTTP no proporciona xifrat ni autenticació."
+      },
+      {
+        "text": "SSH",
+        "isCorrect": false,
+        "rationale": "SSH és per accés remot segur, no per navegació web."
+      },
+      {
+        "text": "SFTP",
+        "isCorrect": false,
+        "rationale": "SFTP és per transferir fitxers xifrats, no pàgines web."
+      }
+    ],
+    "hint": "És com HTTP però amb una 'S' de segur."
+  },
+  {
+    "guid": "08c56fbc-4b5c-44a2-b1a4-4b21994a4f6f",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol que utilitza el port 25 per enviar correus electrònics és ________.",
+    "answerOptions": [
+      {
+        "text": "SMTP (Simple Mail Transfer Protocol)",
+        "isCorrect": true,
+        "rationale": "SMTP és el protocol utilitzat per enviar correus des d’un client a un servidor o entre servidors."
+      },
+      {
+        "text": "IMAP",
+        "isCorrect": false,
+        "rationale": "IMAP serveix per rebre i sincronitzar correus."
+      },
+      {
+        "text": "POP3",
+        "isCorrect": false,
+        "rationale": "POP3 és per descarregar correus locals, no per enviar-los."
+      },
+      {
+        "text": "DNS",
+        "isCorrect": false,
+        "rationale": "DNS no està relacionat amb correu electrònic."
+      }
+    ],
+    "hint": "És el protocol d’enviament, no de recepció."
+  },
+  {
+    "guid": "3e88ef09-7651-46f8-b0d1-5186bdb735e5",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol responsable d’encaminar paquets de dades entre xarxes és ________.",
+    "answerOptions": [
+      {
+        "text": "IP (Internet Protocol)",
+        "isCorrect": true,
+        "rationale": "IP gestiona l’encaminament i adreçament dels paquets a través de xarxes diferents."
+      },
+      {
+        "text": "TCP",
+        "isCorrect": false,
+        "rationale": "TCP és de transport, no d’encaminament."
+      },
+      {
+        "text": "UDP",
+        "isCorrect": false,
+        "rationale": "UDP és de transport sense connexió, no gestiona rutes."
+      },
+      {
+        "text": "ICMP",
+        "isCorrect": false,
+        "rationale": "ICMP només informa d’errors o estat de xarxa."
+      }
+    ],
+    "hint": "És el protocol que porta el seu nom a Internet."
+  },
+  {
+    "guid": "ae234f8e-8c47-47c2-9c83-524b87ab16e4",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "L’organisme europeu encarregat d’assignar adreces IP públiques és ________.",
+    "answerOptions": [
+      {
+        "text": "RIPE NCC",
+        "isCorrect": true,
+        "rationale": "RIPE NCC és el registre regional d’internet per a Europa, responsable de la gestió d’adreces IP."
+      },
+      {
+        "text": "ICANN",
+        "isCorrect": false,
+        "rationale": "ICANN coordina dominis i IPs globals, però no assigna directament adreces a Europa."
+      },
+      {
+        "text": "IANA",
+        "isCorrect": false,
+        "rationale": "IANA gestiona la distribució global a través dels registres regionals com RIPE."
+      },
+      {
+        "text": "IETF",
+        "isCorrect": false,
+        "rationale": "IETF defineix estàndards, no assigna IPs."
+      }
+    ],
+    "hint": "El seu nom comença per R i acaba en NCC."
+  },
+  {
+    "guid": "eae80cfb-7c38-46e7-8e17-2e476a4dd62a",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol de seguretat que garanteix autenticació i integritat al DNS és ________.",
+    "answerOptions": [
+      {
+        "text": "DNSSEC",
+        "isCorrect": true,
+        "rationale": "DNSSEC afegeix signatures digitals per assegurar que les respostes DNS no han estat manipulades."
+      },
+      {
+        "text": "DoH",
+        "isCorrect": false,
+        "rationale": "DoH xifra les consultes DNS, però no afegeix autenticació."
+      },
+      {
+        "text": "SSL",
+        "isCorrect": false,
+        "rationale": "SSL s’utilitza en HTTPS, no en DNS."
+      },
+      {
+        "text": "ICMP",
+        "isCorrect": false,
+        "rationale": "ICMP serveix per diagnòstic, no per autenticació."
+      }
+    ],
+    "hint": "Afegeix signatures digitals a les respostes DNS."
+  },
+
+
+
+
+
+
+
+
+
+  
+  {
+    "guid": "a1b7efc5-bfa7-4a9b-8ee3-9d8bba3c3d01",
+    "subjectId": "T62",
+    "level": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "Internet funciona gràcies al conjunt de protocols conegut com ________, format principalment per ________.",
+    "answerOptions": [
+      {
+        "text": "TCP/IP / Transmission Control Protocol i Internet Protocol",
+        "isCorrect": true,
+        "rationale": "El conjunt TCP/IP defineix les regles de comunicació a Internet."
+      },
+      {
+        "text": "HTTP/HTTPS / HyperText Transfer Protocol i Secure",
+        "isCorrect": false,
+        "rationale": "HTTP i HTTPS són protocols de la capa d’aplicació, no el conjunt bàsic d’Internet."
+      },
+      {
+        "text": "OSI / Open Systems Interconnection",
+        "isCorrect": false,
+        "rationale": "El model OSI és teòric i no és el conjunt real de protocols d’Internet."
+      },
+      {
+        "text": "DNS / Domain Name System",
+        "isCorrect": false,
+        "rationale": "DNS és un sol protocol, no una suite completa."
+      }
+    ],
+    "hint": "És la combinació base de dos protocols fonamentals."
+  },
+  {
+    "guid": "b8d79fd7-6eb4-4b26-99e7-61f23bc7a5ff",
+    "subjectId": "T62",
+    "level": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol ________ utilitza el port 80, mentre que la seva versió segura ________ usa el port 443.",
+    "answerOptions": [
+      {
+        "text": "HTTP / HTTPS",
+        "isCorrect": true,
+        "rationale": "HTTP opera al port 80 i HTTPS afegeix xifrat TLS al port 443."
+      },
+      {
+        "text": "FTP / SFTP",
+        "isCorrect": false,
+        "rationale": "FTP (21) i SFTP (22) són per transferir fitxers, no per pàgines web."
+      },
+      {
+        "text": "DNS / DNSSEC",
+        "isCorrect": false,
+        "rationale": "DNS usa el port 53, tant amb com sense DNSSEC."
+      },
+      {
+        "text": "SMTP / SMTPS",
+        "isCorrect": false,
+        "rationale": "SMTP utilitza el port 25, no el 80."
+      }
+    ],
+    "hint": "Es tracta dels protocols més comuns per navegar per Internet."
+  },
+  {
+    "guid": "cfc1c08c-128e-482a-9b57-7c9876f57da0",
+    "subjectId": "T62",
+    "level": 1,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol que permet transferir fitxers entre un client i un servidor és ________, i la seva versió segura és ________.",
+    "answerOptions": [
+      {
+        "text": "FTP / SFTP",
+        "isCorrect": true,
+        "rationale": "FTP és el protocol de transferència de fitxers; SFTP és la seva versió xifrada sobre SSH."
+      },
+      {
+        "text": "HTTP / HTTPS",
+        "isCorrect": false,
+        "rationale": "HTTP s'utilitza per contingut web, no per transferir fitxers."
+      },
+      {
+        "text": "SMTP / IMAP",
+        "isCorrect": false,
+        "rationale": "SMTP i IMAP són protocols de correu electrònic."
+      },
+      {
+        "text": "DNS / DHCP",
+        "isCorrect": false,
+        "rationale": "Aquests protocols gestionen noms i configuració de xarxa, no fitxers."
+      }
+    ],
+    "hint": "Serveix per pujar i baixar arxius entre ordinadors."
+  },
+  {
+    "guid": "de18cabc-9f9b-42ce-843b-3ee528f54e6f",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El model ________ és teòric i té 7 capes, mentre que el model ________ és pràctic i té 4 capes.",
+    "answerOptions": [
+      {
+        "text": "OSI / TCP/IP",
+        "isCorrect": true,
+        "rationale": "El model OSI és conceptual amb 7 capes; TCP/IP és el model real d'Internet amb 4 capes."
+      },
+      {
+        "text": "TCP/IP / OSI",
+        "isCorrect": false,
+        "rationale": "Estan intercanviats."
+      },
+      {
+        "text": "HTTP / DNS",
+        "isCorrect": false,
+        "rationale": "No són models, sinó protocols d’aplicació."
+      },
+      {
+        "text": "Ethernet / Wi-Fi",
+        "isCorrect": false,
+        "rationale": "Són tecnologies físiques, no models de capes."
+      }
+    ],
+    "hint": "Un és teòric (7 capes) i l’altre és el real (4 capes)."
+  },
+  {
+    "guid": "fa88a48c-fde7-4237-82a0-4ff5e55f9ed1",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol ________ és orientat a connexió i garanteix fiabilitat, mentre que ________ és sense connexió i més ràpid.",
+    "answerOptions": [
+      {
+        "text": "TCP / UDP",
+        "isCorrect": true,
+        "rationale": "TCP assegura l’ordre i el lliurament; UDP és més ràpid però sense control d’errors."
+      },
+      {
+        "text": "UDP / TCP",
+        "isCorrect": false,
+        "rationale": "Estan invertits."
+      },
+      {
+        "text": "IP / ICMP",
+        "isCorrect": false,
+        "rationale": "Aquests són protocols de xarxa, no de transport."
+      },
+      {
+        "text": "FTP / HTTP",
+        "isCorrect": false,
+        "rationale": "Protocols d’aplicació, no de transport."
+      }
+    ],
+    "hint": "Un prioritza la fiabilitat i l’altre la velocitat."
+  },
+  {
+    "guid": "9e91bc3b-1a7e-4922-88de-4d9a9877d6aa",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol ________ assigna automàticament IPs dins d’una xarxa, mentre que ________ converteix IPs privades en públiques.",
+    "answerOptions": [
+      {
+        "text": "DHCP / NAT",
+        "isCorrect": true,
+        "rationale": "DHCP dóna IPs; NAT tradueix IPs privades a públiques per sortir a Internet."
+      },
+      {
+        "text": "DNS / HTTP",
+        "isCorrect": false,
+        "rationale": "DNS resol noms; HTTP és per transferir dades web."
+      },
+      {
+        "text": "FTP / SSH",
+        "isCorrect": false,
+        "rationale": "FTP i SSH són protocols de transferència o accés, no de configuració IP."
+      },
+      {
+        "text": "IP / UDP",
+        "isCorrect": false,
+        "rationale": "Són protocols de comunicació, no de gestió d’adreces."
+      }
+    ],
+    "hint": "Un dona IPs i l’altre fa possible navegar amb IP pública."
+  },
+  {
+    "guid": "4e66a2a5-726d-45f9-92f3-60cb1955a2ef",
+    "subjectId": "T62",
+    "level": 2,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El servei que tradueix noms com www.bcn.cat en adreces IP és ________, i utilitza habitualment el port ________.",
+    "answerOptions": [
+      {
+        "text": "DNS / 53",
+        "isCorrect": true,
+        "rationale": "El protocol DNS usa el port 53, principalment sobre UDP."
+      },
+      {
+        "text": "DHCP / 67",
+        "isCorrect": false,
+        "rationale": "DHCP utilitza els ports 67-68 per assignar IPs."
+      },
+      {
+        "text": "HTTP / 80",
+        "isCorrect": false,
+        "rationale": "HTTP és per contingut web."
+      },
+      {
+        "text": "SMTP / 25",
+        "isCorrect": false,
+        "rationale": "SMTP és per correu electrònic."
+      }
+    ],
+    "hint": "Servei essencial per resoldre noms de domini."
+  },
+  {
+    "guid": "8b2ec76f-cbd0-4a15-b66e-3d73ac398c5e",
+    "subjectId": "T62",
+    "level": 3,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol ________ assegura la integritat i autenticitat de les respostes DNS, mentre que ________ encripta les consultes per privacitat.",
+    "answerOptions": [
+      {
+        "text": "DNSSEC / DoH (DNS over HTTPS)",
+        "isCorrect": true,
+        "rationale": "DNSSEC signa digitalment les respostes; DoH les xifra via HTTPS."
+      },
+      {
+        "text": "DoH / DNSSEC",
+        "isCorrect": false,
+        "rationale": "Estan invertits; cadascun té una funció diferent."
+      },
+      {
+        "text": "TLS / SSL",
+        "isCorrect": false,
+        "rationale": "TLS i SSL són protocols de seguretat per HTTPS, no per DNS."
+      },
+      {
+        "text": "ICMP / IPsec",
+        "isCorrect": false,
+        "rationale": "No tenen relació amb DNS."
+      }
+    ],
+    "hint": "Un signa digitalment, l’altre xifra el trànsit."
+  },
+  {
+    "guid": "b7d5a16c-99e1-41ce-81d7-9fddfa8d6a2a",
+    "subjectId": "T62",
+    "level": 3,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "L’organisme internacional que coordina dominis i adreces IP globals és ________, mentre que a Europa l’assignació IP la gestiona ________.",
+    "answerOptions": [
+      {
+        "text": "ICANN / RIPE NCC",
+        "isCorrect": true,
+        "rationale": "ICANN coordina la gestió global; RIPE NCC assigna a la regió europea."
+      },
+      {
+        "text": "IANA / ICANN",
+        "isCorrect": false,
+        "rationale": "IANA és un departament de l’ICANN, no el coordinador global."
+      },
+      {
+        "text": "IETF / APNIC",
+        "isCorrect": false,
+        "rationale": "IETF defineix estàndards, APNIC és per Àsia-Pacífic."
+      },
+      {
+        "text": "W3C / IANA",
+        "isCorrect": false,
+        "rationale": "W3C s’ocupa d’estàndards web, no d’adreces IP."
+      }
+    ],
+    "hint": "Pensa en qui gestiona els dominis globals i qui ho fa a Europa."
+  },
+  {
+    "guid": "af74e59a-d22e-4d0b-958f-48f6d41db3b8",
+    "subjectId": "T62",
+    "level": 3,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "En IPv6, les adreces de tipus ________ permeten la comunicació dins del mateix segment de xarxa i comencen pel prefix ________.",
+    "answerOptions": [
+      {
+        "text": "link-local / fe80::",
+        "isCorrect": true,
+        "rationale": "Les adreces link-local s’utilitzen en comunicacions locals i comencen per fe80::."
+      },
+      {
+        "text": "global unicast / 2001::",
+        "isCorrect": false,
+        "rationale": "Són adreces globals, no locals."
+      },
+      {
+        "text": "unique local / fc00::",
+        "isCorrect": false,
+        "rationale": "Són privades internes, però no limitades a un sol enllaç."
+      },
+      {
+        "text": "multicast / ff00::",
+        "isCorrect": false,
+        "rationale": "Les multicast s’utilitzen per enviar a múltiples destinataris."
+      }
+    ],
+    "hint": "Comencen per fe80 i no travessen routers."
+  },
+  {
+    "guid": "6b8d19f8-96c1-4d3a-b4d4-8ebcfa1276e9",
+    "subjectId": "T62",
+    "level": 4,
+    "origin": "Generat_OPOS24",
+    "type": "fill_gap",
+    "question": "El protocol ________ proporciona xifrat i autenticació a nivell IP i és utilitzat sovint per construir VPNs.",
+    "answerOptions": [
+      {
+        "text": "IPsec",
+        "isCorrect": true,
+        "rationale": "IPsec permet xifrar i autenticar paquets IP, essent la base de moltes VPNs."
+      },
+      {
+        "text": "TLS",
+        "isCorrect": false,
+        "rationale": "TLS funciona a la capa de transport, no a la d’Internet."
+      },
+      {
+        "text": "SSH",
+        "isCorrect": false,
+        "rationale": "SSH és per accés remot segur, no per xifrat de paquets IP."
+      },
+      {
+        "text": "SFTP",
+        "isCorrect": false,
+        "rationale": "SFTP és per transferir fitxers segurs sobre SSH."
+      }
+    ],
+    "hint": "S’utilitza sovint per túnels VPN segurs."
+  }
+]
+
