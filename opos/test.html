@@ -243,6 +243,8 @@
     function loadQuestions() {
       try {
         preguntes = JSON.parse(localStorage.getItem('oposTest_preguntes') || '[]');
+        // Reordenar aleatoriamente las preguntas
+        preguntes = preguntes.sort(() => Math.random() - 0.5);
         if (!preguntes.length) {
           document.getElementById('questionContainer').innerHTML = 
             '<div class="question-card"><div class="question-text">No hi ha preguntes carregades.</div></div>';
