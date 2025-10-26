@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Opos</title>
   <style>
+    .question-info {
+      font-size: 0.93rem;
+      color: #9fb0ff;
+      margin-bottom: 7px;
+    }
     body { font-family: system-ui, sans-serif; background: #0b1020; color: #e7ecff; margin: 0; padding: 10px; }
     .container { max-width: 800px; margin: 0 auto; }
     .header {
@@ -265,6 +270,9 @@
       
       let html = `
         <div class="question-card">
+          <div class="question-info">
+            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-D' + (pregunta.difficulty || '?')}
+          </div>
           <div class="question-text">${pregunta.pregunta || pregunta.question || 'Pregunta no disponible'}</div>
       `;
 
@@ -414,6 +422,9 @@
       
       let html = `
         <div class="question-card">
+          <div class="question-info">
+            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-D' + (pregunta.difficulty || '?')}
+          </div>
           <div class="question-text">${pregunta.pregunta || pregunta.question}</div>
       `;
 

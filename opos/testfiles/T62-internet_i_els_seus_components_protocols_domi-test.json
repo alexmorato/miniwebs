@@ -866,5 +866,231 @@
       }
     ],
     "hint": "Este componente actúa como un 'guardia de seguridad' en la frontera de una red."
+  },
+
+
+
+
+
+
+
+
+
+  {
+    "guid": "9a010c28-0932-4a31-b9c5-3cf8c4311af9",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quin protocol és responsable de traduir noms de domini en adreces IP?",
+    "answerOptions": [
+      {
+        "text": "DNS (Domain Name System)",
+        "isCorrect": true,
+        "rationale": "El DNS converteix noms de domini com www.bcn.cat en adreces IP numèriques que els ordinadors poden utilitzar per comunicar-se."
+      },
+      {
+        "text": "DHCP (Dynamic Host Configuration Protocol)",
+        "isCorrect": false,
+        "rationale": "DHCP assigna automàticament adreces IP, però no tradueix noms de domini."
+      },
+      {
+        "text": "FTP (File Transfer Protocol)",
+        "isCorrect": false,
+        "rationale": "FTP serveix per transferir fitxers, no per resolució de noms."
+      },
+      {
+        "text": "SMTP (Simple Mail Transfer Protocol)",
+        "isCorrect": false,
+        "rationale": "SMTP s’utilitza per enviar correu electrònic, no per resolució de noms."
+      }
+    ],
+    "hint": "Pensa en el servei que permet accedir a una web sense recordar la seva IP."
+  },
+  {
+    "guid": "5e8a93a9-1464-4b71-8c5c-935bf4a9d113",
+    "subjectId": "T62",
+    "difficulty": 1,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina d’aquestes adreces IP és privada?",
+    "answerOptions": [
+      {
+        "text": "192.168.10.25",
+        "isCorrect": true,
+        "rationale": "Les adreces 192.168.x.x formen part del rang reservat per a xarxes privades."
+      },
+      {
+        "text": "8.8.8.8",
+        "isCorrect": false,
+        "rationale": "És una IP pública de Google DNS."
+      },
+      {
+        "text": "212.15.224.3",
+        "isCorrect": false,
+        "rationale": "És un rang públic assignat a l’Ajuntament de Barcelona."
+      },
+      {
+        "text": "172.40.1.1",
+        "isCorrect": false,
+        "rationale": "El rang privat de 172.x va de 172.16.0.0 a 172.31.255.255; 172.40 no ho és."
+      }
+    ],
+    "hint": "Recorda els tres rangs privats: 10.x, 172.16–31.x, 192.168.x."
+  },
+  {
+    "guid": "dc4d3d40-0b6c-4f69-bd89-3a67a0e4cc19",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina afirmació sobre els protocols TCP i UDP és CORRECTA?",
+    "answerOptions": [
+      {
+        "text": "TCP és orientat a connexió i garanteix la fiabilitat; UDP és més ràpid però no garanteix lliurament.",
+        "isCorrect": true,
+        "rationale": "TCP assegura l’ordre i l’arribada dels paquets; UDP envia sense control per reduir la latència."
+      },
+      {
+        "text": "UDP és orientat a connexió i fiable; TCP no ho és.",
+        "isCorrect": false,
+        "rationale": "Aquesta descripció és l’inversa del funcionament real dels protocols."
+      },
+      {
+        "text": "Tant TCP com UDP utilitzen exactament el mateix port per defecte.",
+        "isCorrect": false,
+        "rationale": "Els ports depenen del servei; no hi ha un port comú per als dos protocols."
+      },
+      {
+        "text": "TCP s’utilitza només per comunicacions locals, i UDP només a Internet.",
+        "isCorrect": false,
+        "rationale": "Tots dos s’utilitzen tant localment com a Internet segons la necessitat."
+      }
+    ],
+    "hint": "Un és fiable, l’altre és ràpid. Recorda quin és quin."
+  },
+  {
+    "guid": "4b5056d5-f544-4c6b-a8a4-66c5c15347cb",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "A quin nivell del model TCP/IP opera el protocol IP?",
+    "answerOptions": [
+      {
+        "text": "Capa d’Internet",
+        "isCorrect": true,
+        "rationale": "El protocol IP gestiona l’adreçament i l’encaminament, funcions pròpies de la capa d’Internet del model TCP/IP."
+      },
+      {
+        "text": "Capa de transport",
+        "isCorrect": false,
+        "rationale": "La capa de transport inclou TCP i UDP, no IP."
+      },
+      {
+        "text": "Capa d’aplicació",
+        "isCorrect": false,
+        "rationale": "Els protocols d’aplicació són HTTP, FTP, DNS, etc."
+      },
+      {
+        "text": "Capa física",
+        "isCorrect": false,
+        "rationale": "Aquesta capa correspon a la transmissió de senyals elèctrics o òptics, no a IP."
+      }
+    ],
+    "hint": "IP s’encarrega d’encaminar els paquets entre xarxes diferents."
+  },
+  {
+    "guid": "8a4b5d92-ec3e-4e2f-b2a3-05fa97e5eb43",
+    "subjectId": "T62",
+    "difficulty": 2,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina de les següents afirmacions sobre DNSSEC és CORRECTA?",
+    "answerOptions": [
+      {
+        "text": "DNSSEC garanteix la integritat i autenticitat de les respostes DNS, però no la confidencialitat.",
+        "isCorrect": true,
+        "rationale": "DNSSEC afegeix signatures digitals a les respostes DNS per verificar-ne la validesa, però no xifra les dades."
+      },
+      {
+        "text": "DNSSEC xifra totes les consultes DNS per evitar que siguin interceptades.",
+        "isCorrect": false,
+        "rationale": "DNSSEC no xifra; per a xifratge s’utilitza DoH o DoT."
+      },
+      {
+        "text": "DNSSEC canvia el port predeterminat del DNS de 53 a 443.",
+        "isCorrect": false,
+        "rationale": "El DNS, amb o sense DNSSEC, continua utilitzant el port 53."
+      },
+      {
+        "text": "DNSSEC és un protocol substitut de DHCP.",
+        "isCorrect": false,
+        "rationale": "DNSSEC amplia DNS, no substitueix DHCP."
+      }
+    ],
+    "hint": "Pensa que DNSSEC autentica però no xifra."
+  },
+  {
+    "guid": "aa5a03df-4f2b-43f7-9a3f-fb46086a1ff8",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina és la funció principal de l’organisme RIPE NCC?",
+    "answerOptions": [
+      {
+        "text": "Assignar i gestionar adreces IP públiques i números d’autonomia per a Europa.",
+        "isCorrect": true,
+        "rationale": "RIPE NCC és el registre regional d’internet per a Europa i gestiona recursos IP per a la seva regió."
+      },
+      {
+        "text": "Establir els estàndards tècnics d’internet com els RFC.",
+        "isCorrect": false,
+        "rationale": "Aquesta és la funció de l’IETF, no de RIPE NCC."
+      },
+      {
+        "text": "Gestionar dominis de primer nivell com .com o .org.",
+        "isCorrect": false,
+        "rationale": "La gestió de dominis TLD és competència d’ICANN."
+      },
+      {
+        "text": "Assignar ports oficials a protocols TCP i UDP.",
+        "isCorrect": false,
+        "rationale": "Els ports oficials els defineix IANA."
+      }
+    ],
+    "hint": "Pensa en l’organisme europeu encarregat de les IP públiques."
+  },
+  {
+    "guid": "c9e93dd3-3b18-4c3e-89d7-476e6d509056",
+    "subjectId": "T62",
+    "difficulty": 3,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina és la diferència principal entre HTTP i HTTPS?",
+    "answerOptions": [
+      {
+        "text": "HTTPS utilitza una capa addicional de seguretat amb TLS per xifrar la comunicació.",
+        "isCorrect": true,
+        "rationale": "HTTPS és HTTP sobre TLS o SSL, proporcionant confidencialitat i autenticitat en la comunicació."
+      },
+      {
+        "text": "HTTPS utilitza UDP en lloc de TCP per millorar la velocitat.",
+        "isCorrect": false,
+        "rationale": "HTTPS continua utilitzant TCP com HTTP."
+      },
+      {
+        "text": "HTTP garanteix autenticació, mentre que HTTPS no.",
+        "isCorrect": false,
+        "rationale": "És a l’inrevés; HTTPS garanteix autenticació gràcies als certificats digitals."
+      },
+      {
+        "text": "HTTPS substitueix completament HTTP i ja no s’utilitza aquest últim.",
+        "isCorrect": false,
+        "rationale": "HTTP encara s’utilitza; HTTPS només l’amplia amb seguretat."
+      }
+    ],
+    "hint": "Pensa en la ‘S’ final d’HTTPS: significa ‘Secure’."
   }
 ]
