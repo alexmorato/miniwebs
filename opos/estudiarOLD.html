@@ -1,0 +1,367 @@
+llistarTestsDesDeManifests<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tests Oposicions</title>
+<style>
+	body {
+		font-family: system-ui, sans-serif;
+		background:#0b1020;
+		color:#e7ecff;
+		margin:0;
+		padding:20px;
+		line-height:1.5;
+	}
+
+	h1 {
+		text-align:center;
+		color:#6ae0a7;
+		margin-bottom:10px;
+	}
+
+	/* Els botons ara seran més grans i fàcils de tocar */
+	button {
+		border-radius:10px;
+		border:none;
+		cursor:pointer;
+		transition:all 0.2s ease;
+		font-size:1rem;
+	}
+
+	.option {
+		display:block;
+		width:100%;
+		text-align:left;
+		padding:14px 16px;
+		margin:8px 0;
+		background:#1b223a;
+		color:#e7ecff;
+		border:1px solid #2a3554;
+	}
+
+	.option.seleccionada {
+		background: #2a3554;
+		border: 2px solid #6ae0a7;
+		color: #ffffff;
+	}
+
+	.option:hover,
+	.option:active {
+		background:#24325a;
+		transform:scale(1.01);
+	}  
+
+	/* Botó SEGUENT més gran i centrat */
+	#seguentBtn {
+		width:100%;
+		background:linear-gradient(180deg,#2aebad,#21c08d);
+		color:#032217;
+		font-weight:bold;
+		font-size:1.1rem;
+		padding:12px;
+		border-radius:12px;
+		border:none;
+	}
+
+	/* Espaiat extra per a pantalles petites */
+	@media (max-width:600px) {
+		body { padding:12px; }
+		.question-box { padding:14px; }
+		.option { font-size:1.05rem; padding:16px; margin:10px 0; }
+		#seguentBtn { font-size:1.2rem; padding:14px; }
+	}
+
+	/* Feedback clar i llegible */
+	.ok { color:#6ae0a7; font-weight:bold; margin-top:8px; }
+	.ko { color:#ff6b6b; font-weight:bold; margin-top:8px; }
+
+	textarea {
+		width:100%;
+		min-height:150px;
+		background:#0f1526;
+		color:#e7ecff;
+		border-radius:10px;
+		margin-top:10px;
+		padding:10px;
+		font-family:monospace;
+		font-size:0.9rem;
+	}
+</style>
+</head>
+<body>
+	<h2 id="h2Opos">🧠 Tests Opos</h2>
+	<div><span id="testName" style="color: #83eded;"></span></div>
+
+	<div id="selectorArea">
+		<div class="muted">Carpetes: <span id="foldersList"></span></div>
+		<div style="margin:8px 0">
+			<label for="testSelect">Selecciona un test:</label>
+			<select id="testSelect"></select>
+			<button id="loadBtn">Carregar test</button>
+		</div>
+	</div>
+
+	<div id="quizArea" class="question-box" style="display:none;">
+		<div id="progress"></div>
+		<div id="nivell" style="margin-top: 10px;"></div>
+		<div id="pregunta" style="font-weight:bold;"></div>
+		<div id="opcions"></div>
+		<div id="feedback" style="margin-top:8px"></div>
+		<div id="botonsNavegacio" style="display:flex;gap:10px;margin-top:10px;">
+			<button id="seguentBtn" style="flex:1;display:none;">SEGUENT ➡️</button>
+			<button id="guardarDubteBtn" title="Guardar la pregunta a l'historial" style="display:none;padding:0 14px;font-size:1.2rem;">💾</button>
+		</div>
+		<span id="guardatMsg" style="color:#6ae0a7;font-size:13px;"></span>
+	</div>
+
+	<button id="copyHistBtn" style="margin-top:8px;">📋 Copiar historial</button>
+	<span id="copyMsg" style="margin-left:10px;color:#6ae0a7;font-size:13px;"></span>
+	<textarea id="historial" readonly></textarea>
+
+<script>
+	const testFolders = ["testjson"];
+	document.getElementById('foldersList').textContent = testFolders.join(", ");
+
+	const testSelect = document.getElementById("testSelect");
+	const loadBtn = document.getElementById("loadBtn");
+	const quizArea = document.getElementById("quizArea");
+	const nivellEl = document.getElementById("nivell");
+	const preguntaEl = document.getElementById("pregunta");
+	const opcionsEl = document.getElementById("opcions");
+	const feedbackEl = document.getElementById("feedback");
+	const historialEl = document.getElementById("historial");
+	const seguentBtn = document.getElementById("seguentBtn");
+	const guardarDubteBtn = document.getElementById("guardarDubteBtn");
+	const guardatMsg = document.getElementById("guardatMsg");
+	const progressEl = document.getElementById("progress");
+
+	let testData = [];
+	let currentIndex = 0;
+	let tipusTest = "truefalse";
+	let correctes = 0;
+	let respostes = 0;
+
+	async function llistarTestsDesDeManifests() {
+		testSelect.innerHTML = "";
+		for (const folder of testFolders) {
+			try {
+				const res = await fetch(`${folder}/manifest.json`);
+				if (!res.ok) continue;
+				const data = await res.json();
+				if (!data.files) continue;
+				const og = document.createElement("optgroup");
+				og.label = folder;
+				data.files.forEach(file=>{
+					const opt = document.createElement("option");
+					opt.value = `${folder}/${file}`;
+					opt.textContent = `${folder}/${file}`;
+					og.appendChild(opt);
+				});
+				testSelect.appendChild(og);
+			} catch(e) { console.warn("Error llegint manifest", e); }
+		}
+	}
+
+	llistarTestsDesDeManifests();
+
+	// 🧭 Comprova si hi ha paràmetre ?test= a la URL
+
+	window.addEventListener("DOMContentLoaded", async () => {
+		// 1. Comprova si hi ha test al localStorage
+		const localTest = localStorage.getItem("testfile_content");
+		if (localTest) {
+			try {
+				const data = JSON.parse(localTest);
+				testData = data;
+				tipusTest = Array.isArray(data) && data[0] && (data[0].hasOwnProperty("resposta_boolean") || data[0].hasOwnProperty("resposta_boolen")) ? "truefalse" : "test";
+				document.getElementById("selectorArea").style.display = "none";
+				document.getElementById("h2Opos").style.display = "none";
+				// Mostrar el nombre del test guardado
+				const testName = localStorage.getItem("testfile_name") || "(Test carregat localment)";
+				document.getElementById("testName").textContent = testName;
+				testData.sort(() => Math.random() - 0.5);
+				currentIndex = 0;
+				correctes = 0;
+				respostes = 0;
+				mostrarPregunta();
+				return;
+			} catch (e) {
+				// Si hay error, sigue con el flujo normal
+				console.warn("Error carregant test de localStorage", e);
+			}
+		}
+		// 2. Si no, mira si hi ha paràmetre ?test= a la URL
+		const params = new URLSearchParams(window.location.search);
+		const testParam = params.get("test");
+		if (testParam) {
+			carregaTest(testParam);
+		}
+	});
+
+	loadBtn.addEventListener("click", async ()=>{
+		const path = testSelect.value;
+		carregaTest(path);
+	});
+
+	function carregaTest(path) {
+		tipusTest = path.includes("truefalse") ? "truefalse" : "test";
+		return fetch(path)
+			.then(res => {
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				return res.json();
+			})
+			.then(data => {
+				testData = data;
+				//elimina l'àrea de selecció de test i botó de carrega del test
+				document.getElementById("selectorArea").style.display = "none";
+				document.getElementById("h2Opos").style.display = "none";
+				document.getElementById("testName").textContent = `${path}`;
+				// 🔀 Barregem l'ordre de les preguntes aleatòriament
+				testData.sort(() => Math.random() - 0.5);
+
+				currentIndex = 0;
+				correctes = 0;
+				respostes = 0;
+				mostrarPregunta();
+			})
+			.catch(e => {
+				alert("No s'ha pogut carregar el test: " + e.message);
+			});
+	}
+
+	function mostrarPregunta() {
+		if (currentIndex >= testData.length) {
+			quizArea.style.display = "none";
+			const nota = ((correctes / respostes) * 100).toFixed(1);
+			alert(`Has completat el test! ✅\nPuntuació final: ${correctes}/${respostes} (${nota}%)`);
+			return;
+		}
+		quizArea.style.display = "block";
+		seguentBtn.style.display = "none";
+		guardarDubteBtn.style.display = "none";
+		guardatMsg.textContent = "";
+		const q = testData[currentIndex];
+		nivellEl.textContent = q.nivell || "";
+		preguntaEl.textContent = q.pregunta || "";
+		feedbackEl.textContent = "";
+		opcionsEl.innerHTML = "";
+		actualitzarProgres();
+
+		if (tipusTest === "test") {
+			const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+			opcions.sort(()=>Math.random()-0.5);
+			opcions.forEach(opt=>{
+				const btn = document.createElement("button");
+				btn.className = "option";
+				btn.textContent = opt;
+				btn.onclick = ()=>comprovarResposta(opt, q.resposta_correcta, q);
+				opcionsEl.appendChild(btn);
+			});
+		} else {
+			["✅ Cert","❌ Fals"].forEach(val=>{
+				const btn = document.createElement("button");
+				btn.className = "option";
+				btn.textContent = val;
+				const expected = (q.resposta_boolean === true || q.resposta_boolean === "true");
+				const userVal = (val === "✅ Cert");
+				btn.onclick = ()=>comprovarResposta(userVal, expected, q);
+				opcionsEl.appendChild(btn);
+			});
+		}
+	}
+
+	function comprovarResposta(userAnswer, correctAnswer, q) {
+		feedbackEl.innerHTML = "";
+		const correcte = (userAnswer === correctAnswer);
+		respostes++;
+
+		// Elimina qualsevol selecció prèvia
+		Array.from(opcionsEl.querySelectorAll(".option")).forEach(b => {
+			b.disabled = true;
+			b.classList.remove("seleccionada");
+		});
+
+		// Marca la resposta que ha triat l'usuari
+		const botoSeleccionat = Array.from(opcionsEl.querySelectorAll(".option"))
+			.find(b => b.textContent.trim() === (typeof userAnswer === "boolean" ? (userAnswer ? "Cert" : "Fals") : userAnswer));
+		if (botoSeleccionat) botoSeleccionat.classList.add("seleccionada");
+
+		if (correcte) {
+			correctes++;
+			feedbackEl.innerHTML = `<div class='ok'>😊 Correcte!</div><div>${q.context || ""}</div>`;
+		} else {
+			feedbackEl.innerHTML = `<div class='ko'>😡 Incorrecte</div><div>${q.context || ""}</div>`;
+			guardarError(q, userAnswer);
+		}
+
+		actualitzarProgres();
+		// Desactiva opcions i mostra botons
+		Array.from(opcionsEl.querySelectorAll("button")).forEach(b => b.disabled = true);
+		seguentBtn.style.display = "inline-block";
+		guardarDubteBtn.style.display = "inline-block";
+	}
+
+
+	seguentBtn.addEventListener("click", ()=>{
+		currentIndex++;
+		mostrarPregunta();
+	});
+
+	function actualitzarProgres() {
+		const total = testData.length;
+		const percent = respostes ? ((correctes / respostes) * 100).toFixed(1) : 0;
+		progressEl.textContent = `Pregunta ${currentIndex + 1} de ${total} — ${percent}% encerts`;
+	}
+
+	function guardarError(q, userAnswer) {
+		let txt = `Nivell: ${q.nivell}\nPregunta: ${q.pregunta}\n`;
+		if (tipusTest === "test") {
+			const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+			txt += `Respostes: ${opcions.join(" | ")}\n`;
+			txt += `Correcte: ${q.resposta_correcta}\nSeleccionada: ${userAnswer}\n`;
+		} else {
+			txt += `Correcte: ${q.resposta_boolean}\nSeleccionada: ${userAnswer}\n`;
+		}
+		txt += `Context: ${q.context || ""}\n---\n`;
+		historialEl.value = txt + historialEl.value;
+	}
+
+	// 🧩 Botó per copiar l’historial al portapapers
+	const copyHistBtn = document.getElementById("copyHistBtn");
+	const copyMsg = document.getElementById("copyMsg");
+
+	copyHistBtn.addEventListener("click", async ()=>{
+		try {
+			await navigator.clipboard.writeText(historialEl.value);
+			copyMsg.textContent = "✅ Copiat!";
+			setTimeout(()=>copyMsg.textContent="",2000);
+		} catch (err) {
+			copyMsg.textContent = "❌ No s'ha pogut copiar";
+		}
+	});
+
+	// 💾 Botó per guardar pregunta a l'historial encara que sigui correcta
+	guardarDubteBtn.addEventListener("click", ()=>{
+		const q = testData[currentIndex];
+		if (!q) return;
+		let txt = `📘 [Dubte manual]\nNivell: ${q.nivell}\nPregunta: ${q.pregunta}\n`;
+
+		if (tipusTest === "test") {
+			const opcions = [q.resposta_correcta, ...(q.respostes_incorrectes || []).slice(0,3)];
+			txt += `Respostes: ${opcions.join(" | ")}\n`;
+			txt += `Correcte: ${q.resposta_correcta}\n`;
+		} else {
+			txt += `Correcte: ${q.resposta_boolen}\n`;
+		}
+		txt += `Context: ${q.context || ""}\n---\n`;
+
+		// Afegim al principi de l'historial
+		historialEl.value = txt + historialEl.value;
+		guardatMsg.textContent = "💾 Guardada a l’historial!";
+		setTimeout(()=> guardatMsg.textContent = "", 2000);
+	});
+
+</script>
+</body>
+</html>
