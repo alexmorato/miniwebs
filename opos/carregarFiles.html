@@ -230,14 +230,14 @@
             if (filesLoaded === fitxers.length) {
               // Guardar preguntas concatenadas y navegar
               localStorage.setItem('oposTest_preguntes', JSON.stringify(preguntesTot));
-              window.location.href = 'test.html';
+              window.location.href = 'estudiar.html';
             }
           })
           .catch(() => {
             filesLoaded++;
             if (filesLoaded === fitxers.length) {
               localStorage.setItem('oposTest_preguntes', JSON.stringify(preguntesTot));
-              window.location.href = 'test.html';
+              window.location.href = 'estudiar.html';
             }
           });
       });
