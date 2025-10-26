@@ -5,14 +5,14 @@
 		"img" : "https://screens.cdn.wordwall.net/200/17a352145f0f4d15b3f700fa6d9c2faa_43"
 	},
 	{
-		"titulo": "El futuro perfecto en español",
-		"iframe_src": "https://wordwall.net/ca/embed/17a352145f0f4d15b3f700fa6d9c2faa?themeId=43&templateId=5&fontStackId=0",
-		"img" : "https://screens.cdn.wordwall.net/200/17a352145f0f4d15b3f700fa6d9c2faa_43"
-	},
-	{
-		"titulo": "Mates multiplicaciones",
+		"titulo": "Mates multiplicaciones - Tren y Globos",
 		"iframe_src": "https://wordwall.net/ca/embed/a91f89428e0140c9992dea6bbadf9e49?themeId=22&templateId=71&fontStackId=0",
 		"img" : "https://screens.cdn.wordwall.net/200/a91f89428e0140c9992dea6bbadf9e49_0"
+	},
+	{
+		"titulo": "Mates multiplicaciones - Ranking",
+		"img" : "https://screens.cdn.wordwall.net/200/a91f89428e0140c9992dea6bbadf9e49_0",
+		"iframe_src": "https://wordwall.net/embed/a91f89428e0140c9992dea6bbadf9e49?themeId=1&templateId=3&fontStackId=0"
 	},
 	{
 		"titulo": "Repaso tablas de multiplicar",
