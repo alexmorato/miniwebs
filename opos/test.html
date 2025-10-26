@@ -37,7 +37,7 @@
       border: 1.5px solid #27304a;
       border-radius: 12px;
       padding: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .question-number {
@@ -118,7 +118,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 30px;
+      margin-top: 10px;
     }
     .nav-btn {
       background: linear-gradient(180deg, #2aebad, #21c08d);
@@ -202,6 +202,27 @@
       font-weight: bold;
       margin-bottom: 10px;
     }
+    .hint-area {
+      background: #232b45;
+      color: #9fb0ff;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 0 0 18px 0;
+      text-align: center;
+      font-size: 1.05rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s, color 0.2s;
+      border: 1.5px solid #27304a;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hint-area.mostrando {
+      background: #0f1525;
+      color: #e7ecff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -212,9 +233,12 @@
       <div class="progress-fill" id="progressFill"></div>
     </div>
 
-    <div id="questionContainer"></div>
 
-    <div class="navigation">
+  <div id="questionContainer"></div>
+
+  <div id="hintArea" class="hint-area" onclick="mostrarHint()">pista</div>
+
+  <div class="navigation">
       <button class="nav-btn secondary" id="prevBtn" onclick="previousQuestion()">← Anterior</button>
       <span id="questionCounter"></span>
       <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">Següent →</button>
@@ -233,6 +257,22 @@
   </div>
 
   <script>
+    // Mostrar y ocultar hint
+    function mostrarHint() {
+      const hintDiv = document.getElementById('hintArea');
+      if (!hintDiv.classList.contains('mostrando')) {
+        const pregunta = preguntes[currentQuestion];
+        const hint = pregunta && (pregunta.hint || pregunta.pista || pregunta.clue);
+        hintDiv.textContent = hint ? hint : '(No hi ha pista per aquesta pregunta)';
+        hintDiv.classList.add('mostrando');
+      }
+    }
+
+    function ocultarHint() {
+      const hintDiv = document.getElementById('hintArea');
+      hintDiv.textContent = 'pista';
+      hintDiv.classList.remove('mostrando');
+    }
     // --- Mapeo de dificultad ---
     let difficultyMap = {};
     fetch('assets/difficulty.json')
@@ -281,6 +321,8 @@
       
       const pregunta = preguntes[index];
       const container = document.getElementById('questionContainer');
+
+  ocultarHint();
       
       let html = `
         <div class="question-card">
@@ -432,6 +474,8 @@
     function showQuestionWithAnswers(index) {
       const pregunta = preguntes[index];
       const container = document.getElementById('questionContainer');
+
+  ocultarHint();
       const userAnswer = answers[index];
       
       let html = `
