@@ -13,7 +13,7 @@
     h1 { color: #333; }
     textarea {
       width: 100%;
-      height: 200px;
+      height: 120px;
       padding: 10px;
       font-family: monospace;
       border: 1px solid #ccc;
@@ -55,6 +55,11 @@
   <div style="margin-bottom:18px;">
     <label for="temaSelect"><b>Tema:</b></label>
     <select id="temaSelect" style="min-width:220px;"></select>
+  </div>
+  <div style="margin-bottom:1px;">
+    <label>
+      <input type="checkbox" id="flashcardsCheckbox"> Flashcards
+    </label>
   </div>
   <p>Pega aquí el texto crudo del response (con <code>\\n</code>, <code>\\u0026quot;</code>, etc.):</p>
   <textarea id="input"></textarea>
@@ -222,8 +227,24 @@
     document.getElementById("convertBtn").addEventListener("click", () => {
       try {
         const jsonData = unescapeAndParse(input.value);
-        // Si tiene quiz, transformar a formato simplificado
-        if (jsonData && Array.isArray(jsonData.quiz)) {
+        const isFlashcards = document.getElementById('flashcardsCheckbox').checked;
+        
+        if (isFlashcards && jsonData && Array.isArray(jsonData.flashcards)) {
+          // Formato flashcards
+          const temaSel = document.getElementById('temaSelect');
+          const tema = temaSel ? temaSel.value : '';
+          const result = {
+            subjectId: tema,
+            origin: 'notebooklm',
+            flashcards: jsonData.flashcards.map(card => ({
+              f: card.f,
+              b: card.b
+            }))
+          };
+          output.textContent = JSON.stringify(result, null, 2);
+          status.textContent = `✅ ${result.flashcards.length} flashcards convertidas.`;
+        } else if (!isFlashcards && jsonData && Array.isArray(jsonData.quiz)) {
+          // Formato quiz original
           const temaSel = document.getElementById('temaSelect');
           const tema = temaSel ? temaSel.value : '';
           const result = jsonData.quiz.map(q => ({
