@@ -1,0 +1,374 @@
+[
+  {
+    "guid": "b67d835d-a4a9-4dca-be3a-670741ddeeec",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Cuál es el propósito principal del componente '2' en la regla de backup 3-2-1?",
+    "answerOptions": [
+      {
+        "text": "Realizar dos copias completas de los datos.",
+        "isCorrect": false,
+        "rationale": "La regla se refiere a un total de tres copias (la original más dos backups), pero el número '2' no especifica el tipo de copia."
+      },
+      {
+        "text": "Almacenar las copias en dos ubicaciones físicas diferentes.",
+        "isCorrect": false,
+        "rationale": "La ubicación física diferente corresponde al componente '1' (offsite) de la regla, no al '2'."
+      },
+      {
+        "text": "Guardar las copias en dos tipos de soportes de almacenamiento diferentes.",
+        "isCorrect": true,
+        "rationale": "El '2' se refiere a la diversificación de los medios (ej. disco y cinta, o disco y nube) para mitigar el riesgo de que un fallo afecte a ambos soportes."
+      },
+      {
+        "text": "Tener un tiempo máximo de recuperación (RTO) de dos horas.",
+        "isCorrect": false,
+        "rationale": "El RTO es una métrica de tiempo de recuperación y no forma parte de la definición numérica de la regla 3-2-1."
+      }
+    ],
+    "hint": "Piensa en cómo se reduce el riesgo si un tipo de tecnología de almacenamiento falla."
+  },
+  {
+    "guid": "df058115-9650-4eb6-b4d0-53a1c9d41e47",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Una organización determina que no puede permitirse perder más de 4 horas de trabajo. ¿Qué métrica de plan de recuperación se está definiendo?",
+    "answerOptions": [
+      {
+        "text": "RTO (Recovery Time Objective)",
+        "isCorrect": false,
+        "rationale": "El RTO define el tiempo máximo aceptable para restaurar un servicio, no la cantidad de datos que se pueden perder."
+      },
+      {
+        "text": "RPO (Recovery Point Objective)",
+        "isCorrect": true,
+        "rationale": "El RPO establece el punto en el tiempo máximo al que se debe poder volver, definiendo así la cantidad máxima de datos que se pueden perder (en este caso, 4 horas de datos)."
+      },
+      {
+        "text": "DRP (Disaster Recovery Plan)",
+        "isCorrect": false,
+        "rationale": "El DRP es el plan completo de recuperación ante desastres, del cual el RPO y el RTO son métricas clave, pero no es la métrica en sí misma."
+      },
+      {
+        "text": "BCP (Business Continuity Plan)",
+        "isCorrect": false,
+        "rationale": "El BCP es un plan más amplio que el DRP y se enfoca en mantener las operaciones del negocio, no en una métrica específica de pérdida de datos."
+      }
+    ],
+    "hint": "Esta métrica se centra en la cantidad de información perdida, no en el tiempo que se tarda en volver a estar operativo."
+  },
+  {
+    "guid": "8a2ae54b-43a8-4b0b-bb2a-9c55b0470b89",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué tipo de copia de seguridad guarda únicamente los datos que han cambiado desde la última copia de seguridad completa (full backup)?",
+    "answerOptions": [
+      {
+        "text": "Incremental",
+        "isCorrect": false,
+        "rationale": "La copia incremental guarda los cambios desde el último backup de cualquier tipo (completo o incremental), no solo desde el último completo."
+      },
+      {
+        "text": "Completa (Full)",
+        "isCorrect": false,
+        "rationale": "Una copia completa guarda todos los datos seleccionados, independientemente de cuándo cambiaron por última vez."
+      },
+      {
+        "text": "Diferencial",
+        "isCorrect": true,
+        "rationale": "La copia diferencial acumula todos los cambios ocurridos desde el último backup completo, lo que la diferencia de la incremental."
+      },
+      {
+        "text": "Sintética",
+        "isCorrect": false,
+        "rationale": "Una copia sintética es un proceso que consolida un backup completo y sus incrementales para crear un nuevo completo virtual, no es un tipo de copia de cambios en sí mismo."
+      }
+    ],
+    "hint": "Para restaurar, este método solo requiere la última copia completa y esta última copia de cambios."
+  },
+  {
+    "guid": "a3a3e5d3-5f91-4c6d-aa37-c647297f09fe",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "En el contexto de la protección contra ransomware, ¿qué característica define a una copia 'air-gapped'?",
+    "answerOptions": [
+      {
+        "text": "Está cifrada con un algoritmo AES-256.",
+        "isCorrect": false,
+        "rationale": "El cifrado protege la confidencialidad de los datos, pero no impide que el archivo de backup sea eliminado o cifrado de nuevo si está en línea."
+      },
+      {
+        "text": "Está almacenada en un proveedor de nube con alta disponibilidad.",
+        "isCorrect": false,
+        "rationale": "Una copia en la nube puede estar permanentemente conectada a la red, lo que no la convierte necesariamente en 'air-gapped'."
+      },
+      {
+        "text": "Está física o lógicamente desconectada de la red.",
+        "isCorrect": true,
+        "rationale": "El concepto 'air gap' (brecha de aire) se refiere a un aislamiento total de cualquier red, impidiendo que el ransomware pueda acceder a ella y afectarla."
+      },
+      {
+        "text": "No puede ser modificada ni borrada durante un período de tiempo.",
+        "isCorrect": false,
+        "rationale": "Esta es la definición de una copia inmutable (WORM), que es otra técnica de protección, pero no es lo mismo que 'air-gapped'."
+      }
+    ],
+    "hint": "El nombre de esta técnica sugiere una separación física o una 'brecha de aire'."
+  },
+  {
+    "guid": "718c5720-adb9-4ade-9ffe-f54844caf7c4",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "El modelo de backup 3-2-1-1-0 es una evolución del 3-2-1. ¿Qué añade el primer '1' de los dos números finales?",
+    "answerOptions": [
+      {
+        "text": "Una copia almacenada durante 1 año como mínimo.",
+        "isCorrect": false,
+        "rationale": "El tiempo de retención es parte de la política de backup, pero no es lo que define este componente del modelo."
+      },
+      {
+        "text": "Una copia inmutable o 'air-gapped'.",
+        "isCorrect": true,
+        "rationale": "Este '1' adicional representa la necesidad crítica de tener una copia que sea invulnerable a modificaciones o eliminaciones, clave contra el ransomware."
+      },
+      {
+        "text": "Una sola persona con permisos de restauración.",
+        "isCorrect": false,
+        "rationale": "Aunque el control de acceso es fundamental, este '1' no se refiere al número de administradores."
+      },
+      {
+        "text": "Una prueba de restauración al mes.",
+        "isCorrect": false,
+        "rationale": "La frecuencia de las pruebas es parte de la política, pero no es lo que este '1' representa en la nomenclatura del modelo."
+      }
+    ],
+    "hint": "Este requisito está específicamente diseñado para ser la última línea de defensa contra ataques destructivos como el ransomware."
+  },
+  {
+    "guid": "a1a77889-be50-4ccf-a1d7-ea97a0b88df7",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Según el material, ¿cuál es un error habitual en la gestión de copias de seguridad que puede dar una falsa sensación de seguridad?",
+    "answerOptions": [
+      {
+        "text": "Utilizar soportes de cinta LTO para el almacenamiento a largo plazo.",
+        "isCorrect": false,
+        "rationale": "El uso de cintas LTO para almacenamiento offsite y a largo plazo es, de hecho, una buena práctica recomendada."
+      },
+      {
+        "text": "Cifrar las copias de seguridad tanto en tránsito como en reposo.",
+        "isCorrect": false,
+        "rationale": "El cifrado de las copias es una medida de seguridad esencial para proteger la confidencialidad, no un error."
+      },
+      {
+        "text": "Realizar copias de seguridad con demasiada frecuencia.",
+        "isCorrect": false,
+        "rationale": "Aunque una frecuencia excesiva puede consumir recursos, el error más grave es el opuesto o la falta de validación."
+      },
+      {
+        "text": "No probar periódicamente la restauración de las copias.",
+        "isCorrect": true,
+        "rationale": "El material destaca que sin pruebas de restauración, una copia de seguridad puede ser inútil en el momento de una emergencia, convirtiéndose en un error crítico y común."
+      }
+    ],
+    "hint": "Una copia de seguridad solo es útil si se puede recuperar con éxito."
+  },
+  {
+    "guid": "ba40b2b6-2f39-4371-8ebd-431815dff87a",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué normativa europea exige explícitamente la capacidad de restaurar la disponibilidad y el acceso a los datos personales en caso de un incidente?",
+    "answerOptions": [
+      {
+        "text": "Esquema Nacional de Seguridad (ENS)",
+        "isCorrect": false,
+        "rationale": "El ENS es una normativa española que exige disponibilidad e integridad, pero la referencia explícita a la restauración de datos personales es el punto clave de otra norma."
+      },
+      {
+        "text": "RGPD (Reglamento General de Protección de Datos)",
+        "isCorrect": true,
+        "rationale": "El artículo 32 del RGPD establece la obligación de implementar medidas técnicas y organizativas para garantizar la capacidad de restaurar los datos personales de forma rápida."
+      },
+      {
+        "text": "Norma ISO 27001",
+        "isCorrect": false,
+        "rationale": "La ISO 27001 es un estándar internacional de gestión de la seguridad de la información y una buena práctica, pero no es una ley europea con esta exigencia específica."
+      },
+      {
+        "text": "Informe ENISA Threat Landscape",
+        "isCorrect": false,
+        "rationale": "El informe de ENISA analiza amenazas y recomienda buenas prácticas, como el modelo 3-2-1, pero no es una normativa con poder legal."
+      }
+    ],
+    "hint": "Esta regulación se centra en la protección de los datos de los ciudadanos de la UE."
+  },
+  {
+    "guid": "2507ca0a-7cf8-484a-b2fe-5329acf11aaf",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Al comparar backup y replicación, ¿cuál es la diferencia fundamental en su objetivo?",
+    "answerOptions": [
+      {
+        "text": "El backup se ejecuta en tiempo real y la replicación es periódica.",
+        "isCorrect": false,
+        "rationale": "Esta afirmación es incorrecta; es al revés. La replicación es continua o casi en tiempo real, mientras que el backup es periódico."
+      },
+      {
+        "text": "El backup guarda datos históricos y la replicación mantiene sistemas redundantes actualizados.",
+        "isCorrect": true,
+        "rationale": "Esta es la distinción clave: el backup permite volver a un punto anterior en el tiempo, mientras que la replicación mantiene una copia idéntica y actual para la conmutación por error."
+      },
+      {
+        "text": "La replicación protege contra el ransomware y el backup no.",
+        "isCorrect": false,
+        "rationale": "La replicación puede propagar instantáneamente el cifrado del ransomware, mientras que un backup histórico (y offline) es la defensa principal."
+      },
+      {
+        "text": "El backup se usa para el RTO y la replicación para el RPO.",
+        "isCorrect": false,
+        "rationale": "Ambos conceptos se aplican a las dos tecnologías, aunque la replicación suele ofrecer un RPO y RTO mucho más bajos."
+      }
+    ],
+    "hint": "Piensa en si necesitas recuperar un archivo borrado hace una semana o si necesitas que un servicio siga funcionando tras la caída de un servidor."
+  },
+  {
+    "guid": "fc5667d6-0cae-4ae1-8221-a0e3e60db105",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Creer que un sistema RAID sustituye la necesidad de hacer backups es un error común. ¿Por qué el RAID no es un backup?",
+    "answerOptions": [
+      {
+        "text": "Porque el RAID solo funciona con discos duros magnéticos y no con SSD.",
+        "isCorrect": false,
+        "rationale": "El RAID funciona tanto con discos duros tradicionales (HDD) como con unidades de estado sólido (SSD)."
+      },
+      {
+        "text": "Porque el RAID es una tecnología más antigua y menos fiable que el backup en la nube.",
+        "isCorrect": false,
+        "rationale": "El RAID sigue siendo una tecnología fundamental y fiable para la alta disponibilidad; su propósito es diferente, no inferior."
+      },
+      {
+        "text": "Porque el RAID no es compatible con los sistemas operativos de servidor modernos.",
+        "isCorrect": false,
+        "rationale": "El RAID es totalmente compatible y está integrado en todos los sistemas operativos de servidor modernos."
+      },
+      {
+        "text": "Porque el RAID protege contra fallos de disco, pero no contra borrados, corrupción o ransomware.",
+        "isCorrect": true,
+        "rationale": "El RAID proporciona tolerancia a fallos de hardware. Si un archivo se borra o es cifrado por ransomware, el RAID replicará ese cambio en todos los discos, no permitiendo recuperar una versión anterior."
+      }
+    ],
+    "hint": "Considera qué sucede si eliminas accidentalmente un archivo importante en un sistema con RAID."
+  },
+  {
+    "guid": "d450ed69-9901-4ed8-ba7e-4d0d9f409f18",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Para restaurar los datos de un backup diferencial realizado el jueves, ¿qué se necesita?",
+    "answerOptions": [
+      {
+        "text": "Solo la copia diferencial del jueves.",
+        "isCorrect": false,
+        "rationale": "La copia diferencial solo contiene los cambios desde el último completo, por lo que por sí sola es insuficiente."
+      },
+      {
+        "text": "El último backup completo y todas las copias incrementales hasta el jueves.",
+        "isCorrect": false,
+        "rationale": "Esta cadena de dependencias es característica de la restauración de un backup incremental, no de uno diferencial."
+      },
+      {
+        "text": "El último backup completo y la copia diferencial del jueves.",
+        "isCorrect": true,
+        "rationale": "La restauración diferencial es más rápida que la incremental porque solo necesita dos elementos: el último backup completo y el fichero diferencial más reciente."
+      },
+      {
+        "text": "El último backup completo y las copias diferenciales del lunes, martes, miércoles y jueves.",
+        "isCorrect": false,
+        "rationale": "A diferencia del incremental, no es necesario aplicar cada copia diaria; la del jueves ya contiene todos los cambios desde el último completo."
+      }
+    ],
+    "hint": "Este tipo de backup siempre toma como referencia el mismo punto de partida para copiar los cambios."
+  },
+  {
+    "guid": "33a80a11-1221-4b97-8839-ed674f0d00c7",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Según las recomendaciones de ENISA para mitigar el ransomware, ¿qué medida es fundamental además de tener una estrategia 3-2-1?",
+    "answerOptions": [
+      {
+        "text": "Contratar un seguro contra ciberataques.",
+        "isCorrect": false,
+        "rationale": "Aunque es una medida financiera complementaria, las recomendaciones de ENISA se centran en las buenas prácticas técnicas y organizativas."
+      },
+      {
+        "text": "Asegurar que las copias estén cifradas y desconectadas (offline) o sean inmutables.",
+        "isCorrect": true,
+        "rationale": "ENISA enfatiza que no basta con tener copias; estas deben estar protegidas del propio ataque, lo que se logra con el aislamiento o la inmutabilidad."
+      },
+      {
+        "text": "Utilizar únicamente software de backup de código abierto.",
+        "isCorrect": false,
+        "rationale": "ENISA no recomienda un tipo de software sobre otro (comercial vs. open source), sino la aplicación de buenas prácticas independientemente de la herramienta."
+      },
+      {
+        "text": "Realizar backups completos cada hora para minimizar la pérdida de datos.",
+        "isCorrect": false,
+        "rationale": "Una frecuencia tan alta de backups completos es generalmente inviable y no es una recomendación específica de ENISA, que se centra más en la seguridad de las copias."
+      }
+    ],
+    "hint": "La clave es proteger las propias copias de seguridad para que no puedan ser el objetivo del ataque."
+  },
+  {
+    "guid": "e2b86de3-a35f-4d43-892e-8a705a0cacbc",
+    "subjectId": "T08",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Un bucket de almacenamiento en la nube está configurado con una política de retención que impide el borrado o la modificación de cualquier objeto durante 30 días. ¿Qué tecnología de protección se está aplicando?",
+    "answerOptions": [
+      {
+        "text": "Backup Continuo (CDP)",
+        "isCorrect": false,
+        "rationale": "CDP se refiere a la frecuencia de la copia (en tiempo real), no a las políticas de protección del almacenamiento una vez guardado el dato."
+      },
+      {
+        "text": "Deduplicación de datos",
+        "isCorrect": false,
+        "rationale": "La deduplicación es una técnica para ahorrar espacio eliminando bloques de datos repetidos, no una medida de protección contra el borrado."
+      },
+      {
+        "text": "Almacenamiento inmutable (WORM)",
+        "isCorrect": true,
+        "rationale": "Esta configuración es un ejemplo clásico de almacenamiento WORM (Write Once, Read Many), donde los datos, una vez escritos, no pueden ser alterados hasta que expire el periodo de retención. Esto los hace inmutables."
+      },
+      {
+        "text": "Air Gap Backup",
+        "isCorrect": false,
+        "rationale": "Aunque el almacenamiento en la nube forma parte de una estrategia offsite, si es accesible a través de la red no se considera 'air-gapped'. La característica descrita es la inmutabilidad."
+      }
+    ],
+    "hint": "Piensa en el acrónimo que significa 'Escribir una vez, leer muchas'."
+  }
+]

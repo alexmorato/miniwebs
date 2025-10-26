@@ -39,6 +39,24 @@
   <button id="comencarBtn" style="width:100%;margin-top:8px;background:linear-gradient(180deg,#2aebad,#21c08d);color:#032217;font-weight:bold;font-size:1.1rem;padding:14px 0;border-radius:12px;border:none;cursor:pointer;opacity:0.5;pointer-events:none;" disabled>Començar</button>
   <div class="footer">Menú de selecció de test — Oposicions TIC</div>
   <script>
+    // --- Lógica para ?tema=... en la URL ---
+    function getTemaFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('tema');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const temaParam = getTemaFromURL();
+      if (temaParam) {
+        // Guardar el tema en localStorage como selección única
+        saveOposTest('temas', [temaParam]);
+        actualitzaSeleccioInfo();
+        // Redirigir como si se hubiera pulsado Començar
+        setTimeout(function() {
+          window.location.href = 'carregarFiles.html';
+        }, 350); // pequeño retardo para asegurar que se guarda
+      }
+    });
     document.getElementById('deseleccionaTotsBtn').onclick = function() {
         // Deselecciona tots els botons de tema visibles
         Array.from(document.querySelectorAll('#temasBotones .tema-btn')).forEach(btn => {

@@ -1093,4 +1093,320 @@
     ],
     "hint": "Pensa en la ‘S’ final d’HTTPS: significa ‘Secure’."
   }
+
+
+
+,
+  {
+    "guid": "51c1b6f9-0a6b-4ec6-8c91-5cf8a11f9419",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "En IPv6, quina d’aquestes afirmacions és CORRECTA respecte a l’adreçament?",
+    "answerOptions": [
+      {
+        "text": "Les adreces IPv6 tenen 128 bits i s’escriuen en hexadecimal, separades per dos punts.",
+        "isCorrect": true,
+        "rationale": "IPv6 utilitza 128 bits per adreça i es representa en 8 blocs de 16 bits en hexadecimal (exemple: 2001:0db8::1)."
+      },
+      {
+        "text": "IPv6 utilitza 64 bits i admet un màxim de 4.294 milions d’adreces.",
+        "isCorrect": false,
+        "rationale": "Aquesta descripció correspon a IPv4, no a IPv6."
+      },
+      {
+        "text": "IPv6 no permet autoconfiguració d’adreces IP sense DHCP.",
+        "isCorrect": false,
+        "rationale": "IPv6 permet autoconfiguració sense estat (SLAAC) sense necessitat de DHCPv6."
+      },
+      {
+        "text": "IPv6 utilitza NAT igual que IPv4 per traduir adreces privades a públiques.",
+        "isCorrect": false,
+        "rationale": "En IPv6 el NAT pràcticament no s’utilitza, ja que totes les adreces poden ser globals."
+      }
+    ],
+    "hint": "IPv6 es va crear per eliminar la necessitat de NAT i ampliar el nombre d’adreces."
+  },
+  {
+    "guid": "da3e10b4-093f-4b27-8ff0-1b55a1a1f9b1",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quin mecanisme de seguretat utilitza HTTPS per autenticar el servidor davant del client?",
+    "answerOptions": [
+      {
+        "text": "Certificats digitals emesos per una Autoritat de Certificació (CA).",
+        "isCorrect": true,
+        "rationale": "HTTPS autentica el servidor mitjançant un certificat digital validat per una CA de confiança, garantint la identitat i el xifrat TLS."
+      },
+      {
+        "text": "Una contrasenya d’administrador enviada al navegador en text pla.",
+        "isCorrect": false,
+        "rationale": "Enviar contrasenyes en text pla és insegur i no forma part del protocol HTTPS."
+      },
+      {
+        "text": "Una clau pública emmagatzemada localment al navegador sense cap validació.",
+        "isCorrect": false,
+        "rationale": "Sense validació CA, qualsevol atacant podria suplantar el servidor."
+      },
+      {
+        "text": "El protocol IPsec a la capa de xarxa.",
+        "isCorrect": false,
+        "rationale": "HTTPS funciona sobre TCP i TLS, no sobre IPsec."
+      }
+    ],
+    "hint": "TLS utilitza certificats emesos per autoritats reconegudes per assegurar autenticitat."
+  },
+  {
+    "guid": "a9a6b6a7-9cc3-4411-84b4-fde99e347e44",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina diferència hi ha entre DNSSEC i DoH (DNS over HTTPS)?",
+    "answerOptions": [
+      {
+        "text": "DNSSEC garanteix autenticitat i integritat, mentre DoH garanteix confidencialitat.",
+        "isCorrect": true,
+        "rationale": "DNSSEC signa digitalment les respostes; DoH les xifra mitjançant HTTPS per evitar espionatge."
+      },
+      {
+        "text": "Tots dos xifren les consultes DNS amb TLS.",
+        "isCorrect": false,
+        "rationale": "Només DoH xifra; DNSSEC autentica però no xifra."
+      },
+      {
+        "text": "DoH substitueix DNSSEC completament.",
+        "isCorrect": false,
+        "rationale": "Són tecnologies complementàries, no excloents."
+      },
+      {
+        "text": "DNSSEC només s’aplica a IPv6, mentre DoH només a IPv4.",
+        "isCorrect": false,
+        "rationale": "No hi ha relació entre DNSSEC o DoH i la versió d’IP utilitzada."
+      }
+    ],
+    "hint": "DNSSEC = autenticitat, DoH = privacitat."
+  },
+  {
+    "guid": "67656a7b-f04d-4a7a-b832-d7c78a5bbdc9",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quin tipus d’adreça IPv6 permet la comunicació dins del mateix segment de xarxa sense router?",
+    "answerOptions": [
+      {
+        "text": "Link-local (prefix fe80::/10)",
+        "isCorrect": true,
+        "rationale": "Les adreces link-local es creen automàticament i s’utilitzen per comunicacions locals dins del mateix enllaç de xarxa."
+      },
+      {
+        "text": "Global unicast (prefix 2000::/3)",
+        "isCorrect": false,
+        "rationale": "Aquestes són adreces globals, no locals al segment."
+      },
+      {
+        "text": "Unique local (prefix fc00::/7)",
+        "isCorrect": false,
+        "rationale": "Són privades, però poden travessar routers dins d’una organització."
+      },
+      {
+        "text": "Multicast (prefix ff00::/8)",
+        "isCorrect": false,
+        "rationale": "Les adreces multicast serveixen per enviar un missatge a múltiples destinataris."
+      }
+    ],
+    "hint": "Les adreces link-local comencen per fe80 i són automàtiques."
+  },
+  {
+    "guid": "4de5a4e5-59ff-4b2a-81a1-9c31ec8487cd",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina diferència principal hi ha entre un servidor DNS recursiu i un autoritatiu?",
+    "answerOptions": [
+      {
+        "text": "El recursiu consulta altres servidors fins obtenir la resposta; l’autoritatiu té la informació definitiva d’un domini.",
+        "isCorrect": true,
+        "rationale": "Els recursius realitzen les cerques; els autoritatius contenen la dada final i són la font d’autoritat d’un domini."
+      },
+      {
+        "text": "El recursiu només serveix per IPv6 i l’autoritatiu per IPv4.",
+        "isCorrect": false,
+        "rationale": "Els dos funcionen independentment de la versió IP."
+      },
+      {
+        "text": "Els recursius operen a la capa de transport i els autoritatius a la capa d’aplicació.",
+        "isCorrect": false,
+        "rationale": "Ambdós operen a la capa d’aplicació."
+      },
+      {
+        "text": "L’autoritatiu envia les consultes cap al root server sempre que pot.",
+        "isCorrect": false,
+        "rationale": "És el recursiu qui contacta amb els root servers, no l’autoritatiu."
+      }
+    ],
+    "hint": "Pensa que el recursiu busca i l’autoritatiu respon amb autoritat."
+  },
+  {
+    "guid": "dcb3e14c-8f3c-4b47-8b89-4e5e3b2f3514",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina capa del model TCP/IP s’encarrega de l’encaminament dels paquets entre xarxes diferents?",
+    "answerOptions": [
+      {
+        "text": "Capa d’Internet",
+        "isCorrect": true,
+        "rationale": "Aquesta capa defineix el protocol IP i l’encaminament entre xarxes a través de routers."
+      },
+      {
+        "text": "Capa de transport",
+        "isCorrect": false,
+        "rationale": "Controla connexions punt a punt, no l’encaminament global."
+      },
+      {
+        "text": "Capa d’aplicació",
+        "isCorrect": false,
+        "rationale": "Gestiona protocols de servei a l’usuari com HTTP o DNS."
+      },
+      {
+        "text": "Capa d’accés",
+        "isCorrect": false,
+        "rationale": "Opera a nivell local de xarxa, no entre xarxes."
+      }
+    ],
+    "hint": "És la capa on treballen IP i ICMP."
+  },
+  {
+    "guid": "89f514f4-d89e-4f91-907a-87a8c2d97c11",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina és la funció del protocol ICMP dins de la suite TCP/IP?",
+    "answerOptions": [
+      {
+        "text": "Informar d’errors i proporcionar diagnòstic de connectivitat a nivell IP.",
+        "isCorrect": true,
+        "rationale": "ICMP s’utilitza per enviar missatges d’error i comprovar l’estat de la xarxa (com amb el comandament ping)."
+      },
+      {
+        "text": "Xifrar el contingut dels paquets IP.",
+        "isCorrect": false,
+        "rationale": "ICMP no té funcions de xifratge; IPsec sí."
+      },
+      {
+        "text": "Assignar adreces IP automàticament.",
+        "isCorrect": false,
+        "rationale": "Aquesta és la funció de DHCP."
+      },
+      {
+        "text": "Traduir noms de domini a IPs.",
+        "isCorrect": false,
+        "rationale": "Això ho fa DNS, no ICMP."
+      }
+    ],
+    "hint": "ICMP és el protocol que utilitza ‘ping’ per comprovar connexió."
+  },
+  {
+    "guid": "1a51df91-7e2f-40e4-bc13-bf67da18bb83",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina d’aquestes funcions NO correspon al protocol IPsec?",
+    "answerOptions": [
+      {
+        "text": "Assignar adreces IP dins d’una VPN.",
+        "isCorrect": true,
+        "rationale": "IPsec xifra i autentica tràfic IP, però no assigna adreces; això ho fa DHCP o la configuració VPN."
+      },
+      {
+        "text": "Proporcionar autenticació d’origen del tràfic IP.",
+        "isCorrect": false,
+        "rationale": "Aquesta és una de les funcions principals d’IPsec."
+      },
+      {
+        "text": "Garantir integritat i confidencialitat a nivell IP.",
+        "isCorrect": false,
+        "rationale": "IPsec assegura aquestes propietats mitjançant AH i ESP."
+      },
+      {
+        "text": "Protegir comunicacions entre xarxes en una VPN.",
+        "isCorrect": false,
+        "rationale": "IPsec s’utilitza àmpliament en VPNs per a comunicacions segures."
+      }
+    ],
+    "hint": "IPsec no gestiona adreces; només protegeix el tràfic IP."
+  },
+  {
+    "guid": "cd75148b-4fd4-49c9-bdbe-d4d93de63f9e",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quina afirmació sobre NAT (Network Address Translation) és CORRECTA?",
+    "answerOptions": [
+      {
+        "text": "Permet que diverses adreces privades comparteixin una única adreça IP pública.",
+        "isCorrect": true,
+        "rationale": "NAT tradueix adreces internes privades a una adreça pública, permetent la connexió a Internet de múltiples dispositius."
+      },
+      {
+        "text": "NAT xifra les comunicacions entre dispositius de la xarxa.",
+        "isCorrect": false,
+        "rationale": "NAT no ofereix cap funció de seguretat ni xifratge."
+      },
+      {
+        "text": "NAT assigna automàticament adreces IP a dispositius nous.",
+        "isCorrect": false,
+        "rationale": "Aquesta és la funció del protocol DHCP, no del NAT."
+      },
+      {
+        "text": "NAT només funciona amb IPv6.",
+        "isCorrect": false,
+        "rationale": "El NAT s’utilitza principalment en IPv4, ja que IPv6 disposa d’espai d’adreces suficient."
+      }
+    ],
+    "hint": "Recorda: NAT tradueix, no xifra."
+  },
+  {
+    "guid": "e23c2ef4-4b7d-4ccf-97f4-b571ef772baf",
+    "subjectId": "T62",
+    "difficulty": 4,
+    "origin": "Generat_OPOS24",
+    "type": "test",
+    "question": "Quin protocol permet configurar automàticament paràmetres de xarxa com IP, passarel·la i DNS?",
+    "answerOptions": [
+      {
+        "text": "DHCP (Dynamic Host Configuration Protocol)",
+        "isCorrect": true,
+        "rationale": "DHCP assigna IPs, màscares, passarel·les i DNS de manera automàtica als clients dins una xarxa."
+      },
+      {
+        "text": "DNS (Domain Name System)",
+        "isCorrect": false,
+        "rationale": "DNS tradueix noms de domini, no assigna IPs."
+      },
+      {
+        "text": "ICMP (Internet Control Message Protocol)",
+        "isCorrect": false,
+        "rationale": "ICMP serveix per diagnòstic de xarxa, no configuració."
+      },
+      {
+        "text": "HTTP (HyperText Transfer Protocol)",
+        "isCorrect": false,
+        "rationale": "HTTP és un protocol d’aplicació, no de configuració de xarxa."
+      }
+    ],
+    "hint": "Aquest protocol és el responsable de donar IPs dinàmiques als equips."
+  }
 ]
+
+
