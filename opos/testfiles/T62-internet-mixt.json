@@ -506,11 +506,11 @@
 
 
 
-  
+
   {
     "guid": "a1b7efc5-bfa7-4a9b-8ee3-9d8bba3c3d01",
     "subjectId": "T62",
-    "level": 1,
+    "difficulty": 1,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "Internet funciona gràcies al conjunt de protocols conegut com ________, format principalment per ________.",
@@ -541,7 +541,7 @@
   {
     "guid": "b8d79fd7-6eb4-4b26-99e7-61f23bc7a5ff",
     "subjectId": "T62",
-    "level": 1,
+    "difficulty": 1,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol ________ utilitza el port 80, mentre que la seva versió segura ________ usa el port 443.",
@@ -572,7 +572,7 @@
   {
     "guid": "cfc1c08c-128e-482a-9b57-7c9876f57da0",
     "subjectId": "T62",
-    "level": 1,
+    "difficulty": 1,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol que permet transferir fitxers entre un client i un servidor és ________, i la seva versió segura és ________.",
@@ -603,7 +603,7 @@
   {
     "guid": "de18cabc-9f9b-42ce-843b-3ee528f54e6f",
     "subjectId": "T62",
-    "level": 2,
+    "difficulty": 2,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El model ________ és teòric i té 7 capes, mentre que el model ________ és pràctic i té 4 capes.",
@@ -634,7 +634,7 @@
   {
     "guid": "fa88a48c-fde7-4237-82a0-4ff5e55f9ed1",
     "subjectId": "T62",
-    "level": 2,
+    "difficulty": 2,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol ________ és orientat a connexió i garanteix fiabilitat, mentre que ________ és sense connexió i més ràpid.",
@@ -665,7 +665,7 @@
   {
     "guid": "9e91bc3b-1a7e-4922-88de-4d9a9877d6aa",
     "subjectId": "T62",
-    "level": 2,
+    "difficulty": 2,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol ________ assigna automàticament IPs dins d’una xarxa, mentre que ________ converteix IPs privades en públiques.",
@@ -696,7 +696,7 @@
   {
     "guid": "4e66a2a5-726d-45f9-92f3-60cb1955a2ef",
     "subjectId": "T62",
-    "level": 2,
+    "difficulty": 2,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El servei que tradueix noms com www.bcn.cat en adreces IP és ________, i utilitza habitualment el port ________.",
@@ -727,7 +727,7 @@
   {
     "guid": "8b2ec76f-cbd0-4a15-b66e-3d73ac398c5e",
     "subjectId": "T62",
-    "level": 3,
+    "difficulty": 3,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol ________ assegura la integritat i autenticitat de les respostes DNS, mentre que ________ encripta les consultes per privacitat.",
@@ -758,7 +758,7 @@
   {
     "guid": "b7d5a16c-99e1-41ce-81d7-9fddfa8d6a2a",
     "subjectId": "T62",
-    "level": 3,
+    "difficulty": 3,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "L’organisme internacional que coordina dominis i adreces IP globals és ________, mentre que a Europa l’assignació IP la gestiona ________.",
@@ -789,7 +789,7 @@
   {
     "guid": "af74e59a-d22e-4d0b-958f-48f6d41db3b8",
     "subjectId": "T62",
-    "level": 3,
+    "difficulty": 3,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "En IPv6, les adreces de tipus ________ permeten la comunicació dins del mateix segment de xarxa i comencen pel prefix ________.",
@@ -820,7 +820,7 @@
   {
     "guid": "6b8d19f8-96c1-4d3a-b4d4-8ebcfa1276e9",
     "subjectId": "T62",
-    "level": 4,
+    "difficulty": 4,
     "origin": "Generat_OPOS24",
     "type": "fill_gap",
     "question": "El protocol ________ proporciona xifrat i autenticació a nivell IP i és utilitzat sovint per construir VPNs.",

@@ -233,6 +233,18 @@
   </div>
 
   <script>
+    // --- Mapeo de dificultad ---
+    let difficultyMap = {};
+    fetch('assets/difficulty.json')
+      .then(r => r.json())
+      .then(arr => {
+        arr.forEach(d => { difficultyMap[d.id] = d.text; });
+      });
+
+    function getDifficultyText(difficulty) {
+      if (!difficulty) return 'D?';
+      return difficultyMap[difficulty] || 'D?';
+    }
     let preguntes = [];
     let currentQuestion = 0;
     let answers = [];
@@ -273,7 +285,7 @@
       let html = `
         <div class="question-card">
           <div class="question-info">
-            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-D' + (pregunta.difficulty || '?')}
+            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-' + getDifficultyText(pregunta.difficulty)}
           </div>
           <div class="question-text">${pregunta.pregunta || pregunta.question || 'Pregunta no disponible'}</div>
       `;
@@ -425,7 +437,7 @@
       let html = `
         <div class="question-card">
           <div class="question-info">
-            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-D' + (pregunta.difficulty || '?')}
+            ${(pregunta.subjectId || '??') + '-' + (pregunta.origin || '??') + '-D' + getDifficultyText(pregunta.difficulty)}
           </div>
           <div class="question-text">${pregunta.pregunta || pregunta.question}</div>
       `;
