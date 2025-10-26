@@ -1,0 +1,22 @@
+[
+	{
+		"titulo": "El futuro perfecto en español",
+		"iframe_src": "https://wordwall.net/es/embed/17a352145f0f4d15b3f700fa6d9c2faa?themeId=43&templateId=5&fontStackId=0&nofullscreen",
+		"img" : "https://screens.cdn.wordwall.net/200/17a352145f0f4d15b3f700fa6d9c2faa_43"
+	},
+	{
+		"titulo": "El futuro perfecto en español",
+		"iframe_src": "https://wordwall.net/ca/embed/17a352145f0f4d15b3f700fa6d9c2faa?themeId=43&templateId=5&fontStackId=0",
+		"img" : "https://screens.cdn.wordwall.net/200/17a352145f0f4d15b3f700fa6d9c2faa_43"
+	},
+	{
+		"titulo": "Mates multiplicaciones",
+		"iframe_src": "https://wordwall.net/ca/embed/a91f89428e0140c9992dea6bbadf9e49?themeId=22&templateId=71&fontStackId=0",
+		"img" : "https://screens.cdn.wordwall.net/200/a91f89428e0140c9992dea6bbadf9e49_0"
+	},
+	{
+		"titulo": "Repaso tablas de multiplicar",
+		"iframe_src": "https://wordwall.net/es/embed/f6a58eb98d5c4450932328cf45ff513a?themeId=1&templateId=46&fontStackId=0",
+		"img" : "https://screens.cdn.wordwall.net/200/f6a58eb98d5c4450932328cf45ff513a_0"	
+	}
+]

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jocs</title>
+  <style>
+    body { background: #0b1020; color: #e7ecff; font-family: system-ui, sans-serif; margin: 0; padding: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; max-width: 900px; margin: 40px auto; padding: 20px; }
+    .card { background: #141a2a; border-radius: 14px; box-shadow: 0 4px 18px #0002; padding: 18px; text-align: center; cursor: pointer; border: 2px solid #27304a; transition: border 0.2s, box-shadow 0.2s; }
+    .card:hover { border: 2px solid #6ae0a7; box-shadow: 0 6px 24px #2aebad33; }
+    .card img { width: 100%; object-fit: contain; border-radius: 10px; background: #232b45; }
+    .card-title { font-size: 1.1rem; color: #9fb0ff; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;color:#6ae0a7;margin-top:32px;">Tria un joc</h2>
+  <div class="grid" id="jocsGrid"></div>
+  <script>
+    fetch('iframes.json')
+      .then(r => r.json())
+      .then(jocs => {
+        const grid = document.getElementById('jocsGrid');
+        jocs.forEach(joc => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<img src="${joc.img}" alt="${joc.titulo}"><div class="card-title">${joc.titulo}</div>`;
+          card.onclick = function() {
+            // Codificar los parámetros para la URL
+            const params = new URLSearchParams({
+              titulo: joc.titulo,
+              iframe_src: joc.iframe_src
+            });
+            window.location.href = 'joc.html?' + params.toString();
+          };
+          grid.appendChild(card);
+        });
+      });
+  </script>
+</body>
+</html>
