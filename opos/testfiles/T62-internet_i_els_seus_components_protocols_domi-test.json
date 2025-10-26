@@ -1406,6 +1406,876 @@
       }
     ],
     "hint": "Aquest protocol és el responsable de donar IPs dinàmiques als equips."
+  },
+
+  
+  {
+    "guid": "f8963e35-8fa1-4c0a-9fa8-ca97b0fc2b51",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Cuál es la función principal del protocolo TCP en el modelo TCP/IP?",
+    "answerOptions": [
+      {
+        "text": "Garantizar la entrega fiable y ordenada de paquetes de datos entre aplicaciones.",
+        "isCorrect": true,
+        "rationale": "TCP es un protocolo orientado a la conexión que se encarga del control de errores, la retransmisión y la secuenciación de paquetes para asegurar una comunicación fiable."
+      },
+      {
+        "text": "Asignar direcciones IP a los dispositivos en una red local.",
+        "isCorrect": false,
+        "rationale": "La asignación de direcciones IP es gestionada por el protocolo DHCP, no por TCP."
+      },
+      {
+        "text": "Traducir nombres de dominio a direcciones IP.",
+        "isCorrect": false,
+        "rationale": "Esta función corresponde al sistema DNS (Domain Name System), que opera en la capa de aplicación."
+      },
+      {
+        "text": "Encaminar paquetes de datos a través de diferentes redes.",
+        "isCorrect": false,
+        "rationale": "El encaminamiento de paquetes entre redes es la responsabilidad principal del protocolo IP (Internet Protocol) en la capa de Internet."
+      }
+    ],
+    "hint": "Piensa en el protocolo que establece una conexión antes de enviar datos para asegurar que no se pierda información."
+  },
+  {
+    "guid": "bc8f557e-046f-4914-84da-35700f10bda1",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "En la jerarquía de DNS, ¿qué tipo de servidor tiene la información definitiva y oficial sobre los nombres de un dominio específico (como 'bcn.cat')?",
+    "answerOptions": [
+      {
+        "text": "Servidor raíz (root)",
+        "isCorrect": false,
+        "rationale": "El servidor raíz dirige las consultas al servidor TLD apropiado, pero no contiene la información específica de un dominio de segundo nivel."
+      },
+      {
+        "text": "Servidor TLD (Top Level Domain)",
+        "isCorrect": false,
+        "rationale": "El servidor TLD gestiona los dominios de un nivel superior (como .com, .org, .cat) y dirige las consultas al servidor autoritativo correspondiente."
+      },
+      {
+        "text": "Servidor autoritativo",
+        "isCorrect": true,
+        "rationale": "Este servidor posee los registros DNS finales para un dominio particular y proporciona la respuesta definitiva (la dirección IP) a una consulta."
+      },
+      {
+        "text": "Servidor recursivo",
+        "isCorrect": false,
+        "rationale": "El servidor recursivo es el que realiza la serie de consultas a otros servidores en nombre del cliente para encontrar la respuesta, pero no posee la información original."
+      }
+    ],
+    "hint": "Considera cuál es la fuente final de verdad para los registros de un dominio."
+  },
+  {
+    "guid": "7eb1d8a5-fe6b-4b3d-bc1c-5936d36bdac9",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Una empresa necesita permitir a sus empleados trabajar desde casa conectándose de forma segura a la red interna. ¿Qué tecnología es la más adecuada para este propósito?",
+    "answerOptions": [
+      {
+        "text": "CDN (Content Delivery Network)",
+        "isCorrect": false,
+        "rationale": "Una CDN se utiliza para distribuir contenido estático (imágenes, vídeos) desde ubicaciones geográficamente cercanas al usuario para acelerar la carga de sitios web."
+      },
+      {
+        "text": "DHCP (Dynamic Host Configuration Protocol)",
+        "isCorrect": false,
+        "rationale": "DHCP asigna automáticamente direcciones IP dentro de una red local, pero no proporciona una conexión segura a través de Internet."
+      },
+      {
+        "text": "VPN (Virtual Private Network)",
+        "isCorrect": true,
+        "rationale": "Una VPN crea un túnel cifrado a través de una red pública como Internet, permitiendo una conexión segura y privada a una red corporativa."
+      },
+      {
+        "text": "IXP (Internet Exchange Point)",
+        "isCorrect": false,
+        "rationale": "Un IXP es un punto de infraestructura física donde los proveedores de servicios de Internet (ISP) intercambian tráfico entre sus redes."
+      }
+    ],
+    "hint": "Esta tecnología crea un 'túnel' cifrado a través de Internet para proteger la comunicación."
+  },
+  {
+    "guid": "05f1bc88-b80e-4727-b5da-b4619c8e9618",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Cuál es la principal diferencia entre los protocolos IPv4 e IPv6?",
+    "answerOptions": [
+      {
+        "text": "IPv6 utiliza un espacio de direcciones mucho mayor que IPv4.",
+        "isCorrect": true,
+        "rationale": "IPv4 usa direcciones de 32 bits, mientras que IPv6 usa direcciones de 128 bits, lo que resuelve el problema del agotamiento de direcciones de IPv4."
+      },
+      {
+        "text": "IPv4 es un protocolo orientado a la conexión, mientras que IPv6 no lo es.",
+        "isCorrect": false,
+        "rationale": "Ambos, IPv4 e IPv6, son protocolos sin conexión que operan en la capa de red; la orientación a la conexión es una característica de protocolos de capa superior como TCP."
+      },
+      {
+        "text": "IPv6 es inherentemente más rápido que IPv4 en todas las situaciones.",
+        "isCorrect": false,
+        "rationale": "Aunque IPv6 tiene cabeceras simplificadas que pueden mejorar la eficiencia del enrutamiento, la velocidad real depende de muchos factores y no es su principal ventaja diferenciadora."
+      },
+      {
+        "text": "IPv4 se usa exclusivamente para redes locales (LAN) e IPv6 para Internet.",
+        "isCorrect": false,
+        "rationale": "Ambos protocolos se utilizan tanto en redes locales como en la Internet global, aunque IPv4 es más común en LANs antiguas debido a NAT."
+      }
+    ],
+    "hint": "El motivo principal para la creación de IPv6 fue solucionar una limitación fundamental de su predecesor."
+  },
+  {
+    "guid": "d190601e-3393-45b0-b648-8fa416d121ac",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Cuando ves 'https' en la URL de un sitio web, ¿qué protocolo se está utilizando para asegurar la comunicación?",
+    "answerOptions": [
+      {
+        "text": "SSH (Secure Shell)",
+        "isCorrect": false,
+        "rationale": "SSH se utiliza para el acceso remoto seguro a la línea de comandos de un servidor, no para la navegación web."
+      },
+      {
+        "text": "SFTP (Secure File Transfer Protocol)",
+        "isCorrect": false,
+        "rationale": "SFTP es una versión segura de FTP que se ejecuta sobre SSH para la transferencia de archivos."
+      },
+      {
+        "text": "SSL/TLS (Secure Sockets Layer/Transport Layer Security)",
+        "isCorrect": true,
+        "rationale": "HTTPS es esencialmente el protocolo HTTP encapsulado dentro de una capa de cifrado SSL/TLS, que proporciona autenticación y privacidad de los datos."
+      },
+      {
+        "text": "IPsec (Internet Protocol Security)",
+        "isCorrect": false,
+        "rationale": "IPsec opera en la capa de red para asegurar todo el tráfico IP, y aunque puede usarse en VPNs, HTTPS se refiere específicamente al uso de SSL/TLS en la capa de aplicación."
+      }
+    ],
+    "hint": "La 'S' en HTTPS significa 'Seguro', y se logra mediante una capa de cifrado añadida a HTTP."
+  },
+  {
+    "guid": "ac92e889-66b1-457e-a784-1cdf6e84f033",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué protocolo de la capa de transporte se elegiría para una aplicación de videoconferencia en tiempo real donde la velocidad es más importante que la fiabilidad?",
+    "answerOptions": [
+      {
+        "text": "TCP",
+        "isCorrect": false,
+        "rationale": "TCP garantiza la entrega y el orden de los paquetes, pero sus mecanismos de retransmisión pueden introducir retardos (latencia), lo cual es perjudicial para aplicaciones en tiempo real."
+      },
+      {
+        "text": "UDP",
+        "isCorrect": true,
+        "rationale": "UDP es un protocolo sin conexión que no garantiza la entrega de paquetes, lo que lo hace más rápido y con menor latencia, ideal para streaming o videoconferencias donde perder un paquete ocasional es aceptable."
+      },
+      {
+        "text": "HTTP",
+        "isCorrect": false,
+        "rationale": "HTTP es un protocolo de la capa de aplicación que generalmente se ejecuta sobre TCP para la transferencia de recursos web."
+      },
+      {
+        "text": "IP",
+        "isCorrect": false,
+        "rationale": "IP es un protocolo de la capa de red, no de transporte. TCP y UDP operan sobre IP para proporcionar servicios de transporte a las aplicaciones."
+      }
+    ],
+    "hint": "Este protocolo no establece una conexión formal y envía los datos directamente, priorizando la rapidez sobre la comprobación de errores."
+  },
+  {
+    "guid": "06f7e0d5-67ce-4486-8774-cb61717d3461",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué organismo es el responsable de la gestión global de los nombres de dominio y la asignación de bloques de direcciones IP?",
+    "answerOptions": [
+      {
+        "text": "IETF (Internet Engineering Task Force)",
+        "isCorrect": false,
+        "rationale": "La IETF se enfoca en el desarrollo y la estandarización de los protocolos técnicos de Internet, documentados en los RFCs."
+      },
+      {
+        "text": "W3C (World Wide Web Consortium)",
+        "isCorrect": false,
+        "rationale": "El W3C desarrolla estándares para la World Wide Web, como HTML y CSS, pero no gestiona la infraestructura de nombres y números de Internet."
+      },
+      {
+        "text": "ICANN (Internet Corporation for Assigned Names and Numbers)",
+        "isCorrect": true,
+        "rationale": "ICANN coordina la asignación de identificadores únicos en Internet a nivel mundial, incluyendo los nombres de dominio y las direcciones IP, a través de IANA."
+      },
+      {
+        "text": "RIPE NCC (Réseaux IP Européens Network Coordination Centre)",
+        "isCorrect": false,
+        "rationale": "RIPE es un Registro Regional de Internet (RIR) que asigna direcciones IP en Europa, Oriente Medio y partes de Asia Central, operando bajo la supervisión de ICANN."
+      }
+    ],
+    "hint": "Busca la organización cuyo nombre refleja directamente la asignación de nombres y números en Internet."
+  },
+  {
+    "guid": "ad2a394e-5f8e-4571-a679-aad4b1fe93b1",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "En el modelo de 4 capas TCP/IP, ¿en qué capa operan los routers para tomar decisiones de encaminamiento?",
+    "answerOptions": [
+      {
+        "text": "Capa de Aplicación",
+        "isCorrect": false,
+        "rationale": "La capa de aplicación es donde operan protocolos como HTTP o SMTP, que son utilizados por los programas del usuario final."
+      },
+      {
+        "text": "Capa de Transporte",
+        "isCorrect": false,
+        "rationale": "La capa de transporte (con protocolos como TCP y UDP) gestiona la comunicación de extremo a extremo, pero no el encaminamiento entre redes."
+      },
+      {
+        "text": "Capa de Internet",
+        "isCorrect": true,
+        "rationale": "Los routers operan en la capa de Internet (o de red), examinando las direcciones IP de destino de los paquetes para decidir la mejor ruta hacia la siguiente red."
+      },
+      {
+        "text": "Capa de Acceso a la Red",
+        "isCorrect": false,
+        "rationale": "Esta capa se ocupa de la transmisión física de datos en una red local (por ejemplo, a través de Ethernet o Wi-Fi) y es donde operan los switches."
+      }
+    ],
+    "hint": "Los routers funcionan en la misma capa que el protocolo responsable del direccionamiento global: IP."
+  },
+  {
+    "guid": "342c4411-d155-4a6e-b5e5-d009805e6bf0",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Si un servidor web utiliza el puerto 443, ¿qué tipo de servicio está ofreciendo?",
+    "answerOptions": [
+      {
+        "text": "Transferencia de archivos segura (SFTP)",
+        "isCorrect": false,
+        "rationale": "SFTP, que se ejecuta sobre SSH, utiliza comúnmente el puerto 22."
+      },
+      {
+        "text": "Comunicación web no cifrada (HTTP)",
+        "isCorrect": false,
+        "rationale": "El protocolo HTTP estándar utiliza el puerto 80 por defecto."
+      },
+      {
+        "text": "Comunicación web cifrada (HTTPS)",
+        "isCorrect": true,
+        "rationale": "El puerto 443 es el puerto estándar asignado por IANA para las conexiones HTTPS, que utilizan cifrado SSL/TLS."
+      },
+      {
+        "text": "Recepción de correo electrónico (IMAP)",
+        "isCorrect": false,
+        "rationale": "El protocolo IMAP utiliza el puerto 143 (o 993 para su versión segura IMAPS)."
+      }
+    ],
+    "hint": "Este puerto está asociado con la versión segura del protocolo utilizado para navegar por la web."
+  },
+  {
+    "guid": "29b1c56d-7387-44e1-8a2d-3a769247881d",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué componente de la infraestructura de Internet permite el intercambio de tráfico directo entre diferentes proveedores de servicios de Internet (ISP) para mejorar la eficiencia?",
+    "answerOptions": [
+      {
+        "text": "Backbone",
+        "isCorrect": false,
+        "rationale": "Un backbone es una red troncal de alta capacidad, a menudo propiedad de un solo ISP grande, que conecta diferentes regiones geográficas."
+      },
+      {
+        "text": "IXP (Internet Exchange Point)",
+        "isCorrect": true,
+        "rationale": "Un IXP es un punto de encuentro físico donde múltiples ISPs conectan sus redes para intercambiar tráfico localmente sin tener que pasarlo por redes de terceros."
+      },
+      {
+        "text": "CDN (Content Delivery Network)",
+        "isCorrect": false,
+        "rationale": "Una CDN es una red de servidores para distribuir contenido, pero no es un punto de interconexión para ISPs."
+      },
+      {
+        "text": "DNS (Domain Name System)",
+        "isCorrect": false,
+        "rationale": "DNS es el sistema para traducir nombres de dominio a direcciones IP, no un punto de intercambio de tráfico de datos."
+      }
+    ],
+    "hint": "Imagina un gran 'intercambiador' de autopistas donde diferentes empresas de transporte conectan sus rutas directamente."
+  },
+  {
+    "guid": "221bd753-0b8f-4b61-b5a5-42ed57997ed6",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Cuál es el propósito de la tecnología NAT (Network Address Translation)?",
+    "answerOptions": [
+      {
+        "text": "Cifrar todo el tráfico que sale de una red privada.",
+        "isCorrect": false,
+        "rationale": "El cifrado de tráfico es la función de tecnologías como VPN o SSL/TLS, no de NAT."
+      },
+      {
+        "text": "Asignar dinámicamente direcciones IP privadas a los dispositivos.",
+        "isCorrect": false,
+        "rationale": "Esta es la función del protocolo DHCP (Dynamic Host Configuration Protocol)."
+      },
+      {
+        "text": "Permitir que múltiples dispositivos en una red privada compartan una única dirección IP pública.",
+        "isCorrect": true,
+        "rationale": "NAT traduce las direcciones IP privadas de los dispositivos de una LAN a una única dirección IP pública para comunicarse con Internet, conservando así el escaso espacio de direcciones IPv4 públicas."
+      },
+      {
+        "text": "Autenticar la identidad de los servidores DNS para prevenir ataques.",
+        "isCorrect": false,
+        "rationale": "La autenticación de las respuestas DNS es el propósito de DNSSEC (DNS Security Extensions)."
+      }
+    ],
+    "hint": "Esta técnica actúa como un traductor en la puerta de enlace de una red local, permitiendo que muchos dispositivos internos hablen con el mundo exterior usando una sola identidad."
+  },
+  {
+    "guid": "5cf1b145-2783-4860-9bf7-c64249c43343",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "De los siguientes protocolos de correo electrónico, ¿cuál se utiliza exclusivamente para el envío de mensajes desde un cliente a un servidor?",
+    "answerOptions": [
+      {
+        "text": "POP3",
+        "isCorrect": false,
+        "rationale": "POP3 (Post Office Protocol 3) se utiliza para descargar correos electrónicos del servidor al cliente."
+      },
+      {
+        "text": "IMAP",
+        "isCorrect": false,
+        "rationale": "IMAP (Internet Message Access Protocol) se utiliza para acceder y gestionar correos electrónicos que permanecen en el servidor."
+      },
+      {
+        "text": "SMTP",
+        "isCorrect": true,
+        "rationale": "SMTP (Simple Mail Transfer Protocol) es el estándar de Internet para la transmisión de correo electrónico, es decir, para el envío."
+      },
+      {
+        "text": "HTTPS",
+        "isCorrect": false,
+        "rationale": "HTTPS es para la navegación web segura; aunque algunas interfaces de webmail lo usan, el protocolo subyacente para el envío de correo es SMTP."
+      }
+    ],
+    "hint": "Piensa en el protocolo cuya función es 'simple' y se centra solo en la 'transferencia' de correo."
+  },
+  {
+    "guid": "1c5828e9-0257-43b8-b0de-ed9c304fa136",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "La tendencia 'Edge Computing' está relacionada con:",
+    "answerOptions": [
+      {
+        "text": "Aumentar el número de direcciones IP disponibles con IPv6.",
+        "isCorrect": false,
+        "rationale": "La expansión de IPv6 está relacionada con el agotamiento de direcciones, no con la localización del procesamiento de datos."
+      },
+      {
+        "text": "Procesar datos más cerca de donde se generan, en lugar de en un servidor centralizado en la nube.",
+        "isCorrect": true,
+        "rationale": "Edge Computing busca reducir la latencia y el uso de ancho de banda al realizar el cómputo en el 'borde' de la red, cerca de los dispositivos IoT y los usuarios."
+      },
+      {
+        "text": "Asegurar las consultas DNS mediante firmas digitales.",
+        "isCorrect": false,
+        "rationale": "Esto describe la función de DNSSEC, una tecnología de seguridad para el sistema de nombres de dominio."
+      },
+      {
+        "text": "Conectar miles de millones de dispositivos de bajo consumo a Internet.",
+        "isCorrect": false,
+        "rationale": "Esto describe el concepto general de IoT (Internet of Things), aunque el Edge Computing es una tecnología habilitadora para IoT."
+      }
+    ],
+    "hint": "Esta tendencia busca acercar la 'computación' al 'borde' o periferia de la red."
+  },
+  {
+    "guid": "354f3f94-2608-4fa3-addb-a8a296dec8c8",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué afirmación describe correctamente la característica 'sin estado' (stateless) del protocolo HTTP?",
+    "answerOptions": [
+      {
+        "text": "El servidor no guarda ninguna información sobre las peticiones anteriores del cliente.",
+        "isCorrect": true,
+        "rationale": "Cada petición HTTP es tratada como una transacción independiente, y el servidor no recuerda las interacciones pasadas con el mismo cliente. Tecnologías como las cookies se usan para mantener el estado."
+      },
+      {
+        "text": "El protocolo no puede transferir archivos que contengan imágenes o vídeos.",
+        "isCorrect": false,
+        "rationale": "HTTP es capaz de transferir cualquier tipo de datos, como se especifica en las cabeceras MIME."
+      },
+      {
+        "text": "No se requiere una conexión TCP para realizar una petición.",
+        "isCorrect": false,
+        "rationale": "HTTP es un protocolo de capa de aplicación que se basa en la fiabilidad de una conexión TCP subyacente."
+      },
+      {
+        "text": "La comunicación entre cliente y servidor no está cifrada.",
+        "isCorrect": false,
+        "rationale": "Esto es cierto para HTTP, pero no es la definición de 'sin estado'. La versión cifrada, HTTPS, sí existe, y también puede ser sin estado."
+      }
+    ],
+    "hint": "Piensa en cómo el servidor trata cada nueva solicitud de un navegador, como si nunca antes hubiera hablado con él."
+  },
+  {
+    "guid": "398ac604-62a6-45e6-b677-060467267702",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Un switch de red opera principalmente en una capa diferente a la de un router. ¿En qué capa del modelo TCP/IP funciona un switch?",
+    "answerOptions": [
+      {
+        "text": "Capa de Internet, junto con el protocolo IP.",
+        "isCorrect": false,
+        "rationale": "La capa de Internet es donde operan los routers para encaminar paquetes entre diferentes redes basándose en direcciones IP."
+      },
+      {
+        "text": "Capa de Transporte, gestionando conexiones TCP.",
+        "isCorrect": false,
+        "rationale": "La capa de transporte es gestionada por los sistemas operativos de los dispositivos finales (cliente y servidor), no por los switches."
+      },
+      {
+        "text": "Capa de Acceso a la Red, utilizando direcciones MAC.",
+        "isCorrect": true,
+        "rationale": "Un switch opera en la capa de Acceso a la Red (equivalente a la capa de Enlace del modelo OSI), reenviando tramas de datos a puertos específicos basándose en las direcciones MAC de los dispositivos conectados en la misma LAN."
+      },
+      {
+        "text": "Capa de Aplicación, filtrando contenido HTTP.",
+        "isCorrect": false,
+        "rationale": "Filtrar contenido de aplicación es una función de dispositivos más avanzados como proxies o firewalls de aplicación, no de un switch estándar."
+      }
+    ],
+    "hint": "Este dispositivo se enfoca en la comunicación dentro de una red local (LAN) y utiliza identificadores de hardware, no direcciones lógicas de Internet."
+  },
+  {
+    "guid": "f92a3e3e-1816-4590-8da8-4f64e28897b1",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Cuál es el propósito principal de DNSSEC (DNS Security Extensions)?",
+    "answerOptions": [
+      {
+        "text": "Cifrar la consulta DNS para que nadie pueda ver el nombre de dominio solicitado.",
+        "isCorrect": false,
+        "rationale": "El cifrado de las consultas DNS es el objetivo de tecnologías como DNS over HTTPS (DoH) o DNS over TLS (DoT), que buscan la privacidad. DNSSEC se centra en la autenticidad."
+      },
+      {
+        "text": "Acelerar el proceso de resolución de nombres de dominio mediante el uso de caché.",
+        "isCorrect": false,
+        "rationale": "El uso de caché es una característica estándar del sistema DNS para mejorar el rendimiento, pero no es la función de DNSSEC."
+      },
+      {
+        "text": "Garantizar que la respuesta a una consulta DNS sea auténtica y no haya sido manipulada.",
+        "isCorrect": true,
+        "rationale": "DNSSEC utiliza firmas digitales para validar que los registros DNS provienen del servidor autoritativo correcto y no han sido alterados en el camino, previniendo ataques como el 'cache poisoning'."
+      },
+      {
+        "text": "Distribuir la carga de consultas DNS entre múltiples servidores.",
+        "isCorrect": false,
+        "rationale": "La distribución de carga es una característica inherente a la arquitectura distribuida y jerárquica del DNS, no una función específica de DNSSEC."
+      }
+    ],
+    "hint": "Esta tecnología añade una capa de 'seguridad' al DNS, pero su enfoque está en la integridad y autenticidad de los datos, no en la confidencialidad."
+  },
+  {
+    "guid": "a15d2f63-9e18-4f30-9531-dbd7dbd55d09",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Si necesitas acceder de forma remota y segura a la línea de comandos de un servidor Linux, ¿qué protocolo deberías utilizar en lugar del obsoleto y no seguro Telnet?",
+    "answerOptions": [
+      {
+        "text": "FTP",
+        "isCorrect": false,
+        "rationale": "FTP se usa para transferir archivos y, en su forma estándar, tampoco es seguro ya que envía credenciales en texto plano."
+      },
+      {
+        "text": "SSH",
+        "isCorrect": true,
+        "rationale": "SSH (Secure Shell) fue diseñado como un reemplazo seguro de Telnet, proporcionando una conexión de terminal remota totalmente cifrada."
+      },
+      {
+        "text": "HTTP",
+        "isCorrect": false,
+        "rationale": "HTTP es para acceder a recursos web, no para obtener un shell de línea de comandos en un servidor."
+      },
+      {
+        "text": "SNMP",
+        "isCorrect": false,
+        "rationale": "SNMP (Simple Network Management Protocol) se utiliza para monitorizar y gestionar dispositivos de red, no para el acceso interactivo a la línea de comandos."
+      }
+    ],
+    "hint": "El nombre de este protocolo moderno incluye la palabra 'Secure' y proporciona un 'Shell' o terminal."
+  },
+  {
+    "guid": "c6d4f60c-8f3b-482a-ad76-67d6c2cdca17",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Un 'backbone' de Internet se refiere a:",
+    "answerOptions": [
+      {
+        "text": "Un dispositivo que conecta múltiples ordenadores en una red doméstica.",
+        "isCorrect": false,
+        "rationale": "Esto describiría un switch o un router doméstico, que son componentes del borde de la red."
+      },
+      {
+        "text": "Las principales redes de alta velocidad que interconectan grandes regiones geográficas y proveedores de servicios.",
+        "isCorrect": true,
+        "rationale": "Los backbones o redes troncales son las 'autopistas' principales de Internet, formadas por enlaces de fibra óptica de gran capacidad que transportan la mayor parte del tráfico a largas distancias."
+      },
+      {
+        "text": "El protocolo que asegura la entrega fiable de datos.",
+        "isCorrect": false,
+        "rationale": "Esto describe la función de un protocolo como TCP, no un componente de infraestructura física."
+      },
+      {
+        "text": "El sistema que traduce nombres de dominio a direcciones IP.",
+        "isCorrect": false,
+        "rationale": "Esta es la descripción del DNS, un sistema distribuido de servidores, no la infraestructura física de transporte."
+      }
+    ],
+    "hint": "Piensa en la 'columna vertebral' de la infraestructura de Internet."
+  },
+  {
+    "guid": "f78a03ce-4bab-4df5-b967-30df56019179",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Si configuras tu cliente de correo para usar POP3, ¿cuál es el comportamiento típico al revisar tu correo?",
+    "answerOptions": [
+      {
+        "text": "Los correos se sincronizan en todos tus dispositivos y los cambios se reflejan en el servidor.",
+        "isCorrect": false,
+        "rationale": "Este comportamiento es característico de IMAP, que mantiene los correos en el servidor y sincroniza el estado (leído, borrado, etc.) entre clientes."
+      },
+      {
+        "text": "Los correos se descargan del servidor a tu dispositivo y, por lo general, se eliminan del servidor.",
+        "isCorrect": true,
+        "rationale": "POP3 funciona como una 'oficina de correos': vas, recoges tu correo (lo descargas) y te lo llevas, vaciando tu buzón en el servidor."
+      },
+      {
+        "text": "Solo puedes leer los encabezados de los correos sin descargar el contenido completo.",
+        "isCorrect": false,
+        "rationale": "Aunque IMAP permite descargar solo los encabezados para ahorrar ancho de banda, el comportamiento principal de POP3 es descargar el mensaje completo."
+      },
+      {
+        "text": "Los correos se envían desde tu dispositivo al servidor para ser distribuidos.",
+        "isCorrect": false,
+        "rationale": "El envío de correos, independientemente del protocolo de recepción, se realiza utilizando SMTP."
+      }
+    ],
+    "hint": "Este protocolo es más antiguo y fue diseñado en una época en que los usuarios solían tener un solo ordenador para acceder a su correo."
+  },
+  {
+    "guid": "7dca3bd5-cfa7-4b5b-872c-8d0a0b932489",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué es un Certificado Digital en el contexto de la seguridad de Internet?",
+    "answerOptions": [
+      {
+        "text": "Un archivo que contiene la dirección IP pública de un servidor web.",
+        "isCorrect": false,
+        "rationale": "La dirección IP se obtiene a través de DNS; un certificado digital tiene un propósito diferente relacionado con la identidad y la confianza."
+      },
+      {
+        "text": "Un documento electrónico emitido por una Autoridad de Certificación (CA) que vincula una clave pública con la identidad de un sitio web.",
+        "isCorrect": true,
+        "rationale": "Un certificado digital permite a un navegador verificar que el sitio web al que se conecta es quien dice ser y obtener su clave pública para iniciar una comunicación cifrada (HTTPS)."
+      },
+      {
+        "text": "Una contraseña cifrada utilizada para acceder a una red Wi-Fi segura.",
+        "isCorrect": false,
+        "rationale": "Las contraseñas de Wi-Fi, aunque son claves de seguridad, no son lo mismo que un certificado digital emitido por una CA para validar la identidad de un servidor."
+      },
+      {
+        "text": "Un registro en el DNS que previene la suplantación de identidad.",
+        "isCorrect": false,
+        "rationale": "Los registros que previenen la suplantación en el DNS son parte de DNSSEC y utilizan firmas digitales, pero no son el mismo concepto que un certificado SSL/TLS."
+      }
+    ],
+    "hint": "Funciona como un 'documento de identidad' digital para un sitio web, validado por un tercero de confianza."
+  },
+  {
+    "guid": "3a945663-0cf9-4442-bf43-877ed428486d",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "El protocolo DHCP es fundamental en las redes locales. ¿Cuál es su función principal?",
+    "answerOptions": [
+      {
+        "text": "Resolver nombres de dominio como 'www.google.com' en su dirección IP correspondiente.",
+        "isCorrect": false,
+        "rationale": "Esta es la función del DNS (Domain Name System)."
+      },
+      {
+        "text": "Asignar automáticamente la configuración de red (dirección IP, máscara de subred, puerta de enlace) a los dispositivos.",
+        "isCorrect": true,
+        "rationale": "DHCP simplifica la administración de la red al evitar la necesidad de configurar manualmente la información de red en cada dispositivo que se conecta."
+      },
+      {
+        "text": "Filtrar el tráfico de red no deseado para proteger la red local.",
+        "isCorrect": false,
+        "rationale": "El filtrado de tráfico es una función típica de un firewall."
+      },
+      {
+        "text": "Transmitir archivos entre un cliente y un servidor de forma segura.",
+        "isCorrect": false,
+        "rationale": "La transferencia segura de archivos se realiza con protocolos como SFTP o FTPS."
+      }
+    ],
+    "hint": "Este protocolo permite que un dispositivo se conecte a una red y obtenga una dirección 'dinámicamente' sin intervención manual."
+  },
+  {
+    "guid": "62c219dc-9fe4-4b35-9b93-9dee5a69397c",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué capa del modelo TCP/IP es la más cercana al usuario final y a las aplicaciones que utiliza, como un navegador web o un cliente de correo electrónico?",
+    "answerOptions": [
+      {
+        "text": "Capa de Acceso a la Red",
+        "isCorrect": false,
+        "rationale": "Esta es la capa más baja del modelo, encargada de la transmisión física de bits a través del medio (cable, Wi-Fi)."
+      },
+      {
+        "text": "Capa de Internet",
+        "isCorrect": false,
+        "rationale": "Esta capa se encarga del direccionamiento y enrutamiento de paquetes entre redes, pero no interactúa directamente con las aplicaciones del usuario."
+      },
+      {
+        "text": "Capa de Transporte",
+        "isCorrect": false,
+        "rationale": "Esta capa proporciona servicios de comunicación a la capa superior, pero no es la interfaz directa con el usuario."
+      },
+      {
+        "text": "Capa de Aplicación",
+        "isCorrect": true,
+        "rationale": "La capa de aplicación contiene los protocolos (HTTP, SMTP, FTP, etc.) que las aplicaciones de software utilizan directamente para comunicarse a través de la red."
+      }
+    ],
+    "hint": "El nombre de esta capa refleja su propósito: servir a las 'aplicaciones' de software."
+  },
+  {
+    "guid": "1c7d2201-98f2-4a67-942c-1f617fa73971",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "En la URL `https://intranet.bcn.cat`, ¿qué parte se considera el dominio de segundo nivel (Second-Level Domain)?",
+    "answerOptions": [
+      {
+        "text": "https",
+        "isCorrect": false,
+        "rationale": "Esto indica el protocolo que se está utilizando para la comunicación."
+      },
+      {
+        "text": "intranet",
+        "isCorrect": false,
+        "rationale": "Esto es un subdominio, que es una subdivisión del dominio principal."
+      },
+      {
+        "text": "bcn",
+        "isCorrect": true,
+        "rationale": "En la jerarquía de dominios, el dominio de segundo nivel es el que se registra directamente bajo el TLD y generalmente representa el nombre de la organización."
+      },
+      {
+        "text": ".cat",
+        "isCorrect": false,
+        "rationale": "Esto es el dominio de nivel superior o TLD (Top-Level Domain)."
+      }
+    ],
+    "hint": "Es la parte del nombre que identifica de forma única a la organización dentro de un dominio de nivel superior como .com o .cat."
+  },
+  {
+    "guid": "a6c05cc0-1108-4eaa-8c28-fa38174e53d6",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "La tecnología de contenedores, como Docker, se ha vuelto muy popular para desplegar servicios web. ¿Cuál es una de sus principales ventajas en el contexto de la arquitectura de Internet?",
+    "answerOptions": [
+      {
+        "text": "Proporciona cifrado de extremo a extremo para todo el tráfico de Internet.",
+        "isCorrect": false,
+        "rationale": "El cifrado es una función de protocolos como TLS o IPsec, no una característica inherente de los contenedores."
+      },
+      {
+        "text": "Permite un despliegue y escalabilidad eficientes de aplicaciones y servicios.",
+        "isCorrect": true,
+        "rationale": "Los contenedores empaquetan una aplicación con todas sus dependencias, lo que permite que se ejecute de manera consistente en diferentes entornos y se pueda escalar (crear más copias) rápidamente."
+      },
+      {
+        "text": "Asigna automáticamente direcciones IPv6 a los dispositivos de una red.",
+        "isCorrect": false,
+        "rationale": "La asignación de direcciones IP, ya sea v4 o v6, es manejada por protocolos como DHCP o mediante configuración estática."
+      },
+      {
+        "text": "Reemplaza la necesidad de utilizar el sistema DNS.",
+        "isCorrect": false,
+        "rationale": "Los servicios en contenedores todavía dependen del DNS para ser localizables en la red; de hecho, sistemas como Kubernetes tienen sus propios mecanismos de DNS internos."
+      }
+    ],
+    "hint": "Esta tecnología permite empaquetar una aplicación y sus dependencias en una unidad aislada y portátil, facilitando su gestión."
+  },
+  {
+    "guid": "3d7ce48f-ccd7-430b-9ce4-36efd8ad8f15",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Por qué el protocolo UDP es preferido sobre TCP para las consultas DNS?",
+    "answerOptions": [
+      {
+        "text": "Porque UDP garantiza que la respuesta del servidor DNS llegará sin errores.",
+        "isCorrect": false,
+        "rationale": "Al contrario, UDP es un protocolo no fiable que no garantiza la entrega; TCP es el que ofrece fiabilidad."
+      },
+      {
+        "text": "Porque las consultas DNS requieren establecer una conexión duradera, lo cual UDP hace eficientemente.",
+        "isCorrect": false,
+        "rationale": "UDP es sin conexión. TCP es el que establece conexiones, pero el 'handshake' de tres vías introduce una sobrecarga innecesaria para una consulta DNS rápida."
+      },
+      {
+        "text": "Porque las consultas y respuestas DNS son generalmente pequeñas y la sobrecarga de TCP es innecesaria.",
+        "isCorrect": true,
+        "rationale": "Una consulta DNS es una solicitud y respuesta corta. La rapidez y baja sobrecarga de UDP son ideales para este tipo de transacciones rápidas."
+      },
+      {
+        "text": "Porque UDP utiliza el puerto 53, que está especialmente optimizado para la seguridad.",
+        "isCorrect": false,
+        "rationale": "Tanto TCP como UDP pueden usar el puerto 53. La elección del protocolo se basa en la eficiencia de la transacción, no en una seguridad inherente al puerto."
+      }
+    ],
+    "hint": "La naturaleza de una pregunta y respuesta de DNS es muy breve. ¿Qué protocolo es más eficiente para transacciones cortas y rápidas?"
+  },
+  {
+    "guid": "fa3df951-c12c-4c6b-ab6c-ae1e4383573a",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "¿Qué describe mejor el modelo de seguridad 'Zero Trust' (Confianza Cero)?",
+    "answerOptions": [
+      {
+        "text": "Un modelo que confía en todos los dispositivos dentro de la red local (LAN) pero desconfía de las conexiones externas.",
+        "isCorrect": false,
+        "rationale": "Este es el modelo de seguridad tradicional de 'castillo y foso', que el modelo de Confianza Cero busca reemplazar."
+      },
+      {
+        "text": "Un modelo de seguridad que asume que ninguna entidad, dentro o fuera de la red, es de confianza por defecto y verifica continuamente cada solicitud de acceso.",
+        "isCorrect": true,
+        "rationale": "El principio fundamental de 'Zero Trust' es 'nunca confiar, siempre verificar', lo que significa que la identidad y los permisos se validan rigurosamente para cada intento de acceso a los recursos, sin importar la ubicación."
+      },
+      {
+        "text": "Un sistema que utiliza únicamente firewalls para proteger el perímetro de la red.",
+        "isCorrect": false,
+        "rationale": "La dependencia exclusiva de firewalls perimetrales es característica del modelo antiguo; Zero Trust utiliza múltiples controles de seguridad en toda la red."
+      },
+      {
+        "text": "Una política que prohíbe completamente el acceso remoto a los recursos de la empresa.",
+        "isCorrect": false,
+        "rationale": "Zero Trust no prohíbe el acceso remoto, sino que lo habilita de una manera mucho más segura al verificar cada conexión individualmente."
+      }
+    ],
+    "hint": "Este enfoque de seguridad elimina la idea de un 'interior' de red seguro y un 'exterior' inseguro."
+  },
+  {
+    "guid": "12b9375e-abfa-4475-9afe-422976e79810",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "En el contexto de los dominios de Internet, ¿qué es un ccTLD?",
+    "answerOptions": [
+      {
+        "text": "Un dominio de nivel superior genérico, como .com o .org.",
+        "isCorrect": false,
+        "rationale": "Estos se conocen como gTLD (generic Top-Level Domain)."
+      },
+      {
+        "text": "Un dominio de nivel superior territorial asignado a un país o territorio específico, como .es o .fr.",
+        "isCorrect": true,
+        "rationale": "ccTLD significa 'country code Top-Level Domain' y se compone de dos letras que corresponden a un código de país."
+      },
+      {
+        "text": "Un subdominio utilizado para fines comerciales dentro de una organización.",
+        "isCorrect": false,
+        "rationale": "Un subdominio (como 'ventas.empresa.com') es una subdivisión de un dominio de segundo nivel, no un tipo de TLD."
+      },
+      {
+        "text": "Un dominio reservado para las entidades gubernamentales, como .gov.",
+        "isCorrect": false,
+        "rationale": "Aunque .gov es un tipo de TLD, se clasifica como un TLD patrocinado (sTLD), no específicamente un ccTLD, aunque está restringido a un país."
+      }
+    ],
+    "hint": "Las dos 'c' en ccTLD se refieren al 'código de país'."
+  },
+  {
+    "guid": "16a8f596-e80d-489b-880a-4a3cc4cb66bc",
+    "subjectId": "T62",
+    "origin": "notebooklm",
+    "type": "test",
+    "difficulty": "",
+    "question": "Si tu ordenador no puede obtener una dirección IP de un servidor DHCP, es posible que se autoasigne una dirección que empieza por '169.254'. ¿Cómo se llama este mecanismo?",
+    "answerOptions": [
+      {
+        "text": "NAT (Network Address Translation)",
+        "isCorrect": false,
+        "rationale": "NAT se utiliza para traducir direcciones privadas a públicas en la puerta de enlace de una red, no para la autoasignación de IP."
+      },
+      {
+        "text": "APIPA (Automatic Private IP Addressing)",
+        "isCorrect": true,
+        "rationale": "APIPA es una característica de los sistemas operativos que permite a un dispositivo asignarse a sí mismo una dirección IP del rango 169.254.0.0/16 si no puede contactar con un servidor DHCP, permitiendo la comunicación en la red local."
+      },
+      {
+        "text": "DNSSEC (DNS Security Extensions)",
+        "isCorrect": false,
+        "rationale": "DNSSEC es un conjunto de especificaciones para asegurar la autenticidad de las respuestas DNS."
+      },
+      {
+        "text": "IPsec (Internet Protocol Security)",
+        "isCorrect": false,
+        "rationale": "IPsec es un conjunto de protocolos para asegurar las comunicaciones a nivel de la capa de red, comúnmente usado en VPNs."
+      }
+    ],
+    "hint": "Piensa en un mecanismo 'automático' para obtener una dirección IP 'privada' cuando falla la configuración normal."
   }
 ]
 
