@@ -9,10 +9,10 @@
         },
         {
             "guid": "b3479f1a-4d86-4910-ab08-ae70fda7a547",
-            "name": "test",
+            "name": "anonim",
             "role": "user",
-            "password_hash": "$2a$12$VFRw75JYWB6IRRPjCDnyo.a9LYx7Nx3GXPjC1wERWyzKSzSDhGmwy",
-            "email": "test@example.com"
+            "password_hash": "$2a$12$8WYTuk3gXAalfPOk.b4uoe2iKzNiiV81IZ4CWkEwbkQLKN151kce2",
+            "email": "anonim@example.com"
         }
     ]
 }
