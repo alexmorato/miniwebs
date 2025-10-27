@@ -1,17 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Juego</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title id="page-title">Juego</title>
+        <style>
+            body {
+                background: linear-gradient(135deg, #ffe0f7 0%, #c2e9fb 100%);
+                color: #a14fa1;
+                font-family: 'Comic Sans MS', 'Comic Sans', cursive, system-ui, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .top-bar {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 6px;
+                padding: 8px 0 0 8px;
+            }
+            .back-btn {
+                padding: 3px 15px;
+                border-radius: 20px;
+                background: linear-gradient(90deg, #ffb6ec 0%, #b2f7ef 100%);
+                cursor: pointer;
+                font-size: 1rem;
+                transition: background 0.2s, transform 0.2s;
+            }
+            .back-btn:hover {
+                background: linear-gradient(90deg, #f7c6ff 0%, #a2e7ff 100%);
+                color: #a14fa1;
+                transform: scale(1.07);
+            }
+            #titulo-display {
+                font-size: 1.3rem;
+                color: #ff69b4;
+                font-weight: bold;
+                text-shadow: 1px 1px 0 #fff6, 0 2px 8px #f7c6ff88;
+            }
+            #game-iframe {
+                width: 100%;
+                height: calc(100vh - 110px);
+                min-height: 260px;
+                max-height: 100vh;
+                border: none;
+            }
+            @media (max-width: 600px) {
+                #game-iframe { height: calc(100vh - 90px); min-height: 160px; }
+                .top-bar { padding-left: 8px; }
+                #titulo-display { font-size: 1.05rem; }
+            }
+        </style>
 </head>
 <body>
 
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
-            <button onclick="window.location.href='index.html'" style="padding:6px 18px;border-radius:8px;background:#232b45;color:#9fb0ff;border:none;cursor:pointer;font-size:1rem;">⬅️ Tornar</button>
-            <span id="titulo-display" style="font-size:1.1rem;color:#9fb0ff;"></span>
-        </div>
-    <iframe id="game-iframe" width="100%" style="height:calc(100vh - 130px);min-height:320px;max-height:100vh;" frameborder="0"></iframe>
+    <div class="top-bar">
+    <button class="back-btn" onclick="window.location.href='index.html'">🦄 Volver a los juegos</button>
+    <span id="titulo-display"></span>
+    </div>
+    <iframe id="game-iframe"></iframe>
 
     <script>
         // Obtener parámetros de la URL
