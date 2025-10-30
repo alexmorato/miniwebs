@@ -17,7 +17,7 @@
   <h2 style="text-align:center;color:#6ae0a7;margin-top:32px;">Tria un joc</h2>
   <div class="grid" id="jocsGrid"></div>
   <script>
-    fetch('iframes.json')
+    fetch('assets/iframes.json')
       .then(r => r.json())
       .then(jocs => {
         const grid = document.getElementById('jocsGrid');
