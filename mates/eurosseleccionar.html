@@ -389,13 +389,13 @@
     let tempsResposta = parseInt(params.get("tempsResposta")) || 4000;
 
     const monedes = [
-      { valor: 0.01, img: "1cts.png" }, { valor: 0.01, img: "1cts.png" }, { valor: 0.02, img: "2cts.png" },
-      { valor: 0.05, img: "5cts.png" }, { valor: 0.10, img: "10cts.png" },
-      { valor: 0.20, img: "20cts.png" }, { valor: 0.50, img: "50cts.png" },
-      { valor: 1, img: "1e.png" }, { valor: 2, img: "2e.png" },
-      { valor: 5, img: "5e.png" }, { valor: 10, img: "10e.png" },
-      { valor: 20, img: "20e.png" }, { valor: 50, img: "50e.png" },
-      { valor: 100, img: "100e.png" }, { valor: 200, img: "200e.png" }
+  { valor: 0.01, img: "assets/img/euros/1cts.png" }, { valor: 0.01, img: "assets/img/euros/1cts.png" }, { valor: 0.02, img: "assets/img/euros/2cts.png" },
+  { valor: 0.05, img: "assets/img/euros/5cts.png" }, { valor: 0.10, img: "assets/img/euros/10cts.png" },
+  { valor: 0.20, img: "assets/img/euros/20cts.png" }, { valor: 0.50, img: "assets/img/euros/50cts.png" },
+  { valor: 1, img: "assets/img/euros/1e.png" }, { valor: 2, img: "assets/img/euros/2e.png" },
+  { valor: 5, img: "assets/img/euros/5e.png" }, { valor: 10, img: "assets/img/euros/10e.png" },
+  { valor: 20, img: "assets/img/euros/20e.png" }, { valor: 50, img: "assets/img/euros/50e.png" },
+  { valor: 100, img: "assets/img/euros/100e.png" }, { valor: 200, img: "assets/img/euros/200e.png" }
     ];
 
     function renderRondes() {
@@ -505,7 +505,7 @@
     const escala = 3.0;
     monedesMostrades.forEach(m => {
       const img = document.createElement("img");
-      img.src = `assets/${m.img}`;
+      img.src = `${m.img}`;
       img.alt = m.valor.toFixed(2);
       if (m.valor <= 2) {
         img.className = "moneda";

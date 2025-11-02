@@ -1,0 +1,109 @@
+{
+	"preguntas": [
+		{
+			"pregunta": "En la clase de Lara, ________ debe llevar su propio material.",
+			"nok": ["nadie", "alguien", "ninguno"],
+			"ok": ["cada uno"]
+		},
+		{
+			"pregunta": "Hoy en el patio no hay ________, porque llueve mucho.",
+			"nok": ["alguien", "todos", "alguno"],
+			"ok": ["nadie"]
+		},
+		{
+			"pregunta": "Lara no ha traído ________ para el recreo.",
+			"nok": ["algo", "algún", "ningún"],
+			"ok": ["nada"]
+		},
+		{
+			"pregunta": "________ los niños del colegio L’Areny participan en la fiesta de final de curso.",
+			"nok": ["Nadie", "Alguno", "Algunos"],
+			"ok": ["Todos"]
+		},
+		{
+			"pregunta": "En el grupo de danza siempre hay ________ que llega tarde.",
+			"nok": ["nadie", "ninguno", "cada uno"],
+			"ok": ["alguien"]
+		},
+		{
+			"pregunta": "En el aula de Lara hay ________ dibujos en la pared.",
+			"nok": ["nada", "ninguno", "cada uno"],
+			"ok": ["muchos"]
+		},
+		{
+			"pregunta": "Lara ha invitado a ________ amigos a su cumpleaños.",
+			"nok": ["ninguno", "cada uno", "nada"],
+			"ok": ["algunos"]
+		},
+		{
+			"pregunta": "Puedes elegir ________ de estos colores para tu dibujo.",
+			"nok": ["nadie", "ninguno", "alguno"],
+			"ok": ["cualquiera"]
+		},
+		{
+			"pregunta": "Lara siempre tiene ________ interesante que contar cuando vuelve del colegio.",
+			"nok": ["nada", "ninguno", "todo"],
+			"ok": ["algo"]
+		},
+		{
+			"pregunta": "Hoy no hay ________ lápiz en la mesa de Lara.",
+			"nok": ["algún", "cada uno", "nada"],
+			"ok": ["ningún"]
+		},
+		{
+			"pregunta": "¿Tienes ________ cuento para leer esta noche?",
+			"nok": ["ningún", "muchos", "todo"],
+			"ok": ["algún"]
+		},
+		{
+			"pregunta": "De todos los libros, sólo me gusta ________ de aventuras.",
+			"nok": ["cada uno", "nada", "todo"],
+			"ok": ["alguno"]
+		},
+		{
+			"pregunta": "Lara tiene ________ amigas muy alegres en clase.",
+			"nok": ["muchos", "ninguno", "nada"],
+			"ok": ["algunas"]
+		},
+		{
+			"pregunta": "En la mochila de Naia no hay ________, está vacía.",
+			"nok": ["algo", "algún", "ninguno"],
+			"ok": ["nada"]
+		},
+		{
+			"pregunta": "________ los niños deben respetar las normas del aula.",
+			"nok": ["Nadie", "Alguno", "Cualquiera"],
+			"ok": ["Todos"]
+		},
+		{
+			"pregunta": "Lara y Naia tienen ________ juguetes en común que les gustan mucho.",
+			"nok": ["ninguno", "muchos", "cada uno"],
+			"ok": ["algunos"]
+		},
+		{
+			"pregunta": "En la clase de danza, ________ puede practicar su baile favorito.",
+			"nok": ["nadie", "alguno", "ninguno"],
+			"ok": ["cualquiera"]
+		},
+		{
+			"pregunta": "Después del recreo, Lara come ________ fruta antes de volver a clase.",
+			"nok": ["ninguna", "muchas", "cada una"],
+			"ok": ["alguna"]
+		},
+		{
+			"pregunta": "Lara revisa ________ sus cuadernos antes del examen.",
+			"nok": ["ninguno", "algunos", "algunas"],
+			"ok": ["cada uno"]
+		},
+		{
+			"pregunta": "En la biblioteca del colegio, hay ________ libros sobre animales que le gustan a Lara.",
+			"nok": ["muchos", "ninguno", "cada uno"],
+			"ok": ["algunos"]
+		},
+		{
+			"pregunta": "Durante la excursión, Lara encontró ________ conchas en la playa.",
+			"nok": ["ningunas", "muchas", "cada una"],
+			"ok": ["algunas"]
+		}
+	]
+}
