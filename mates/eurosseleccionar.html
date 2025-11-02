@@ -2,26 +2,139 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>💰 Joc d'Euros - Selecciona les Monedes Correctes</title>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <style>
+    /* Iconos de menú y fullscreen en las esquinas */
+    .corner-icon {
+      position: fixed;
+      bottom: 14px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0,0,0,0.85);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 101;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #0006;
+      transition: background 0.18s;
+      border: none;
+      padding: 0;
+    }
+    .corner-icon:active, .corner-icon:focus {
+      background: #1976d2;
+      outline: none;
+    }
+    .corner-icon.menu {
+      left: 14px;
+    }
+    .corner-icon.fullscreen {
+      right: 14px;
+    }
+    .corner-icon svg {
+      display: block;
+      width: 28px;
+      height: 28px;
+      fill: #fff;
+    }
+    /* Pantalla de inicio */
+    #pantallaInicio {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #pantallaInicio .titulo-euros {
+      color: #fff;
+      font-size: 3em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      flex: 1;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      width: 100%;
+    }
+    #pantallaInicio .bloque-boton {
+      flex: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin: 32px 0 18px 0;
+    }
+    #btnIniciarJuego {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #2196f3;
+      border: none;
+      border-radius: 18px;
+      width: 110px;
+      height: 110px;
+      box-shadow: 0 4px 16px #0008;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+    #btnIniciarJuego span {
+      color: #fff;
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-top: 8px;
+      letter-spacing: 1px;
+      }
+    #pantallaInicio .texto-instruccion {
+      color: #fff;
+      font-size: 1.25em;
+      margin-top: 18px;
+      max-width: 90vw;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      align-items: start;
+      justify-content: center;
+      width: 100%;
+    }
     body {
       font-family: "Comic Neue", "Comic Sans MS", cursive;
       background-color: #f0faff;
       text-align: center;
       padding: 30px;
+      margin: 0;
     }
 
-    h1 { color: #0078D7; font-size: 2.5em; }
+    h1 {
+      color: #0078D7;
+      font-size: 2.5em;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
     .card {
       background: linear-gradient(135deg, #ffffff, #e7f4ff);
       padding: 30px;
       border-radius: 25px;
       box-shadow: 0 0 20px rgba(0,0,0,0.15);
-      display: inline-block;
       border: 3px solid #89c9ff;
       margin-bottom: 30px;
+      max-width: 700px;
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #monedesContainer {
@@ -40,6 +153,8 @@
       cursor: pointer;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       transition: transform 0.2s, background-color 0.2s;
+      width: 70px;
+      height: 70px;
     }
 
     .bitllet {
@@ -49,6 +164,8 @@
       cursor: pointer;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       transition: transform 0.2s, background-color 0.2s;
+      width: 120px;
+      height: 60px;
     }
 
     .seleccionada {
@@ -90,21 +207,178 @@
     .correcte { color: green; font-weight: bold; }
     .incorrecte { color: red; font-weight: bold; }
 
+    /* Responsive styles */
+    @media (max-width: 700px) {
+      .card {
+        padding: 12px 2vw;
+        border-radius: 16px;
+        font-size: 1em;
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: -2vw;
+        margin-right: -2vw;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      #monedesContainer {
+        gap: 6px;
+        max-width: 98vw;
+      }
+      .moneda {
+        width: 48px;
+        height: 48px;
+      }
+      .bitllet {
+        width: 70px;
+        height: 36px;
+      }
+      button {
+        font-size: 1em;
+        padding: 10px 12px;
+        border-radius: 10px;
+      }
+      #historial {
+        font-size: 0.95em;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        padding: 6px;
+      }
+      .card {
+        padding: 6px 0.5vw;
+        border-radius: 10px;
+        font-size: 0.95em;
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: -3vw;
+        margin-right: -3vw;
+      }
+      h1 {
+        font-size: 1.1em;
+      }
+      #monedesContainer {
+        gap: 3px;
+      }
+      .moneda {
+        width: 32px;
+        height: 32px;
+      }
+      .bitllet {
+        width: 40px;
+        height: 18px;
+      }
+      button {
+        font-size: 0.9em;
+        padding: 7px 6px;
+        border-radius: 7px;
+      }
+      #historial {
+        font-size: 0.85em;
+        padding: 4px;
+      }
+    }
+
+        #rondes {
+          position: fixed;
+          left: 50%;
+          bottom: 12px;
+          transform: translateX(-50%);
+          background: rgba(0,0,0,0.85);
+          color: #fff;
+          font-size: 1.25em;
+          font-weight: bold;
+          text-align: center;
+          padding: 7px 18px 6px 18px;
+          letter-spacing: 1px;
+          z-index: 100;
+          margin: 0;
+          border-radius: 12px;
+          box-shadow: 0 2px 10px #0006;
+          user-select: none;
+          min-width: 60px;
+          max-width: 120px;
+          white-space: nowrap;
+          pointer-events: none;
+        }
+
+    /* Cronómetro y aciertos */
+    .corner-top {
+      position: fixed;
+      top: 14px;
+      min-width: 54px;
+      min-height: 38px;
+      background: rgba(0,0,0,0.85);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 102;
+      font-size: 1.25em;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 2px 10px #0006;
+      padding: 7px 16px 6px 16px;
+      user-select: none;
+      letter-spacing: 1px;
+    }
+    .corner-top.crono {
+      right: 14px;
+    }
+    .corner-top.aciertos {
+      left: 14px;
+    }
+
   </style>
 </head>
 <body>
-  <h1>💰 Selecciona els diners justos!</h1>
-  <div id="rondes">Ronda 0 de 0</div>
 
-  <div class="card">
-    <h2 id="preuObjectiu"></h2>
-    <div id="monedesContainer"></div>
-    <button onclick="comprovar()">✨ Comprova!</button>
-    <p id="resultat"></p>
+  <!-- Pantalla de inicio -->
+  <div id="pantallaInicio">
+    <div class="titulo-euros">
+      <span>💶 EUROS</span>
+    </div>
+    <div class="bloque-boton">
+      <button id="btnIniciarJuego">
+        <svg width="48" height="48" viewBox="0 0 48 48"><polygon points="16,10 40,24 16,38" fill="white"/></svg>
+        <span>INICIAR</span>
+      </button>
+    </div>
+    <div class="texto-instruccion">
+      <span>💰 Selecciona els diners justos!</span>
+    </div>
   </div>
 
-  <h2 style="color:#0078D7;">📋 Historial</h2>
-  <div id="historial"></div>
+  <div id="mainLayout">
+    <!-- Barra superior -->
+    <div id="barraSuperior">
+      <div class="corner-top aciertos" id="aciertos">✓ 0</div>
+      <div class="corner-top crono" id="cronometro">00:00</div>
+    </div>
+    <!-- Zona central del juego -->
+    <div id="zonaCentral">
+      <div class="card">
+        <h2 id="preuObjectiu"></h2>
+        <div id="monedesContainer"></div>
+        <button onclick="comprovar()">✨ Comprova!</button>
+        <p id="resultat"></p>
+      </div>
+    </div>
+    <!-- Barra inferior -->
+    <div id="barraInferior">
+      <button class="corner-icon menu" id="btnMenu" title="Menú" tabindex="0">
+        <svg viewBox="0 0 32 32"><rect y="6" width="32" height="4" rx="2"/><rect y="14" width="32" height="4" rx="2"/><rect y="22" width="32" height="4" rx="2"/></svg>
+      </button>
+      <div id="rondes"></div>
+      <button class="corner-icon fullscreen" id="btnFullscreen" title="Pantalla completa" tabindex="0">
+        <svg viewBox="0 0 32 32"><path d="M4 12V4h8M28 12V4h-8M4 20v8h8M28 20v8h-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -112,7 +386,6 @@
     const maximRondes = parseInt(params.get("maximRondes")) || 10;
     let ronda = 0, preu = 0, total = 0;
     let seleccionades = [];
-    let historialData = [];
     let tempsResposta = parseInt(params.get("tempsResposta")) || 4000;
 
     const monedes = [
@@ -126,7 +399,9 @@
     ];
 
     function renderRondes() {
-      document.getElementById("rondes").textContent = `🎯 Ronda ${ronda} de ${maximRondes}`;
+      // Mostrar la ronda actual (empezando en 1)
+      const actual = Math.min(ronda + 1, maximRondes);
+      document.getElementById("rondes").textContent = `${actual} de ${maximRondes}`;
     }
 
     function formatValor(valor) {
@@ -141,40 +416,68 @@
             return;
         }
 
-        // 🔹 Definir configuració per nivell
-        let disponibles;
-        if (nivell === 1) {
-            disponibles = monedes.filter(m => m.valor <= 2); // només monedes petites
-        } else if (nivell === 2) {
-            disponibles = monedes.filter(m => m.valor <= 50); // monedes i bitllets fins a 50€
-        } else {
-            disponibles = monedes; // tots
+
+    // 🔹 Definir configuració per nivell
+    let monedesMostrades = [];
+    if (nivell === 1) {
+      // 3-4 monedas de céntimos
+      let centimos = monedes.filter(m => m.valor === 0.01 || m.valor === 0.02 || m.valor === 0.05 || m.valor === 0.10 || m.valor === 0.20 || m.valor === 0.50);
+      let euros = monedes.filter(m => m.valor === 1 || m.valor === 2);
+      let billetes = monedes.filter(m => m.valor === 5 || m.valor === 10);
+
+      let nCentimos = Math.floor(Math.random() * 2) + 3; // 3 o 4
+      let nEuros = Math.floor(Math.random() * 2) + 2;    // 2 o 3
+      let nBilletes = Math.random() < 0.5 ? 1 : 3;       // 1 o 3
+
+      // Seleccionar aleatoriament sense repetició
+      function pickRandom(arr, n) {
+        let copy = [...arr];
+        let out = [];
+        for (let i = 0; i < n && copy.length > 0; i++) {
+          let idx = Math.floor(Math.random() * copy.length);
+          out.push(copy.splice(idx, 1)[0]);
         }
+        return out;
+      }
+      monedesMostrades = [
+        ...pickRandom(centimos, nCentimos),
+        ...pickRandom(euros, nEuros),
+        ...pickRandom(billetes, nBilletes)
+      ];
+    } else if (nivell === 2) {
+      let disponibles = monedes.filter(m => m.valor <= 50); // monedes i bitllets fins a 50€
+      const numMostrades = 8;
+      while (monedesMostrades.length < numMostrades && disponibles.length > 0) {
+        const i = Math.floor(Math.random() * disponibles.length);
+        monedesMostrades.push(disponibles.splice(i, 1)[0]);
+      }
+    } else {
+      let disponibles = [...monedes];
+      const numMostrades = 10;
+      while (monedesMostrades.length < numMostrades && disponibles.length > 0) {
+        const i = Math.floor(Math.random() * disponibles.length);
+        monedesMostrades.push(disponibles.splice(i, 1)[0]);
+      }
+    }
 
-        // 🔹 Nombre d'opcions a mostrar
-        const numMostrades = nivell === 1 ? 6 : (nivell === 2 ? 8 : 10);
 
-        // 🔹 Escollim monedes aleatòries sense repetició
-        const monedesMostrades = [];
-        while (monedesMostrades.length < numMostrades && disponibles.length > 0) {
-            const i = Math.floor(Math.random() * disponibles.length);
-            monedesMostrades.push(disponibles.splice(i, 1)[0]);
-        }
+    // 🔹 Triem un subconjunt aleatori d’aquestes per formar el preu objectiu (50-80% de les monedes)
+    const subset = [];
+    let total = 0;
+    const minPct = 0.5, maxPct = 0.8;
+    const minNum = Math.max(1, Math.floor(monedesMostrades.length * minPct));
+    const maxNum = Math.max(minNum, Math.floor(monedesMostrades.length * maxPct));
+    const nombreSub = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+    const copia = [...monedesMostrades];
 
-        // 🔹 Triem un subconjunt aleatori d’aquestes per formar el preu objectiu
-        const subset = [];
-        let total = 0;
-        const nombreSub = Math.floor(Math.random() * (monedesMostrades.length / 2)) + 1; // almenys 1
-        const copia = [...monedesMostrades];
+    for (let i = 0; i < nombreSub && copia.length > 0; i++) {
+      const j = Math.floor(Math.random() * copia.length);
+      const m = copia.splice(j, 1)[0];
+      subset.push(m);
+      total += m.valor;
+    }
 
-        for (let i = 0; i < nombreSub && copia.length > 0; i++) {
-            const j = Math.floor(Math.random() * copia.length);
-            const m = copia.splice(j, 1)[0];
-            subset.push(m);
-            total += m.valor;
-        }
-
-        preu = total.toFixed(2);
+    preu = total.toFixed(2);
 
         // 🔹 Reiniciem estat del joc
         seleccionades = [];
@@ -187,16 +490,37 @@
         const cont = document.getElementById("monedesContainer");
         cont.innerHTML = "";
 
-        monedesMostrades.forEach(m => {
-            const img = document.createElement("img");
-            img.src = `assets/${m.img}`;
-            img.alt = m.valor.toFixed(2);
-            img.className = m.valor <= 2 ? "moneda" : "bitllet";
-            img.style.width = m.valor <= 2 ? "70px" : "120px";
-            img.style.height = m.valor <= 2 ? "70px" : "60px";
-            img.addEventListener("click", () => toggleSeleccio(m, img));
-            cont.appendChild(img);
-        });
+    // Escala realista para monedas (diámetro aproximado en mm, luego escalado a px)
+    const diametros = {
+      0.01: 16.25,
+      0.02: 18.75,
+      0.05: 21.25,
+      0.10: 19.75,
+      0.20: 22.25,
+      0.50: 24.25,
+      1: 23.25,
+      2: 25.75
+    };
+    // Escala: 1mm = 3px (ajustable)
+    const escala = 3.0;
+    monedesMostrades.forEach(m => {
+      const img = document.createElement("img");
+      img.src = `assets/${m.img}`;
+      img.alt = m.valor.toFixed(2);
+      if (m.valor <= 2) {
+        img.className = "moneda";
+        let diam = diametros[m.valor] || 20;
+        let px = Math.round(diam * escala);
+        img.style.width = px + "px";
+        img.style.height = px + "px";
+      } else {
+        img.className = "bitllet";
+        img.style.width = "120px";
+        img.style.height = "60px";
+      }
+      img.addEventListener("click", () => toggleSeleccio(m, img));
+      cont.appendChild(img);
+    });
 
         renderRondes();
     }
@@ -214,11 +538,43 @@
       }
     }
 
+    // Cronómetro y aciertos
+let cronoInterval = null;
+let cronoStart = null;
+let aciertos = 0;
+
+function actualizarCronometro() {
+  if (!cronoStart) return;
+  const elapsed = Math.floor((Date.now() - cronoStart) / 1000);
+  const min = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const seg = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('cronometro').textContent = `${min}:${seg}`;
+}
+
+function iniciarCronometro() {
+  cronoStart = Date.now();
+  actualizarCronometro();
+  if (cronoInterval) clearInterval(cronoInterval);
+  cronoInterval = setInterval(actualizarCronometro, 1000);
+}
+
+function resetearCronometro() {
+  if (cronoInterval) clearInterval(cronoInterval);
+  cronoStart = null;
+  document.getElementById('cronometro').textContent = '00:00';
+}
+
+function actualizarAciertos() {
+  document.getElementById('aciertos').textContent = `✓ ${aciertos}`;
+}
+
     function comprovar() {
       const resultat = document.getElementById("resultat");
       const correcte = parseFloat(preu) === parseFloat(total.toFixed(2));
 
       if (correcte) {
+        aciertos++;
+        actualizarAciertos();
         resultat.textContent = "✅ Correcte! Molt bé!";
         resultat.style.color = "green";
         confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
@@ -227,37 +583,23 @@
         resultat.style.color = "red";
       }
 
-      historialData.unshift({
-        ronda: ronda + 1,
-        preu,
-        total: total.toFixed(2),
-        correcte,
-        monedes: seleccionades.map(m => m.valor)
-      });
-
-      renderHistorial();
       ronda++;
-
       // 🔹 Reinicia el total abans de començar la nova ronda
-        total = 0;
-
+      total = 0;
       setTimeout(nouProblema, tempsResposta);
     }
 
-    function renderHistorial() {
-      const hist = document.getElementById("historial");
-      hist.innerHTML = "";
-      historialData.forEach(e => {
-        const div = document.createElement("div");
-        div.classList.add(e.correcte ? "correcte" : "incorrecte");
-        const valors = e.monedes.map(v => formatValor(v)).join(" + ");
-        div.textContent = `${e.correcte ? "✅" : "❌"} ${valors} = ${e.total} € (Preu: ${e.preu} €)`;
-        hist.appendChild(div);
-      });
+    // Ocultar la pantalla de inicio y arrancar el juego
+    function iniciarJuego() {
+      document.getElementById('pantallaInicio').style.display = 'none';
+      aciertos = 0;
+      actualizarAciertos();
+      resetearCronometro();
+      iniciarCronometro();
+      renderRondes();
+      nouProblema();
     }
-
-    renderRondes();
-    nouProblema();
+    document.getElementById('btnIniciarJuego').onclick = iniciarJuego;
   </script>
 </body>
 </html>
