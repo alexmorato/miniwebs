@@ -169,7 +169,8 @@
       font-weight: bold;
       z-index: 10;
       animation: aparecerSimbolo 0.3s ease-out;
-    }
+      text-shadow: 10px 2px 8px rgba(0,0,0,0.35), 0 0 2px #fff;
+      }
     
     @keyframes aparecerSimbolo {
       0% {
@@ -498,12 +499,13 @@ function mostrarPregunta() {
   }
   
   // Crear botones
+  const colorOffset = Math.floor(Math.random() * coloresBotones.length);
   respuestas.forEach((respuesta, index) => {
     const boton = document.createElement('button');
     boton.className = 'boton-respuesta';
     boton.textContent = respuesta.text;
     boton.dataset.correcta = respuesta.isCorrect ? "1" : "0";
-    boton.style.backgroundColor = coloresBotones[index % coloresBotones.length];
+    boton.style.backgroundColor = coloresBotones[(index + colorOffset) % coloresBotones.length];
     
     boton.onclick = () => manejarRespuesta(index, boton);
     
@@ -522,26 +524,37 @@ function manejarRespuesta(indiceSeleccionado, botonClickeado) {
   const botones = document.querySelectorAll('.boton-respuesta');
   botones.forEach(btn => btn.onclick = null);
   
-  // Mostrar símbolo de resultado
+  // Mostrar símbolo de resultado en el botón pulsado
   const simbolo = document.createElement('div');
   simbolo.className = 'simbolo-resultado';
   simbolo.textContent = esCorrecta ? '✓' : '✗';
-  simbolo.style.color = esCorrecta ? 'green' : 'red';
-
-  
+  simbolo.style.color = esCorrecta ? '#2ecc71' : '#e74c3c';
   botonClickeado.appendChild(simbolo);
-  
-  // Actualizar aciertos si es correcta
   if (esCorrecta) {
     aciertos++;
     actualizarContadores();
+    setTimeout(() => {
+      preguntaActual++;
+      mostrarPregunta();
+    }, 1500);
+  } else {
+    // Si es incorrecta, tras 1s mostrar el check en la correcta y luego pasar de pregunta
+    setTimeout(() => {
+      // Buscar el botón correcto
+      const btnCorrecto = Array.from(botones).find(btn => btn.dataset.correcta === "1");
+      if (btnCorrecto) {
+        const check = document.createElement('div');
+        check.className = 'simbolo-resultado';
+        check.textContent = '✓';
+        check.style.color = '#2ecc71';
+        btnCorrecto.appendChild(check);
+      }
+      setTimeout(() => {
+        preguntaActual++;
+        mostrarPregunta();
+      }, 1300);
+    }, 1300);
   }
-  
-  // Pasar a la siguiente pregunta después de 1 segundo
-  setTimeout(() => {
-    preguntaActual++;
-    mostrarPregunta();
-  }, 1000);
 }
 
 function finalizarJuego() {
