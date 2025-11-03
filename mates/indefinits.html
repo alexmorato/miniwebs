@@ -343,6 +343,7 @@
     </div>
   </div>
 
+<div id="menuModal" style="display:none;"></div>
 <script type="module">
 import { shuffle } from './assets/util.js';
 
@@ -352,6 +353,8 @@ let preguntaActual = 0;
 let aciertos = 0;
 let tiempoInicio = 0;
 let cronometroInterval = null;
+let cronometroPausado = false;
+let tiempoPausa = 0;
 
 // Colores para los botones
 const coloresBotones = [
@@ -359,6 +362,56 @@ const coloresBotones = [
   '#9b59b6', '#1abc9c', '#e67e22', '#34495e',
   '#e91e63', '#673ab7', '#00bcd4', '#4caf50'
 ];
+
+function mostrarMenuModal() {
+  // Pausar cronómetro
+  if (cronometroInterval && !cronometroPausado) {
+    clearInterval(cronometroInterval);
+    cronometroPausado = true;
+    tiempoPausa = Date.now();
+  }
+  const modal = document.getElementById('menuModal');
+  modal.innerHTML = `
+    <div style="position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(40,40,40,0.45);"></div>
+    <div style="position:fixed;z-index:9999;left:24px;bottom:24px;min-width:220px;max-width:90vw;padding:0 0 18px 0;background:#23242a;border:2px solid #fff;border-radius:18px;box-shadow:0 8px 32px #0008;display:flex;flex-direction:column;align-items:stretch;">
+      <div style="padding:18px 18px 8px 18px;font-size:1.3em;font-weight:bold;color:#fff;">Menú</div>
+      <div style="height:2px;background:linear-gradient(90deg,#fff,#bbb);margin:0 0 10px 0;"></div>
+      <button id="btnEnviarRespuestas" disabled style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#444;color:#aaa;border:none;border-radius:8px;cursor:not-allowed;opacity:0.7;">Enviar respuestas</button>
+      <button id="btnReiniciarJuego" style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#fff;color:#23242a;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Volver a empezar</button>
+      <button id="btnReanudar" style="margin:0 18px 0 18px;padding:12px;font-size:1em;background:#2196f3;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Reanudar</button>
+    </div>
+  `;
+  modal.style.display = 'block';
+  // Listeners
+  document.getElementById('btnReanudar').onclick = ocultarMenuModal;
+  document.getElementById('btnReiniciarJuego').onclick = function() {
+    ocultarMenuModal();
+    mostrarPantallaInicio();
+  };
+}
+
+function ocultarMenuModal() {
+  document.getElementById('menuModal').style.display = 'none';
+  // Reanudar cronómetro
+  if (cronometroPausado) {
+    tiempoInicio += Date.now() - tiempoPausa;
+    cronometroInterval = setInterval(actualizarCronometro, 1000);
+    cronometroPausado = false;
+  }
+}
+
+function mostrarPantallaInicio() {
+  // Resetear todo y mostrar pantalla de inicio
+  document.getElementById('pantallaInicio').style.display = 'flex';
+  document.getElementById('juegoContainer').style.display = 'none';
+  document.getElementById('mensajeBienvenida').style.display = 'flex';
+  document.getElementById('areaCentral').innerHTML = document.getElementById('areaCentral').innerHTML; // reset contenido
+  if (cronometroInterval) clearInterval(cronometroInterval);
+  cronometroPausado = false;
+  tiempoInicio = 0;
+  actualizarContadores(0, 1, 10);
+  document.getElementById('cronometro').textContent = '00:00';
+}
 
 async function cargarPreguntas() {
   try {
@@ -375,23 +428,15 @@ async function cargarPreguntas() {
 }
 
 function iniciarJuego() {
-  // Ocultar mensaje de bienvenida y mostrar juego
+  document.getElementById('pantallaInicio').style.display = 'none';
   document.getElementById('mensajeBienvenida').style.display = 'none';
   document.getElementById('juegoContainer').style.display = 'flex';
-  
-  // Reiniciar variables
   preguntaActual = 0;
   aciertos = 0;
   tiempoInicio = Date.now();
-  
-  // Actualizar UI inicial
   actualizarContadores();
   actualizarCronometro();
-  
-  // Iniciar cronómetro
   cronometroInterval = setInterval(actualizarCronometro, 1000);
-  
-  // Mostrar primera pregunta
   mostrarPregunta();
 }
 
@@ -512,9 +557,7 @@ document.getElementById('btnIniciarJuego').onclick = function() {
 };
 
 document.getElementById('btnMenu').onclick = function() {
-  if (confirm('¿Estás seguro de que quieres volver al menú? Se perderá el progreso actual.')) {
-    location.reload();
-  }
+  mostrarMenuModal();
 };
 
 document.getElementById('btnFullscreen').onclick = function() {
