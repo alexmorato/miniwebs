@@ -211,6 +211,22 @@
       text-align: center;
       opacity: 0.9;
     }
+    /* --- MÓVIL VERTICAL: mejorar tamaño de texto y botones --- */
+    @media (max-width: 480px) {
+      .zona-pregunta {
+        padding: 8vw 4vw 4vw 4vw;
+      }
+      .texto-pregunta {
+        font-size: clamp(1.3em, 8vw, 2.2em);
+        line-height: 1.25;
+        max-width: 98vw;
+      }
+      .boton-respuesta {
+        font-size: clamp(1.1em, 5vw, 1.5em);
+        min-height: 48px;
+        padding: 16px 8px;
+      }
+    }
     .area-inferior {
       width: 100vw;
       min-height: 48px;
