@@ -35,7 +35,6 @@
       box-shadow: 0 2px 8px #0002;
     }
     .area-superior .cronometro {
-      background: #2221;
       color: #222;
       border-radius: 8px;
       padding: 4px 12px;
@@ -166,7 +165,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 7em;
+      font-size: 4em;
       font-weight: bold;
       z-index: 10;
       animation: aparecerSimbolo 0.3s ease-out;
@@ -227,6 +226,20 @@
         padding: 16px 8px;
       }
     }
+
+      /* --- MÓVIL HORIZONTAL: 4 botones en línea si el alto es pequeño --- */
+      @media (max-width: 900px) and (max-height: 480px) {
+        .zona-respuestas {
+          grid-template-columns: repeat(4, 1fr) !important;
+          gap: 10px;
+          padding: 2vw 2vw 2vw 2vw;
+        }
+        .boton-respuesta {
+          font-size: clamp(1em, 3vw, 1.2em);
+          min-height: 40px;
+          padding: 12px 4px;
+        }
+      }
     .area-inferior {
       width: 100vw;
       min-height: 48px;
@@ -513,7 +526,8 @@ function manejarRespuesta(indiceSeleccionado, botonClickeado) {
   const simbolo = document.createElement('div');
   simbolo.className = 'simbolo-resultado';
   simbolo.textContent = esCorrecta ? '✓' : '✗';
-  simbolo.style.color = '#00f';
+  simbolo.style.color = esCorrecta ? 'green' : 'red';
+
   
   botonClickeado.appendChild(simbolo);
   
