@@ -448,6 +448,10 @@ async function cargarPreguntas() {
     const resp = await fetch('config/indefinidos.json');
     if (!resp.ok) throw new Error('No se pudo cargar el JSON');
     const data = await resp.json();
+    // Guardar guid en localStorage si existe
+    if (data.guid) {
+      localStorage.setItem('game_guid', data.guid);
+    }
     if (!data.preguntas || !Array.isArray(data.preguntas)) throw new Error('Formato incorrecto');
     const barajadas = shuffle([...data.preguntas]);
     preguntasSeleccionadas = barajadas.slice(0, 10);
