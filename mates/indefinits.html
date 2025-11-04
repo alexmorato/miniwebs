@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joc d'Euros - Layout 3 Àrees</title>
+  <title>Es Tu Dia Jugant</title>
   <style>
     html, body {
       height: 100%;
@@ -402,7 +402,7 @@ function mostrarMenuModal() {
   }
   const modal = document.getElementById('menuModal');
   modal.innerHTML = `
-    <div style="position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(40,40,40,0.45);"></div>
+    <div style="position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(40,40,40,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
     <div style="position:fixed;z-index:9999;left:24px;bottom:24px;min-width:220px;max-width:90vw;padding:0 0 18px 0;background:#23242a;border:2px solid #fff;border-radius:18px;box-shadow:0 8px 32px #0008;display:flex;flex-direction:column;align-items:stretch;">
       <div style="padding:18px 18px 8px 18px;font-size:1.3em;font-weight:bold;color:#fff;">Menú</div>
       <div style="height:2px;background:linear-gradient(90deg,#fff,#bbb);margin:0 0 10px 0;"></div>

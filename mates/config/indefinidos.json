@@ -80,12 +80,12 @@
 		},
 		{
 			"pregunta": "Lara y Naia tienen ________ juguetes en común que les gustan mucho.",
-			"nok": ["ninguno", "muchos", "cada uno"],
-			"ok": ["algunos"]
+			"nok": ["ninguno", "cada uno"],
+			"ok": ["algunos", "muchos"]
 		},
 		{
 			"pregunta": "En la clase de danza, ________ puede practicar su baile favorito.",
-			"nok": ["nadie", "alguno", "ninguno"],
+			"nok": ["algunas", "alguno", "ninguno"],
 			"ok": ["cualquiera"]
 		},
 		{
@@ -94,19 +94,19 @@
 			"ok": ["alguna"]
 		},
 		{
-			"pregunta": "Lara revisa ________ sus cuadernos antes del examen.",
-			"nok": ["ninguno", "algunos", "algunas"],
-			"ok": ["cada uno"]
+			"pregunta": "Lara revisa ________ de sus cuadernos antes del examen.",
+			"nok": ["ninguno", "algunas"],
+			"ok": ["cada uno", "algunos"]
 		},
 		{
 			"pregunta": "En la biblioteca del colegio, hay ________ libros sobre animales que le gustan a Lara.",
-			"nok": ["muchos", "ninguno", "cada uno"],
-			"ok": ["algunos"]
+			"nok": ["ninguno", "cada uno"],
+			"ok": ["algunos", "muchos"]
 		},
 		{
 			"pregunta": "Durante la excursión, Lara encontró ________ conchas en la playa.",
-			"nok": ["ningunas", "muchas", "cada una"],
-			"ok": ["algunas"]
+			"nok": ["ningunas", "cada una"],
+			"ok": ["algunas", "muchas"]
 		}
 	]
 }
