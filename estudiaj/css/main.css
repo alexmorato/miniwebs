@@ -1,0 +1,101 @@
+/* Estils principals per Es Tu Dia Jugant */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0faff;
+}
+.header {
+  width: 100vw;
+  min-height: 60px;
+  background: #2196f3;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px #0002;
+  padding: 12px 0;
+}
+.logo {
+  height: 48px;
+  width: 48px;
+  border-radius: 12px;
+  background: #fff;
+  object-fit: contain;
+  box-shadow: 0 2px 8px #0002;
+}
+.titol {
+  font-size: clamp(2em, 6vw, 3em);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 8px #0002;
+}
+.menu-principal {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 8px;
+}
+.subtitol {
+  font-size: clamp(1.2em, 4vw, 2em);
+  color: #222;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.menu-botons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+}
+.menu-btn {
+  background: #ff9800;
+  color: #fff;
+  font-size: clamp(1.5em, 6vw, 2.5em);
+  font-weight: bold;
+  border-radius: 18px;
+  padding: 32px 24px;
+  min-width: 180px;
+  min-height: 80px;
+  box-shadow: 0 4px 16px #0004;
+  transition: background 0.2s, transform 0.2s;
+}
+.menu-btn:hover {
+  background: #f57c00;
+  transform: scale(1.05);
+}
+.footer {
+  width: 100vw;
+  min-height: 48px;
+  background: #2196f3;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+  box-shadow: 0 -2px 8px #0002;
+}
+@media (max-width: 600px) {
+  .menu-botons {
+    flex-direction: column;
+    gap: 18px;
+    max-width: 98vw;
+  }
+  .menu-btn {
+    min-width: 80vw;
+    min-height: 60px;
+    font-size: clamp(1.2em, 7vw, 2em);
+    padding: 18px 8px;
+  }
+  .header {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0;
+  }
+}

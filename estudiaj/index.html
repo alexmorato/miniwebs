@@ -1,102 +1,44 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Es Tu Dia Jugant</title>
-	<link rel="stylesheet" href="css/reset.css">
-	<link rel="stylesheet" href="css/main.css">
-	<style>
-		body {
-			background: #f0faff;
-			font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-			margin: 0;
-			min-height: 100vh;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: flex-start;
-		}
-		.header {
-			width: 100vw;
-			background: #6ae0a7;
-			color: #032217;
-			text-align: center;
-			font-size: 2.2em;
-			font-weight: bold;
-			padding: 24px 0 12px 0;
-			letter-spacing: 1px;
-			box-shadow: 0 2px 8px #0002;
-		}
-		.menu {
-			display: flex;
-			flex-direction: column;
-			gap: 24px;
-			margin: 40px 0 0 0;
-			width: 100%;
-			max-width: 420px;
-			align-items: center;
-		}
-		.menu-btn {
-			width: 100%;
-			max-width: 340px;
-			background: #21c08d;
-			color: #fff;
-			font-size: 1.5em;
-			font-weight: bold;
-			border: none;
-			border-radius: 18px;
-			padding: 28px 0;
-			margin: 0 auto;
-			box-shadow: 0 4px 16px #0002;
-			cursor: pointer;
-			transition: background 0.2s, transform 0.2s;
-			letter-spacing: 1px;
-			outline: none;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.menu-btn:active {
-			background: #6ae0a7;
-			transform: scale(0.98);
-		}
-		.menu-btn .icon {
-			margin-right: 18px;
-			font-size: 1.5em;
-			display: inline-block;
-		}
-		@media (max-width: 600px) {
-			.header { font-size: 1.5em; padding: 18px 0 8px 0; }
-			.menu-btn { font-size: 1.1em; padding: 18px 0; }
-			.menu { max-width: 98vw; }
-		}
-	</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Es Tu Dia Jugant</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="assets/img/logo.png">
+  <script type="module" src="js/login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 </head>
 <body>
-	<div class="header">Es Tu Dia Jugant</div>
-	<div class="menu">
-		<button class="menu-btn" id="btnJugar"><span class="icon">🎲</span>Jugar</button>
-		<button class="menu-btn" id="btnPractica"><span class="icon">📚</span>Practica</button>
-		<button class="menu-btn" id="btnAprendre"><span class="icon">🧠</span>Aprendre</button>
-		<button class="menu-btn" id="btnConfig"><span class="icon">⚙️</span>Configuració</button>
-	</div>
-	<script>
-		// Guardar visita en localStorage amb prefix stdj_
-		localStorage.setItem('stdj_lastVisit', new Date().toISOString());
-		// Els botons no tenen funcionalitat de moment
-		document.getElementById('btnJugar').onclick = function() {
-			alert('Pròximament podràs jugar!');
-		};
-		document.getElementById('btnPractica').onclick = function() {
-			alert('Pròximament podràs practicar!');
-		};
-		document.getElementById('btnAprendre').onclick = function() {
-			alert('Pròximament podràs aprendre!');
-		};
-		document.getElementById('btnConfig').onclick = function() {
-			alert('Pròximament podràs configurar!');
-		};
-	</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.login && typeof login.checkUserAuth === 'function') {
+        login.checkUserAuth();
+      }
+    }, {once:true});
+  </script>
+  <header class="header">
+    <img src="assets/img/logo.png" alt="Logo" class="logo">
+    <h1 class="titol">Es Tu Dia Jugant</h1>
+  </header>
+  <main class="menu-principal">
+    <h2 class="subtitol">Tria una activitat per començar a jugar!</h2>
+    <nav class="menu-botons">
+      <button class="menu-btn" id="btnJoc1">Opció 1</button>
+      <button class="menu-btn" id="btnJoc2">Opció 2</button>
+      <button class="menu-btn" id="btnJoc3">Opció 3</button>
+      <button class="menu-btn" id="btnJoc4">Opció 4</button>
+      <button class="menu-btn" id="btnJoc5">Opció 5</button>
+      <button class="menu-btn" id="btnJoc6">Opció 6</button>
+      <button class="menu-btn" id="btnJoc7">Opció 7</button>
+      <button class="menu-btn" id="btnJoc8">Opció 8</button>
+      <button class="menu-btn" id="btnJoc9">Opció 9</button>
+    </nav>
+  </main>
+  <footer class="footer">
+    <span>&copy; 2025 Es Tu Dia Jugant</span>
+  </footer>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No autoritzat - Es Tu Dia Jugant</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #ffecec;
+    }
+    .error401 {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #0002;
+      padding: 32px 24px;
+      text-align: center;
+      max-width: 400px;
+    }
+    .error401 h1 {
+      font-size: 3em;
+      color: #e74c3c;
+      margin-bottom: 12px;
+    }
+    .error401 p {
+      font-size: 1.3em;
+      color: #222;
+      margin-bottom: 18px;
+    }
+    .error401 a {
+      display: inline-block;
+      background: #2196f3;
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 10px 24px;
+      text-decoration: none;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .error401 a:hover {
+      background: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <div class="error401">
+    <h1>401</h1>
+    <p>No estàs autoritzat per accedir a aquesta pàgina.</p>
+    <a href="login.html">Inicia sessió</a>
+  </div>
+</body>
+</html>

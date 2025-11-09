@@ -1,0 +1,31 @@
+{
+    "users": [
+        {
+            "guid": "e304cd7b-00c4-4cee-b7e9-911ea34a52a4",
+            "name": "lara",
+            "password_hash": "$2a$12$6xhJCr0i5s7cUd3wcP8c0uMC/b3eeBDrbcfYuWnuOkOze6dVKceyG",
+            "password_hint": "Whats your favorite hero?",
+            "role": "user",
+            "birthdate": "2018-08-13",
+            "email": "lara@example.com"
+        },
+        {
+            "guid": "b3479f1a-4d86-4910-ab08-ae70fda7a547",
+            "name": "anonim",
+            "password_hash": "$2a$12$8WYTuk3gXAalfPOk.b4uoe2iKzNiiV81IZ4CWkEwbkQLKN151kce2",
+            "password_hint": "You forgot your pass?",
+            "role": "user",
+            "birthdate": "",
+            "email": "anonim@example.com"
+        },
+        {
+            "guid": "d5f4c3b2-1a2b-3c4d-5e6f-708192a3b4c5",
+            "name": "amorato",
+            "password_hash": "$2a$12$kiZGs2FoFLqxvK6MmSoFzuA3jHEOkfIFkjFlrekmfgUbUE0XQbTbu",
+            "password_hint": "What is your pet's name?",
+            "role": "administrator",
+            "birthdate": "1990-01-01",
+            "email": "amorato@example.com"
+        }
+    ]
+}
