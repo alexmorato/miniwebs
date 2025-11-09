@@ -1,0 +1,940 @@
+[
+    {
+        "guid": "4ef6335f-2760-45b2-8322-81be1474f930",
+        "nombre": "Indefinidos",
+        "descripcion": "Ejercicios para practicar los indefinidos en oraciones.",
+        "type": "selectone",
+        "preguntas": [
+            {
+                "pregunta": "En la clase de Lara, ________ debe llevar su propio material.",
+                "nok": ["nadie", "alguien", "ninguno"],
+                "ok": ["cada uno"]
+            },
+            {
+                "pregunta": "Hoy en el patio no hay ________, porque llueve mucho.",
+                "nok": ["alguien", "todos", "alguno"],
+                "ok": ["nadie"]
+            },
+            {
+                "pregunta": "Lara no ha traído ________ para el recreo.",
+                "nok": ["algo", "algún", "ningún"],
+                "ok": ["nada"]
+            },
+            {
+                "pregunta": "________ los niños del colegio L’Areny participan en la fiesta de final de curso.",
+                "nok": ["Nadie", "Alguno", "Algunos"],
+                "ok": ["Todos"]
+            },
+            {
+                "pregunta": "En el grupo de danza siempre hay ________ que llega tarde.",
+                "nok": ["nadie", "ninguno", "cada uno"],
+                "ok": ["alguien"]
+            },
+            {
+                "pregunta": "En el aula de Lara hay ________ dibujos en la pared.",
+                "nok": ["nada", "ninguno", "cada uno"],
+                "ok": ["muchos"]
+            },
+            {
+                "pregunta": "Lara ha invitado a ________ amigos a su cumpleaños.",
+                "nok": ["ninguno", "cada uno", "nada"],
+                "ok": ["algunos"]
+            },
+            {
+                "pregunta": "Puedes elegir ________ de estos colores para tu dibujo.",
+                "nok": ["nadie", "ninguno", "alguno"],
+                "ok": ["cualquiera"]
+            },
+            {
+                "pregunta": "Lara siempre tiene ________ interesante que contar cuando vuelve del colegio.",
+                "nok": ["nada", "ninguno", "todo"],
+                "ok": ["algo"]
+            },
+            {
+                "pregunta": "Hoy no hay ________ lápiz en la mesa de Lara.",
+                "nok": ["algún", "cada uno", "nada"],
+                "ok": ["ningún"]
+            },
+            {
+                "pregunta": "¿Tienes ________ cuento para leer esta noche?",
+                "nok": ["ningún", "muchos", "todo"],
+                "ok": ["algún"]
+            },
+            {
+                "pregunta": "De todos los libros, sólo me gusta ________ de aventuras.",
+                "nok": ["cada uno", "nada", "todo"],
+                "ok": ["alguno"]
+            },
+            {
+                "pregunta": "Lara tiene ________ amigas muy alegres en clase.",
+                "nok": ["muchos", "ninguno", "nada"],
+                "ok": ["algunas"]
+            },
+            {
+                "pregunta": "En la mochila de Naia no hay ________, está vacía.",
+                "nok": ["algo", "algún", "ninguno"],
+                "ok": ["nada"]
+            },
+            {
+                "pregunta": "________ los niños deben respetar las normas del aula.",
+                "nok": ["Nadie", "Alguno", "Cualquiera"],
+                "ok": ["Todos"]
+            },
+            {
+                "pregunta": "Lara y Naia tienen ________ juguetes en común que les gustan mucho.",
+                "nok": ["ninguno", "cada uno"],
+                "ok": ["algunos", "muchos"]
+            },
+            {
+                "pregunta": "En la clase de danza, ________ puede practicar su baile favorito.",
+                "nok": ["algunas", "alguno", "ninguno"],
+                "ok": ["cualquiera"]
+            },
+            {
+                "pregunta": "Después del recreo, Lara come ________ fruta antes de volver a clase.",
+                "nok": ["ninguna", "muchas", "cada una"],
+                "ok": ["alguna"]
+            },
+            {
+                "pregunta": "Lara revisa ________ de sus cuadernos antes del examen.",
+                "nok": ["ninguno", "algunas"],
+                "ok": ["cada uno", "algunos"]
+            },
+            {
+                "pregunta": "En la biblioteca del colegio, hay ________ libros sobre animales que le gustan a Lara.",
+                "nok": ["ninguno", "cada uno"],
+                "ok": ["algunos", "muchos"]
+            },
+            {
+                "pregunta": "Durante la excursión, Lara encontró ________ conchas en la playa.",
+                "nok": ["ningunas", "cada una"],
+                "ok": ["algunas", "muchas"]
+            }
+        ]
+    },
+    {
+  "guid": "c93df8de-172b-4c3c-bd4d-bf0f6b62ab71",
+  "nombre": "Am, Is, Are con Lara – Nivel 2",
+  "descripcion": "Segunda parte del juego para aprender am, is y are, con frases negativas y preguntas sobre la vida de Lara.",
+  "type": "selectone",
+  "tags": ["llengua", "english", "lara", "grammar", "nivel2"],
+  "preguntas": [
+    {
+      "pregunta": "I ______ not sad. I am happy!",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "Lara ______ not at home, she is at school.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "We ______ not tired after dancing. We want to dance more!",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "My mom ______ not angry. She is smiling.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "It ______ not raining today.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "You ______ my best friend, Daiana!",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "I ______ not in the kitchen. I am in my room.",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "Naia ______ not sleeping, she is drawing.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "The books ______ on the bed.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "My shoes ______ not clean. They are dirty!",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "______ you ready to dance, Lara?",
+      "ok": ["Are"],
+      "nok": ["Is", "Am"]
+    },
+    {
+      "pregunta": "______ Naia your sister?",
+      "ok": ["Is"],
+      "nok": ["Are", "Am"]
+    },
+    {
+      "pregunta": "______ you happy today?",
+      "ok": ["Are"],
+      "nok": ["Is", "Am"]
+    },
+    {
+      "pregunta": "______ it sunny in Cornellà?",
+      "ok": ["Is"],
+      "nok": ["Are", "Am"]
+    },
+    {
+      "pregunta": "______ I late for dance class?",
+      "ok": ["Am"],
+      "nok": ["Is", "Are"]
+    },
+    {
+      "pregunta": "My dad and mom ______ not teachers.",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "Lara and Naira ______ in the same dance group.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "______ your friends at the park?",
+      "ok": ["Are"],
+      "nok": ["Is", "Am"]
+    },
+    {
+      "pregunta": "Naia ______ not scared of the dark.",
+      "ok": ["is"],
+      "nok": ["are", "am"]
+    },
+    {
+      "pregunta": "I ______ not hungry right now.",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    }
+  ]
+},
+{
+  "guid": "b2a512cb-8144-4ad0-8af5-f9838c6e47ab",
+  "nombre": "Am, Is, Are con Lara",
+  "descripcion": "Juego divertido para aprender a usar am, is y are con frases sobre Lara, su familia, sus amigas y sus actividades.",
+  "type": "selectone",
+  "tags": ["llengua", "english", "lara", "grammar"],
+  "preguntas": [
+    {
+      "pregunta": "I ______ Lara. I love dancing and drawing.",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "Lara ______ seven years old.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "My friends Naira and Martina ______ in the same class as me.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "My sister Naia ______ four years old.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "We ______ at the river Llobregat with our bikes.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "My mom and dad ______ very nice.",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "It ______ a sunny day in Cornellà.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "I ______ happy when I dance at TP Dance.",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "My school ______ called Areny.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "The trees at school ______ green and beautiful.",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "My backpack ______ pink and purple.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "My shoes ______ full of glitter!",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "I ______ in the Farigola class.",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "Martina ______ very funny and kind.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "We ______ learning English with fun games.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    },
+    {
+      "pregunta": "My dad Alex ______ good at fixing things.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "Naia and I ______ sisters.",
+      "ok": ["are"],
+      "nok": ["is", "am"]
+    },
+    {
+      "pregunta": "I ______ tired after dancing all day!",
+      "ok": ["am"],
+      "nok": ["is", "are"]
+    },
+    {
+      "pregunta": "My favorite book ______ Anna Kadabra.",
+      "ok": ["is"],
+      "nok": ["am", "are"]
+    },
+    {
+      "pregunta": "My pencils ______ on the table.",
+      "ok": ["are"],
+      "nok": ["am", "is"]
+    }
+  ]
+},
+{
+  "guid": "e5a321b8-b871-4b3f-93e7-62f3c12c77b5",
+  "nombre": "Multiplica con Lara – Nivel 1",
+  "descripcion": "Juego con 40 preguntas para practicar las tablas del 2, 3, 5 y 9 de forma divertida con Lara.",
+  "type": "selectone",
+  "tags": ["matemáticas", "multiplicación", "lara", "tablas", "aprendizaje"],
+  "preguntas": [
+    { "pregunta": "2 × 1 = ?", "ok": ["2"], "nok": ["1", "3", "4"] },
+    { "pregunta": "2 × 2 = ?", "ok": ["4"], "nok": ["6", "2", "8"] },
+    { "pregunta": "2 × 3 = ?", "ok": ["6"], "nok": ["4", "8", "5"] },
+    { "pregunta": "2 × 4 = ?", "ok": ["8"], "nok": ["6", "10", "12"] },
+    { "pregunta": "2 × 5 = ?", "ok": ["10"], "nok": ["8", "12", "6"] },
+    { "pregunta": "2 × 6 = ?", "ok": ["12"], "nok": ["10", "14", "8"] },
+    { "pregunta": "2 × 7 = ?", "ok": ["14"], "nok": ["12", "16", "18"] },
+    { "pregunta": "2 × 8 = ?", "ok": ["16"], "nok": ["14", "18", "20"] },
+    { "pregunta": "2 × 9 = ?", "ok": ["18"], "nok": ["16", "20", "12"] },
+    { "pregunta": "2 × 10 = ?", "ok": ["20"], "nok": ["18", "22", "24"] },
+
+    { "pregunta": "3 × 1 = ?", "ok": ["3"], "nok": ["2", "4", "5"] },
+    { "pregunta": "3 × 2 = ?", "ok": ["6"], "nok": ["5", "8", "7"] },
+    { "pregunta": "3 × 3 = ?", "ok": ["9"], "nok": ["6", "12", "8"] },
+    { "pregunta": "3 × 4 = ?", "ok": ["12"], "nok": ["9", "15", "10"] },
+    { "pregunta": "3 × 5 = ?", "ok": ["15"], "nok": ["12", "18", "10"] },
+    { "pregunta": "3 × 6 = ?", "ok": ["18"], "nok": ["21", "15", "12"] },
+    { "pregunta": "3 × 7 = ?", "ok": ["21"], "nok": ["18", "24", "27"] },
+    { "pregunta": "3 × 8 = ?", "ok": ["24"], "nok": ["21", "27", "30"] },
+    { "pregunta": "3 × 9 = ?", "ok": ["27"], "nok": ["24", "30", "18"] },
+    { "pregunta": "3 × 10 = ?", "ok": ["30"], "nok": ["27", "33", "25"] },
+
+    { "pregunta": "5 × 1 = ?", "ok": ["5"], "nok": ["4", "6", "10"] },
+    { "pregunta": "5 × 2 = ?", "ok": ["10"], "nok": ["15", "8", "12"] },
+    { "pregunta": "5 × 3 = ?", "ok": ["15"], "nok": ["10", "20", "12"] },
+    { "pregunta": "5 × 4 = ?", "ok": ["20"], "nok": ["25", "15", "18"] },
+    { "pregunta": "5 × 5 = ?", "ok": ["25"], "nok": ["20", "30", "15"] },
+    { "pregunta": "5 × 6 = ?", "ok": ["30"], "nok": ["25", "35", "40"] },
+    { "pregunta": "5 × 7 = ?", "ok": ["35"], "nok": ["30", "40", "25"] },
+    { "pregunta": "5 × 8 = ?", "ok": ["40"], "nok": ["35", "45", "30"] },
+    { "pregunta": "5 × 9 = ?", "ok": ["45"], "nok": ["40", "35", "50"] },
+    { "pregunta": "5 × 10 = ?", "ok": ["50"], "nok": ["45", "55", "60"] },
+
+    { "pregunta": "9 × 1 = ?", "ok": ["9"], "nok": ["8", "7", "6"] },
+    { "pregunta": "9 × 2 = ?", "ok": ["18"], "nok": ["16", "20", "12"] },
+    { "pregunta": "9 × 3 = ?", "ok": ["27"], "nok": ["24", "30", "21"] },
+    { "pregunta": "9 × 4 = ?", "ok": ["36"], "nok": ["32", "39", "45"] },
+    { "pregunta": "9 × 5 = ?", "ok": ["45"], "nok": ["40", "35", "50"] },
+    { "pregunta": "9 × 6 = ?", "ok": ["54"], "nok": ["45", "63", "49"] },
+    { "pregunta": "9 × 7 = ?", "ok": ["63"], "nok": ["54", "72", "69"] },
+    { "pregunta": "9 × 8 = ?", "ok": ["72"], "nok": ["63", "81", "70"] },
+    { "pregunta": "9 × 9 = ?", "ok": ["81"], "nok": ["72", "90", "79"] },
+    { "pregunta": "9 × 10 = ?", "ok": ["90"], "nok": ["80", "99", "100"] }
+  ]
+},
+{
+  "guid": "0abf145f-9511-46a8-81f7-5894de5c6c84",
+  "nombre": "Multiplica con Lara – Nivel 2",
+  "descripcion": "Reto divertido con preguntas de multiplicación para pensar, comparar y completar. Tablas del 2, 3, 5 y 9.",
+  "type": "selectone",
+  "tags": ["matemáticas", "multiplicación", "lara", "razonamiento", "tablas", "nivel2"],
+  "preguntas": [
+    {
+      "pregunta": "¿Cuál es mayor?",
+      "ok": ["9 × 5"],
+      "nok": ["3 × 9", "2 × 10", "5 × 7"]
+    },
+    {
+      "pregunta": "¿Cuál es menor?",
+      "ok": ["2 × 2"],
+      "nok": ["3 × 3", "5 × 3", "9 × 2"]
+    },
+    {
+      "pregunta": "Completa: 2 × __ = 10",
+      "ok": ["5"],
+      "nok": ["4", "6", "3"]
+    },
+    {
+      "pregunta": "Completa: 3 × __ = 12",
+      "ok": ["4"],
+      "nok": ["3", "5", "6"]
+    },
+    {
+      "pregunta": "Completa: 5 × __ = 25",
+      "ok": ["5"],
+      "nok": ["4", "6", "3"]
+    },
+    {
+      "pregunta": "Completa: 9 × __ = 81",
+      "ok": ["9"],
+      "nok": ["8", "7", "10"]
+    },
+    {
+      "pregunta": "¿Qué operación da 18?",
+      "ok": ["9 × 2"],
+      "nok": ["3 × 4", "5 × 4", "2 × 7"]
+    },
+    {
+      "pregunta": "¿Qué operación da 45?",
+      "ok": ["9 × 5"],
+      "nok": ["5 × 8", "3 × 9", "2 × 10"]
+    },
+    {
+      "pregunta": "¿Qué operación da 27?",
+      "ok": ["3 × 9"],
+      "nok": ["9 × 2", "5 × 6", "2 × 9"]
+    },
+    {
+      "pregunta": "¿Qué operación da 20?",
+      "ok": ["5 × 4"],
+      "nok": ["9 × 2", "2 × 8", "3 × 7"]
+    },
+    {
+      "pregunta": "¿Qué número falta? 9 × 4 = __",
+      "ok": ["36"],
+      "nok": ["34", "45", "32"]
+    },
+    {
+      "pregunta": "¿Qué número falta? 2 × 8 = __",
+      "ok": ["16"],
+      "nok": ["14", "12", "18"]
+    },
+    {
+      "pregunta": "Si 5 × 5 = 25, ¿cuánto es 5 × 6?",
+      "ok": ["30"],
+      "nok": ["20", "35", "25"]
+    },
+    {
+      "pregunta": "Si 3 × 4 = 12, ¿cuánto es 3 × 5?",
+      "ok": ["15"],
+      "nok": ["12", "18", "10"]
+    },
+    {
+      "pregunta": "¿Cuál tiene el mismo resultado que 9 × 3?",
+      "ok": ["3 × 9"],
+      "nok": ["9 × 2", "5 × 5", "2 × 9"]
+    },
+    {
+      "pregunta": "¿Qué resultado es correcto?",
+      "ok": ["2 × 9 = 18"],
+      "nok": ["2 × 9 = 16", "2 × 9 = 19", "2 × 9 = 12"]
+    },
+    {
+      "pregunta": "¿Qué resultado es correcto?",
+      "ok": ["5 × 8 = 40"],
+      "nok": ["5 × 8 = 35", "5 × 8 = 45", "5 × 8 = 50"]
+    },
+    {
+      "pregunta": "¿Qué número falta? __ × 3 = 9",
+      "ok": ["3"],
+      "nok": ["2", "4", "5"]
+    },
+    {
+      "pregunta": "Si 2 × 9 = 18, ¿cuánto es 9 × 2?",
+      "ok": ["18"],
+      "nok": ["20", "16", "27"]
+    },
+    {
+      "pregunta": "¿Qué número hace falta? 5 × __ = 45",
+      "ok": ["9"],
+      "nok": ["7", "6", "8"]
+    }
+  ]
+},
+
+{
+  "guid": "5a2138b1-0a58-4d29-97e8-ec9c97ad7a61",
+  "nombre": "S sonora o sorda amb la Lara",
+  "descripcion": "Joc per aprendre a reconèixer si el so de la 's' és sorda o sonora segons la paraula. Ideal per a infants de 7 anys.",
+  "type": "selectone",
+  "tags": ["llengua", "català", "ortografia", "s sonora", "s sorda", "lara"],
+  "preguntas": [
+    {
+      "pregunta": "La paraula **casa** té una S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **caça** té una S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **roses** té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **rosses** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **pesa** (de pesar) té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **peça** (d’un trencaclosques) té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **bossa** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **missa** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **gos** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **mesa** (taula) té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **coses** té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **passa** (de passar) té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **música** té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **massa** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **bes** (fer un petó) té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **bessons** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **nas** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **pèsol** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    },
+    {
+      "pregunta": "La paraula **rosa** té la S...",
+      "ok": ["sonora"],
+      "nok": ["sorda"]
+    },
+    {
+      "pregunta": "La paraula **festa** té la S...",
+      "ok": ["sorda"],
+      "nok": ["sonora"]
+    }
+  ]
+},
+{
+  "guid": "8cbd5e5f-b2a8-4c49-8f8d-87c86d33a132",
+  "nombre": "Separa síl·labes amb la Lara",
+  "descripcion": "Joc per aprendre a separar paraules en síl·labes de manera divertida. Pensat per a infants de 7 anys.",
+  "type": "selectone",
+  "tags": ["llengua", "català", "síl·labes", "aprendre", "lara"],
+  "preguntas": [
+    {
+      "pregunta": "Com se separa correctament la paraula **casa**?",
+      "ok": ["ca-sa"],
+      "nok": ["cas-a", "c-asa", "casa"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **amistat**?",
+      "ok": ["a-mis-tat"],
+      "nok": ["am-is-tat", "a-mi-stat", "amis-tat"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **escola**?",
+      "ok": ["es-co-la"],
+      "nok": ["esc-o-la", "e-sco-la", "esco-la"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **bicicleta**?",
+      "ok": ["bi-ci-cle-ta"],
+      "nok": ["bic-i-cle-ta", "bi-cic-le-ta", "bici-cle-ta"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **lluna**?",
+      "ok": ["llu-na"],
+      "nok": ["ll-un-a", "llu-n-a", "llu-naa"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **flor**?",
+      "ok": ["flor"],
+      "nok": ["flo-r", "f-lor", "fl-or"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **papallona**?",
+      "ok": ["pa-pa-llo-na"],
+      "nok": ["pap-all-ona", "pa-pall-o-na", "papa-llona"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **animal**?",
+      "ok": ["a-ni-mal"],
+      "nok": ["an-i-mal", "a-nim-al", "ani-mal"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **família**?",
+      "ok": ["fa-mí-li-a"],
+      "nok": ["fam-í-li-a", "fa-mi-lia", "fa-mil-i-a"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **paraigua**?",
+      "ok": ["pa-rai-gua"],
+      "nok": ["par-ai-gua", "pa-ra-ig-ua", "pa-r-aigua"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **estrella**?",
+      "ok": ["es-tre-lla"],
+      "nok": ["e-str-e-lla", "es-tr-ella", "estre-lla"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **ratolí**?",
+      "ok": ["ra-to-lí"],
+      "nok": ["rat-o-lí", "ra-tol-í", "rato-lí"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **música**?",
+      "ok": ["mú-si-ca"],
+      "nok": ["mu-sí-ca", "mú-sic-a", "mús-ica"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **mirall**?",
+      "ok": ["mi-rall"],
+      "nok": ["mir-all", "mi-ra-ll", "m-irall"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **xocolata**?",
+      "ok": ["xo-co-la-ta"],
+      "nok": ["xoc-o-la-ta", "xo-col-ata", "xoco-lata"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **paraula**?",
+      "ok": ["pa-rau-la"],
+      "nok": ["par-au-la", "pa-ra-ul-a", "para-ul-a"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **ocell**?",
+      "ok": ["o-cell"],
+      "nok": ["oc-ell", "o-cel-l", "ocell"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **gat**?",
+      "ok": ["gat"],
+      "nok": ["ga-t", "g-at", "gat-"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **pintura**?",
+      "ok": ["pin-tu-ra"],
+      "nok": ["pint-ura", "pi-ntu-ra", "pin-tura"]
+    },
+    {
+      "pregunta": "Com se separa correctament la paraula **avió**?",
+      "ok": ["a-vió"],
+      "nok": ["av-ió", "a-vi-ó", "avi-ó"]
+    }
+  ]
+},
+
+{
+  "guid": "a90e87b2-7ef2-4a57-91a1-9f0f1a6eab53",
+  "nombre": "Guess the place or thing – with Lara (Level 2)",
+  "descripcion": "Read the sentence and choose the correct place or thing. Fun English vocabulary game for kids.",
+  "type": "selectone",
+  "tags": ["english", "vocabulary", "lara", "places", "objects", "learning"],
+  "preguntas": [
+    {
+      "pregunta": "It has books, tables, and you must be quiet.",
+      "ok": ["library"],
+      "nok": ["park", "kitchen", "school"]
+    },
+    {
+      "pregunta": "It is big, green, and you can play, run, or have a picnic there.",
+      "ok": ["park"],
+      "nok": ["bathroom", "bedroom", "cinema"]
+    },
+    {
+      "pregunta": "It is in the sky at night and shines bright.",
+      "ok": ["moon"],
+      "nok": ["sun", "cloud", "rain"]
+    },
+    {
+      "pregunta": "You sleep here at night.",
+      "ok": ["bedroom"],
+      "nok": ["kitchen", "garden", "bathroom"]
+    },
+    {
+      "pregunta": "You can cook food here. There is a fridge and a stove.",
+      "ok": ["kitchen"],
+      "nok": ["living room", "school", "garage"]
+    },
+    {
+      "pregunta": "It is yellow, sweet, and monkeys love it.",
+      "ok": ["banana"],
+      "nok": ["apple", "grape", "pear"]
+    },
+    {
+      "pregunta": "It is a place where you learn new things.",
+      "ok": ["school"],
+      "nok": ["shop", "park", "museum"]
+    },
+    {
+      "pregunta": "You use it to write or draw.",
+      "ok": ["pencil"],
+      "nok": ["chair", "book", "bag"]
+    },
+    {
+      "pregunta": "It is cold, white, and falls from the sky in winter.",
+      "ok": ["snow"],
+      "nok": ["rain", "sun", "wind"]
+    },
+    {
+      "pregunta": "It is round, blue and green. We all live on it.",
+      "ok": ["Earth"],
+      "nok": ["moon", "sun", "Mars"]
+    },
+    {
+      "pregunta": "You watch movies here. The room is dark and big.",
+      "ok": ["cinema"],
+      "nok": ["school", "bedroom", "garden"]
+    },
+    {
+      "pregunta": "You sit on it when you are tired.",
+      "ok": ["chair"],
+      "nok": ["pencil", "table", "window"]
+    },
+    {
+      "pregunta": "You wear them on your feet.",
+      "ok": ["shoes"],
+      "nok": ["hats", "gloves", "rings"]
+    },
+    {
+      "pregunta": "You use it to tell the time.",
+      "ok": ["clock"],
+      "nok": ["book", "pen", "door"]
+    },
+    {
+      "pregunta": "You use it when it rains. It keeps you dry.",
+      "ok": ["umbrella"],
+      "nok": ["jacket", "hat", "towel"]
+    },
+    {
+      "pregunta": "You can swim here. It has water.",
+      "ok": ["swimming pool"],
+      "nok": ["park", "library", "kitchen"]
+    },
+    {
+      "pregunta": "You can find many animals here.",
+      "ok": ["zoo"],
+      "nok": ["hospital", "shop", "garden"]
+    },
+    {
+      "pregunta": "You sleep on it. It’s soft and has a pillow.",
+      "ok": ["bed"],
+      "nok": ["chair", "table", "sofa"]
+    },
+    {
+      "pregunta": "It gives light in the dark.",
+      "ok": ["lamp"],
+      "nok": ["window", "book", "mirror"]
+    },
+    {
+      "pregunta": "You use it to clean your teeth.",
+      "ok": ["toothbrush"],
+      "nok": ["soap", "comb", "brush"]
+    }
+  ]
+}
+,
+{
+  "guid": "d4f9617b-4029-4f97-bb4f-3eddfbb0eeb3",
+  "nombre": "Guess the animal – with Lara",
+  "descripcion": "Read the description and guess the animal. Fun English vocabulary game for kids!",
+  "type": "selectone",
+  "tags": ["english", "animals", "vocabulary", "lara", "learning"],
+  "preguntas": [
+    {
+      "pregunta": "It is small, it likes cheese, and it says 'squeak squeak'.",
+      "ok": ["mouse"],
+      "nok": ["cat", "rabbit", "bird"]
+    },
+    {
+      "pregunta": "It has wings and can fly. It says 'tweet tweet'.",
+      "ok": ["bird"],
+      "nok": ["fish", "dog", "turtle"]
+    },
+    {
+      "pregunta": "It is big and gray. It has a long trunk.",
+      "ok": ["elephant"],
+      "nok": ["hippo", "lion", "rhino"]
+    },
+    {
+      "pregunta": "It is orange and white. It lives in the sea and swims fast.",
+      "ok": ["fish"],
+      "nok": ["whale", "cat", "duck"]
+    },
+    {
+      "pregunta": "It has black and white stripes and runs very fast.",
+      "ok": ["zebra"],
+      "nok": ["tiger", "horse", "panda"]
+    },
+    {
+      "pregunta": "It is green, small, and can jump very high.",
+      "ok": ["frog"],
+      "nok": ["snake", "lizard", "bird"]
+    },
+    {
+      "pregunta": "It has four legs, a tail, and says 'woof woof'.",
+      "ok": ["dog"],
+      "nok": ["cat", "sheep", "pig"]
+    },
+    {
+      "pregunta": "It says 'meow' and likes to sleep a lot.",
+      "ok": ["cat"],
+      "nok": ["rabbit", "cow", "duck"]
+    },
+    {
+      "pregunta": "It is yellow and black. It can fly and makes honey.",
+      "ok": ["bee"],
+      "nok": ["butterfly", "ant", "fly"]
+    },
+    {
+      "pregunta": "It lives on a farm and gives milk.",
+      "ok": ["cow"],
+      "nok": ["goat", "horse", "sheep"]
+    },
+    {
+      "pregunta": "It has a shell and moves very slowly.",
+      "ok": ["turtle"],
+      "nok": ["frog", "snake", "crab"]
+    },
+    {
+      "pregunta": "It has long ears and likes carrots.",
+      "ok": ["rabbit"],
+      "nok": ["dog", "fox", "cat"]
+    },
+    {
+      "pregunta": "It is very big, has sharp teeth, and lives in the ocean.",
+      "ok": ["shark"],
+      "nok": ["dolphin", "whale", "seal"]
+    },
+    {
+      "pregunta": "It is colorful, it has feathers, and can talk.",
+      "ok": ["parrot"],
+      "nok": ["duck", "chicken", "owl"]
+    },
+    {
+      "pregunta": "It lives in the jungle and is the king of animals.",
+      "ok": ["lion"],
+      "nok": ["tiger", "bear", "elephant"]
+    },
+    {
+      "pregunta": "It lives in trees, eats bananas, and jumps a lot.",
+      "ok": ["monkey"],
+      "nok": ["bear", "cat", "fox"]
+    },
+    {
+      "pregunta": "It has eight legs and makes a web.",
+      "ok": ["spider"],
+      "nok": ["ant", "bee", "snake"]
+    },
+    {
+      "pregunta": "It lives in the sea, has eight arms, and likes to hide.",
+      "ok": ["octopus"],
+      "nok": ["fish", "crab", "turtle"]
+    },
+    {
+      "pregunta": "It is white, fluffy, and gives wool.",
+      "ok": ["sheep"],
+      "nok": ["goat", "cow", "dog"]
+    },
+    {
+      "pregunta": "It is black and white, eats bamboo, and lives in China.",
+      "ok": ["panda"],
+      "nok": ["zebra", "bear", "monkey"]
+    }
+  ]
+}
+
+
+
+
+
+
+
+]

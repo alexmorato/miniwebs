@@ -97,150 +97,6 @@
       background: #fff;
       overflow: hidden;
     }
-    
-    /* Estilos del juego */
-    .juego-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .zona-pregunta {
-      flex: 1 1 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: #f8f9fa;
-      border-bottom: 2px solid #e9ecef;
-    }
-    
-    .texto-pregunta {
-      font-size: clamp(1.2em, 7vw, 2.5em);
-      font-weight: bold;
-      text-align: center;
-      color: #333;
-      line-height: 1.3;
-      max-width: 90%;
-    }
-    
-    .zona-respuestas {
-      flex: 1 1 50%;
-      display: grid;
-      gap: 8px;
-      padding: 15px;
-      grid-auto-rows: 1fr;
-    }
-    
-    .boton-respuesta {
-      border: none;
-      border-radius: 12px;
-      font-size: clamp(0.9em, 6vw, 1.8em);
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 10px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    .boton-respuesta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    
-    .boton-respuesta:active {
-      transform: translateY(0);
-    }
-    
-    .simbolo-resultado {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 4em;
-      font-weight: bold;
-      z-index: 10;
-      animation: aparecerSimbolo 0.3s ease-out;
-      text-shadow: 10px 2px 8px rgba(0,0,0,0.35), 0 0 2px #fff;
-      }
-    
-    @keyframes aparecerSimbolo {
-      0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 0;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.2);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .pantalla-final {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    
-    .mensaje-final {
-      font-size: clamp(2em, 6vw, 4em);
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .puntuacion-final {
-      font-size: clamp(1.2em, 3vw, 2em);
-      text-align: center;
-      opacity: 0.9;
-    }
-    /* --- MÓVIL VERTICAL: mejorar tamaño de texto y botones --- */
-    @media (max-width: 480px) {
-      .zona-pregunta {
-        padding: 8vw 4vw 4vw 4vw;
-      }
-      .texto-pregunta {
-        font-size: clamp(1.3em, 8vw, 2.2em);
-        line-height: 1.25;
-        max-width: 98vw;
-      }
-      .boton-respuesta {
-        font-size: clamp(1.1em, 5vw, 1.5em);
-        min-height: 48px;
-        padding: 16px 8px;
-      }
-    }
-
-      /* --- MÓVIL HORIZONTAL: 4 botones en línea si el alto es pequeño --- */
-      @media (max-width: 900px) and (max-height: 480px) {
-        .zona-respuestas {
-          grid-template-columns: repeat(4, 1fr) !important;
-          gap: 10px;
-          padding: 2vw 2vw 2vw 2vw;
-        }
-        .boton-respuesta {
-          font-size: clamp(1em, 3vw, 1.2em);
-          min-height: 40px;
-          padding: 12px 4px;
-        }
-      }
     .area-inferior {
       width: 100vw;
       min-height: 48px;
@@ -320,8 +176,9 @@
 <body>
   <!-- Pantalla de inicio -->
   <div id="pantallaInicio">
-    <div style="flex:1;display:flex;align-items:end;justify-content:center;width:100%;">
-      <span class="titol">LENGUA</span>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;width:100%;">
+      <span class="titol" id="gameTitle">JOC</span>
+      <span id="gameTags" style="color:#fff;font-size:1em;margin-top:8px;display:none;"></span>
     </div>
     <div style="flex:0;display:flex;align-items:center;justify-content:center;width:100%;margin:32px 0 18px 0;">
       <button id="btnIniciarJuego">
@@ -329,8 +186,9 @@
         <span style="color:#fff;font-size:1.3em;font-weight:bold;margin-top:8px;letter-spacing:1px;">INICIAR</span>
       </button>
     </div>
-    <div style="flex:1;display:flex;align-items:start;justify-content:center;width:100%;">
-      <span class="subtitol">Indefinidos - Determinantes y Pronombres</span>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:start;width:100%;">
+      <span class="subtitol" id="gameSubtitle">...</span>
+      <span id="gameDesc" style="color:#fff;font-size:1.1em;margin-top:10px;max-width:90vw;text-align:center;display:none;"></span>
     </div>
   </div>
 
@@ -339,7 +197,7 @@
       <span id="cronometro" class="cronometro">00:00</span>
     </div>
     <div class="superior-centro">
-      <span id="ajudaText" class="ajudaText">Indefinidos</span>
+      <span id="ajudaText" class="ajudaText">...</span>
     </div>
     <div class="superior-der">
       <span class="check">&#10003;</span>
@@ -354,7 +212,7 @@
       <div class="zona-respuestas" id="zonaRespuestas"></div>
     </div>
     <div id="mensajeBienvenida" style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.5em; color: #666; text-align: center;">
-      Pulsa "INICIAR" para comenzar el juego
+      Pulsa "INICIAR" per començar el joc
     </div>
   </div>
   <div class="area-inferior">
@@ -364,7 +222,7 @@
       </button>
     </div>
     <div class="inferior-centro" style="flex:1 1 auto; display:flex; align-items:center; justify-content:center; min-width:0;">
-  <span id="contadorRondas" style="font-size:1.1em; font-weight:bold;">1 de 10</span>
+      <span id="contadorRondas" style="font-size:1.1em; font-weight:bold;">1 de 10</span>
     </div>
     <div class="inferior-der" style="flex:0 0 auto; display:flex; align-items:center; min-width:60px; justify-content:flex-end;">
       <button id="btnFullscreen" style="background:none;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;">
@@ -372,94 +230,64 @@
       </button>
     </div>
   </div>
-
-<div id="menuModal" style="display:none;"></div>
 <script type="module">
-import { shuffle } from './assets/util.js';
+// Mostrar los campos del GameContract: nombre, descripcion, tags
+const juegoRaw = localStorage.getItem('stdj_chooseone');
+let juego = null;
+if (juegoRaw) {
+  try {
+    juego = JSON.parse(juegoRaw);
+    // nombre
+    document.getElementById('gameTitle').textContent = juego.nombre || juego.titol || 'JOC';
+    // descripcion
+    if (juego.descripcion) {
+      document.getElementById('gameDesc').textContent = juego.descripcion;
+      document.getElementById('gameDesc').style.display = 'block';
+    } else if (juego.subtitol) {
+      document.getElementById('gameDesc').textContent = juego.subtitol;
+      document.getElementById('gameDesc').style.display = 'block';
+    } else {
+      document.getElementById('gameDesc').style.display = 'none';
+    }
+    // subtitulo (si existe)
+    document.getElementById('gameSubtitle').textContent = juego.subtitol || '';
+    // tags
+    if (Array.isArray(juego.tags) && juego.tags.length > 0) {
+      document.getElementById('gameTags').textContent = 'Etiquetes: ' + juego.tags.join(', ');
+      document.getElementById('gameTags').style.display = 'block';
+    } else {
+      document.getElementById('gameTags').style.display = 'none';
+    }
+    // ayudaText
+    document.getElementById('ajudaText').textContent = juego.nombre || juego.titol || 'JOC';
+  } catch (e) {
+    document.getElementById('gameTitle').textContent = 'JOC';
+    document.getElementById('gameSubtitle').textContent = 'Error carregant joc';
+    document.getElementById('ajudaText').textContent = 'JOC';
+    document.getElementById('gameDesc').style.display = 'none';
+    document.getElementById('gameTags').style.display = 'none';
+  }
+} else {
+  document.getElementById('gameTitle').textContent = 'JOC';
+  document.getElementById('gameSubtitle').textContent = 'No s\'ha seleccionat cap joc';
+  document.getElementById('ajudaText').textContent = 'JOC';
+  document.getElementById('gameDesc').style.display = 'none';
+  document.getElementById('gameTags').style.display = 'none';
+}
+// --- Lógica de juego tipo indefinits ---
+import { shuffle } from '../js/utils.js';
 
-// Variables del juego
 let preguntasSeleccionadas = [];
 let preguntaActual = 0;
 let aciertos = 0;
 let tiempoInicio = 0;
 let cronometroInterval = null;
-let cronometroPausado = false;
-let tiempoPausa = 0;
 
-// Colores para los botones
 const coloresBotones = [
   '#e74c3c', '#3498db', '#2ecc71', '#f39c12',
   '#9b59b6', '#1abc9c', '#e67e22', '#34495e',
   '#e91e63', '#673ab7', '#00bcd4', '#4caf50'
 ];
-
-function mostrarMenuModal() {
-  // Pausar cronómetro
-  if (cronometroInterval && !cronometroPausado) {
-    clearInterval(cronometroInterval);
-    cronometroPausado = true;
-    tiempoPausa = Date.now();
-  }
-  const modal = document.getElementById('menuModal');
-  modal.innerHTML = `
-    <div style="position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(40,40,40,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
-    <div style="position:fixed;z-index:9999;left:24px;bottom:24px;min-width:220px;max-width:90vw;padding:0 0 18px 0;background:#23242a;border:2px solid #fff;border-radius:18px;box-shadow:0 8px 32px #0008;display:flex;flex-direction:column;align-items:stretch;">
-      <div style="padding:18px 18px 8px 18px;font-size:1.3em;font-weight:bold;color:#fff;">Menú</div>
-      <div style="height:2px;background:linear-gradient(90deg,#fff,#bbb);margin:0 0 10px 0;"></div>
-      <button id="btnEnviarRespuestas" disabled style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#444;color:#aaa;border:none;border-radius:8px;cursor:not-allowed;opacity:0.7;">Enviar respuestas</button>
-      <button id="btnReiniciarJuego" style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#fff;color:#23242a;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Volver a empezar</button>
-      <button id="btnReanudar" style="margin:0 18px 0 18px;padding:12px;font-size:1em;background:#2196f3;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Reanudar</button>
-    </div>
-  `;
-  modal.style.display = 'block';
-  // Listeners
-  document.getElementById('btnReanudar').onclick = ocultarMenuModal;
-  document.getElementById('btnReiniciarJuego').onclick = function() {
-    ocultarMenuModal();
-    mostrarPantallaInicio();
-  };
-}
-
-function ocultarMenuModal() {
-  document.getElementById('menuModal').style.display = 'none';
-  // Reanudar cronómetro
-  if (cronometroPausado) {
-    tiempoInicio += Date.now() - tiempoPausa;
-    cronometroInterval = setInterval(actualizarCronometro, 1000);
-    cronometroPausado = false;
-  }
-}
-
-function mostrarPantallaInicio() {
-  // Resetear todo y mostrar pantalla de inicio
-  document.getElementById('pantallaInicio').style.display = 'flex';
-  document.getElementById('juegoContainer').style.display = 'none';
-  document.getElementById('mensajeBienvenida').style.display = 'flex';
-  document.getElementById('areaCentral').innerHTML = document.getElementById('areaCentral').innerHTML; // reset contenido
-  if (cronometroInterval) clearInterval(cronometroInterval);
-  cronometroPausado = false;
-  tiempoInicio = 0;
-  actualizarContadores(0, 1, 10);
-  document.getElementById('cronometro').textContent = '00:00';
-}
-
-async function cargarPreguntas() {
-  try {
-    const resp = await fetch('config/indefinidos.json');
-    if (!resp.ok) throw new Error('No se pudo cargar el JSON');
-    const data = await resp.json();
-    // Guardar guid en localStorage si existe
-    if (data.guid) {
-      localStorage.setItem('game_guid', data.guid);
-    }
-    if (!data.preguntas || !Array.isArray(data.preguntas)) throw new Error('Formato incorrecto');
-    const barajadas = shuffle([...data.preguntas]);
-    preguntasSeleccionadas = barajadas.slice(0, 10);
-    iniciarJuego();
-  } catch (e) {
-    alert('Error cargando preguntas: ' + e.message);
-  }
-}
 
 function iniciarJuego() {
   document.getElementById('pantallaInicio').style.display = 'none';
@@ -469,26 +297,36 @@ function iniciarJuego() {
   aciertos = 0;
   tiempoInicio = Date.now();
   actualizarContadores();
-  actualizarCronometro();
-  cronometroInterval = setInterval(actualizarCronometro, 1000);
   mostrarPregunta();
+  if (cronometroInterval) clearInterval(cronometroInterval);
+  cronometroInterval = setInterval(actualizarCronometro, 1000);
 }
 
+function cargarPreguntas() {
+  if (!juego || !Array.isArray(juego.preguntas)) {
+    alert('No hay preguntas en el juego');
+    return;
+  }
+  preguntasSeleccionadas = shuffle([...juego.preguntas]).slice(0, 10);
+  iniciarJuego();
+}
+
+function actualizarCronometro() {
+  if (!tiempoInicio) return;
+  const tiempoTranscurrido = Math.floor((Date.now() - tiempoInicio) / 1000);
+  const minutos = Math.floor(tiempoTranscurrido / 60);
+  const segundos = tiempoTranscurrido % 60;
+  document.getElementById('cronometro').textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+}
 function mostrarPregunta() {
   if (preguntaActual >= preguntasSeleccionadas.length) {
     finalizarJuego();
     return;
   }
-  
   const pregunta = preguntasSeleccionadas[preguntaActual];
-  
-  // Mostrar texto de la pregunta
   document.getElementById('textoPregunta').textContent = pregunta.pregunta;
-  
-  // Crear botones de respuesta
   const zonaRespuestas = document.getElementById('zonaRespuestas');
   zonaRespuestas.innerHTML = '';
-  
   const respuestas = shuffle([
     ...((pregunta.ok || []).map(text => ({ text, isCorrect: true }))),
     ...((pregunta.nok || []).map(text => ({ text, isCorrect: false })))
@@ -501,8 +339,6 @@ function mostrarPregunta() {
   } else {
     zonaRespuestas.style.gridTemplateColumns = 'repeat(3, 1fr)';
   }
-  
-  // Crear botones
   const colorOffset = Math.floor(Math.random() * coloresBotones.length);
   respuestas.forEach((respuesta, index) => {
     const boton = document.createElement('button');
@@ -510,25 +346,17 @@ function mostrarPregunta() {
     boton.textContent = respuesta.text;
     boton.dataset.correcta = respuesta.isCorrect ? "1" : "0";
     boton.style.backgroundColor = coloresBotones[(index + colorOffset) % coloresBotones.length];
-    
     boton.onclick = () => manejarRespuesta(index, boton);
-    
     zonaRespuestas.appendChild(boton);
   });
-  
-  // Actualizar contador de rondas
   actualizarContadores();
 }
 
 function manejarRespuesta(indiceSeleccionado, botonClickeado) {
   const pregunta = preguntasSeleccionadas[preguntaActual];
   const esCorrecta = botonClickeado.dataset.correcta === "1";
-  
-  // Deshabilitar todos los botones
   const botones = document.querySelectorAll('.boton-respuesta');
   botones.forEach(btn => btn.onclick = null);
-  
-  // Mostrar símbolo de resultado en el botón pulsado
   const simbolo = document.createElement('div');
   simbolo.className = 'simbolo-resultado';
   simbolo.textContent = esCorrecta ? '✓' : '✗';
@@ -542,9 +370,7 @@ function manejarRespuesta(indiceSeleccionado, botonClickeado) {
       mostrarPregunta();
     }, 1500);
   } else {
-    // Si es incorrecta, tras 1s mostrar el check en la correcta y luego pasar de pregunta
     setTimeout(() => {
-      // Buscar el botón correcto
       const btnCorrecto = Array.from(botones).find(btn => btn.dataset.correcta === "1");
       if (btnCorrecto) {
         const check = document.createElement('div');
@@ -562,13 +388,10 @@ function manejarRespuesta(indiceSeleccionado, botonClickeado) {
 }
 
 function finalizarJuego() {
-  // Detener cronómetro
-  if (cronometroInterval) {
-    clearInterval(cronometroInterval);
-    cronometroInterval = null;
-  }
-  
-  // Mostrar pantalla final
+  // Ocultar el contenedor de preguntas y mostrar pantalla final
+  document.getElementById('juegoContainer').style.display = 'none';
+  document.getElementById('mensajeBienvenida').style.display = 'none';
+  // Crear pantalla final
   const areaCentral = document.getElementById('areaCentral');
   areaCentral.innerHTML = `
     <div class="pantalla-final">
@@ -577,8 +400,32 @@ function finalizarJuego() {
         <div>Aciertos: ${aciertos} de ${preguntasSeleccionadas.length}</div>
         <div>Porcentaje: ${Math.round((aciertos / preguntasSeleccionadas.length) * 100)}%</div>
       </div>
+      <button id="btnVolverAJugar" style="margin-top:32px;padding:12px 24px;font-size:1.2em;border-radius:12px;border:none;background:#fff;color:#764ba2;font-weight:bold;cursor:pointer;">Volver a jugar</button>
     </div>
   `;
+  // Listener para volver a jugar
+  document.getElementById('btnVolverAJugar').onclick = function() {
+    // Restaurar pantalla de inicio y contenedores
+    areaCentral.innerHTML = `
+      <div class=\"juego-container\" id=\"juegoContainer\" style=\"display: none;\">
+        <div class=\"zona-pregunta\">
+          <div class=\"texto-pregunta\" id=\"textoPregunta\"></div>
+        </div>
+        <div class=\"zona-respuestas\" id=\"zonaRespuestas\"></div>
+      </div>
+      <div id=\"mensajeBienvenida\" style=\"display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.5em; color: #666; text-align: center;\">
+        Pulsa \"INICIAR\" per començar el joc
+      </div>
+    `;
+    document.getElementById('pantallaInicio').style.display = 'flex';
+    document.getElementById('juegoContainer').style.display = 'none';
+    document.getElementById('mensajeBienvenida').style.display = 'flex';
+    preguntaActual = 0;
+    aciertos = 0;
+    tiempoInicio = 0;
+    document.getElementById('cronometro').textContent = '00:00';
+    actualizarContadores();
+  };
 }
 
 function actualizarContadores() {
@@ -586,33 +433,9 @@ function actualizarContadores() {
   document.getElementById('contadorRondas').textContent = `${preguntaActual + 1} de ${preguntasSeleccionadas.length}`;
 }
 
-function actualizarCronometro() {
-  if (!tiempoInicio) return;
-  
-  const tiempoTranscurrido = Math.floor((Date.now() - tiempoInicio) / 1000);
-  const minutos = Math.floor(tiempoTranscurrido / 60);
-  const segundos = tiempoTranscurrido % 60;
-  
-  document.getElementById('cronometro').textContent = 
-    `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-}
-
 // Event listeners
 document.getElementById('btnIniciarJuego').onclick = function() {
-  document.getElementById('pantallaInicio').style.display = 'none';
   cargarPreguntas();
-};
-
-document.getElementById('btnMenu').onclick = function() {
-  mostrarMenuModal();
-};
-
-document.getElementById('btnFullscreen').onclick = function() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
 };
 </script>
 </body>

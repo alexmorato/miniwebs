@@ -8,3 +8,7 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
     alert('Aquesta secció encara no està disponible!');
   });
 });
+
+document.getElementById('btnChoseOne').addEventListener('click', function() {
+  window.location.href = 'pages/choosegame.html';
+});
