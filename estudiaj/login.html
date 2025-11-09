@@ -153,28 +153,16 @@
   import './js/toast.js';
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+
       const name = document.getElementById('user_name').value.trim();
       const pass = document.getElementById('user_pass').value;
+
       const errorDiv = document.getElementById('loginError');
       errorDiv.textContent = '';
+
       try {
-        const usersData = await fetch('data/users.json').then(r => r.json());
-        if (!usersData || !Array.isArray(usersData.users)) throw new Error('No users');
-        const user = usersData.users.find(u => u.name === name);
-        if (!user) throw new Error('Usuari no trobat');
-        // Esperar a que bcryptjs estigui disponible
-        function waitForBcrypt() {
-          return new Promise(resolve => {
-            (function check() {
-              if (window.dcodeIO && window.dcodeIO.bcrypt) resolve(window.dcodeIO.bcrypt);
-              else if (window.bcryptjs) resolve(window.bcryptjs);
-              else if (window.bcrypt) resolve(window.bcrypt);
-              else setTimeout(check, 50);
-            })();
-          });
-        }
-        const bcrypt = await waitForBcrypt();
-        if (!bcrypt.compareSync(pass, user.password_hash)) throw new Error('Contrasenya incorrecta');
+        const result = await login.checkUserPass(name, pass);
+        if (result !== true) throw new Error(result);
         // Guardar en localStorage
         localStorage.setItem('stdj_user_name', name);
         localStorage.setItem('stdj_user_pass', pass);
@@ -183,6 +171,7 @@
         errorDiv.textContent = err.message;
       }
     });
+    
     // Mostrar pista del password
     document.getElementById('btnPista').addEventListener('click', async function() {
       const name = document.getElementById('user_name').value.trim();

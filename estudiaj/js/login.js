@@ -17,7 +17,7 @@ export const login = {
     }
     try {
       const isValid = await login.checkUserPass(user_name, user_pass);
-      if (!isValid) throw new Error('Bad pass');
+      if (isValid !== true) throw new Error(isValid);
     } catch (e) {
       window.location.href = '401.html';
     }
@@ -27,14 +27,14 @@ export const login = {
    * Comprueba si el usuario y contraseña son válidos
    * @param {string} user_name
    * @param {string} user_pass
-   * @returns {Promise<boolean>}
+   * @returns {Promise<true|string>} true si válido, string con mensaje de error si no
    */
   async checkUserPass(user_name, user_pass) {
     try {
       const usersData = await fetch('data/users.json').then(r => r.json());
-      if (!usersData || !Array.isArray(usersData.users)) return false;
+      if (!usersData || !Array.isArray(usersData.users)) return 'No users';
       const user = usersData.users.find(u => u.name === user_name);
-      if (!user) return false;
+      if (!user) return 'Usuari no trobat';
       function waitForBcrypt() {
         return new Promise(resolve => {
           (function check() {
@@ -46,9 +46,10 @@ export const login = {
         });
       }
       const bcrypt = await waitForBcrypt();
-      return bcrypt.compareSync(user_pass, user.password_hash);
+      if (!bcrypt.compareSync(user_pass, user.password_hash)) return 'Contrasenya incorrecta';
+      return true;
     } catch (e) {
-      return false;
+      return 'Error de validació';
     }
   }
 
