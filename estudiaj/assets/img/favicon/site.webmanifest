@@ -1,0 +1,22 @@
+{
+  "name": "Es Tu Dia Jugant",
+  "short_name": "DiaJugant",
+  "description": "Web educativa per a nens - Es Tu Dia Jugant",
+  "icons": [
+    {
+      "src": "favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/estudiaj/index.html",
+  "background_color": "#f0faff",
+  "theme_color": "#2196f3",
+  "display": "standalone",
+  "orientation": "portrait"
+}
