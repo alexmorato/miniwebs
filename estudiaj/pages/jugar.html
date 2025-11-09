@@ -433,9 +433,73 @@ function actualizarContadores() {
   document.getElementById('contadorRondas').textContent = `${preguntaActual + 1} de ${preguntasSeleccionadas.length}`;
 }
 
+
+// --- Menú modal igual que indefinits ---
+let cronometroPausado = false;
+let tiempoPausa = 0;
+
+function mostrarMenuModal() {
+  // Pausar cronómetro
+  if (cronometroInterval && !cronometroPausado) {
+    clearInterval(cronometroInterval);
+    cronometroPausado = true;
+    tiempoPausa = Date.now();
+  }
+  const modal = document.createElement('div');
+  modal.id = 'menuModal';
+  modal.style.display = 'block';
+  modal.innerHTML = `
+    <div style="position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(40,40,40,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
+    <div style="position:fixed;z-index:9999;left:24px;bottom:24px;min-width:220px;max-width:90vw;padding:0 0 18px 0;background:#23242a;border:2px solid #fff;border-radius:18px;box-shadow:0 8px 32px #0008;display:flex;flex-direction:column;align-items:stretch;">
+      <div style="padding:18px 18px 8px 18px;font-size:1.3em;font-weight:bold;color:#fff;">Menú</div>
+      <div style="height:2px;background:linear-gradient(90deg,#fff,#bbb);margin:0 0 10px 0;"></div>
+  <button id="btnEnviarRespuestas" disabled style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#444;color:#aaa;border:none;border-radius:8px;cursor:not-allowed;opacity:0.7;">Enviar respuestas</button>
+  <button id="btnMenuPrincipal" style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#eee;color:#23242a;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Volver al menú</button>
+  <button id="btnReiniciarJuego" style="margin:0 18px 10px 18px;padding:12px;font-size:1em;background:#fff;color:#23242a;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Juega otra vez</button>
+  <button id="btnReanudar" style="margin:0 18px 0 18px;padding:12px;font-size:1em;background:#2196f3;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">Reanudar</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById('btnReanudar').onclick = ocultarMenuModal;
+  document.getElementById('btnReiniciarJuego').onclick = function() {
+    ocultarMenuModal();
+    // Reiniciar juego
+    preguntaActual = 0;
+    aciertos = 0;
+    tiempoInicio = Date.now();
+    actualizarContadores();
+    actualizarCronometro();
+    if (cronometroInterval) clearInterval(cronometroInterval);
+    cronometroInterval = setInterval(actualizarCronometro, 1000);
+    mostrarPregunta();
+    document.getElementById('pantallaInicio').style.display = 'none';
+    document.getElementById('mensajeBienvenida').style.display = 'none';
+    document.getElementById('juegoContainer').style.display = 'flex';
+  };
+  document.getElementById('btnMenuPrincipal').onclick = function() {
+    window.location.href = '../index.html';
+  };
+}
+
+function ocultarMenuModal() {
+  const modal = document.getElementById('menuModal');
+  if (modal) {
+    modal.remove();
+  }
+  // Reanudar cronómetro
+  if (cronometroPausado) {
+    tiempoInicio += Date.now() - tiempoPausa;
+    cronometroInterval = setInterval(actualizarCronometro, 1000);
+    cronometroPausado = false;
+  }
+}
+
 // Event listeners
 document.getElementById('btnIniciarJuego').onclick = function() {
   cargarPreguntas();
+};
+document.getElementById('btnMenu').onclick = function() {
+  mostrarMenuModal();
 };
 </script>
 </body>

@@ -930,6 +930,116 @@
     }
   ]
 }
+,
+{
+  "guid": "3d8f6e2a-5c2c-4c2d-9c0c-2a9b9d2a77c1",
+  "nombre": "Participios irregulares con Lara",
+  "descripcion": "Juego para practicar el pretérito perfecto con participios irregulares y tildes en palabras frecuentes.",
+  "type": "selectone",
+  "tags": ["castellano", "gramática", "participios", "ortografía", "lara"],
+  "preguntas": [
+    {
+      "pregunta": "He ______ esto aquí.",
+      "ok": ["puesto"],
+      "nok": ["ponido", "ponío", "posado"]
+    },
+    {
+      "pregunta": "Lara ha ______ la puerta sin querer.",
+      "ok": ["roto"],
+      "nok": ["rompido", "rompío", "rompida"]
+    },
+    {
+      "pregunta": "Hoy hemos ______ un dibujo precioso.",
+      "ok": ["hecho"],
+      "nok": ["hacido", "hechido", "hazo"]
+    },
+    {
+      "pregunta": "Mi mamá ha ______ un pastel de chocolate.",
+      "ok": ["hecho"],
+      "nok": ["hacido", "hechido", "hicho"]
+    },
+    {
+      "pregunta": "¿Has ______ el libro de Isadora Moon?",
+      "ok": ["visto"],
+      "nok": ["veído", "vidado", "viso"]
+    },
+    {
+      "pregunta": "Naia ha ______ su dibujo en la pared.",
+      "ok": ["puesto"],
+      "nok": ["ponido", "ponído", "posado"]
+    },
+    {
+      "pregunta": "El jarrón se ha ______ en el suelo.",
+      "ok": ["roto"],
+      "nok": ["rompido", "rotoz", "rompío"]
+    },
+    {
+      "pregunta": "He ______ la carta a mi amiga.",
+      "ok": ["escrito"],
+      "nok": ["escribido", "escritao", "escrita"]
+    },
+    {
+      "pregunta": "Mi papá ha ______ temprano a casa.",
+      "ok": ["vuelto"],
+      "nok": ["volvido", "volto", "devolvido"]
+    },
+    {
+      "pregunta": "La planta ha ______ con el sol.",
+      "ok": ["muerto"],
+      "nok": ["morido", "morío", "muerta"]
+    },
+    {
+      "pregunta": "He ______ el regalo con papel bonito.",
+      "ok": ["envuelto"],
+      "nok": ["envolvido", "envalado", "envueltoz"]
+    },
+    {
+      "pregunta": "¿Has ______ bien la mesa?",
+      "ok": ["puesto"],
+      "nok": ["ponido", "ponío", "posado"]
+    },
+    {
+      "pregunta": "El cuadro ya está ______ en la pared.",
+      "ok": ["colgado"],
+      "nok": ["colgido", "colgao", "colgada"]
+    },
+    {
+      "pregunta": "Ayer hemos ______ al parque del río.",
+      "ok": ["ido"],
+      "nok": ["idoz", "andado", "andido"]
+    },
+    {
+      "pregunta": "La carta está mal ______: falta la tilde en 'aquí'.",
+      "ok": ["escrita"],
+      "nok": ["escribida", "escrito", "escritao"]
+    },
+    {
+      "pregunta": "Hemos ______ la mesa para la merienda.",
+      "ok": ["puesto"],
+      "nok": ["ponido", "ponío", "posado"]
+    },
+    {
+      "pregunta": "¿Has ______ la puerta con llave?",
+      "ok": ["abierto"],
+      "nok": ["abrido", "abierto/a", "abrío"]
+    },
+    {
+      "pregunta": "La bici se ha ______ con el barro.",
+      "ok": ["ensuciado"],
+      "nok": ["ensucido", "ensuciao", "ensucida"]
+    },
+    {
+      "pregunta": "El examen ya está ______ por la profe.",
+      "ok": ["corregido"],
+      "nok": ["correjido", "corregído", "corregidoz"]
+    },
+    {
+      "pregunta": "Lara ha ______ la historia a su hermana.",
+      "ok": ["dicho"],
+      "nok": ["decido", "decicho", "dizao"]
+    }
+  ]
+}
 
 
 
