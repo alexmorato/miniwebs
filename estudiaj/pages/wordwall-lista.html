@@ -93,21 +93,26 @@
         <div class="grid" id="gamesGrid"></div>
     </div>
     <script>
-    fetch('../data/wordwall.json')
-        .then(res => res.json())
-        .then(data => {
-            const grid = document.getElementById('gamesGrid');
-            data.forEach(game => {
-                const btn = document.createElement('button');
-                btn.className = 'game-btn';
-                btn.onclick = () => window.open(game.href, '_blank');
-                btn.innerHTML = `
-                    <img src="${game.src}" alt="${game.title}">
-                    <div class="game-title">${game.title}</div>
-                `;
-                grid.appendChild(btn);
+    import('../js/localstorage.js').then(({ LS_KEYS }) => {
+        fetch('../data/wordwall.json')
+            .then(res => res.json())
+            .then(data => {
+                const grid = document.getElementById('gamesGrid');
+                data.forEach(game => {
+                    const btn = document.createElement('button');
+                    btn.className = 'game-btn';
+                    btn.onclick = () => {
+                        localStorage.setItem(LS_KEYS.WORDWALL_URL, game.href);
+                        window.location.href = 'wordwall-iframe.html';
+                    };
+                    btn.innerHTML = `
+                        <img src="${game.src}" alt="${game.title}">
+                        <div class="game-title">${game.title}</div>
+                    `;
+                    grid.appendChild(btn);
+                });
             });
-        });
+    });
     </script>
 </body>
 </html>

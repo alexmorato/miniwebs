@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordwall Juego</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #222;
+        }
+        iframe {
+            border: none;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+        .no-url {
+            color: #fff;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script type="module">
+    import('../js/localstorage.js').then(({ LS_KEYS }) => {
+        const url = localStorage.getItem(LS_KEYS.WORDWALL_URL);
+        const container = document.getElementById('container');
+        if (url) {
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.allow = 'fullscreen';
+            container.appendChild(iframe);
+        } else {
+            container.innerHTML = '<div class="no-url">No se ha seleccionado ningún juego de Wordwall.<br>Por favor, elige uno primero.</div>';
+        }
+    });
+    </script>
+</body>
+</html>
