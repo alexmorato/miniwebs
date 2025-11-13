@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordwall HTML a JSON Converter</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; }
+        h1 { text-align: center; margin-bottom: 24px; }
+        textarea { width: 100%; min-height: 120px; font-size: 1rem; margin-bottom: 16px; border-radius: 6px; border: 1px solid #ccc; padding: 8px; }
+        button { display: block; width: 100%; padding: 12px; font-size: 1rem; background: #0078d7; color: #fff; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 16px; }
+        button:hover { background: #005fa3; }
+        pre { background: #f4f4f4; border-radius: 6px; padding: 12px; font-size: 1rem; overflow-x: auto; }
+        label { font-weight: bold; display: block; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wordwall HTML a JSON</h1>
+        <label for="inputHtml">Pega aquí el HTML de Wordwall:</label>
+        <textarea id="inputHtml" placeholder="Pega aquí el código HTML..."></textarea>
+        <button id="convertBtn">Convertir a JSON</button>
+    <label for="outputJson">Resultado JSON:</label>
+    <button id="copyBtn" style="margin-bottom:10px;">Copiar resultado</button>
+    <pre id="outputJson"></pre>
+    </div>
+    <script>
+    document.getElementById('convertBtn').onclick = function() {
+        const html = document.getElementById('inputHtml').value;
+        let href = '', src = '', title = '';
+        try {
+            // Extraer href
+            const hrefMatch = html.match(/href=["']([^"']+)["']/i);
+            if (hrefMatch) href = hrefMatch[1];
+            // Extraer src
+            const srcMatch = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+            if (srcMatch) src = srcMatch[1];
+            // Extraer title (del <span> o alt del <img>)
+            const spanMatch = html.match(/<span[^>]*>(.*?)<\/span>/i);
+            if (spanMatch) {
+                title = spanMatch[1].trim();
+            } else {
+                // fallback: alt del img
+                const altMatch = html.match(/<img[^>]+alt=["']([^"']+)["']/i);
+                if (altMatch) title = altMatch[1].trim();
+            }
+            if (!href || !src || !title) throw new Error('No se pudo extraer algún campo.');
+            const json = {
+                href: href,
+                src: src,
+                title: title
+            };
+            document.getElementById('outputJson').textContent = "," + JSON.stringify(json, null, 4);
+        } catch (e) {
+            document.getElementById('outputJson').textContent = 'Error: ' + e.message;
+        }
+    };
+
+    document.getElementById('copyBtn').onclick = function() {
+        const output = document.getElementById('outputJson').textContent;
+        if (!output) return;
+        navigator.clipboard.writeText(output).then(function() {
+            document.getElementById('copyBtn').textContent = '¡Copiado!';
+            setTimeout(() => {
+                document.getElementById('copyBtn').textContent = 'Copiar resultado';
+            }, 1200);
+        });
+    };
+    </script>
+</body>
+</html>
