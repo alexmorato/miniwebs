@@ -105,8 +105,12 @@
                         localStorage.setItem(LS_KEYS.WORDWALL_URL, game.href);
                         window.location.href = 'wordwall-iframe.html';
                     };
+                    let imgSrc = game.src;
+                    if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && imgSrc.startsWith('/miniwebs')) {
+                        imgSrc = imgSrc.replace('/miniwebs', '');
+                    }
                     btn.innerHTML = `
-                        <img src="${game.src}" alt="${game.title}">
+                        <img src="${imgSrc}" alt="${game.title}">
                         <div class="game-title">${game.title}</div>
                     `;
                     grid.appendChild(btn);
