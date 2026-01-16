@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Memory de Colores</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= HUD ================= */
+#hud {
+  flex: 0 0 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+
+.scores {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5px;
+}
+
+.player {
+  padding: 6px 12px;
+  font-size: 2.6rem;
+  border-radius: 8px;
+  background: #222;
+}
+
+.player.active {
+  outline: 2px solid #0f0;
+}
+
+#turn {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* ================= BOARD ================= */
+#board {
+  flex: 1;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 19px; /* GAP MEDIO */
+}
+
+/* ================= CARD ================= */
+.card {
+  perspective: 600px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  background: #444;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+}
+
+/* ================= DICE ================= */
+#dice-zone {
+  flex: 0 0 20%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+#dice {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  background: #333;
+  border: 2px solid white;
+}
+
+button {
+  padding: 14px 20px;
+  font-size: 1.4rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="scores">
+    <div id="p1" class="player active">🐻: <span>0</span></div>
+    <div id="p2" class="player">🐼: <span>0</span></div>
+  </div>
+  <div id="turn">Tira el dado</div>
+</div>
+
+<!-- BOARD -->
+<div id="board"></div>
+
+<!-- DICE -->
+<div id="dice-zone">
+  <div id="dice"></div>
+  <button id="rollBtn">🎲 Tirar dado</button>
+</div>
+
+<script>
+const colors = ["red", "blue", "green", "yellow", "purple", "orange"];
+const board = document.getElementById("board");
+const dice = document.getElementById("dice");
+const rollBtn = document.getElementById("rollBtn");
+const turnText = document.getElementById("turn");
+
+let currentPlayer = 0;
+let scores = [0, 0];
+let diceColor = null;
+let canFlip = false;
+let lockedCount = 0;
+
+/* ================= AUDIO ================= */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(freq, duration = 0.2, type = "sine") {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = type;
+  osc.frequency.value = freq;
+
+  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function vibrate(pattern) {
+  if ("vibrate" in navigator) navigator.vibrate(pattern);
+}
+
+/* ================= INIT ================= */
+function initGame() {
+  board.innerHTML = "";
+  scores = [0, 0];
+  currentPlayer = 0;
+  lockedCount = 0;
+  updateHUD();
+  diceColor = null;
+  canFlip = false;
+  dice.style.background = "#333";
+
+  let pool = [];
+  colors.forEach(c => {
+    for (let i = 0; i < 4; i++) pool.push(c);
+  });
+
+  pool.sort(() => Math.random() - 0.5);
+
+  pool.forEach(color => board.appendChild(createCard(color)));
+}
+
+function createCard(color) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.color = color;
+  card.dataset.locked = "false";
+
+  const inner = document.createElement("div");
+  inner.className = "card-inner";
+
+  const back = document.createElement("div");
+  back.className = "card-face card-back";
+
+  const front = document.createElement("div");
+  front.className = "card-face card-front";
+  front.style.background = color;
+
+  inner.append(back, front);
+  card.appendChild(inner);
+
+  card.addEventListener("click", () => handleCardClick(card));
+  return card;
+}
+
+/* ================= GAME ================= */
+rollBtn.addEventListener("click", () => {
+  if (diceColor) return;
+
+  audioCtx.resume();
+  diceColor = colors[Math.floor(Math.random() * colors.length)];
+  dice.style.background = diceColor;
+  canFlip = true;
+
+  playSound(800, 0.08, "square");
+  vibrate(30);
+
+  turnText.textContent = "Elige una carta";
+});
+
+function handleCardClick(card) {
+  if (!canFlip) return;
+  if (card.dataset.locked === "true") return;
+  if (card.classList.contains("flipped")) return;
+
+  card.classList.add("flipped");
+  canFlip = false;
+
+  setTimeout(() => {
+    if (card.dataset.color === diceColor) {
+      card.dataset.locked = "true";
+      scores[currentPlayer]++;
+      lockedCount++;
+
+      playSound(1200, 0.3);
+      vibrate([40, 40, 40]);
+
+      updateHUD();
+      checkEnd();
+      resetTurn(false);
+    } else {
+      playSound(200, 0.35, "sawtooth");
+      vibrate(200);
+
+      card.classList.remove("flipped");
+      resetTurn(true);
+    }
+  }, 900);
+}
+
+function resetTurn(changePlayer) {
+  diceColor = null;
+  dice.style.background = "#333";
+  if (changePlayer) currentPlayer = currentPlayer === 0 ? 1 : 0;
+  updateHUD();
+}
+
+function checkEnd() {
+  if (lockedCount === 24) {
+    playSound(600, 0.6);
+    playSound(900, 0.6);
+    vibrate([100, 50, 100, 50, 200]);
+    turnText.textContent =
+      scores[0] === scores[1]
+        ? "🤝 Empate"
+        : `🏆 Gana Jugador ${scores[0] > scores[1] ? 1 : 2}`;
+  }
+}
+
+function updateHUD() {
+  document.querySelector("#p1 span").textContent = scores[0];
+  document.querySelector("#p2 span").textContent = scores[1];
+  document.getElementById("p1").classList.toggle("active", currentPlayer === 0);
+  document.getElementById("p2").classList.toggle("active", currentPlayer === 1);
+  turnText.textContent = "Tira el dado";
+}
+
+/* ================= START ================= */
+initGame();
+</script>
+
+
+</body>
+</html>
