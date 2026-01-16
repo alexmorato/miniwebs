@@ -139,7 +139,7 @@ button {
 
 <!-- DICE -->
 <div id="dice-zone">
-  <div id="dice"></div>
+  <div id="dice" title="Pantalla completa"></div>
   <button id="rollBtn">🎲 Tirar dado</button>
 </div>
 
@@ -147,6 +147,15 @@ button {
 const colors = ["red", "blue", "green", "yellow", "purple", "orange"];
 const board = document.getElementById("board");
 const dice = document.getElementById("dice");
+
+// Fullscreen toggle al clicar el dado
+dice.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
 const rollBtn = document.getElementById("rollBtn");
 const turnText = document.getElementById("turn");
 
@@ -177,6 +186,7 @@ function playSound(freq, duration = 0.2, type = "sine") {
 }
 
 function vibrate(pattern) {
+    return; // Deshabilitado
   if ("vibrate" in navigator) navigator.vibrate(pattern);
 }
 
@@ -258,9 +268,9 @@ function handleCardClick(card) {
 
       updateHUD();
       checkEnd();
-      resetTurn(false);
+      resetTurn(true);
     } else {
-      playSound(200, 0.35, "sawtooth");
+      //playSound(200, 0.35, "sawtooth");
       vibrate(200);
 
       card.classList.remove("flipped");
