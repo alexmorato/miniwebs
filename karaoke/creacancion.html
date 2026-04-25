@@ -421,6 +421,20 @@
 			line-height: 1.45;
 		}
 
+		.runtime-warning {
+			padding: 14px 16px;
+			border-radius: 18px;
+			background: rgba(255, 224, 196, 0.82);
+			border: 1px solid rgba(218, 107, 46, 0.28);
+			color: #7a4420;
+			line-height: 1.45;
+		}
+
+		.runtime-warning strong {
+			display: block;
+			margin-bottom: 4px;
+		}
+
 		@media (max-width: 1160px) {
 			.app {
 				grid-template-columns: 1fr;
@@ -487,6 +501,11 @@
 				<button id="saveDraftButton" class="secondary">Guardar borrador</button>
 				<label for="importInput" class="fake-button ghost">Importar JSON</label>
 				<input id="importInput" type="file" accept="application/json" class="hidden">
+			</div>
+
+			<div id="runtimeWarning" class="runtime-warning hidden">
+				<strong>YouTube necesita un origen HTTP(S)</strong>
+				<div>Si abres este HTML como archivo local, algunos vídeos muestran “Ver en YouTube” aunque sí sean embebibles. Ábrelo con un servidor local, por ejemplo: <code>py -m http.server 8010</code> y entra en <code>http://localhost:8010/karaoke/creacancion.html</code>.</div>
 			</div>
 
 			<div class="field">
@@ -598,6 +617,7 @@
 			startButton: document.getElementById('startButton'),
 			saveDraftButton: document.getElementById('saveDraftButton'),
 			importInput: document.getElementById('importInput'),
+			runtimeWarning: document.getElementById('runtimeWarning'),
 			savedSongsSelect: document.getElementById('savedSongsSelect'),
 			loadSavedButton: document.getElementById('loadSavedButton'),
 			deleteSavedButton: document.getElementById('deleteSavedButton'),
@@ -627,12 +647,71 @@
 		const state = {
 			apiReady: false,
 			player: null,
+			playerIframe: null,
 			playerReady: false,
 			clockTimer: null,
 			currentSong: null,
 			currentIndex: -1,
 			awaiting: 'start'
 		};
+
+		function isHttpOrigin() {
+			return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+		}
+
+		function getOriginForPlayer() {
+			return isHttpOrigin() ? window.location.origin : undefined;
+		}
+
+		function updateRuntimeWarning() {
+			elements.runtimeWarning.classList.toggle('hidden', isHttpOrigin());
+		}
+
+		function buildEmbedUrl(videoId) {
+			const url = new URL(`https://www.youtube.com/embed/${videoId}`);
+			url.searchParams.set('autoplay', '0');
+			url.searchParams.set('cc_load_policy', '0');
+			url.searchParams.set('controls', '1');
+			url.searchParams.set('disablekb', '0');
+			url.searchParams.set('enablejsapi', '1');
+			url.searchParams.set('fs', '0');
+			url.searchParams.set('iv_load_policy', '3');
+			url.searchParams.set('loop', '0');
+			url.searchParams.set('modestbranding', '1');
+			url.searchParams.set('playsinline', '1');
+			url.searchParams.set('rel', '0');
+
+			const origin = getOriginForPlayer();
+			if (origin) {
+				url.searchParams.set('origin', origin);
+			}
+
+			return url.toString();
+		}
+
+		function ensureEmbedIframe(videoId) {
+			const src = buildEmbedUrl(videoId);
+
+			if (!state.playerIframe) {
+				const iframe = document.createElement('iframe');
+				iframe.className = 'yt-video__frame';
+				iframe.id = 'ytPlayerFrame';
+				iframe.title = 'Reproductor de YouTube';
+				iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+				iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+				iframe.frameBorder = '0';
+				iframe.style.width = '100%';
+				iframe.style.height = '100%';
+				iframe.style.minHeight = '280px';
+				iframe.src = src;
+				document.getElementById('player').replaceChildren(iframe);
+				state.playerIframe = iframe;
+				return iframe;
+			}
+
+			state.playerIframe.src = src;
+			return state.playerIframe;
+		}
 
 		function createEmptySong() {
 			return {
@@ -993,29 +1072,69 @@
 				return;
 			}
 
+			if (!isHttpOrigin()) {
+				setStatus('Origen local detectado', 'Abre esta página mediante http://localhost para evitar bloqueos del reproductor de YouTube con enablejsapi.');
+			}
+
 			elements.playerPlaceholder.classList.add('hidden');
+			const iframe = ensureEmbedIframe(videoId);
 
 			if (state.player) {
-				state.player.loadVideoById(videoId);
-				state.playerReady = true;
-				ensureClock();
+				state.player = new YT.Player(iframe, {
+					events: {
+						onReady: () => {
+							state.playerReady = true;
+							ensureClock();
+							setStatus('Reproductor listo', 'Ya puedes reproducir el vídeo y marcar frases.');
+							renderStage();
+						},
+						onError: (event) => {
+							state.playerReady = false;
+							handlePlayerError(event.data);
+							renderStage();
+						}
+					}
+				});
 				return;
 			}
 
-			state.player = new YT.Player('player', {
-				videoId,
-				playerVars: {
-					rel: 0,
-					modestbranding: 1
-				},
+			state.player = new YT.Player(iframe, {
 				events: {
 					onReady: () => {
 						state.playerReady = true;
 						ensureClock();
+						setStatus('Reproductor listo', 'Ya puedes reproducir el vídeo y marcar frases.');
+						renderStage();
+					},
+					onError: (event) => {
+						state.playerReady = false;
+						handlePlayerError(event.data);
 						renderStage();
 					}
 				}
 			});
+		}
+
+		function handlePlayerError(errorCode) {
+			const messages = {
+				2: 'El ID del vídeo no es válido.',
+				5: 'El navegador no ha podido reproducir este vídeo dentro del iframe.',
+				100: 'El vídeo no existe o ya no está disponible.',
+				101: 'YouTube ha rechazado este embed para este origen o esta petición.',
+				150: 'YouTube ha rechazado este embed para este origen o esta petición.'
+			};
+
+			if (!isHttpOrigin()) {
+				setStatus('YouTube bloqueado por origen local', 'Este HTML está abierto como archivo local. Sirve la carpeta con http://localhost y vuelve a probar.');
+				return;
+			}
+
+			if (errorCode === 101 || errorCode === 150) {
+				setStatus('Embed rechazado en este origen', 'El vídeo puede funcionar en otras webs, pero YouTube está rechazando esta carga concreta. Suele depender del dominio, del encabezado Referer o de restricciones del propio embed.');
+				return;
+			}
+
+			setStatus('Error del reproductor', messages[errorCode] || `YouTube devolvió el código ${errorCode}.`);
 		}
 
 		function handleStart() {
@@ -1374,6 +1493,7 @@
 			}
 		};
 
+		updateRuntimeWarning();
 		hydrateInitialDraft();
 		refreshCurrentTime();
 	</script>
