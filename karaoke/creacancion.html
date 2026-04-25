@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Creador de canciones karaoke</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+		:root {
+			--bg: #fff7ec;
+			--panel: rgba(255, 252, 246, 0.84);
+			--panel-strong: #fffdf8;
+			--line: rgba(111, 76, 49, 0.18);
+			--text: #2c1f17;
+			--muted: #806555;
+			--accent: #ef6c57;
+			--accent-2: #f6b73c;
+			--good: #1f9d79;
+			--warn: #da6b2e;
+			--shadow: 0 20px 60px rgba(136, 89, 52, 0.18);
+			--radius: 24px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+			font-family: 'Fredoka', 'Segoe UI', sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at top left, rgba(246, 183, 60, 0.55), transparent 30%),
+				radial-gradient(circle at top right, rgba(239, 108, 87, 0.38), transparent 28%),
+				linear-gradient(135deg, #fff4d9 0%, #fff9f0 48%, #ffeede 100%);
+		}
+
+		body {
+			padding: 24px;
+		}
+
+		.app {
+			max-width: 1480px;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: minmax(320px, 420px) minmax(0, 1fr) minmax(280px, 360px);
+			gap: 20px;
+			align-items: start;
+		}
+
+		.panel {
+			background: var(--panel);
+			border: 1px solid rgba(255, 255, 255, 0.6);
+			backdrop-filter: blur(16px);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+		}
+
+		.left,
+		.right {
+			padding: 20px;
+			position: sticky;
+			top: 24px;
+			max-height: calc(100vh - 48px);
+			overflow: auto;
+		}
+
+		.center {
+			padding: 20px;
+			display: grid;
+			gap: 18px;
+		}
+
+		h1,
+		h2,
+		h3,
+		p {
+			margin: 0;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 12px;
+			border-radius: 999px;
+			font-size: 0.82rem;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			color: var(--muted);
+			background: rgba(255, 255, 255, 0.72);
+		}
+
+		.title-block {
+			display: grid;
+			gap: 12px;
+			margin-bottom: 18px;
+		}
+
+		.title-block h1 {
+			font-size: clamp(1.9rem, 3vw, 3rem);
+			line-height: 0.95;
+			max-width: 12ch;
+		}
+
+		.title-block p {
+			color: var(--muted);
+			line-height: 1.4;
+		}
+
+		.field {
+			display: grid;
+			gap: 8px;
+			margin-bottom: 14px;
+		}
+
+		.field label {
+			font-size: 0.9rem;
+			color: var(--muted);
+		}
+
+		.field input,
+		.field textarea,
+		.field select,
+		.json-output {
+			width: 100%;
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			padding: 14px 16px;
+			font: inherit;
+			color: var(--text);
+			background: rgba(255, 255, 255, 0.85);
+			transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+		}
+
+		.field textarea,
+		.json-output {
+			resize: vertical;
+			min-height: 180px;
+			font-family: 'IBM Plex Mono', Consolas, monospace;
+			font-size: 0.92rem;
+			line-height: 1.55;
+		}
+
+		.field input:focus,
+		.field textarea:focus,
+		.json-output:focus {
+			outline: none;
+			border-color: rgba(239, 108, 87, 0.6);
+			box-shadow: 0 0 0 4px rgba(239, 108, 87, 0.16);
+			transform: translateY(-1px);
+		}
+
+		.row,
+		.toolbar,
+		.stats,
+		.pill-row,
+		.action-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		button,
+		.fake-button {
+			appearance: none;
+			border: 0;
+			border-radius: 18px;
+			padding: 12px 16px;
+			font: inherit;
+			cursor: pointer;
+			color: var(--text);
+			background: rgba(255, 255, 255, 0.85);
+			transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+			box-shadow: 0 10px 24px rgba(110, 77, 53, 0.1);
+		}
+
+		button:hover,
+		.fake-button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 14px 28px rgba(110, 77, 53, 0.14);
+		}
+
+		button:disabled {
+			cursor: not-allowed;
+			opacity: 0.45;
+			transform: none;
+			box-shadow: none;
+		}
+
+		.primary {
+			background: linear-gradient(135deg, var(--accent), #ff8f66);
+			color: #fffaf6;
+		}
+
+		.secondary {
+			background: linear-gradient(135deg, #ffdd9f, #ffeecf);
+		}
+
+		.accent-2 {
+			background: linear-gradient(135deg, #ffe072, var(--accent-2));
+		}
+
+		.danger {
+			background: linear-gradient(135deg, #ffd5c9, #ffc0b0);
+		}
+
+		.ghost {
+			background: rgba(255, 255, 255, 0.58);
+			box-shadow: none;
+			border: 1px solid rgba(111, 76, 49, 0.14);
+		}
+
+		.player-card {
+			display: grid;
+			gap: 18px;
+			padding: 22px;
+			background: linear-gradient(160deg, rgba(255, 253, 248, 0.96), rgba(255, 246, 233, 0.9));
+		}
+
+		.player-frame {
+			position: relative;
+			border-radius: 26px;
+			overflow: hidden;
+			background: #1b0f08;
+			min-height: 280px;
+			box-shadow: 0 20px 50px rgba(56, 31, 17, 0.25);
+		}
+
+		#player,
+		.player-placeholder {
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			min-height: 280px;
+		}
+
+		.player-placeholder {
+			display: grid;
+			place-items: center;
+			color: rgba(255, 248, 240, 0.78);
+			text-align: center;
+			padding: 24px;
+			background:
+				radial-gradient(circle at 20% 20%, rgba(255, 196, 105, 0.28), transparent 22%),
+				radial-gradient(circle at 80% 20%, rgba(255, 129, 102, 0.22), transparent 24%),
+				linear-gradient(135deg, #2f170d, #1f130e 45%, #382114 100%);
+		}
+
+		.lyric-stage {
+			display: grid;
+			gap: 16px;
+			padding: 28px;
+			border-radius: 28px;
+			background: linear-gradient(135deg, rgba(255, 245, 232, 0.96), rgba(255, 251, 244, 0.96));
+			border: 1px solid rgba(255, 255, 255, 0.8);
+		}
+
+		.status-banner {
+			display: flex;
+			justify-content: space-between;
+			gap: 12px;
+			flex-wrap: wrap;
+			align-items: center;
+			padding: 14px 16px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.72);
+			color: var(--muted);
+		}
+
+		.status-banner strong {
+			color: var(--text);
+		}
+
+		.current-line {
+			font-size: clamp(2rem, 5vw, 4.8rem);
+			line-height: 1.02;
+			font-weight: 700;
+			letter-spacing: -0.03em;
+			min-height: 2.2em;
+		}
+
+		.next-line {
+			font-size: clamp(1rem, 2vw, 1.55rem);
+			color: var(--muted);
+			min-height: 1.6em;
+		}
+
+		.mark-button {
+			width: 100%;
+			min-height: 110px;
+			border-radius: 32px;
+			padding: 20px;
+			font-size: clamp(1.3rem, 2.2vw, 1.95rem);
+			font-weight: 700;
+			color: #fff8f1;
+			background: linear-gradient(135deg, #ff7a61, #f3a13b 70%, #f8ca54);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.mark-button::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+			transform: translateX(-120%);
+			animation: shine 3.2s infinite;
+		}
+
+		@keyframes shine {
+			to {
+				transform: translateX(120%);
+			}
+		}
+
+		.stats {
+			gap: 12px;
+		}
+
+		.stat {
+			flex: 1 1 150px;
+			padding: 14px 16px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.8);
+			border: 1px solid rgba(111, 76, 49, 0.1);
+		}
+
+		.stat .label {
+			display: block;
+			font-size: 0.82rem;
+			color: var(--muted);
+			margin-bottom: 6px;
+		}
+
+		.stat .value {
+			font-size: 1.2rem;
+			font-weight: 700;
+		}
+
+		.song-list {
+			display: grid;
+			gap: 10px;
+			margin-top: 16px;
+		}
+
+		.song-item,
+		.phrase-item {
+			width: 100%;
+			text-align: left;
+			padding: 14px 16px;
+			border-radius: 18px;
+			border: 1px solid rgba(111, 76, 49, 0.12);
+			background: rgba(255, 255, 255, 0.74);
+		}
+
+		.song-item.active,
+		.phrase-item.active {
+			border-color: rgba(239, 108, 87, 0.48);
+			background: rgba(255, 238, 230, 0.95);
+		}
+
+		.song-item .meta,
+		.phrase-item .meta {
+			display: block;
+			margin-top: 8px;
+			font-size: 0.82rem;
+			color: var(--muted);
+		}
+
+		.phrase-item.deleted {
+			opacity: 0.62;
+			border-style: dashed;
+		}
+
+		.pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 6px 10px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.84);
+			color: var(--muted);
+			font-size: 0.82rem;
+		}
+
+		.pill.good {
+			color: var(--good);
+		}
+
+		.pill.warn {
+			color: var(--warn);
+		}
+
+		.empty {
+			padding: 18px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.65);
+			color: var(--muted);
+			line-height: 1.45;
+		}
+
+		.hint {
+			color: var(--muted);
+			font-size: 0.9rem;
+			line-height: 1.45;
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		.footer-note {
+			padding: 14px 16px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.7);
+			color: var(--muted);
+			font-size: 0.88rem;
+			line-height: 1.45;
+		}
+
+		@media (max-width: 1160px) {
+			.app {
+				grid-template-columns: 1fr;
+			}
+
+			.left,
+			.right {
+				position: static;
+				max-height: none;
+			}
+		}
+
+		@media (max-width: 640px) {
+			body {
+				padding: 14px;
+			}
+
+			.panel,
+			.player-card,
+			.lyric-stage {
+				border-radius: 22px;
+			}
+
+			.center,
+			.left,
+			.right,
+			.player-card,
+			.lyric-stage {
+				padding: 16px;
+			}
+
+			.current-line {
+				min-height: 2.8em;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="app">
+		<aside class="panel left">
+			<div class="title-block">
+				<span class="eyebrow">Generador karaoke</span>
+				<h1>Marca cada frase al ritmo del vídeo</h1>
+				<p>Introduce el vídeo de YouTube y la letra completa. Cada línea será una frase independiente para el JSON final.</p>
+			</div>
+
+			<div class="field">
+				<label for="songTitle">Título de la canción</label>
+				<input id="songTitle" type="text" placeholder="Mi canción favorita">
+			</div>
+
+			<div class="field">
+				<label for="youtubeInput">ID o URL de YouTube</label>
+				<input id="youtubeInput" type="text" placeholder="https://www.youtube.com/watch?v=... o solo el ID">
+			</div>
+
+			<div class="field">
+				<label for="lyricsInput">Letra</label>
+				<textarea id="lyricsInput" placeholder="Una frase por línea"></textarea>
+			</div>
+
+			<div class="toolbar">
+				<button id="startButton" class="primary">Cargar y comenzar</button>
+				<button id="saveDraftButton" class="secondary">Guardar borrador</button>
+				<label for="importInput" class="fake-button ghost">Importar JSON</label>
+				<input id="importInput" type="file" accept="application/json" class="hidden">
+			</div>
+
+			<div class="field">
+				<label for="savedSongsSelect">Canciones guardadas en este navegador</label>
+				<select id="savedSongsSelect"></select>
+			</div>
+
+			<div class="toolbar">
+				<button id="loadSavedButton" class="ghost">Cargar guardada</button>
+				<button id="deleteSavedButton" class="ghost">Eliminar guardada</button>
+			</div>
+
+			<div class="song-list" id="savedSongsList"></div>
+		</aside>
+
+		<main class="center">
+			<section class="panel player-card">
+				<div class="player-frame">
+					<div id="playerPlaceholder" class="player-placeholder">
+						<div>
+							<h2>El vídeo aparecerá aquí</h2>
+							<p>Carga una canción y usa Espacio o el botón grande para marcar inicio y fin de cada frase.</p>
+						</div>
+					</div>
+					<div id="player"></div>
+				</div>
+
+				<div class="stats">
+					<div class="stat">
+						<span class="label">Tiempo actual</span>
+						<span class="value" id="currentTimeValue">0.00 s</span>
+					</div>
+					<div class="stat">
+						<span class="label">Frase actual</span>
+						<span class="value" id="progressValue">0 / 0</span>
+					</div>
+					<div class="stat">
+						<span class="label">Estado</span>
+						<span class="value" id="markStateValue">Sin iniciar</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="panel lyric-stage">
+				<div class="status-banner">
+					<div>
+						<strong id="statusTitle">Prepara la canción</strong>
+						<div id="statusMessage">Carga un vídeo y la letra para empezar a marcar.</div>
+					</div>
+					<div class="pill-row">
+						<span class="pill" id="phrasesDonePill">0 frases marcadas</span>
+						<span class="pill warn" id="deletedPill">0 eliminadas</span>
+					</div>
+				</div>
+
+				<div class="current-line" id="currentLine">La frase actual aparecerá aquí.</div>
+				<div class="next-line" id="nextLine">La siguiente frase se mostrará como anticipación.</div>
+
+				<button id="markButton" class="mark-button" disabled>Pulsa Espacio para empezar la frase</button>
+
+				<div class="action-row">
+					<button id="playPauseButton" class="ghost" disabled>Reproducir / Pausar</button>
+					<button id="editPhraseButton" class="ghost" disabled>Editar frase actual</button>
+					<button id="skipPhraseButton" class="danger" disabled>Saltar o eliminar frase</button>
+					<button id="restartCurrentButton" class="ghost" disabled>Rehacer frase actual</button>
+				</div>
+
+				<p class="hint">Atajo: la barra espaciadora marca inicio y fin. Si haces clic en una frase del listado lateral, se borrarán las marcas desde ese punto para volver a sincronizar desde ahí.</p>
+			</section>
+
+			<section class="panel" style="padding: 20px; display: grid; gap: 14px;">
+				<div class="toolbar">
+					<button id="exportButton" class="accent-2" disabled>Exportar JSON</button>
+					<button id="copyJsonButton" class="ghost" disabled>Copiar JSON</button>
+					<button id="saveSongButton" class="secondary" disabled>Guardar canción</button>
+				</div>
+
+				<div class="field" style="margin: 0;">
+					<label for="jsonOutput">JSON generado</label>
+					<textarea id="jsonOutput" class="json-output" readonly placeholder="Aquí aparecerá el JSON cuando haya frases marcadas."></textarea>
+				</div>
+
+				<div class="footer-note">El JSON se genera solo con las frases activas. Las frases saltadas quedan fuera del resultado final, pero se mantienen en el borrador para que puedas rehacerlas si quieres.</div>
+			</section>
+		</main>
+
+		<aside class="panel right">
+			<div class="title-block" style="margin-bottom: 12px;">
+				<span class="eyebrow">Progreso</span>
+				<h2>Frases y remarcar</h2>
+				<p>Pulsa una frase ya marcada para limpiar desde ahí y continuar sincronizando desde ese punto.</p>
+			</div>
+
+			<div id="phraseList" class="song-list">
+				<div class="empty">Todavía no hay frases cargadas.</div>
+			</div>
+		</aside>
+	</div>
+
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script>
+		const STORAGE_KEY = 'karaokeCreatorSongs';
+		const LAST_DRAFT_KEY = 'karaokeCreatorLastDraft';
+
+		const elements = {
+			songTitle: document.getElementById('songTitle'),
+			youtubeInput: document.getElementById('youtubeInput'),
+			lyricsInput: document.getElementById('lyricsInput'),
+			startButton: document.getElementById('startButton'),
+			saveDraftButton: document.getElementById('saveDraftButton'),
+			importInput: document.getElementById('importInput'),
+			savedSongsSelect: document.getElementById('savedSongsSelect'),
+			loadSavedButton: document.getElementById('loadSavedButton'),
+			deleteSavedButton: document.getElementById('deleteSavedButton'),
+			savedSongsList: document.getElementById('savedSongsList'),
+			playerPlaceholder: document.getElementById('playerPlaceholder'),
+			currentTimeValue: document.getElementById('currentTimeValue'),
+			progressValue: document.getElementById('progressValue'),
+			markStateValue: document.getElementById('markStateValue'),
+			statusTitle: document.getElementById('statusTitle'),
+			statusMessage: document.getElementById('statusMessage'),
+			currentLine: document.getElementById('currentLine'),
+			nextLine: document.getElementById('nextLine'),
+			phrasesDonePill: document.getElementById('phrasesDonePill'),
+			deletedPill: document.getElementById('deletedPill'),
+			markButton: document.getElementById('markButton'),
+			playPauseButton: document.getElementById('playPauseButton'),
+			editPhraseButton: document.getElementById('editPhraseButton'),
+			skipPhraseButton: document.getElementById('skipPhraseButton'),
+			restartCurrentButton: document.getElementById('restartCurrentButton'),
+			exportButton: document.getElementById('exportButton'),
+			copyJsonButton: document.getElementById('copyJsonButton'),
+			saveSongButton: document.getElementById('saveSongButton'),
+			jsonOutput: document.getElementById('jsonOutput'),
+			phraseList: document.getElementById('phraseList')
+		};
+
+		const state = {
+			apiReady: false,
+			player: null,
+			playerReady: false,
+			clockTimer: null,
+			currentSong: null,
+			currentIndex: -1,
+			awaiting: 'start'
+		};
+
+		function createEmptySong() {
+			return {
+				id: crypto.randomUUID(),
+				titulo: '',
+				youtubeId: '',
+				rawInput: '',
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
+				lyrics: []
+			};
+		}
+
+		function cloneSong(song) {
+			return JSON.parse(JSON.stringify(song));
+		}
+
+		function getSavedSongs() {
+			try {
+				return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+			} catch (error) {
+				console.error('No se pudieron leer las canciones guardadas.', error);
+				return [];
+			}
+		}
+
+		function setSavedSongs(songs) {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(songs));
+		}
+
+		function saveLastDraft(song) {
+			localStorage.setItem(LAST_DRAFT_KEY, JSON.stringify(song));
+		}
+
+		function loadLastDraft() {
+			try {
+				return JSON.parse(localStorage.getItem(LAST_DRAFT_KEY) || 'null');
+			} catch (error) {
+				console.error('No se pudo leer el borrador anterior.', error);
+				return null;
+			}
+		}
+
+		function extractYouTubeId(value) {
+			const trimmed = value.trim();
+			if (!trimmed) {
+				return '';
+			}
+
+			if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+				return trimmed;
+			}
+
+			try {
+				const url = new URL(trimmed);
+				if (url.hostname.includes('youtu.be')) {
+					return url.pathname.replace('/', '').slice(0, 11);
+				}
+				if (url.searchParams.get('v')) {
+					return url.searchParams.get('v').slice(0, 11);
+				}
+				const pathParts = url.pathname.split('/').filter(Boolean);
+				const embedIndex = pathParts.findIndex((part) => part === 'embed' || part === 'shorts');
+				if (embedIndex >= 0 && pathParts[embedIndex + 1]) {
+					return pathParts[embedIndex + 1].slice(0, 11);
+				}
+			} catch (error) {
+				return '';
+			}
+
+			return '';
+		}
+
+		function parseLyrics(rawInput) {
+			return rawInput
+				.split(/\r?\n/)
+				.map((line) => line.trim())
+				.filter(Boolean)
+				.map((texto, index) => ({
+					id: crypto.randomUUID(),
+					order: index,
+					texto,
+					start: null,
+					end: null,
+					deleted: false
+				}));
+		}
+
+		function formatSeconds(value) {
+			return Number.isFinite(value) ? value.toFixed(2) + ' s' : '0.00 s';
+		}
+
+		function buildExportPayload(song) {
+			return {
+				youtubeId: song.youtubeId,
+				titulo: song.titulo,
+				lyrics: song.lyrics
+					.filter((item) => !item.deleted && Number.isFinite(item.start) && Number.isFinite(item.end))
+					.map((item) => ({
+						texto: item.texto,
+						start: Number(item.start.toFixed(3)),
+						end: Number(item.end.toFixed(3))
+					}))
+			};
+		}
+
+		function getNextActiveIndex(fromIndex) {
+			if (!state.currentSong) {
+				return -1;
+			}
+
+			for (let index = fromIndex; index < state.currentSong.lyrics.length; index += 1) {
+				if (!state.currentSong.lyrics[index].deleted) {
+					return index;
+				}
+			}
+			return -1;
+		}
+
+		function getNextPhrasePreview(index) {
+			const nextIndex = getNextActiveIndex(index + 1);
+			return nextIndex >= 0 ? state.currentSong.lyrics[nextIndex].texto : 'No hay más frases. Cuando termines, exporta o guarda la canción.';
+		}
+
+		function setStatus(title, message) {
+			elements.statusTitle.textContent = title;
+			elements.statusMessage.textContent = message;
+		}
+
+		function renderSavedSongs() {
+			const songs = getSavedSongs();
+
+			if (songs.length === 0) {
+				elements.savedSongsSelect.innerHTML = '<option value="">No hay canciones guardadas</option>';
+				elements.savedSongsList.innerHTML = '<div class="empty">Las canciones que guardes aquí se conservarán en el navegador y podrás recuperarlas o exportarlas más tarde.</div>';
+				return;
+			}
+
+			elements.savedSongsSelect.innerHTML = songs
+				.map((song) => {
+					const selected = state.currentSong && state.currentSong.id === song.id ? 'selected' : '';
+					return `<option value="${song.id}" ${selected}>${escapeHtml(song.titulo || 'Sin título')} · ${song.lyrics.length} frases</option>`;
+				})
+				.join('');
+
+			elements.savedSongsList.innerHTML = songs
+				.slice()
+				.sort((left, right) => new Date(right.updatedAt) - new Date(left.updatedAt))
+				.map((song) => {
+					const marked = song.lyrics.filter((item) => !item.deleted && Number.isFinite(item.start) && Number.isFinite(item.end)).length;
+					const cssClass = state.currentSong && state.currentSong.id === song.id ? 'song-item active' : 'song-item';
+					return `
+						<button class="${cssClass}" data-song-id="${song.id}">
+							<strong>${escapeHtml(song.titulo || 'Sin título')}</strong>
+							<span class="meta">${escapeHtml(song.youtubeId)} · ${marked}/${song.lyrics.length} frases listas</span>
+						</button>
+					`;
+				})
+				.join('');
+		}
+
+		function renderPhraseList() {
+			if (!state.currentSong || state.currentSong.lyrics.length === 0) {
+				elements.phraseList.innerHTML = '<div class="empty">Todavía no hay frases cargadas.</div>';
+				return;
+			}
+
+			elements.phraseList.innerHTML = state.currentSong.lyrics
+				.map((phrase, index) => {
+					const status = phrase.deleted
+						? 'Eliminada'
+						: Number.isFinite(phrase.start) && Number.isFinite(phrase.end)
+							? `${phrase.start.toFixed(2)} s → ${phrase.end.toFixed(2)} s`
+							: Number.isFinite(phrase.start)
+								? `Inicio ${phrase.start.toFixed(2)} s · esperando fin`
+								: 'Pendiente';
+
+					const classNames = [
+						'phrase-item',
+						index === state.currentIndex ? 'active' : '',
+						phrase.deleted ? 'deleted' : ''
+					].filter(Boolean).join(' ');
+
+					return `
+						<button class="${classNames}" data-phrase-index="${index}">
+							<strong>${index + 1}. ${escapeHtml(phrase.texto)}</strong>
+							<span class="meta">${status}</span>
+						</button>
+					`;
+				})
+				.join('');
+		}
+
+		function renderJson() {
+			if (!state.currentSong) {
+				elements.jsonOutput.value = '';
+				return;
+			}
+			elements.jsonOutput.value = JSON.stringify(buildExportPayload(state.currentSong), null, 2);
+		}
+
+		function renderStage() {
+			const song = state.currentSong;
+
+			if (!song || song.lyrics.length === 0) {
+				elements.currentLine.textContent = 'La frase actual aparecerá aquí.';
+				elements.nextLine.textContent = 'La siguiente frase se mostrará como anticipación.';
+				elements.progressValue.textContent = '0 / 0';
+				elements.markStateValue.textContent = 'Sin iniciar';
+				elements.markButton.textContent = 'Pulsa Espacio para empezar la frase';
+				elements.markButton.disabled = true;
+				elements.playPauseButton.disabled = true;
+				elements.editPhraseButton.disabled = true;
+				elements.skipPhraseButton.disabled = true;
+				elements.restartCurrentButton.disabled = true;
+				elements.exportButton.disabled = true;
+				elements.copyJsonButton.disabled = true;
+				elements.saveSongButton.disabled = true;
+				elements.phrasesDonePill.textContent = '0 frases marcadas';
+				elements.deletedPill.textContent = '0 eliminadas';
+				renderPhraseList();
+				renderJson();
+				return;
+			}
+
+			const marked = song.lyrics.filter((item) => !item.deleted && Number.isFinite(item.start) && Number.isFinite(item.end)).length;
+			const deleted = song.lyrics.filter((item) => item.deleted).length;
+			const activePhrase = song.lyrics[state.currentIndex] || null;
+			const hasActivePhrase = activePhrase && !activePhrase.deleted;
+			const allDone = getNextActiveIndex(0) === -1 || getNextActiveIndex(state.currentIndex >= 0 ? state.currentIndex : 0) === -1 && !hasActivePhrase;
+
+			elements.progressValue.textContent = `${Math.max(state.currentIndex + 1, 0)} / ${song.lyrics.length}`;
+			elements.markStateValue.textContent = state.awaiting === 'start' ? 'Esperando inicio' : 'Esperando fin';
+			elements.markButton.disabled = !hasActivePhrase || !state.playerReady;
+			elements.playPauseButton.disabled = !state.playerReady;
+			elements.editPhraseButton.disabled = !hasActivePhrase;
+			elements.skipPhraseButton.disabled = !hasActivePhrase;
+			elements.restartCurrentButton.disabled = !hasActivePhrase;
+			elements.exportButton.disabled = marked === 0;
+			elements.copyJsonButton.disabled = marked === 0;
+			elements.saveSongButton.disabled = song.lyrics.length === 0;
+			elements.phrasesDonePill.textContent = `${marked} frases marcadas`;
+			elements.deletedPill.textContent = `${deleted} eliminadas`;
+
+			if (!hasActivePhrase) {
+				elements.currentLine.textContent = 'Todas las frases activas han terminado.';
+				elements.nextLine.textContent = 'Puedes exportar, guardar, o remarcar desde cualquier frase lateral.';
+				elements.markButton.textContent = 'Sin más frases activas';
+				if (allDone) {
+					setStatus('Marcaje completado', 'La canción ya tiene todas las frases activas listas para exportar.');
+				}
+			} else {
+				elements.currentLine.textContent = activePhrase.texto;
+				elements.nextLine.textContent = getNextPhrasePreview(state.currentIndex);
+				elements.markButton.textContent = state.awaiting === 'start'
+					? 'Pulsa Espacio para marcar el inicio de esta frase'
+					: 'Pulsa Espacio para marcar el final y pasar a la siguiente';
+			}
+
+			renderPhraseList();
+			renderJson();
+			saveLastDraft(song);
+		}
+
+		function escapeHtml(value) {
+			return value
+				.replaceAll('&', '&amp;')
+				.replaceAll('<', '&lt;')
+				.replaceAll('>', '&gt;')
+				.replaceAll('"', '&quot;');
+		}
+
+		function refreshCurrentTime() {
+			if (!state.playerReady || !state.player || typeof state.player.getCurrentTime !== 'function') {
+				elements.currentTimeValue.textContent = '0.00 s';
+				return;
+			}
+			elements.currentTimeValue.textContent = formatSeconds(state.player.getCurrentTime());
+		}
+
+		function ensureClock() {
+			if (state.clockTimer) {
+				window.clearInterval(state.clockTimer);
+			}
+			state.clockTimer = window.setInterval(refreshCurrentTime, 120);
+		}
+
+		function applySongToForm(song) {
+			elements.songTitle.value = song.titulo || '';
+			elements.youtubeInput.value = song.youtubeId || '';
+			elements.lyricsInput.value = song.rawInput || song.lyrics.map((item) => item.texto).join('\n');
+		}
+
+		function setCurrentSong(song, options = {}) {
+			state.currentSong = cloneSong(song);
+			state.currentSong.updatedAt = new Date().toISOString();
+			applySongToForm(state.currentSong);
+
+			if (options.keepIndex && typeof options.keepIndex === 'number') {
+				state.currentIndex = options.keepIndex;
+			} else {
+				state.currentIndex = getNextActiveIndex(0);
+			}
+
+			const currentPhrase = state.currentSong.lyrics[state.currentIndex];
+			state.awaiting = currentPhrase && Number.isFinite(currentPhrase.start) && !Number.isFinite(currentPhrase.end) ? 'end' : 'start';
+			if (currentPhrase && Number.isFinite(currentPhrase.start) && Number.isFinite(currentPhrase.end)) {
+				state.awaiting = 'start';
+				const nextIndex = getNextActiveIndex(state.currentIndex + 1);
+				state.currentIndex = nextIndex;
+			}
+
+			renderSavedSongs();
+			renderStage();
+		}
+
+		function createSongFromForm() {
+			const youtubeId = extractYouTubeId(elements.youtubeInput.value);
+			const lyrics = parseLyrics(elements.lyricsInput.value);
+			if (!youtubeId) {
+				throw new Error('Necesitas un ID o una URL válida de YouTube.');
+			}
+			if (lyrics.length === 0) {
+				throw new Error('Escribe al menos una frase en la letra.');
+			}
+
+			return {
+				id: state.currentSong?.id || crypto.randomUUID(),
+				titulo: elements.songTitle.value.trim() || 'Sin título',
+				youtubeId,
+				rawInput: elements.lyricsInput.value,
+				createdAt: state.currentSong?.createdAt || new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
+				lyrics
+			};
+		}
+
+		function upsertCurrentSong() {
+			if (!state.currentSong) {
+				return;
+			}
+			const songs = getSavedSongs();
+			const copy = cloneSong(state.currentSong);
+			copy.updatedAt = new Date().toISOString();
+			const index = songs.findIndex((song) => song.id === copy.id);
+			if (index >= 0) {
+				songs[index] = copy;
+			} else {
+				songs.push(copy);
+			}
+			setSavedSongs(songs);
+			renderSavedSongs();
+		}
+
+		function loadYouTubePlayer(videoId) {
+			if (!state.apiReady) {
+				setStatus('Esperando a YouTube', 'La API del reproductor todavía no está lista. Prueba de nuevo en un momento.');
+				return;
+			}
+
+			elements.playerPlaceholder.classList.add('hidden');
+
+			if (state.player) {
+				state.player.loadVideoById(videoId);
+				state.playerReady = true;
+				ensureClock();
+				return;
+			}
+
+			state.player = new YT.Player('player', {
+				videoId,
+				playerVars: {
+					rel: 0,
+					modestbranding: 1
+				},
+				events: {
+					onReady: () => {
+						state.playerReady = true;
+						ensureClock();
+						renderStage();
+					}
+				}
+			});
+		}
+
+		function handleStart() {
+			try {
+				const song = createSongFromForm();
+				setCurrentSong(song);
+				loadYouTubePlayer(song.youtubeId);
+				setStatus('Marcaje listo', 'Reproduce el vídeo y pulsa Espacio en el inicio y fin de cada frase.');
+			} catch (error) {
+				window.alert(error.message);
+			}
+		}
+
+		function getPlayerTime() {
+			return state.playerReady && state.player ? state.player.getCurrentTime() : 0;
+		}
+
+		function markCurrentPhrase() {
+			const phrase = state.currentSong?.lyrics[state.currentIndex];
+			if (!phrase || phrase.deleted || !state.playerReady) {
+				return;
+			}
+
+			const currentTime = getPlayerTime();
+
+			if (state.awaiting === 'start') {
+				phrase.start = currentTime;
+				phrase.end = null;
+				state.awaiting = 'end';
+				setStatus('Inicio marcado', `Ahora espera al final de la frase ${state.currentIndex + 1}.`);
+			} else {
+				if (currentTime < phrase.start) {
+					window.alert('El final no puede ser anterior al inicio.');
+					return;
+				}
+
+				phrase.end = currentTime;
+				const nextIndex = getNextActiveIndex(state.currentIndex + 1);
+				state.currentIndex = nextIndex;
+				state.awaiting = 'start';
+
+				if (nextIndex >= 0) {
+					setStatus('Frase completada', `Pasando a la frase ${nextIndex + 1}.`);
+				} else {
+					setStatus('Todas las frases marcadas', 'La canción está lista para exportar o guardar.');
+				}
+			}
+
+			state.currentSong.updatedAt = new Date().toISOString();
+			renderStage();
+		}
+
+		function togglePlayback() {
+			if (!state.playerReady || !state.player) {
+				return;
+			}
+			const playerState = state.player.getPlayerState();
+			if (playerState === YT.PlayerState.PLAYING) {
+				state.player.pauseVideo();
+				setStatus('Vídeo en pausa', 'Puedes ajustar texto, rehacer frase o seguir cuando quieras.');
+			} else {
+				state.player.playVideo();
+				setStatus('Vídeo reproduciéndose', 'Marca con Espacio el inicio y el final de la frase actual.');
+			}
+		}
+
+		function editCurrentPhrase() {
+			const phrase = state.currentSong?.lyrics[state.currentIndex];
+			if (!phrase) {
+				return;
+			}
+
+			const updated = window.prompt('Editar frase actual', phrase.texto);
+			if (updated === null) {
+				return;
+			}
+
+			const trimmed = updated.trim();
+			if (!trimmed) {
+				window.alert('La frase no puede quedar vacía. Usa "Saltar o eliminar" si quieres quitarla.');
+				return;
+			}
+
+			phrase.texto = trimmed;
+			state.currentSong.rawInput = state.currentSong.lyrics.filter((item) => !item.deleted).map((item) => item.texto).join('\n');
+			applySongToForm(state.currentSong);
+			renderStage();
+		}
+
+		function skipCurrentPhrase() {
+			const phrase = state.currentSong?.lyrics[state.currentIndex];
+			if (!phrase) {
+				return;
+			}
+
+			const accepted = window.confirm('Esta frase se marcará como eliminada y quedará fuera del JSON exportado.');
+			if (!accepted) {
+				return;
+			}
+
+			phrase.deleted = true;
+			phrase.start = null;
+			phrase.end = null;
+			state.currentIndex = getNextActiveIndex(state.currentIndex + 1);
+			state.awaiting = 'start';
+			state.currentSong.updatedAt = new Date().toISOString();
+			setStatus('Frase eliminada', 'Se ha saltado la frase actual. Puedes recuperarla desde el listado si remarcas desde antes.');
+			renderStage();
+		}
+
+		function restartCurrentPhrase() {
+			const phrase = state.currentSong?.lyrics[state.currentIndex];
+			if (!phrase) {
+				return;
+			}
+			phrase.start = null;
+			phrase.end = null;
+			state.awaiting = 'start';
+			setStatus('Frase reiniciada', 'Vuelve a marcar inicio y fin para la frase actual.');
+			renderStage();
+		}
+
+		function rewindFrom(index) {
+			if (!state.currentSong) {
+				return;
+			}
+
+			const accepted = window.confirm(`Se borrarán las marcas desde la frase ${index + 1}.`);
+			if (!accepted) {
+				return;
+			}
+
+			state.currentSong.lyrics.forEach((phrase, phraseIndex) => {
+				if (phraseIndex >= index) {
+					phrase.start = null;
+					phrase.end = null;
+					if (phrase.deleted) {
+						phrase.deleted = false;
+					}
+				}
+			});
+
+			state.currentIndex = getNextActiveIndex(index);
+			state.awaiting = 'start';
+			state.currentSong.updatedAt = new Date().toISOString();
+			setStatus('Marcaje reabierto', `Continúa sincronizando desde la frase ${index + 1}.`);
+			renderStage();
+
+			if (state.playerReady && state.player) {
+				const seekTime = index > 0 ? (state.currentSong.lyrics[index - 1].end || 0) : 0;
+				state.player.seekTo(Math.max(seekTime - 0.3, 0), true);
+			}
+		}
+
+		function downloadJson() {
+			if (!state.currentSong) {
+				return;
+			}
+
+			const payload = JSON.stringify(buildExportPayload(state.currentSong), null, 2);
+			const blob = new Blob([payload], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement('a');
+			const safeTitle = (state.currentSong.titulo || 'cancion').replace(/[^a-z0-9_-]+/gi, '_').toLowerCase();
+			link.href = url;
+			link.download = `${safeTitle}.json`;
+			link.click();
+			URL.revokeObjectURL(url);
+		}
+
+		async function copyJson() {
+			try {
+				await navigator.clipboard.writeText(elements.jsonOutput.value);
+				setStatus('JSON copiado', 'Ya puedes pegar el JSON donde lo necesites.');
+			} catch (error) {
+				window.alert('No se pudo copiar al portapapeles.');
+			}
+		}
+
+		function saveCurrentSong() {
+			if (!state.currentSong) {
+				return;
+			}
+			state.currentSong.titulo = elements.songTitle.value.trim() || state.currentSong.titulo || 'Sin título';
+			state.currentSong.youtubeId = extractYouTubeId(elements.youtubeInput.value) || state.currentSong.youtubeId;
+			state.currentSong.rawInput = elements.lyricsInput.value;
+			upsertCurrentSong();
+			setStatus('Canción guardada', 'El borrador se ha guardado en localStorage.');
+		}
+
+		function saveDraftFromForm() {
+			const song = createEmptySong();
+			song.titulo = elements.songTitle.value.trim() || 'Borrador sin título';
+			song.youtubeId = extractYouTubeId(elements.youtubeInput.value);
+			song.rawInput = elements.lyricsInput.value;
+			song.lyrics = parseLyrics(elements.lyricsInput.value);
+			saveLastDraft(song);
+			setStatus('Borrador guardado', 'Los datos del formulario se han guardado aunque todavía no hayas empezado a marcar.');
+		}
+
+		function importSongFromJson(file) {
+			if (!file) {
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.onload = () => {
+				try {
+					const parsed = JSON.parse(String(reader.result));
+					if (!parsed.youtubeId || !Array.isArray(parsed.lyrics)) {
+						throw new Error('El JSON no tiene la estructura esperada.');
+					}
+
+					const song = {
+						id: crypto.randomUUID(),
+						titulo: parsed.titulo || file.name.replace(/\.json$/i, ''),
+						youtubeId: parsed.youtubeId,
+						rawInput: parsed.lyrics.map((item) => item.texto).join('\n'),
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						lyrics: parsed.lyrics.map((item, index) => ({
+							id: crypto.randomUUID(),
+							order: index,
+							texto: item.texto,
+							start: Number(item.start),
+							end: Number(item.end),
+							deleted: false
+						}))
+					};
+
+					setCurrentSong(song);
+					loadYouTubePlayer(song.youtubeId);
+					setStatus('JSON importado', 'Puedes seguir ajustando tiempos o exportarlo de nuevo.');
+				} catch (error) {
+					window.alert(error.message);
+				}
+			};
+			reader.readAsText(file, 'utf-8');
+		}
+
+		function loadSelectedSavedSong() {
+			const songs = getSavedSongs();
+			const selectedId = elements.savedSongsSelect.value;
+			const selectedSong = songs.find((song) => song.id === selectedId);
+			if (!selectedSong) {
+				return;
+			}
+			setCurrentSong(selectedSong);
+			loadYouTubePlayer(selectedSong.youtubeId);
+			setStatus('Canción recuperada', 'Has cargado un borrador guardado localmente.');
+		}
+
+		function deleteSelectedSavedSong() {
+			const selectedId = elements.savedSongsSelect.value;
+			if (!selectedId) {
+				return;
+			}
+			const accepted = window.confirm('Esta canción se eliminará del navegador.');
+			if (!accepted) {
+				return;
+			}
+			const songs = getSavedSongs().filter((song) => song.id !== selectedId);
+			setSavedSongs(songs);
+			renderSavedSongs();
+			setStatus('Canción eliminada', 'La entrada guardada ya no está en localStorage.');
+		}
+
+		function hydrateInitialDraft() {
+			const draft = loadLastDraft();
+			if (!draft) {
+				renderSavedSongs();
+				renderStage();
+				return;
+			}
+			setCurrentSong(draft);
+			setStatus('Borrador recuperado', 'Se ha restaurado el último estado conocido del generador.');
+		}
+
+		elements.startButton.addEventListener('click', handleStart);
+		elements.saveDraftButton.addEventListener('click', () => {
+			try {
+				saveDraftFromForm();
+			} catch (error) {
+				window.alert(error.message);
+			}
+		});
+		elements.markButton.addEventListener('click', markCurrentPhrase);
+		elements.playPauseButton.addEventListener('click', togglePlayback);
+		elements.editPhraseButton.addEventListener('click', editCurrentPhrase);
+		elements.skipPhraseButton.addEventListener('click', skipCurrentPhrase);
+		elements.restartCurrentButton.addEventListener('click', restartCurrentPhrase);
+		elements.exportButton.addEventListener('click', downloadJson);
+		elements.copyJsonButton.addEventListener('click', copyJson);
+		elements.saveSongButton.addEventListener('click', saveCurrentSong);
+		elements.loadSavedButton.addEventListener('click', loadSelectedSavedSong);
+		elements.deleteSavedButton.addEventListener('click', deleteSelectedSavedSong);
+		elements.importInput.addEventListener('change', (event) => {
+			importSongFromJson(event.target.files?.[0]);
+			event.target.value = '';
+		});
+
+		elements.savedSongsList.addEventListener('click', (event) => {
+			const button = event.target.closest('[data-song-id]');
+			if (!button) {
+				return;
+			}
+			elements.savedSongsSelect.value = button.dataset.songId;
+			loadSelectedSavedSong();
+		});
+
+		elements.phraseList.addEventListener('click', (event) => {
+			const button = event.target.closest('[data-phrase-index]');
+			if (!button) {
+				return;
+			}
+			rewindFrom(Number(button.dataset.phraseIndex));
+		});
+
+		document.addEventListener('keydown', (event) => {
+			const target = event.target;
+			const isEditable = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+			if (event.code === 'Space' && !isEditable) {
+				event.preventDefault();
+				markCurrentPhrase();
+				return;
+			}
+			if (event.code === 'KeyP' && !isEditable) {
+				event.preventDefault();
+				togglePlayback();
+			}
+		});
+
+		document.addEventListener('input', (event) => {
+			if (!state.currentSong) {
+				return;
+			}
+			if (event.target === elements.songTitle) {
+				state.currentSong.titulo = elements.songTitle.value.trim();
+			}
+			if (event.target === elements.youtubeInput) {
+				const youtubeId = extractYouTubeId(elements.youtubeInput.value);
+				if (youtubeId) {
+					state.currentSong.youtubeId = youtubeId;
+				}
+			}
+			if (event.target === elements.lyricsInput) {
+				state.currentSong.rawInput = elements.lyricsInput.value;
+			}
+			saveLastDraft(state.currentSong);
+		});
+
+		window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+			state.apiReady = true;
+			if (state.currentSong?.youtubeId) {
+				loadYouTubePlayer(state.currentSong.youtubeId);
+			}
+		};
+
+		hydrateInitialDraft();
+		refreshCurrentTime();
+	</script>
+</body>
+</html>
