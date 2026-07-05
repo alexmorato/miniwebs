@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bingo Musical</title>
+	<style>
+		:root {
+			--bg-1: #0b1324;
+			--bg-2: #122a4f;
+			--panel: rgba(13, 24, 46, 0.88);
+			--text: #ecf3ff;
+			--muted: #9db4d4;
+			--ok: #23c483;
+			--warn: #f0a100;
+			--danger: #ff5d5d;
+			--accent: #44a9ff;
+			--button: #1f5fa3;
+			--button-hover: #2c78c7;
+			--ring: rgba(68, 169, 255, 0.45);
+			--radius: 16px;
+			--shadow: 0 12px 38px rgba(0, 0, 0, 0.35);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at 10% 5%, #285d95 0%, transparent 40%),
+				radial-gradient(circle at 90% 15%, #2a457f 0%, transparent 35%),
+				linear-gradient(160deg, var(--bg-1), var(--bg-2));
+			display: flex;
+			justify-content: center;
+			padding: 16px;
+		}
+
+		.app {
+			width: min(960px, 100%);
+			background: var(--panel);
+			border: 1px solid rgba(157, 180, 212, 0.18);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			overflow: hidden;
+			backdrop-filter: blur(6px);
+			animation: enter 500ms ease;
+		}
+
+		@keyframes enter {
+			from { opacity: 0; transform: translateY(14px) scale(0.98); }
+			to { opacity: 1; transform: translateY(0) scale(1); }
+		}
+
+		header {
+			padding: 20px;
+			border-bottom: 1px solid rgba(157, 180, 212, 0.2);
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: clamp(1.5rem, 2.2vw, 2rem);
+			letter-spacing: 0.02em;
+		}
+
+		.status-pill {
+			padding: 8px 12px;
+			border-radius: 999px;
+			font-weight: 700;
+			font-size: 0.9rem;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			color: var(--muted);
+			background: rgba(255, 255, 255, 0.06);
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 16px;
+			padding: 18px;
+		}
+
+		.controls,
+		.player-wrap,
+		.messages {
+			border: 1px solid rgba(157, 180, 212, 0.2);
+			border-radius: var(--radius);
+			padding: 16px;
+			background: rgba(6, 15, 31, 0.62);
+		}
+
+		.row {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-bottom: 12px;
+		}
+
+		.row:last-child {
+			margin-bottom: 0;
+		}
+
+		label {
+			font-weight: 700;
+			color: var(--muted);
+		}
+
+		select,
+		button {
+			border: 0;
+			border-radius: 12px;
+			min-height: 48px;
+			font-size: 1rem;
+		}
+
+		select {
+			background: #edf4ff;
+			padding: 10px 12px;
+			min-width: 150px;
+			font-weight: 700;
+		}
+
+		button {
+			background: var(--button);
+			color: #fff;
+			padding: 10px 18px;
+			cursor: pointer;
+			font-weight: 800;
+			letter-spacing: 0.01em;
+			transition: background 180ms ease, transform 120ms ease;
+			touch-action: manipulation;
+		}
+
+		button:hover {
+			background: var(--button-hover);
+		}
+
+		button:active {
+			transform: translateY(1px);
+		}
+
+		button:disabled {
+			cursor: not-allowed;
+			opacity: 0.55;
+			transform: none;
+		}
+
+		button.secondary {
+			background: #2e4a67;
+		}
+
+		button.danger {
+			background: #7d2f3a;
+		}
+
+		button:focus-visible,
+		select:focus-visible {
+			outline: 3px solid var(--ring);
+			outline-offset: 2px;
+		}
+
+		#player {
+			width: 100%;
+			min-height: 72px;
+			border-radius: 12px;
+			background: #040b18;
+			padding: 10px;
+		}
+
+		.messages p {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.45;
+		}
+
+		.messages p + p {
+			margin-top: 8px;
+		}
+
+		.good { color: var(--ok); }
+		.warn { color: var(--warn); }
+		.bad { color: var(--danger); }
+
+		@media (max-width: 720px) {
+			.row {
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			button,
+			select {
+				width: 100%;
+			}
+
+			header {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="app">
+		<header>
+			<h1>Bingo Musical</h1>
+			<div id="gamePill" class="status-pill">En espera</div>
+		</header>
+
+		<section class="layout">
+			<section class="controls">
+				<div class="row">
+					<label for="sizeSelect">Tamano del bingo:</label>
+					<select id="sizeSelect">
+						<option value="2">2 canciones (prueba)</option>
+						<option value="10">10 canciones</option>
+						<option value="20">20 canciones</option>
+						<option value="30">30 canciones</option>
+						<option value="40">40 canciones</option>
+						<option value="50">50 canciones</option>
+					</select>
+				</div>
+				<div class="row">
+					<button id="startBtn">Iniciar</button>
+					<button id="nextBtn" class="secondary" disabled>Siguiente</button>
+					<button id="resetBtn" class="danger">Reiniciar</button>
+				</div>
+			</section>
+
+			<section class="player-wrap">
+				<div id="player">
+					<audio id="audioPlayer" controls preload="metadata" style="width: 100%;"></audio>
+				</div>
+			</section>
+
+			<section class="messages">
+				<p id="progressText">Sin partida activa.</p>
+				<p id="trackText">Esperando inicio...</p>
+				<p id="infoText">Configura y pulsa Iniciar para crear el reproductor.</p>
+			</section>
+		</section>
+	</main>
+
+	<script>
+		const CONFIG_KEY = "bingoConfig";
+		const STATE_KEY = "bingoGameState";
+
+		const DEFAULT_CONFIG = {
+			songs: [],
+			settings: {
+				ttsDelaySeconds: 5,
+				wakeLockEnabled: true
+			}
+		};
+
+		const ui = {
+			sizeSelect: document.getElementById("sizeSelect"),
+			startBtn: document.getElementById("startBtn"),
+			nextBtn: document.getElementById("nextBtn"),
+			resetBtn: document.getElementById("resetBtn"),
+			audioPlayer: document.getElementById("audioPlayer"),
+			progressText: document.getElementById("progressText"),
+			trackText: document.getElementById("trackText"),
+			infoText: document.getElementById("infoText"),
+			gamePill: document.getElementById("gamePill")
+		};
+
+		let game = {
+			size: null,
+			playlistIds: [],
+			currentIndex: 0,
+			active: false,
+			completed: false
+		};
+
+		let currentTrack = null;
+		let ttsTimerId = null;
+		let wakeLock = null;
+		let resumeTime = 0;
+
+		function parseJSON(value, fallback) {
+			try {
+				const parsed = JSON.parse(value);
+				return parsed && typeof parsed === "object" ? parsed : fallback;
+			} catch {
+				return fallback;
+			}
+		}
+
+		function loadConfig() {
+			const raw = localStorage.getItem(CONFIG_KEY);
+			const cfg = raw ? parseJSON(raw, DEFAULT_CONFIG) : DEFAULT_CONFIG;
+			if (!Array.isArray(cfg.songs)) {
+				cfg.songs = [];
+			}
+			if (!cfg.settings || typeof cfg.settings !== "object") {
+				cfg.settings = { ...DEFAULT_CONFIG.settings };
+			}
+			const s = Number(cfg.settings.ttsDelaySeconds);
+			cfg.settings.ttsDelaySeconds = Number.isFinite(s) && s >= 0 ? s : 5;
+			cfg.settings.wakeLockEnabled = Boolean(cfg.settings.wakeLockEnabled);
+			return cfg;
+		}
+
+		function loadState() {
+			const raw = localStorage.getItem(STATE_KEY);
+			if (!raw) return null;
+			const state = parseJSON(raw, null);
+			if (!state || typeof state !== "object") return null;
+			if (!Array.isArray(state.playlistIds) || typeof state.size !== "string") return null;
+			if (!Number.isInteger(state.currentIndex) || state.currentIndex < 0) return null;
+			return state;
+		}
+
+		function saveState() {
+			// Persist only what is needed to rebuild the session after reload.
+			const snapshot = {
+				size: game.size,
+				playlistIds: game.playlistIds,
+				currentIndex: game.currentIndex
+			};
+			localStorage.setItem(STATE_KEY, JSON.stringify(snapshot));
+		}
+
+		function clearState() {
+			localStorage.removeItem(STATE_KEY);
+		}
+
+		function getSongFile(song) {
+			const value = String(song.file || song.url || "").trim();
+			if (!value) return "";
+			return encodeURI(value);
+		}
+
+		function shuffled(array) {
+			const arr = [...array];
+			for (let i = arr.length - 1; i > 0; i -= 1) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[arr[i], arr[j]] = [arr[j], arr[i]];
+			}
+			return arr;
+		}
+
+		function pickSongs(config, size) {
+			const targetTag = String(size);
+			const filtered = config.songs
+				.filter((song) => Array.isArray(song.tags) && song.tags.includes(targetTag))
+				.map((song) => ({ ...song, file: getSongFile(song) }))
+				.filter((song) => song.file);
+
+			if (filtered.length < Number(size)) {
+				throw new Error(
+					`No hay canciones validas suficientes para tamano ${size}. ` +
+					`Disponibles: ${filtered.length}.`
+				);
+			}
+
+			return shuffled(filtered).slice(0, Number(size));
+		}
+
+		function getSongMap(config) {
+			const map = new Map();
+			for (const song of config.songs) {
+				map.set(song.id, { ...song, file: getSongFile(song) });
+			}
+			return map;
+		}
+
+		function updateInfo(message, className = "") {
+			ui.infoText.className = className;
+			ui.infoText.textContent = message;
+		}
+
+		function updateUI() {
+			if (!game.active) {
+				ui.nextBtn.disabled = true;
+				ui.progressText.textContent = "Sin partida activa.";
+				ui.trackText.textContent = "Esperando inicio...";
+				ui.gamePill.textContent = "En espera";
+				return;
+			}
+			ui.nextBtn.disabled = false;
+			ui.progressText.textContent = `Cancion ${game.currentIndex + 1} de ${game.playlistIds.length}`;
+			ui.gamePill.textContent = "Jugando";
+			if (currentTrack) {
+				ui.trackText.textContent = `${currentTrack.titulo} - ${currentTrack.artista}`;
+			}
+		}
+
+		async function requestWakeLockIfNeeded(config) {
+			if (!game.active || !config.settings.wakeLockEnabled) return;
+			if (!("wakeLock" in navigator)) {
+				updateInfo("WakeLock no disponible en este navegador.", "warn");
+				return;
+			}
+			try {
+				wakeLock = await navigator.wakeLock.request("screen");
+				wakeLock.addEventListener("release", () => {
+					if (game.active) updateInfo("WakeLock liberado por el sistema.", "warn");
+				});
+			} catch (err) {
+				updateInfo(`No se pudo activar WakeLock: ${err.message}`, "warn");
+			}
+		}
+
+		async function releaseWakeLock() {
+			if (!wakeLock) return;
+			try {
+				await wakeLock.release();
+			} catch {
+				// Ignore release errors.
+			}
+			wakeLock = null;
+		}
+
+		function cancelPendingAudioActions() {
+			if (ttsTimerId) {
+				clearTimeout(ttsTimerId);
+				ttsTimerId = null;
+			}
+			if (window.speechSynthesis) {
+				window.speechSynthesis.cancel();
+			}
+		}
+
+		function announceCurrentTrack(config) {
+			cancelPendingAudioActions();
+			const delayMs = Math.max(0, Number(config.settings.ttsDelaySeconds) * 1000);
+
+			// Pause audio after X seconds, speak title/artist, then resume.
+			ttsTimerId = setTimeout(() => {
+				ttsTimerId = null;
+				if (!game.active || !currentTrack) return;
+
+				if (!("speechSynthesis" in window)) {
+					updateInfo("TTS no disponible en este navegador.", "warn");
+					return;
+				}
+
+				try {
+					resumeTime = ui.audioPlayer.currentTime || 0;
+					ui.audioPlayer.pause();
+				} catch {
+					resumeTime = 0;
+				}
+
+				const text = `${currentTrack.titulo} de ${currentTrack.artista}`;
+				const utterance = new SpeechSynthesisUtterance(text);
+				utterance.lang = "es-ES";
+				utterance.rate = 1;
+				utterance.pitch = 1;
+
+				utterance.onend = () => {
+					if (!game.active) return;
+					try {
+						ui.audioPlayer.currentTime = resumeTime;
+						ui.audioPlayer.play().catch(() => {
+							updateInfo("Pulsa Play para continuar audio.", "warn");
+						});
+					} catch {
+						// Ignore audio errors.
+					}
+				};
+
+				utterance.onerror = () => {
+					if (game.active) {
+						try {
+							ui.audioPlayer.play().catch(() => {
+								updateInfo("Pulsa Play para continuar audio.", "warn");
+							});
+						} catch {
+							// Ignore audio errors.
+						}
+					}
+				};
+
+				window.speechSynthesis.cancel();
+				window.speechSynthesis.speak(utterance);
+			}, delayMs);
+		}
+
+		function playCurrentSong() {
+			if (!game.active) return;
+
+			const config = loadConfig();
+			const songMap = getSongMap(config);
+			const songId = game.playlistIds[game.currentIndex];
+			const song = songMap.get(songId);
+
+			if (!song || !song.file) {
+				updateInfo("Cancion no valida en partida guardada. Saltando.", "warn");
+				nextSong();
+				return;
+			}
+
+			currentTrack = song;
+			updateUI();
+			updateInfo("Reproduciendo...");
+
+			cancelPendingAudioActions();
+			ui.audioPlayer.src = song.file;
+			ui.audioPlayer.currentTime = 0;
+			ui.audioPlayer.play().catch(() => {
+				updateInfo("Pulsa Play en el reproductor para iniciar audio.", "warn");
+			});
+			announceCurrentTrack(config);
+			saveState();
+		}
+
+		function finishGame() {
+			game.active = false;
+			game.completed = true;
+			cancelPendingAudioActions();
+			clearState();
+			releaseWakeLock();
+			ui.audioPlayer.pause();
+			ui.audioPlayer.removeAttribute("src");
+			ui.audioPlayer.load();
+			ui.nextBtn.disabled = true;
+			ui.progressText.textContent = "Partida finalizada.";
+			ui.trackText.textContent = "¡Bingo completado!";
+			ui.gamePill.textContent = "Completado";
+			updateInfo("¡Bingo completado!", "good");
+		}
+
+		function nextSong() {
+			if (!game.active) return;
+			cancelPendingAudioActions();
+			ui.audioPlayer.pause();
+
+			game.currentIndex += 1;
+			if (game.currentIndex >= game.playlistIds.length) {
+				finishGame();
+				return;
+			}
+			saveState();
+			playCurrentSong();
+		}
+
+		function startFromSelection() {
+			const config = loadConfig();
+			const size = ui.sizeSelect.value;
+			const selected = pickSongs(config, size);
+
+			game = {
+				size,
+				playlistIds: selected.map((song) => song.id),
+				currentIndex: 0,
+				active: true,
+				completed: false
+			};
+
+			saveState();
+			updateUI();
+			requestWakeLockIfNeeded(config);
+			playCurrentSong();
+		}
+
+		function startFromSavedState(state) {
+			const config = loadConfig();
+			const songMap = getSongMap(config);
+			const validIds = state.playlistIds.filter((id) => {
+				const song = songMap.get(id);
+				return song && song.file;
+			});
+
+			if (!validIds.length) {
+				clearState();
+				throw new Error("La partida guardada ya no es valida con el catalogo actual.");
+			}
+
+			game = {
+				size: state.size,
+				playlistIds: validIds,
+				currentIndex: Math.min(state.currentIndex, validIds.length - 1),
+				active: true,
+				completed: false
+			};
+
+			ui.sizeSelect.value = game.size;
+			updateUI();
+			saveState();
+			requestWakeLockIfNeeded(config);
+			playCurrentSong();
+		}
+
+		function resetGame() {
+			cancelPendingAudioActions();
+			game = {
+				size: null,
+				playlistIds: [],
+				currentIndex: 0,
+				active: false,
+				completed: false
+			};
+			clearState();
+			releaseWakeLock();
+			ui.audioPlayer.pause();
+			ui.audioPlayer.removeAttribute("src");
+			ui.audioPlayer.load();
+			updateUI();
+			updateInfo("Partida reiniciada.", "good");
+		}
+
+		function handleStartClick() {
+			try {
+				const saved = loadState();
+				if (!game.active) {
+					if (saved && saved.size === ui.sizeSelect.value && saved.currentIndex < saved.playlistIds.length) {
+						startFromSavedState(saved);
+						updateInfo("Partida restaurada.", "good");
+					} else {
+						startFromSelection();
+						updateInfo("Partida iniciada.", "good");
+					}
+				}
+			} catch (err) {
+				updateInfo(err.message || "No se pudo iniciar el juego.", "bad");
+			}
+		}
+
+		document.addEventListener("visibilitychange", async () => {
+			if (!game.active) return;
+			const config = loadConfig();
+			if (!config.settings.wakeLockEnabled) return;
+			if (document.visibilityState === "visible" && !wakeLock) {
+				await requestWakeLockIfNeeded(config);
+			}
+		});
+
+		ui.startBtn.addEventListener("click", handleStartClick);
+		ui.nextBtn.addEventListener("click", nextSong);
+		ui.resetBtn.addEventListener("click", resetGame);
+		ui.audioPlayer.addEventListener("ended", () => {
+			if (game.active) {
+				nextSong();
+			}
+		});
+		ui.audioPlayer.addEventListener("error", () => {
+			if (!game.active) return;
+			updateInfo("Error cargando audio local. Saltando a la siguiente.", "warn");
+			nextSong();
+		});
+
+		(function init() {
+			const cfg = loadConfig();
+			const state = loadState();
+			if (state && typeof state.size === "string") {
+				ui.sizeSelect.value = state.size;
+				ui.startBtn.textContent = "Iniciar / Continuar";
+				updateInfo("Hay una partida guardada. Pulsa Iniciar para continuar.", "warn");
+			}
+			if (!cfg.songs.length) {
+				updateInfo("No hay canciones en el catalogo. Configuralas en admin.html con rutas mp3 locales.", "warn");
+			}
+		})();
+	</script>
+</body>
+</html>

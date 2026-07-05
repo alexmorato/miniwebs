@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Bingo Musical</title>
+	<style>
+		:root {
+			--bg: #f4f7fb;
+			--panel: #ffffff;
+			--panel-2: #eef3fb;
+			--text: #1a2740;
+			--muted: #587196;
+			--accent: #0f6ecf;
+			--accent-2: #1f8fff;
+			--danger: #bf3a4b;
+			--ok: #128b63;
+			--border: #d4dfef;
+			--radius: 14px;
+			--shadow: 0 14px 36px rgba(14, 44, 83, 0.12);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			color: var(--text);
+			font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+			background:
+				radial-gradient(circle at 95% 5%, #d7e8ff 0, transparent 30%),
+				linear-gradient(180deg, #edf4ff, var(--bg));
+			padding: 16px;
+		}
+
+		.shell {
+			width: min(1100px, 100%);
+			margin: 0 auto;
+			display: grid;
+			gap: 16px;
+		}
+
+		.card {
+			background: var(--panel);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			padding: 16px;
+		}
+
+		h1, h2 {
+			margin: 0 0 12px 0;
+			letter-spacing: 0.01em;
+		}
+
+		h1 {
+			font-size: clamp(1.5rem, 2.3vw, 2rem);
+		}
+
+		.grid {
+			display: grid;
+			gap: 12px;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.grid .full {
+			grid-column: 1 / -1;
+		}
+
+		label {
+			display: block;
+			font-weight: 700;
+			font-size: 0.92rem;
+			color: var(--muted);
+			margin-bottom: 6px;
+		}
+
+		input[type="text"],
+		input[type="url"],
+		input[type="number"] {
+			width: 100%;
+			min-height: 44px;
+			border-radius: 10px;
+			border: 1px solid var(--border);
+			padding: 10px 12px;
+			font-size: 1rem;
+			background: #fff;
+		}
+
+		.check-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			background: var(--panel-2);
+			border-radius: 10px;
+			padding: 10px;
+			border: 1px solid var(--border);
+		}
+
+		.check-item {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 6px 8px;
+			border-radius: 8px;
+			background: #fff;
+			border: 1px solid var(--border);
+			font-weight: 700;
+			color: var(--muted);
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		button {
+			border: 0;
+			border-radius: 10px;
+			min-height: 44px;
+			padding: 10px 14px;
+			color: #fff;
+			background: var(--accent);
+			font-weight: 800;
+			cursor: pointer;
+			transition: background 160ms ease;
+			touch-action: manipulation;
+		}
+
+		button:hover {
+			background: var(--accent-2);
+		}
+
+		button.secondary {
+			background: #50698c;
+		}
+
+		button.danger {
+			background: var(--danger);
+		}
+
+		button.success {
+			background: var(--ok);
+		}
+
+		.message {
+			margin-top: 8px;
+			font-weight: 700;
+			color: var(--muted);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			overflow: hidden;
+			border-radius: 12px;
+			border: 1px solid var(--border);
+			background: #fff;
+		}
+
+		th,
+		td {
+			text-align: left;
+			padding: 10px;
+			border-bottom: 1px solid var(--border);
+			vertical-align: top;
+		}
+
+		th {
+			font-size: 0.85rem;
+			letter-spacing: 0.02em;
+			color: var(--muted);
+			text-transform: uppercase;
+			background: var(--panel-2);
+		}
+
+		td small {
+			color: var(--muted);
+		}
+
+		.table-actions {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
+
+		.table-actions button {
+			min-height: 36px;
+			padding: 6px 10px;
+			font-size: 0.92rem;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		@media (max-width: 850px) {
+			.grid {
+				grid-template-columns: 1fr;
+			}
+
+			th:nth-child(3),
+			td:nth-child(3) {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="shell">
+		<section class="card">
+			<h1>Panel de Administracion - Bingo Musical</h1>
+			<p class="message" id="statusMsg">Gestiona canciones y configuracion global.</p>
+		</section>
+
+		<section class="card">
+			<h2>Canciones</h2>
+			<form id="songForm" class="grid" novalidate>
+				<div>
+					<label for="tituloInput">Titulo</label>
+					<input id="tituloInput" type="text" required>
+				</div>
+				<div>
+					<label for="artistaInput">Artista</label>
+					<input id="artistaInput" type="text" required>
+				</div>
+				<div class="full">
+					<label for="fileInput">Archivo MP3 (ruta local o URL)</label>
+					<input id="fileInput" type="text" placeholder="songs/mi-cancion.mp3" required>
+				</div>
+				<div class="full">
+					<label>Tags de tamano</label>
+					<div class="check-row">
+						<label class="check-item"><input type="checkbox" value="2">2</label>
+						<label class="check-item"><input type="checkbox" value="10">10</label>
+						<label class="check-item"><input type="checkbox" value="20">20</label>
+						<label class="check-item"><input type="checkbox" value="30">30</label>
+						<label class="check-item"><input type="checkbox" value="40">40</label>
+						<label class="check-item"><input type="checkbox" value="50">50</label>
+					</div>
+				</div>
+				<div class="full actions">
+					<button type="submit" id="saveSongBtn">Guardar cancion</button>
+					<button type="button" class="secondary" id="loadLocalDemoBtn">Cargar demo local (2 canciones)</button>
+					<button type="button" class="secondary" id="cancelEditBtn">Cancelar edicion</button>
+				</div>
+			</form>
+		</section>
+
+		<section class="card">
+			<h2>Configuracion Global</h2>
+			<div class="grid">
+				<div>
+					<label for="ttsSecondsInput">Segundos antes de anunciar (TTS)</label>
+					<input id="ttsSecondsInput" type="number" min="0" step="1" value="5">
+				</div>
+				<div>
+					<label>WakeLock</label>
+					<div class="check-row">
+						<label class="check-item"><input id="wakeLockInput" type="checkbox"> Habilitar WakeLock en juego</label>
+					</div>
+				</div>
+				<div class="full actions">
+					<button id="saveSettingsBtn" class="success" type="button">Guardar configuracion</button>
+					<button id="exportBtn" class="secondary" type="button">Exportar JSON</button>
+					<button id="importBtn" class="secondary" type="button">Importar JSON</button>
+					<input id="importFile" class="hidden" type="file" accept="application/json">
+				</div>
+			</div>
+		</section>
+
+		<section class="card">
+			<h2>Listado</h2>
+			<div style="overflow:auto;">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Titulo / Artista</th>
+							<th>Archivo</th>
+							<th>Tags</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id="songsTableBody"></tbody>
+				</table>
+			</div>
+		</section>
+	</main>
+
+	<script>
+		const CONFIG_KEY = "bingoConfig";
+		const STATE_KEY = "bingoGameState";
+		const VALID_TAGS = ["2", "10", "20", "30", "40", "50"];
+
+		const DEFAULT_CONFIG = {
+			songs: [],
+			settings: {
+				ttsDelaySeconds: 5,
+				wakeLockEnabled: true
+			}
+		};
+
+		const ui = {
+			statusMsg: document.getElementById("statusMsg"),
+			songForm: document.getElementById("songForm"),
+			tituloInput: document.getElementById("tituloInput"),
+			artistaInput: document.getElementById("artistaInput"),
+			fileInput: document.getElementById("fileInput"),
+			tagCheckboxes: Array.from(document.querySelectorAll('.check-row input[type="checkbox"][value]')),
+			saveSongBtn: document.getElementById("saveSongBtn"),
+			loadLocalDemoBtn: document.getElementById("loadLocalDemoBtn"),
+			cancelEditBtn: document.getElementById("cancelEditBtn"),
+			songsTableBody: document.getElementById("songsTableBody"),
+			ttsSecondsInput: document.getElementById("ttsSecondsInput"),
+			wakeLockInput: document.getElementById("wakeLockInput"),
+			saveSettingsBtn: document.getElementById("saveSettingsBtn"),
+			exportBtn: document.getElementById("exportBtn"),
+			importBtn: document.getElementById("importBtn"),
+			importFile: document.getElementById("importFile")
+		};
+
+		let config = loadConfig();
+		let editingSongId = null;
+
+		function parseJSON(value, fallback) {
+			try {
+				const parsed = JSON.parse(value);
+				return parsed && typeof parsed === "object" ? parsed : fallback;
+			} catch {
+				return fallback;
+			}
+		}
+
+		function loadConfig() {
+			const raw = localStorage.getItem(CONFIG_KEY);
+			const data = raw ? parseJSON(raw, DEFAULT_CONFIG) : { ...DEFAULT_CONFIG };
+
+			if (!Array.isArray(data.songs)) data.songs = [];
+			data.songs = ensureUniqueSongIds(data.songs.map(normalizeSong).filter(Boolean));
+
+			if (!data.settings || typeof data.settings !== "object") {
+				data.settings = { ...DEFAULT_CONFIG.settings };
+			}
+
+			const tts = Number(data.settings.ttsDelaySeconds);
+			data.settings.ttsDelaySeconds = Number.isFinite(tts) && tts >= 0 ? Math.floor(tts) : 5;
+			data.settings.wakeLockEnabled = Boolean(data.settings.wakeLockEnabled);
+
+			return data;
+		}
+
+		function saveConfig(nextConfig) {
+			config = {
+				songs: Array.isArray(nextConfig.songs)
+					? ensureUniqueSongIds(nextConfig.songs.map(normalizeSong).filter(Boolean))
+					: [],
+				settings: {
+					ttsDelaySeconds: Math.max(0, Math.floor(Number(nextConfig.settings?.ttsDelaySeconds ?? 5))),
+					wakeLockEnabled: Boolean(nextConfig.settings?.wakeLockEnabled)
+				}
+			};
+			localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+			render();
+		}
+
+		function normalizeSong(song) {
+			if (!song || typeof song !== "object") return null;
+			const id = Number(song.id);
+			const titulo = String(song.titulo || "").trim();
+			const artista = String(song.artista || "").trim();
+			const file = String(song.file || song.url || "").trim();
+			const tags = Array.isArray(song.tags) ? song.tags.map((t) => String(t)).filter((t) => VALID_TAGS.includes(t)) : [];
+
+			if (!Number.isFinite(id) || id <= 0 || !titulo || !artista || !file) return null;
+
+			return { id: Math.floor(id), titulo, artista, file, tags: [...new Set(tags)] };
+		}
+
+		function isLikelyAudioPath(path) {
+			if (!path || typeof path !== "string") return false;
+			const value = path.trim().toLowerCase();
+			if (!value) return false;
+			if (value.startsWith("blob:") || value.startsWith("data:audio/")) return true;
+			return /\.(mp3|wav|ogg|m4a)(\?.*)?$/.test(value);
+		}
+
+		function collectSelectedTags() {
+			return ui.tagCheckboxes.filter((cb) => cb.checked).map((cb) => cb.value);
+		}
+
+		function clearForm() {
+			editingSongId = null;
+			ui.songForm.reset();
+			ui.tagCheckboxes.forEach((cb) => {
+				cb.checked = false;
+			});
+			ui.saveSongBtn.textContent = "Guardar cancion";
+		}
+
+		function setMessage(text, type = "info") {
+			const colors = {
+				info: "#587196",
+				ok: "#128b63",
+				warn: "#9a6a00",
+				error: "#bf3a4b"
+			};
+			ui.statusMsg.textContent = text;
+			ui.statusMsg.style.color = colors[type] || colors.info;
+		}
+
+		function askToClearStateIfNeeded(reason) {
+			// The game stores a fixed playlist by song IDs. Catalog changes can invalidate it.
+			if (!localStorage.getItem(STATE_KEY)) return;
+			const answer = confirm(`${reason}\n\nSe ha detectado una partida activa guardada. ¿Quieres borrarla para evitar inconsistencias?`);
+			if (answer) {
+				localStorage.removeItem(STATE_KEY);
+				setMessage("Cambios guardados y partida anterior eliminada.", "ok");
+			} else {
+				setMessage("Cambios guardados. Se mantuvo la partida existente.", "warn");
+			}
+		}
+
+		function nextSongId() {
+			return config.songs.reduce((max, song) => Math.max(max, song.id), 0) + 1;
+		}
+
+		function ensureUniqueSongIds(songs) {
+			const used = new Set();
+			let fallbackId = songs.reduce((max, song) => Math.max(max, song.id), 0) + 1;
+			return songs.map((song) => {
+				let id = song.id;
+				if (used.has(id)) {
+					id = fallbackId;
+					fallbackId += 1;
+				}
+				used.add(id);
+				return { ...song, id };
+			});
+		}
+
+		function handleSongSubmit(event) {
+			event.preventDefault();
+
+			const titulo = ui.tituloInput.value.trim();
+			const artista = ui.artistaInput.value.trim();
+			const file = ui.fileInput.value.trim();
+			const tags = collectSelectedTags();
+
+			if (!titulo || !artista || !file) {
+				setMessage("Completa titulo, artista y archivo mp3.", "error");
+				return;
+			}
+
+			if (!isLikelyAudioPath(file)) {
+				setMessage("Ruta invalida. Usa .mp3/.wav/.ogg/.m4a (ej: songs/tema.mp3).", "error");
+				return;
+			}
+
+			if (!tags.length) {
+				setMessage("Selecciona al menos un tag de tamano.", "error");
+				return;
+			}
+
+			const songs = [...config.songs];
+			if (editingSongId == null) {
+				songs.push({ id: nextSongId(), titulo, artista, file, tags });
+				saveConfig({ ...config, songs });
+				askToClearStateIfNeeded("Se anadio una cancion al catalogo.");
+				setMessage("Cancion anadida correctamente.", "ok");
+			} else {
+				const idx = songs.findIndex((s) => s.id === editingSongId);
+				if (idx === -1) {
+					setMessage("No se encontro la cancion a editar.", "error");
+					return;
+				}
+				songs[idx] = { id: editingSongId, titulo, artista, file, tags };
+				saveConfig({ ...config, songs });
+				askToClearStateIfNeeded("Se modifico el catalogo de canciones.");
+				setMessage("Cancion actualizada.", "ok");
+			}
+
+			clearForm();
+		}
+
+		function editSong(id) {
+			const song = config.songs.find((s) => s.id === id);
+			if (!song) {
+				setMessage("Cancion no encontrada.", "error");
+				return;
+			}
+
+			editingSongId = id;
+			ui.tituloInput.value = song.titulo;
+			ui.artistaInput.value = song.artista;
+			ui.fileInput.value = song.file;
+			ui.tagCheckboxes.forEach((cb) => {
+				cb.checked = song.tags.includes(cb.value);
+			});
+
+			ui.saveSongBtn.textContent = "Guardar cambios";
+			setMessage(`Editando cancion #${id}.`, "info");
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+
+		function loadLocalDemoSongs() {
+			const songs = [
+				{
+					id: 1,
+					titulo: "Red Descendientes 4",
+					artista: "Kylie Cantrall",
+					file: "songs/Kylie Cantrall - Red Descendientes 4.mp3",
+					tags: ["2"]
+				},
+				{
+					id: 2,
+					titulo: "Red Descendientes 4 (Version 2)",
+					artista: "Kylie Cantrall",
+					file: "songs/Kylie Cantrall - Red Descendientes 4 2.mp3",
+					tags: ["2"]
+				}
+			];
+
+			saveConfig({ ...config, songs });
+			askToClearStateIfNeeded("Se cargo el demo local de canciones mp3.");
+			setMessage("Demo local cargado. Ya puedes jugar con tamano 2.", "ok");
+			clearForm();
+		}
+
+		function removeSong(id) {
+			const song = config.songs.find((s) => s.id === id);
+			if (!song) return;
+
+			const ok = confirm(`Eliminar "${song.titulo}" de ${song.artista}?`);
+			if (!ok) return;
+
+			const songs = config.songs.filter((s) => s.id !== id);
+			saveConfig({ ...config, songs });
+			askToClearStateIfNeeded("Se elimino una cancion del catalogo.");
+			setMessage("Cancion eliminada.", "ok");
+			if (editingSongId === id) clearForm();
+		}
+
+		function handleSaveSettings() {
+			const ttsDelaySeconds = Math.max(0, Math.floor(Number(ui.ttsSecondsInput.value || 0)));
+			const wakeLockEnabled = ui.wakeLockInput.checked;
+
+			saveConfig({
+				...config,
+				settings: {
+					ttsDelaySeconds,
+					wakeLockEnabled
+				}
+			});
+
+			setMessage("Configuracion global guardada.", "ok");
+		}
+
+		function handleExport() {
+			const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = `bingo_config_${new Date().toISOString().slice(0, 10)}.json`;
+			a.click();
+			URL.revokeObjectURL(url);
+			setMessage("Configuracion exportada.", "ok");
+		}
+
+		function validateImportedConfig(raw) {
+			// Accept partial backups and normalize to the app schema.
+			if (!raw || typeof raw !== "object") {
+				throw new Error("JSON invalido.");
+			}
+
+			const songs = Array.isArray(raw.songs) ? raw.songs.map(normalizeSong).filter(Boolean) : [];
+			const tts = Number(raw.settings?.ttsDelaySeconds);
+			const wake = Boolean(raw.settings?.wakeLockEnabled);
+
+			return {
+				songs,
+				settings: {
+					ttsDelaySeconds: Number.isFinite(tts) && tts >= 0 ? Math.floor(tts) : 5,
+					wakeLockEnabled: wake
+				}
+			};
+		}
+
+		function handleImportFile(event) {
+			const [file] = event.target.files;
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = () => {
+				try {
+					const importedRaw = parseJSON(String(reader.result || ""), null);
+					const imported = validateImportedConfig(importedRaw);
+					saveConfig(imported);
+					askToClearStateIfNeeded("Se importo un catalogo de canciones.");
+					clearForm();
+					setMessage(`Importacion completada. Canciones: ${imported.songs.length}.`, "ok");
+				} catch (err) {
+					setMessage(err.message || "No se pudo importar el archivo.", "error");
+				} finally {
+					ui.importFile.value = "";
+				}
+			};
+			reader.onerror = () => {
+				setMessage("Error al leer el archivo.", "error");
+			};
+			reader.readAsText(file, "utf-8");
+		}
+
+		function renderTable() {
+			if (!config.songs.length) {
+				ui.songsTableBody.innerHTML = `
+					<tr>
+						<td colspan="5"><small>No hay canciones registradas.</small></td>
+					</tr>
+				`;
+				return;
+			}
+
+			ui.songsTableBody.innerHTML = config.songs
+				.sort((a, b) => a.id - b.id)
+				.map((song) => {
+					const escapedTitle = escapeHtml(song.titulo);
+					const escapedArtist = escapeHtml(song.artista);
+					const escapedFile = escapeHtml(song.file);
+					const tagText = song.tags.join(", ");
+
+					return `
+						<tr>
+							<td>${song.id}</td>
+							<td><strong>${escapedTitle}</strong><br><small>${escapedArtist}</small></td>
+							<td><small>${escapedFile}</small></td>
+							<td>${escapeHtml(tagText)}</td>
+							<td>
+								<div class="table-actions">
+									<button type="button" class="secondary" data-action="edit" data-id="${song.id}">Editar</button>
+									<button type="button" class="danger" data-action="delete" data-id="${song.id}">Eliminar</button>
+								</div>
+							</td>
+						</tr>
+					`;
+				})
+				.join("");
+		}
+
+		function escapeHtml(value) {
+			return String(value)
+				.replaceAll("&", "&amp;")
+				.replaceAll("<", "&lt;")
+				.replaceAll(">", "&gt;")
+				.replaceAll('"', "&quot;")
+				.replaceAll("'", "&#39;");
+		}
+
+		function renderSettings() {
+			ui.ttsSecondsInput.value = config.settings.ttsDelaySeconds;
+			ui.wakeLockInput.checked = config.settings.wakeLockEnabled;
+		}
+
+		function render() {
+			renderSettings();
+			renderTable();
+		}
+
+		ui.songForm.addEventListener("submit", handleSongSubmit);
+		ui.loadLocalDemoBtn.addEventListener("click", loadLocalDemoSongs);
+		ui.cancelEditBtn.addEventListener("click", () => {
+			clearForm();
+			setMessage("Edicion cancelada.");
+		});
+		ui.saveSettingsBtn.addEventListener("click", handleSaveSettings);
+		ui.exportBtn.addEventListener("click", handleExport);
+		ui.importBtn.addEventListener("click", () => ui.importFile.click());
+		ui.importFile.addEventListener("change", handleImportFile);
+
+		ui.songsTableBody.addEventListener("click", (event) => {
+			const target = event.target;
+			if (!(target instanceof HTMLElement)) return;
+			const button = target.closest("button[data-action][data-id]");
+			if (!button) return;
+
+			const action = button.dataset.action;
+			const id = Number(button.dataset.id);
+			if (!Number.isFinite(id)) return;
+
+			if (action === "edit") editSong(id);
+			if (action === "delete") removeSong(id);
+		});
+
+		render();
+	</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube URL Tester</title>
+  <style>
+    :root {
+      --bg: #0d1627;
+      --bg2: #1a2c49;
+      --panel: rgba(10, 18, 33, 0.9);
+      --panel2: rgba(24, 40, 65, 0.9);
+      --text: #ecf4ff;
+      --muted: #9db7da;
+      --ok: #3fd08a;
+      --warn: #ffbb3e;
+      --bad: #ff6464;
+      --accent: #49a5ff;
+      --accentHover: #5fb2ff;
+      --radius: 14px;
+      --shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 90% 0%, #3b5f95 0, transparent 35%),
+        radial-gradient(circle at 10% 0%, #244a7e 0, transparent 40%),
+        linear-gradient(160deg, var(--bg), var(--bg2));
+      padding: 16px;
+    }
+
+    .wrap {
+      width: min(1000px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(157, 183, 218, 0.22);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.4rem, 2.3vw, 2rem);
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid rgba(157, 183, 218, 0.3);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      background: #f2f7ff;
+      color: #0d1627;
+    }
+
+    button {
+      min-height: 48px;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--accent);
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 140ms ease;
+    }
+
+    button:hover {
+      background: var(--accentHover);
+    }
+
+    .btn-secondary {
+      background: #486489;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(157, 183, 218, 0.12);
+      color: var(--muted);
+      font-weight: 700;
+      border: 1px solid rgba(157, 183, 218, 0.28);
+    }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .player-box {
+      border: 1px solid rgba(157, 183, 218, 0.2);
+      background: var(--panel2);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .player-title {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 10px;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #apiPlayer {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .log {
+      margin-top: 12px;
+      border: 1px solid rgba(157, 183, 218, 0.2);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px;
+      min-height: 110px;
+      max-height: 210px;
+      overflow: auto;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      color: #d8e7ff;
+    }
+
+    @media (max-width: 880px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .actions button {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>YouTube URL Tester</h1>
+      <p>Pega una URL de YouTube para comprobar si carga en iframe normal y en YouTube IFrame API.</p>
+      <div class="row">
+        <input id="urlInput" type="text" placeholder="https://youtu.be/... o https://www.youtube.com/watch?v=..." />
+        <button id="testBtn">Probar URL</button>
+      </div>
+      <div class="actions">
+        <button id="sampleBtn" class="btn-secondary">Cargar ejemplo</button>
+        <button id="copyEmbedBtn" class="btn-secondary">Copiar URL embed</button>
+        <button id="openEmbedBtn" class="btn-secondary">Abrir embed</button>
+        <button id="clearLogBtn" class="btn-secondary">Limpiar log</button>
+      </div>
+      <div id="statusBadge" class="badge">Esperando URL...</div>
+    </section>
+
+    <section class="grid">
+      <article class="player-box">
+        <h2 class="player-title">Prueba con iframe embed</h2>
+        <iframe id="rawIframe" class="video-frame" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      </article>
+
+      <article class="player-box">
+        <h2 class="player-title">Prueba con YouTube IFrame API</h2>
+        <div id="apiPlayer"></div>
+        <div class="actions">
+          <button id="playBtn">Play</button>
+          <button id="pauseBtn" class="btn-secondary">Pause</button>
+          <button id="stopBtn" class="btn-secondary">Stop</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2 class="player-title">Log de eventos</h2>
+      <div id="logBox" class="log"></div>
+    </section>
+  </main>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const ui = {
+      urlInput: document.getElementById("urlInput"),
+      testBtn: document.getElementById("testBtn"),
+      sampleBtn: document.getElementById("sampleBtn"),
+      copyEmbedBtn: document.getElementById("copyEmbedBtn"),
+      openEmbedBtn: document.getElementById("openEmbedBtn"),
+      clearLogBtn: document.getElementById("clearLogBtn"),
+      statusBadge: document.getElementById("statusBadge"),
+      rawIframe: document.getElementById("rawIframe"),
+      playBtn: document.getElementById("playBtn"),
+      pauseBtn: document.getElementById("pauseBtn"),
+      stopBtn: document.getElementById("stopBtn"),
+      logBox: document.getElementById("logBox")
+    };
+
+    let ytReady = false;
+    let apiPlayer = null;
+    let currentVideoId = null;
+    let currentEmbedUrl = "";
+
+    function log(message) {
+      const line = `[${new Date().toLocaleTimeString()}] ${message}`;
+      ui.logBox.textContent += `${line}\n`;
+      ui.logBox.scrollTop = ui.logBox.scrollHeight;
+    }
+
+    function setStatus(text, type = "") {
+      ui.statusBadge.className = `badge ${type}`.trim();
+      ui.statusBadge.textContent = text;
+    }
+
+    function parseYoutubeInput(inputUrl) {
+      if (!inputUrl || typeof inputUrl !== "string") return null;
+      const value = inputUrl.trim();
+      if (!value) return null;
+
+      const idPattern = /^[a-zA-Z0-9_-]{11}$/;
+      if (idPattern.test(value)) {
+        return {
+          id: value,
+          embedUrl: buildEmbedUrl(value),
+          source: "id"
+        };
+      }
+
+      try {
+        const u = new URL(value);
+        const host = u.hostname.replace(/^www\./i, "").toLowerCase();
+        const isYoutubeHost = [
+          "youtube.com",
+          "m.youtube.com",
+          "music.youtube.com",
+          "youtube-nocookie.com"
+        ].includes(host);
+
+        if (host === "youtu.be") {
+          const id = u.pathname.replace(/^\//, "").split("/")[0];
+          if (!idPattern.test(id)) return null;
+          return {
+            id,
+            embedUrl: buildEmbedUrl(id),
+            source: "short"
+          };
+        }
+
+        if (isYoutubeHost) {
+          const v = u.searchParams.get("v");
+          if (idPattern.test(v || "")) {
+            return {
+              id: v,
+              embedUrl: buildEmbedUrl(v),
+              source: "watch"
+            };
+          }
+
+          const parts = u.pathname.split("/").filter(Boolean);
+          const section = parts[0];
+          const id = parts[1];
+          if ((section === "embed" || section === "shorts" || section === "live") && idPattern.test(id || "")) {
+            // Keep original embed params (e.g. si, start) to mimic YouTube's generated code.
+            const embedUrl = section === "embed"
+              ? `${u.origin}/embed/${id}${u.search}`
+              : buildEmbedUrl(id);
+            return {
+              id,
+              embedUrl,
+              source: section
+            };
+          }
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    }
+
+    function buildEmbedUrl(videoId) {
+      return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`;
+    }
+
+    function stateToText(state) {
+      if (window.YT && state === YT.PlayerState.UNSTARTED) return "UNSTARTED";
+      if (window.YT && state === YT.PlayerState.ENDED) return "ENDED";
+      if (window.YT && state === YT.PlayerState.PLAYING) return "PLAYING";
+      if (window.YT && state === YT.PlayerState.PAUSED) return "PAUSED";
+      if (window.YT && state === YT.PlayerState.BUFFERING) return "BUFFERING";
+      if (window.YT && state === YT.PlayerState.CUED) return "CUED";
+      return `UNKNOWN(${state})`;
+    }
+
+    function ensureYTReady() {
+      if (window.YT && typeof window.YT.Player === "function") {
+        ytReady = true;
+        return Promise.resolve();
+      }
+      if (ytReady) return Promise.resolve();
+
+      return new Promise((resolve) => {
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+          ytReady = true;
+          if (typeof prev === "function") prev();
+          resolve();
+        };
+      });
+    }
+
+    function createPlayerIfNeeded(videoId) {
+      if (!apiPlayer) {
+        apiPlayer = new YT.Player("apiPlayer", {
+          width: "100%",
+          height: "100%",
+          videoId,
+          playerVars: {
+            rel: 0,
+            modestbranding: 1,
+            playsinline: 1
+          },
+          events: {
+            onReady: () => {
+              log("API Player listo.");
+            },
+            onStateChange: (event) => {
+              log(`API state: ${stateToText(event.data)}.`);
+            },
+            onError: (event) => {
+              setStatus(`Error API YouTube: ${event.data}`, "bad");
+              log(`Error API YouTube: ${event.data}.`);
+            }
+          }
+        });
+        return;
+      }
+
+      apiPlayer.loadVideoById(videoId, 0, "large");
+    }
+
+    async function testUrl() {
+      const raw = ui.urlInput.value.trim();
+      const parsed = parseYoutubeInput(raw);
+
+      if (!parsed) {
+        setStatus("URL inválida o no se pudo extraer ID de video.", "bad");
+        log("Fallo de validacion: URL invalida.");
+        return;
+      }
+
+      currentVideoId = parsed.id;
+      const embedUrl = parsed.embedUrl;
+      currentEmbedUrl = embedUrl;
+
+      ui.rawIframe.src = embedUrl;
+      setStatus(`ID detectado: ${parsed.id}`, "ok");
+      log(`ID extraido: ${parsed.id}. Fuente: ${parsed.source}.`);
+      log(`Embed URL: ${embedUrl}`);
+
+      try {
+        await ensureYTReady();
+        createPlayerIfNeeded(parsed.id);
+        log("Carga de video via API solicitada.");
+      } catch (err) {
+        setStatus("No se pudo inicializar la API de YouTube.", "bad");
+        log(`Error inicializando API: ${err.message || err}`);
+      }
+    }
+
+    ui.testBtn.addEventListener("click", testUrl);
+    ui.urlInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        testUrl();
+      }
+    });
+
+    ui.sampleBtn.addEventListener("click", () => {
+      ui.urlInput.value = "https://www.youtube.com/watch?v=4NRXx6U8ABQ";
+      testUrl();
+    });
+
+    ui.copyEmbedBtn.addEventListener("click", async () => {
+      if (!currentEmbedUrl) {
+        setStatus("Primero prueba una URL valida.", "warn");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(currentEmbedUrl);
+        setStatus("URL embed copiada al portapapeles.", "ok");
+      } catch {
+        setStatus("No se pudo copiar al portapapeles.", "warn");
+      }
+    });
+
+    ui.openEmbedBtn.addEventListener("click", () => {
+      if (!currentEmbedUrl) {
+        setStatus("Primero prueba una URL valida.", "warn");
+        return;
+      }
+      window.open(currentEmbedUrl, "_blank", "noopener,noreferrer");
+    });
+
+    ui.clearLogBtn.addEventListener("click", () => {
+      ui.logBox.textContent = "";
+      log("Log limpiado.");
+    });
+
+    ui.playBtn.addEventListener("click", () => {
+      if (!apiPlayer) {
+        setStatus("La API aun no tiene un video cargado.", "warn");
+        return;
+      }
+      apiPlayer.playVideo();
+    });
+
+    ui.pauseBtn.addEventListener("click", () => {
+      if (!apiPlayer) {
+        setStatus("La API aun no tiene un video cargado.", "warn");
+        return;
+      }
+      apiPlayer.pauseVideo();
+    });
+
+    ui.stopBtn.addEventListener("click", () => {
+      if (!apiPlayer) {
+        setStatus("La API aun no tiene un video cargado.", "warn");
+        return;
+      }
+      apiPlayer.stopVideo();
+    });
+
+    setStatus("Listo para probar.");
+    log("Tester inicializado.");
+  </script>
+</body>
+</html>

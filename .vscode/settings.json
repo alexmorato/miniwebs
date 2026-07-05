@@ -1,0 +1,25 @@
+{
+    "python-envs.pythonProjects": [
+        {
+            "path": "testfiles/manifest/generate_manifest.py",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip",
+            "workspace": "opos"
+        },
+        {
+            "path": "testfiles/manifest/generate_manifest.py",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "apunts_new/generate_manifest.py",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": ".",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
+}
