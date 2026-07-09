@@ -43,8 +43,13 @@
     },
     "named": {
       "includeHighways": ["motorway", "trunk", "primary", "secondary", "tertiary", "path", "track"],
+      "waterwayEmoji": "♒ ",
       "defaultMinZoom": 13,
       "railOrWaterMinZoom": 14,
+      "railwayMinZoom": 14,
+      "railwayPriority": 2,
+      "waterwayMinZoom": 16,
+      "waterwayPriority": 1,
       "minZoomByHighway": {
         "motorway": 12,
         "trunk": 12,

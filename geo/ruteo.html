@@ -613,18 +613,25 @@
 							if (h && namedWayConfig.minZoomByHighway[h] !== undefined) {
 								minZoom = namedWayConfig.minZoomByHighway[h];
 							}
-							if (tags.has("railway") || tags.has("waterway")) {
-								minZoom = namedWayConfig.railOrWaterMinZoom;
-							}
 							let wayPriority = namedWayConfig.defaultPriority;
 							if (h && namedWayConfig.priorityByHighway[h] !== undefined) {
 								wayPriority = namedWayConfig.priorityByHighway[h];
 							}
+							if (tags.has("railway")) {
+								minZoom = namedWayConfig.railwayMinZoom ?? namedWayConfig.railOrWaterMinZoom;
+								wayPriority = namedWayConfig.railwayPriority ?? wayPriority;
+							} else if (tags.has("waterway")) {
+								minZoom = namedWayConfig.waterwayMinZoom ?? namedWayConfig.railOrWaterMinZoom;
+								wayPriority = namedWayConfig.waterwayPriority ?? wayPriority;
+							}
+							const wayText = tags.has("waterway")
+								? `${namedWayConfig.waterwayEmoji ?? "♒ "}${wayName}`
+								: wayName;
 
 							labels.push({
 								lat: mid[0],
 								lng: mid[1],
-								text: wayName,
+								text: wayText,
 								priority: wayPriority,
 								minZoom,
 								isPeak: false,
