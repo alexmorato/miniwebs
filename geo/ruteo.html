@@ -46,6 +46,7 @@
 			font-weight: 800;
 			letter-spacing: .01em;
 			backdrop-filter: blur(6px);
+            font-size: 0.7rem;
 		}
 
 		.gps-center-btn {
@@ -217,7 +218,7 @@
 <body>
 	<div id="map" role="application" aria-label="Mapa principal"></div>
 
-	<div class="distance-pill" id="distancePill">Distancia a ruta: -</div>
+	<div class="distance-pill" id="distancePill">Ruta: -</div>
 	<button class="gps-center-btn" id="gpsCenterBtn" type="button" aria-label="Centrar en mi posicion GPS" title="Centrar en mi posicion GPS">🎯</button>
 
 	<details class="controls" id="controls" open>
@@ -841,7 +842,7 @@
 				else routePoints = parseGeoJson(text);
 
 				drawRoute();
-				distancePillEl.textContent = "Distancia a ruta: esperando GPS";
+				distancePillEl.textContent = "Ruta: esperando GPS";
 			}
 
 			async function loadDefaultRoute() {
@@ -923,7 +924,7 @@
 					}
 
 					const d = distanceToRoute(lat, lng);
-					distancePillEl.textContent = `Distancia a ruta: ${metersText(d)}`;
+					distancePillEl.textContent = `Ruta: ${metersText(d)}`;
 				}, (err) => {
 					setStatus(`Error GPS: ${err.message}`);
 				}, {
