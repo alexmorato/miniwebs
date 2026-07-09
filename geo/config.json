@@ -15,10 +15,10 @@
     "uniqueCap": 1200,
     "places": {
       "city": { "priority": 6, "minZoom": 10, "emoji": "🏢 " },
-      "town": { "priority": 5, "minZoom": 11, "emoji": "" },
+      "town": { "priority": 5, "minZoom": 11, "emoji": "🏢 " },
       "village": { "priority": 4, "minZoom": 12, "emoji": "🏢 " },
       "hamlet": { "priority": 4, "minZoom": 12, "emoji": "" },
-      "locality": { "priority": 4, "minZoom": 12, "emoji": "🏡 " }
+      "locality": { "priority": 4, "minZoom": 12, "emoji": "" }
     },
     "naturals": {
       "peak": { "priority": 4, "minZoom": 12, "emoji": "⛰️ " },
@@ -26,6 +26,19 @@
     },
     "guidepost": { "priority": 1, "minZoom": 14, "emoji": "⬆️ " },
     "poi": { "priority": 2, "minZoom": 13, "emoji": "" },
+    "tourismTypes": {
+      "information": { "text": "↔️INF.", "priority": 1, "minZoom": 16 },
+      "viewpoint": { "text": "VIEW.", "priority": 1, "minZoom": 16 },
+      "picnic_site": { "text": "PICNIC.", "priority": 1, "minZoom": 16 },
+      "hotel": { "text": "HOTEL.", "priority": 1, "minZoom": 16 },
+      "attraction": { "text": "ATTRAC.", "priority": 1, "minZoom": 16 },
+      "artwork": { "text": "ART.", "priority": 1, "minZoom": 16 },
+      "alpine_hut": { "text": "🛖REFUG.", "priority": 10, "minZoom": 1 },
+      "camp_site": { "text": "CAMP.", "priority": 1, "minZoom": 16 },
+      "wilderness_hut": { "text": "REFUG.", "priority": 1, "minZoom": 16 },
+      "guest_house": { "text": "GUEST.", "priority": 1, "minZoom": 16 },
+      "hostel": { "text": "HOST.", "priority": 1, "minZoom": 16 }
+    },
     "visibility": {
       "visibleCap": 700,
       "cellByZoom": { "base": 66, "z14": 32, "z16": 18 },

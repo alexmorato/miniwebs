@@ -8,7 +8,6 @@ const STATIC_ASSETS = [
   "./config.json",
   "./gpx/nuria-coma-de-vaca-queralbs.gpx",
   "./mapa/map.osm",
-  "./mapa/map2.osm",
   "./leaflet/dist/leaflet.css",
   "./leaflet/dist/leaflet.js",
   "./leaflet/dist/images/layers-2x.png",
