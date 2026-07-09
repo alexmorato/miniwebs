@@ -1,10 +1,13 @@
-const CACHE_STATIC = "seguir-ruta-static-v1";
-const CACHE_DYNAMIC = "seguir-ruta-dynamic-v1";
+const CACHE_STATIC = "seguir-ruta-static-v3";
+const CACHE_DYNAMIC = "seguir-ruta-dynamic-v3";
 
 const STATIC_ASSETS = [
   "./seguir_ruta.html",
+  "./ruteo.html",
   "./seguir_ruta.sw.js",
+  "./gpx/nuria-coma-de-vaca-queralbs.gpx",
   "./mapa/map.osm",
+  "./mapa/map2.osm",
   "./leaflet/dist/leaflet.css",
   "./leaflet/dist/leaflet.js",
   "./leaflet/dist/images/layers-2x.png",
@@ -35,8 +38,23 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   const isTile = /\/tiles\//.test(url.pathname) || /tile\.openstreetmap\.org/.test(url.hostname);
+  const isHtmlNavigation = event.request.mode === "navigate"
+    || (event.request.headers.get("accept") || "").includes("text/html");
 
   if (event.request.method !== "GET") {
+    return;
+  }
+
+  if (isHtmlNavigation) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_DYNAMIC).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match("./ruteo.html") || caches.match("./seguir_ruta.html")))
+    );
     return;
   }
 

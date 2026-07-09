@@ -133,6 +133,64 @@
 			color: var(--muted);
 			min-height: 16px;
 		}
+
+		.toggle {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+			font-weight: 700;
+			color: var(--ink);
+		}
+
+		.toggle input[type="checkbox"] {
+			width: 18px;
+			height: 18px;
+			margin: 0;
+		}
+
+		.osm-label {
+			pointer-events: none;
+			background: rgba(255, 255, 255, 0.92);
+			border: 1px solid rgba(0, 0, 0, 0.15);
+			border-radius: 6px;
+			padding: 1px 5px;
+			font-size: 11px;
+			font-weight: 700;
+			color: #17221f;
+			white-space: nowrap;
+		}
+
+		.osm-label-tooltip {
+			pointer-events: none;
+			background: rgba(255, 255, 255, 0.92);
+			border: 1px solid rgba(0, 0, 0, 0.15);
+			border-radius: 6px;
+			padding: 2px 6px;
+			font-size: 11px;
+			font-weight: 700;
+			color: #17221f;
+			box-shadow: none;
+		}
+
+		.osm-label-tooltip:before {
+			display: none;
+		}
+
+		.osm-label-tooltip.peak {
+			background: rgba(255, 245, 226, 0.96);
+			border-color: rgba(148, 90, 24, 0.45);
+		}
+
+		.osm-label-tooltip.locality {
+			background: rgba(236, 250, 235, 0.96);
+			border-color: rgba(43, 126, 63, 0.4);
+		}
+
+		.osm-label-tooltip.guidepost {
+			background: rgba(236, 244, 255, 0.96);
+			border-color: rgba(49, 93, 158, 0.35);
+		}
 	</style>
 </head>
 <body>
@@ -165,6 +223,11 @@
 				<input id="osmFile" type="file" accept=".osm,.xml" />
 			</div>
 
+			<label class="toggle" for="showLabels">
+				<input id="showLabels" type="checkbox" checked>
+				Mostrar nombres (lugares y vias principales)
+			</label>
+
 			<div class="row">
 				<button id="startBtn" class="btn-main" type="button">Iniciar GPS</button>
 				<button id="stopBtn" class="btn-alt" type="button">Detener GPS</button>
@@ -175,6 +238,9 @@
 	</details>
 
 	<script>
+		const DEFAULT_GPX_PATH = "./gpx/nuria-coma-de-vaca-queralbs.gpx";
+		const DEFAULT_OSM_PATH = "./mapa/map.osm";
+
 		async function loadLeaflet() {
 			function addCss(href) {
 				return new Promise((resolve, reject) => {
@@ -213,6 +279,7 @@
 			const routeFileEl = document.getElementById("routeFile");
 			const mapModeEl = document.getElementById("mapMode");
 			const osmFileEl = document.getElementById("osmFile");
+			const showLabelsEl = document.getElementById("showLabels");
 			const startBtn = document.getElementById("startBtn");
 			const stopBtn = document.getElementById("stopBtn");
 			const statusEl = document.getElementById("status");
@@ -222,6 +289,8 @@
 
 			let baseLayer = null;
 			let osmVectorLayer = null;
+			let osmLabelLayer = null;
+			let osmParsedData = null;
 			let routeLine = null;
 			let userMarker = null;
 			let watchId = null;
@@ -329,17 +398,81 @@
 				map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
 			}
 
-			function parseOsmXmlWays(text) {
+			function escapeHtml(value) {
+				return String(value)
+					.replace(/&/g, "&amp;")
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;")
+					.replace(/\"/g, "&quot;")
+					.replace(/'/g, "&#39;");
+			}
+
+			function parseOsmXmlData(text) {
 				const xml = new DOMParser().parseFromString(text, "application/xml");
 				const parserError = xml.querySelector("parsererror");
 				if (parserError) throw new Error("OSM XML invalido");
 
 				const nodeMap = new Map();
+				const labels = [];
 				for (const n of Array.from(xml.querySelectorAll("node"))) {
 					const id = n.getAttribute("id");
 					const lat = Number(n.getAttribute("lat"));
 					const lon = Number(n.getAttribute("lon"));
 					if (id && Number.isFinite(lat) && Number.isFinite(lon)) nodeMap.set(id, [lat, lon]);
+
+					const name = n.querySelector("tag[k='name']")?.getAttribute("v");
+					if (!name) continue;
+					const place = n.querySelector("tag[k='place']")?.getAttribute("v") || "";
+					const natural = n.querySelector("tag[k='natural']")?.getAttribute("v") || "";
+					const tourism = n.querySelector("tag[k='tourism']")?.getAttribute("v") || "";
+					const amenity = n.querySelector("tag[k='amenity']")?.getAttribute("v") || "";
+					const leisure = n.querySelector("tag[k='leisure']")?.getAttribute("v") || "";
+					const historic = n.querySelector("tag[k='historic']")?.getAttribute("v") || "";
+                    const information = n.querySelector("tag[k='information']")?.getAttribute("v") || "";
+                    const isGuidepost = information === "guidepost";
+
+					const isNamedPoi = Boolean(place || natural || tourism || amenity || leisure || historic || isGuidepost);
+					if (!isNamedPoi) continue;
+
+					let priority = 1;
+					let minZoom = 14;
+					if (place === "city") {
+						priority = 6;
+						minZoom = 10;
+					} else if (place === "town") {
+						priority = 5;
+						minZoom = 11;
+					} else if (place === "village") {
+						priority = 4;
+						minZoom = 12;
+					} else if (place === "hamlet" || place === "locality") {
+						priority = 4;
+						minZoom = 12;
+					} else if (natural === "peak" || natural === "saddle") {
+						priority = 4;
+						minZoom = 12;
+					} else if (isGuidepost) {
+						priority = 1;
+						minZoom = 15;
+					} else if (tourism || amenity || leisure || historic) {
+						priority = 2;
+						minZoom = 13;
+					}
+
+					labels.push({
+						lat,
+						lng: lon,
+						text: natural === "peak"
+							? `⛰️ ${name}`
+							: (place === "locality"
+								? `🏡 ${name}`
+								: (isGuidepost ? `⬆️ ${name}` : name)),
+						priority,
+						minZoom,
+						isPeak: natural === "peak",
+						isLocality: place === "locality",
+						isGuidepost
+					});
 				}
 
 				const ways = [];
@@ -365,17 +498,118 @@
 					if (tags.get("highway") === "motorway" || tags.get("highway") === "trunk") weight = 3;
 
 					ways.push({ points, color, weight });
+
+					const wayName = tags.get("name");
+					if (wayName) {
+						const h = tags.get("highway");
+						const isNamedMainWay = tags.has("railway")
+							|| tags.has("waterway")
+							|| ["motorway", "trunk", "primary", "secondary", "tertiary", "path", "track"].includes(h);
+						if (isNamedMainWay) {
+							const mid = points[Math.floor(points.length / 2)];
+							let minZoom = 14;
+							if (h === "motorway" || h === "trunk") minZoom = 12;
+							else if (h === "primary") minZoom = 13;
+							else if (h === "secondary") minZoom = 13;
+							else if (h === "tertiary") minZoom = 14;
+							else if (h === "path" || h === "track") minZoom = 15;
+							if (tags.has("railway") || tags.has("waterway")) minZoom = 14;
+
+							labels.push({
+								lat: mid[0],
+								lng: mid[1],
+								text: wayName,
+								priority: (h === "motorway" || h === "trunk") ? 3 : 2,
+								minZoom,
+								isPeak: false,
+								isLocality: false,
+								isGuidepost: false
+							});
+						}
+					}
 				}
 
 				if (!ways.length) throw new Error("No hay vias dibujables en el OSM XML");
-				return ways;
+
+				labels.sort((a, b) => b.priority - a.priority);
+				const unique = [];
+				const seen = new Set();
+				for (const label of labels) {
+					const key = `${label.text.toLowerCase()}|${label.lat.toFixed(4)}|${label.lng.toFixed(4)}`;
+					if (seen.has(key)) continue;
+					seen.add(key);
+					unique.push(label);
+					if (unique.length >= 380) break;
+				}
+
+				return { ways, labels: unique };
 			}
 
-			function drawOsmWays(ways) {
+			function getVisibleLabelsByZoomAndDensity(osmData) {
+				const zoom = map.getZoom();
+				const candidates = osmData.labels.filter((label) => zoom >= label.minZoom);
+				if (!candidates.length) return [];
+
+				const cell = zoom >= 16 ? 42 : (zoom >= 14 ? 54 : 66);
+				const used = new Set();
+				const output = [];
+				const sorted = [...candidates].sort((a, b) => {
+					const ap = a.priority + (a.isPeak ? 2 : 0) + (a.isLocality ? 1 : 0);
+					const bp = b.priority + (b.isPeak ? 2 : 0) + (b.isLocality ? 1 : 0);
+					return bp - ap;
+				});
+
+				for (const label of sorted) {
+					const pt = map.latLngToLayerPoint([label.lat, label.lng]);
+					const cx = Math.floor(pt.x / cell);
+					const cy = Math.floor(pt.y / cell);
+
+					if (used.has(`${cx}:${cy}`)) continue;
+					used.add(`${cx}:${cy}`);
+					output.push(label);
+					if (output.length >= 220) break;
+				}
+
+				return output;
+			}
+
+			function renderOsmLabels(osmData) {
+				if (osmLabelLayer) {
+					map.removeLayer(osmLabelLayer);
+				}
+				osmLabelLayer = L.layerGroup();
+
+				if (!showLabelsEl.checked) return 0;
+				const labels = getVisibleLabelsByZoomAndDensity(osmData);
+				for (const label of labels) {
+					const marker = L.circleMarker([label.lat, label.lng], {
+						radius: 0,
+						opacity: 0,
+						fillOpacity: 0,
+						interactive: false,
+					});
+					marker.bindTooltip(escapeHtml(label.text), {
+						permanent: true,
+						direction: "top",
+						offset: [0, -2],
+						className: label.isPeak
+							? "osm-label-tooltip peak"
+							: (label.isLocality
+								? "osm-label-tooltip locality"
+								: (label.isGuidepost ? "osm-label-tooltip guidepost" : "osm-label-tooltip"))
+					});
+					marker.addTo(osmLabelLayer);
+				}
+				osmLabelLayer.addTo(map);
+				return labels.length;
+			}
+
+			function drawOsmData(osmData, fitToBounds = true) {
 				if (osmVectorLayer) map.removeLayer(osmVectorLayer);
 				osmVectorLayer = L.layerGroup();
+
 				const segments = [];
-				for (const way of ways) {
+				for (const way of osmData.ways) {
 					const line = L.polyline(way.points, {
 						color: way.color,
 						weight: way.weight,
@@ -385,8 +619,29 @@
 					segments.push(line);
 				}
 				osmVectorLayer.addTo(map);
+
+				renderOsmLabels(osmData);
+
 				const bounds = L.featureGroup(segments).getBounds();
-				if (bounds.isValid()) map.fitBounds(bounds, { padding: [20, 20] });
+				if (fitToBounds && bounds.isValid()) map.fitBounds(bounds, { padding: [20, 20] });
+			}
+
+			function loadRouteFromText(text, sourceExt) {
+				const lower = sourceExt.toLowerCase();
+				if (lower.endsWith(".gpx")) routePoints = parseGpx(text);
+				else if (lower.endsWith(".kml")) routePoints = parseKml(text);
+				else routePoints = parseGeoJson(text);
+
+				drawRoute();
+				distancePillEl.textContent = "Distancia a ruta: esperando GPS";
+			}
+
+			async function loadDefaultRoute() {
+				const res = await fetch(DEFAULT_GPX_PATH, { cache: "no-cache" });
+				if (!res.ok) throw new Error(`No se encontro ${DEFAULT_GPX_PATH}`);
+				const text = await res.text();
+				loadRouteFromText(text, ".gpx");
+				setStatus(`Ruta por defecto cargada (${routePoints.length} puntos)`);
 			}
 
 			async function loadOsmVectorMap() {
@@ -394,13 +649,15 @@
 				if (osmFileEl.files && osmFileEl.files[0]) {
 					text = await osmFileEl.files[0].text();
 				} else {
-					const res = await fetch("./mapa/map.osm", { cache: "no-cache" });
-					if (!res.ok) throw new Error("No se encontro ./mapa/map.osm");
+					const res = await fetch(DEFAULT_OSM_PATH, { cache: "no-cache" });
+					if (!res.ok) throw new Error(`No se encontro ${DEFAULT_OSM_PATH}`);
 					text = await res.text();
 				}
-				const ways = parseOsmXmlWays(text);
-				drawOsmWays(ways);
-				setStatus(`Mapa OSM XML cargado (${ways.length} vias)`);
+				osmParsedData = parseOsmXmlData(text);
+				drawOsmData(osmParsedData, !routePoints.length);
+				const zoom = map.getZoom();
+				const shown = renderOsmLabels(osmParsedData);
+				setStatus(`Mapa OSM XML cargado (${osmParsedData.ways.length} vias, etiquetas visibles ${shown}, zoom ${zoom})`);
 			}
 
 			function applyBaseMap() {
@@ -411,6 +668,10 @@
 				if (osmVectorLayer) {
 					map.removeLayer(osmVectorLayer);
 					osmVectorLayer = null;
+				}
+				if (osmLabelLayer) {
+					map.removeLayer(osmLabelLayer);
+					osmLabelLayer = null;
 				}
 
 				if (mapModeEl.value === "osm") {
@@ -480,13 +741,7 @@
 
 				try {
 					const text = await file.text();
-					const lower = file.name.toLowerCase();
-					if (lower.endsWith(".gpx")) routePoints = parseGpx(text);
-					else if (lower.endsWith(".kml")) routePoints = parseKml(text);
-					else routePoints = parseGeoJson(text);
-
-					drawRoute();
-					distancePillEl.textContent = "Distancia a ruta: esperando GPS";
+					loadRouteFromText(text, file.name);
 					setStatus(`Ruta cargada (${routePoints.length} puntos)`);
 				} catch (err) {
 					setStatus(`Error al cargar ruta: ${err.message}`);
@@ -497,12 +752,28 @@
 			osmFileEl.addEventListener("change", () => {
 				if (mapModeEl.value === "osmxml") applyBaseMap();
 			});
+			showLabelsEl.addEventListener("change", () => {
+				if (mapModeEl.value === "osmxml" && osmParsedData) {
+					const shown = renderOsmLabels(osmParsedData);
+					const mode = showLabelsEl.checked ? "activadas" : "ocultas";
+					setStatus(`Etiquetas ${mode} (${shown} visibles)`);
+				}
+			});
+			map.on("zoomend", () => {
+				if (mapModeEl.value === "osmxml" && osmParsedData) {
+					const shown = renderOsmLabels(osmParsedData);
+					setStatus(`Zoom ${map.getZoom()} - etiquetas visibles ${shown}`);
+				}
+			});
 			startBtn.addEventListener("click", startGps);
 			stopBtn.addEventListener("click", stopGps);
 			controlsEl.addEventListener("toggle", updateSummaryHint);
 
 			updateSummaryHint();
 			applyBaseMap();
+			loadDefaultRoute().catch((err) => {
+				setStatus(`No se pudo cargar la ruta por defecto: ${err.message}`);
+			});
 		}
 
 		loadLeaflet()
