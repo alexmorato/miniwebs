@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+	<title>Ruteo movil</title>
+	<link rel="stylesheet" href="./leaflet/dist/leaflet.css">
+	<style>
+		:root {
+			--bg: #0d1513;
+			--panel: rgba(248, 243, 232, 0.95);
+			--ink: #17221f;
+			--accent: #0f7a67;
+			--muted: #56625d;
+			--border: #d9ccb2;
+		}
+
+		* { box-sizing: border-box; }
+
+		html, body {
+			margin: 0;
+			width: 100%;
+			height: 100%;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			background: var(--bg);
+		}
+
+		#map {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		.distance-pill {
+			position: fixed;
+			top: max(12px, env(safe-area-inset-top));
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 1000;
+			background: rgba(18, 31, 27, 0.9);
+			color: #ecf4f1;
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 999px;
+			padding: 8px 14px;
+			font-weight: 800;
+			letter-spacing: .01em;
+			backdrop-filter: blur(6px);
+		}
+
+		details.controls {
+			position: fixed;
+			left: 10px;
+			right: 10px;
+			bottom: max(10px, env(safe-area-inset-bottom));
+			z-index: 1000;
+			background: var(--panel);
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			overflow: hidden;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+		}
+
+		details.controls summary {
+			list-style: none;
+			cursor: pointer;
+			padding: 10px 12px;
+			font-weight: 800;
+			color: var(--ink);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		details.controls summary::-webkit-details-marker { display: none; }
+
+		.summary-right {
+			color: var(--muted);
+			font-size: 12px;
+			font-weight: 700;
+		}
+
+		.panel-body {
+			border-top: 1px solid var(--border);
+			padding: 10px;
+			display: grid;
+			gap: 8px;
+		}
+
+		label {
+			display: block;
+			margin: 0 0 4px;
+			font-size: 12px;
+			color: var(--muted);
+			font-weight: 700;
+		}
+
+		input[type="file"],
+		select,
+		button {
+			width: 100%;
+			border: 1px solid var(--border);
+			border-radius: 10px;
+			background: #fff;
+			color: var(--ink);
+			padding: 10px;
+			font: inherit;
+		}
+
+		.row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 8px;
+		}
+
+		button {
+			font-weight: 800;
+			cursor: pointer;
+		}
+
+		.btn-main {
+			background: linear-gradient(180deg, #11a088 0%, var(--accent) 100%);
+			color: #fff;
+			border-color: #0b6757;
+		}
+
+		.btn-alt {
+			background: #f8f1df;
+		}
+
+		.status {
+			font-size: 12px;
+			color: var(--muted);
+			min-height: 16px;
+		}
+	</style>
+</head>
+<body>
+	<div id="map" role="application" aria-label="Mapa principal"></div>
+
+	<div class="distance-pill" id="distancePill">Distancia a ruta: -</div>
+
+	<details class="controls" id="controls" open>
+		<summary>
+			Comandos
+			<span class="summary-right" id="summaryInfo">Toca para colapsar</span>
+		</summary>
+
+		<div class="panel-body">
+			<div>
+				<label for="routeFile">Ruta (GPX, KML, GeoJSON)</label>
+				<input id="routeFile" type="file" accept=".gpx,.kml,.geojson,.json" />
+			</div>
+
+			<div>
+				<label for="mapMode">Mapa base</label>
+				<select id="mapMode">
+					<option value="osm" selected>Online OSM (para cachear)</option>
+					<option value="osmxml">OSM XML local (sin tiles)</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="osmFile">Archivo OSM XML opcional (.osm/.xml)</label>
+				<input id="osmFile" type="file" accept=".osm,.xml" />
+			</div>
+
+			<div class="row">
+				<button id="startBtn" class="btn-main" type="button">Iniciar GPS</button>
+				<button id="stopBtn" class="btn-alt" type="button">Detener GPS</button>
+			</div>
+
+			<div class="status" id="status">Listo</div>
+		</div>
+	</details>
+
+	<script>
+		async function loadLeaflet() {
+			function addCss(href) {
+				return new Promise((resolve, reject) => {
+					const link = document.createElement("link");
+					link.rel = "stylesheet";
+					link.href = href;
+					link.onload = resolve;
+					link.onerror = reject;
+					document.head.appendChild(link);
+				});
+			}
+
+			function addJs(src) {
+				return new Promise((resolve, reject) => {
+					const script = document.createElement("script");
+					script.src = src;
+					script.onload = resolve;
+					script.onerror = reject;
+					document.body.appendChild(script);
+				});
+			}
+
+			try {
+				await addJs("./leaflet/dist/leaflet.js");
+			} catch {
+				await Promise.all([
+					addCss("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"),
+					addJs("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
+				]);
+			}
+		}
+
+		function initApp() {
+			const controlsEl = document.getElementById("controls");
+			const summaryInfoEl = document.getElementById("summaryInfo");
+			const routeFileEl = document.getElementById("routeFile");
+			const mapModeEl = document.getElementById("mapMode");
+			const osmFileEl = document.getElementById("osmFile");
+			const startBtn = document.getElementById("startBtn");
+			const stopBtn = document.getElementById("stopBtn");
+			const statusEl = document.getElementById("status");
+			const distancePillEl = document.getElementById("distancePill");
+
+			const map = L.map("map", { zoomControl: true }).setView([42.35, 2.17], 12);
+
+			let baseLayer = null;
+			let osmVectorLayer = null;
+			let routeLine = null;
+			let userMarker = null;
+			let watchId = null;
+			let routePoints = [];
+
+			function setStatus(msg) {
+				statusEl.textContent = msg;
+			}
+
+			function updateSummaryHint() {
+				summaryInfoEl.textContent = controlsEl.open ? "Toca para colapsar" : "Toca para abrir";
+			}
+
+			function metersText(m) {
+				if (!Number.isFinite(m)) return "-";
+				if (m < 1000) return `${Math.round(m)} m`;
+				return `${(m / 1000).toFixed(2)} km`;
+			}
+
+			function haversineMeters(lat1, lon1, lat2, lon2) {
+				const R = 6371000;
+				const toRad = (v) => (v * Math.PI) / 180;
+				const dLat = toRad(lat2 - lat1);
+				const dLon = toRad(lon2 - lon1);
+				const a = Math.sin(dLat / 2) ** 2
+					+ Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+				return 2 * R * Math.asin(Math.sqrt(a));
+			}
+
+			function distanceToRoute(lat, lng) {
+				if (!routePoints.length) return NaN;
+				let min = Infinity;
+				for (const p of routePoints) {
+					const d = haversineMeters(lat, lng, p.lat, p.lng);
+					if (d < min) min = d;
+				}
+				return min;
+			}
+
+			function parseGpx(text) {
+				const xml = new DOMParser().parseFromString(text, "application/xml");
+				const parserError = xml.querySelector("parsererror");
+				if (parserError) throw new Error("GPX invalido");
+				const pts = Array.from(xml.querySelectorAll("trkpt, rtept")).map((n) => ({
+					lat: Number(n.getAttribute("lat")),
+					lng: Number(n.getAttribute("lon"))
+				})).filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
+				if (pts.length < 2) throw new Error("GPX sin suficientes puntos");
+				return pts;
+			}
+
+			function parseKml(text) {
+				const xml = new DOMParser().parseFromString(text, "application/xml");
+				const parserError = xml.querySelector("parsererror");
+				if (parserError) throw new Error("KML invalido");
+
+				const coordinatesNodes = Array.from(xml.querySelectorAll("LineString > coordinates"));
+				const pts = [];
+				for (const node of coordinatesNodes) {
+					const lines = node.textContent.trim().split(/\s+/);
+					for (const line of lines) {
+						const [lon, lat] = line.split(",").map(Number);
+						if (Number.isFinite(lat) && Number.isFinite(lon)) {
+							pts.push({ lat, lng: lon });
+						}
+					}
+				}
+				if (pts.length < 2) throw new Error("KML sin LineString util");
+				return pts;
+			}
+
+			function parseGeoJson(text) {
+				const data = JSON.parse(text);
+				const out = [];
+
+				function addCoords(coords) {
+					for (const c of coords) {
+						if (Array.isArray(c[0])) addCoords(c);
+						else {
+							const [lon, lat] = c;
+							if (Number.isFinite(lat) && Number.isFinite(lon)) out.push({ lat, lng: lon });
+						}
+					}
+				}
+
+				function scan(obj) {
+					if (!obj || typeof obj !== "object") return;
+					if (obj.type === "LineString" || obj.type === "MultiLineString") addCoords(obj.coordinates);
+					else if (obj.type === "Feature") scan(obj.geometry);
+					else if (obj.type === "FeatureCollection") for (const f of obj.features || []) scan(f);
+				}
+
+				scan(data);
+				if (out.length < 2) throw new Error("GeoJSON sin linea util");
+				return out;
+			}
+
+			function drawRoute() {
+				if (routeLine) map.removeLayer(routeLine);
+				routeLine = L.polyline(routePoints.map((p) => [p.lat, p.lng]), {
+					color: "#0f7a67",
+					weight: 5,
+					opacity: 0.9
+				}).addTo(map);
+				map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
+			}
+
+			function parseOsmXmlWays(text) {
+				const xml = new DOMParser().parseFromString(text, "application/xml");
+				const parserError = xml.querySelector("parsererror");
+				if (parserError) throw new Error("OSM XML invalido");
+
+				const nodeMap = new Map();
+				for (const n of Array.from(xml.querySelectorAll("node"))) {
+					const id = n.getAttribute("id");
+					const lat = Number(n.getAttribute("lat"));
+					const lon = Number(n.getAttribute("lon"));
+					if (id && Number.isFinite(lat) && Number.isFinite(lon)) nodeMap.set(id, [lat, lon]);
+				}
+
+				const ways = [];
+				for (const w of Array.from(xml.querySelectorAll("way"))) {
+					const tags = new Map();
+					for (const t of Array.from(w.querySelectorAll("tag"))) tags.set(t.getAttribute("k"), t.getAttribute("v"));
+
+					const isDrawable = tags.has("highway") || tags.has("railway") || tags.has("waterway");
+					if (!isDrawable) continue;
+
+					const points = [];
+					for (const nd of Array.from(w.querySelectorAll("nd"))) {
+						const ref = nd.getAttribute("ref");
+						if (ref && nodeMap.has(ref)) points.push(nodeMap.get(ref));
+					}
+					if (points.length < 2) continue;
+
+					let color = "#596965";
+					let weight = 2;
+					if (tags.has("waterway")) color = "#3e7db2";
+					if (tags.has("railway")) color = "#282828";
+					if (tags.get("highway") === "path" || tags.get("highway") === "track") color = "#9a6d2a";
+					if (tags.get("highway") === "motorway" || tags.get("highway") === "trunk") weight = 3;
+
+					ways.push({ points, color, weight });
+				}
+
+				if (!ways.length) throw new Error("No hay vias dibujables en el OSM XML");
+				return ways;
+			}
+
+			function drawOsmWays(ways) {
+				if (osmVectorLayer) map.removeLayer(osmVectorLayer);
+				osmVectorLayer = L.layerGroup();
+				const segments = [];
+				for (const way of ways) {
+					const line = L.polyline(way.points, {
+						color: way.color,
+						weight: way.weight,
+						opacity: 0.85
+					});
+					line.addTo(osmVectorLayer);
+					segments.push(line);
+				}
+				osmVectorLayer.addTo(map);
+				const bounds = L.featureGroup(segments).getBounds();
+				if (bounds.isValid()) map.fitBounds(bounds, { padding: [20, 20] });
+			}
+
+			async function loadOsmVectorMap() {
+				let text;
+				if (osmFileEl.files && osmFileEl.files[0]) {
+					text = await osmFileEl.files[0].text();
+				} else {
+					const res = await fetch("./mapa/map.osm", { cache: "no-cache" });
+					if (!res.ok) throw new Error("No se encontro ./mapa/map.osm");
+					text = await res.text();
+				}
+				const ways = parseOsmXmlWays(text);
+				drawOsmWays(ways);
+				setStatus(`Mapa OSM XML cargado (${ways.length} vias)`);
+			}
+
+			function applyBaseMap() {
+				if (baseLayer) {
+					map.removeLayer(baseLayer);
+					baseLayer = null;
+				}
+				if (osmVectorLayer) {
+					map.removeLayer(osmVectorLayer);
+					osmVectorLayer = null;
+				}
+
+				if (mapModeEl.value === "osm") {
+					baseLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+						maxZoom: 19,
+						attribution: "&copy; OpenStreetMap contributors"
+					}).addTo(map);
+					setStatus("Modo online OSM activo");
+					return;
+				}
+
+				loadOsmVectorMap().catch((err) => setStatus(`Error OSM local: ${err.message}`));
+			}
+
+			function startGps() {
+				if (!navigator.geolocation) {
+					setStatus("Geolocalizacion no soportada");
+					return;
+				}
+				if (!routePoints.length) {
+					setStatus("Carga una ruta antes de iniciar GPS");
+					return;
+				}
+				if (watchId !== null) return;
+
+				watchId = navigator.geolocation.watchPosition((pos) => {
+					const lat = pos.coords.latitude;
+					const lng = pos.coords.longitude;
+					const latlng = [lat, lng];
+
+					if (!userMarker) {
+						userMarker = L.circleMarker(latlng, {
+							radius: 7,
+							color: "#17302a",
+							fillColor: "#f5fffb",
+							fillOpacity: 1,
+							weight: 3
+						}).addTo(map);
+					} else {
+						userMarker.setLatLng(latlng);
+					}
+
+					const d = distanceToRoute(lat, lng);
+					distancePillEl.textContent = `Distancia a ruta: ${metersText(d)}`;
+				}, (err) => {
+					setStatus(`Error GPS: ${err.message}`);
+				}, {
+					enableHighAccuracy: true,
+					maximumAge: 2000,
+					timeout: 10000
+				});
+
+				setStatus("GPS activo");
+			}
+
+			function stopGps() {
+				if (watchId !== null) {
+					navigator.geolocation.clearWatch(watchId);
+					watchId = null;
+				}
+				setStatus("GPS detenido");
+			}
+
+			routeFileEl.addEventListener("change", async (e) => {
+				const file = e.target.files && e.target.files[0];
+				if (!file) return;
+
+				try {
+					const text = await file.text();
+					const lower = file.name.toLowerCase();
+					if (lower.endsWith(".gpx")) routePoints = parseGpx(text);
+					else if (lower.endsWith(".kml")) routePoints = parseKml(text);
+					else routePoints = parseGeoJson(text);
+
+					drawRoute();
+					distancePillEl.textContent = "Distancia a ruta: esperando GPS";
+					setStatus(`Ruta cargada (${routePoints.length} puntos)`);
+				} catch (err) {
+					setStatus(`Error al cargar ruta: ${err.message}`);
+				}
+			});
+
+			mapModeEl.addEventListener("change", applyBaseMap);
+			osmFileEl.addEventListener("change", () => {
+				if (mapModeEl.value === "osmxml") applyBaseMap();
+			});
+			startBtn.addEventListener("click", startGps);
+			stopBtn.addEventListener("click", stopGps);
+			controlsEl.addEventListener("toggle", updateSummaryHint);
+
+			updateSummaryHint();
+			applyBaseMap();
+		}
+
+		loadLeaflet()
+			.then(initApp)
+			.catch((err) => {
+				const distancePillEl = document.getElementById("distancePill");
+				distancePillEl.textContent = `Error cargando Leaflet: ${err.message}`;
+			});
+	</script>
+</body>
+</html>
