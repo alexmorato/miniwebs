@@ -281,6 +281,7 @@
 				},
 				guidepost: { priority: 1, minZoom: 15, emoji: "⬆️ " },
 				poi: { priority: 2, minZoom: 13, emoji: "" },
+				waterwayNode: { priority: 1, minZoom: 16, emoji: "💦 " },
 				tourismTypes: {
 					information: { text: "INF.", priority: 1, minZoom: 16 },
 					viewpoint: { text: "VIEW.", priority: 1, minZoom: 16 },
@@ -409,6 +410,7 @@
 			const naturalRules = appConfig.labels.naturals;
 			const guidepostRule = appConfig.labels.guidepost;
 			const poiRule = appConfig.labels.poi;
+			const waterwayNodeRule = appConfig.labels.waterwayNode || { priority: 1, minZoom: 16, emoji: "💦 " };
 			const tourismTypeRules = appConfig.labels.tourismTypes || {};
 			const labelVisibility = appConfig.labels.visibility;
 			const wayRender = appConfig.ways.render;
@@ -555,6 +557,7 @@
 					const name = n.querySelector("tag[k='name']")?.getAttribute("v") || "";
 					const place = n.querySelector("tag[k='place']")?.getAttribute("v") || "";
 					const natural = n.querySelector("tag[k='natural']")?.getAttribute("v") || "";
+					const waterway = n.querySelector("tag[k='waterway']")?.getAttribute("v") || "";
 					const tourism = n.querySelector("tag[k='tourism']")?.getAttribute("v") || "";
 					const amenity = n.querySelector("tag[k='amenity']")?.getAttribute("v") || "";
 					const leisure = n.querySelector("tag[k='leisure']")?.getAttribute("v") || "";
@@ -563,9 +566,9 @@
                     const isGuidepost = information === "guidepost";
                     const tourismRule = tourismTypeRules[tourism];
 
-					const isNamedPoi = Boolean(place || natural || tourism || amenity || leisure || historic || isGuidepost);
+					const isNamedPoi = Boolean(place || natural || waterway || tourism || amenity || leisure || historic || isGuidepost);
 					if (!isNamedPoi) continue;
-					if (!name && !tourismRule) continue;
+					if (!name && !tourismRule && !waterway) continue;
 
 					let priority = 1;
 					let minZoom = 14;
@@ -573,6 +576,9 @@
 					if (tourismRule) {
 						priority = tourismRule.priority;
 						minZoom = tourismRule.minZoom;
+					} else if (waterway) {
+						priority = waterwayNodeRule.priority;
+						minZoom = waterwayNodeRule.minZoom;
 					} else if (place && placeRules[place]) {
 						priority = placeRules[place].priority;
 						minZoom = placeRules[place].minZoom;
@@ -590,8 +596,10 @@
 					const placeEmoji = (place && placeRules[place] && placeRules[place].emoji) ? placeRules[place].emoji : "";
 					const naturalEmoji = (natural && naturalRules[natural] && naturalRules[natural].emoji) ? naturalRules[natural].emoji : "";
 					const guidepostEmoji = guidepostRule.emoji || "";
+					const waterwayEmoji = waterwayNodeRule.emoji || "💦 ";
 					let labelText = name;
 					if (tourismRule) labelText = name ? `${tourismRule.text} ${name}` : tourismRule.text;
+					else if (waterway) labelText = name ? `${waterwayEmoji}${name}` : waterwayEmoji.trim();
 					else if (naturalEmoji) labelText = `${naturalEmoji}${name}`;
 					else if (placeEmoji) labelText = `${placeEmoji}${name}`;
 					else if (isGuidepost) labelText = `${guidepostEmoji}${name}`;
@@ -687,7 +695,7 @@
 								wayPriority = namedWayConfig.waterwayPriority ?? wayPriority;
 							}
 							const wayText = tags.has("waterway")
-								? `${namedWayConfig.waterwayEmoji ?? "♒ "}${wayName}`
+								? `${namedWayConfig.waterwayEmoji ?? "💦 "}${wayName}`
 								: wayName;
 
 							labels.push({
