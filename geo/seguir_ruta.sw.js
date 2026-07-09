@@ -1,10 +1,11 @@
-const CACHE_STATIC = "seguir-ruta-static-v3";
-const CACHE_DYNAMIC = "seguir-ruta-dynamic-v3";
+const CACHE_STATIC = "seguir-ruta-static-v4";
+const CACHE_DYNAMIC = "seguir-ruta-dynamic-v4";
 
 const STATIC_ASSETS = [
   "./seguir_ruta.html",
   "./ruteo.html",
   "./seguir_ruta.sw.js",
+  "./config.json",
   "./gpx/nuria-coma-de-vaca-queralbs.gpx",
   "./mapa/map.osm",
   "./mapa/map2.osm",

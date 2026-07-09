@@ -238,8 +238,91 @@
 	</details>
 
 	<script>
-		const DEFAULT_GPX_PATH = "./gpx/nuria-coma-de-vaca-queralbs.gpx";
-		const DEFAULT_OSM_PATH = "./mapa/map.osm";
+		const FALLBACK_CONFIG = {
+			defaults: {
+				gpxPath: "./gpx/nuria-coma-de-vaca-queralbs.gpx",
+				osmPath: "./mapa/map.osm",
+				mapMode: "osm"
+			},
+			labels: {
+				uniqueCap: 380,
+				places: {
+					city: { priority: 6, minZoom: 10, emoji: "" },
+					town: { priority: 5, minZoom: 11, emoji: "" },
+					village: { priority: 4, minZoom: 12, emoji: "" },
+					hamlet: { priority: 4, minZoom: 12, emoji: "" },
+					locality: { priority: 4, minZoom: 12, emoji: "🏡 " }
+				},
+				naturals: {
+					peak: { priority: 4, minZoom: 12, emoji: "⛰️ " },
+					saddle: { priority: 4, minZoom: 12, emoji: "" }
+				},
+				guidepost: { priority: 1, minZoom: 15, emoji: "⬆️ " },
+				poi: { priority: 2, minZoom: 13, emoji: "" },
+				visibility: {
+					visibleCap: 220,
+					cellByZoom: { base: 66, z14: 54, z16: 42 },
+					scoreBonuses: { peak: 2, locality: 1, guidepost: 0 }
+				}
+			},
+			ways: {
+				render: {
+					defaultColor: "#596965",
+					defaultWeight: 2,
+					waterway: { color: "#3e7db2", weight: 2 },
+					railway: { color: "#282828", weight: 2 },
+					pathTrack: { color: "#9a6d2a", weight: 2 },
+					motorwayTrunk: { weight: 3 }
+				},
+				named: {
+					includeHighways: ["motorway", "trunk", "primary", "secondary", "tertiary", "path", "track"],
+					defaultMinZoom: 14,
+					railOrWaterMinZoom: 14,
+					minZoomByHighway: {
+						motorway: 12,
+						trunk: 12,
+						primary: 13,
+						secondary: 13,
+						tertiary: 14,
+						path: 15,
+						track: 15
+					},
+					defaultPriority: 2,
+					priorityByHighway: {
+						motorway: 3,
+						trunk: 3
+					}
+				}
+			}
+		};
+
+		function mergeConfig(base, override) {
+			if (Array.isArray(base)) {
+				return Array.isArray(override) ? override : base;
+			}
+			if (!base || typeof base !== "object") {
+				return override === undefined ? base : override;
+			}
+			const out = { ...base };
+			if (!override || typeof override !== "object") {
+				return out;
+			}
+			for (const key of Object.keys(override)) {
+				out[key] = key in base ? mergeConfig(base[key], override[key]) : override[key];
+			}
+			return out;
+		}
+
+		async function loadRuntimeConfig() {
+			try {
+				const res = await fetch("./config.json", { cache: "no-cache" });
+				if (!res.ok) return FALLBACK_CONFIG;
+				const parsed = await res.json();
+				return mergeConfig(FALLBACK_CONFIG, parsed);
+			} catch {
+				return FALLBACK_CONFIG;
+			}
+		}
 
 		async function loadLeaflet() {
 			function addCss(href) {
@@ -273,7 +356,8 @@
 			}
 		}
 
-		function initApp() {
+		async function initApp() {
+			const appConfig = await loadRuntimeConfig();
 			const controlsEl = document.getElementById("controls");
 			const summaryInfoEl = document.getElementById("summaryInfo");
 			const routeFileEl = document.getElementById("routeFile");
@@ -285,7 +369,18 @@
 			const statusEl = document.getElementById("status");
 			const distancePillEl = document.getElementById("distancePill");
 
-			const map = L.map("map", { zoomControl: true }).setView([42.35, 2.17], 12);
+			const placeRules = appConfig.labels.places;
+			const naturalRules = appConfig.labels.naturals;
+			const guidepostRule = appConfig.labels.guidepost;
+			const poiRule = appConfig.labels.poi;
+			const labelVisibility = appConfig.labels.visibility;
+			const wayRender = appConfig.ways.render;
+			const namedWayConfig = appConfig.ways.named;
+			const defaultsConfig = appConfig.defaults;
+
+			const iv = defaultsConfig.initialView || { lat: 42.35, lng: 2.17, zoom: 12 };
+			const map = L.map("map", { zoomControl: true }).setView([iv.lat, iv.lng], iv.zoom);
+			mapModeEl.value = appConfig.defaults.mapMode;
 
 			let baseLayer = null;
 			let osmVectorLayer = null;
@@ -436,37 +531,33 @@
 
 					let priority = 1;
 					let minZoom = 14;
-					if (place === "city") {
-						priority = 6;
-						minZoom = 10;
-					} else if (place === "town") {
-						priority = 5;
-						minZoom = 11;
-					} else if (place === "village") {
-						priority = 4;
-						minZoom = 12;
-					} else if (place === "hamlet" || place === "locality") {
-						priority = 4;
-						minZoom = 12;
-					} else if (natural === "peak" || natural === "saddle") {
-						priority = 4;
-						minZoom = 12;
+
+					if (place && placeRules[place]) {
+						priority = placeRules[place].priority;
+						minZoom = placeRules[place].minZoom;
+					} else if (natural && naturalRules[natural]) {
+						priority = naturalRules[natural].priority;
+						minZoom = naturalRules[natural].minZoom;
 					} else if (isGuidepost) {
-						priority = 1;
-						minZoom = 15;
+						priority = guidepostRule.priority;
+						minZoom = guidepostRule.minZoom;
 					} else if (tourism || amenity || leisure || historic) {
-						priority = 2;
-						minZoom = 13;
+						priority = poiRule.priority;
+						minZoom = poiRule.minZoom;
 					}
+
+					const placeEmoji = (place && placeRules[place] && placeRules[place].emoji) ? placeRules[place].emoji : "";
+					const naturalEmoji = (natural && naturalRules[natural] && naturalRules[natural].emoji) ? naturalRules[natural].emoji : "";
+					const guidepostEmoji = guidepostRule.emoji || "";
+					let labelText = name;
+					if (naturalEmoji) labelText = `${naturalEmoji}${name}`;
+					else if (placeEmoji) labelText = `${placeEmoji}${name}`;
+					else if (isGuidepost) labelText = `${guidepostEmoji}${name}`;
 
 					labels.push({
 						lat,
 						lng: lon,
-						text: natural === "peak"
-							? `⛰️ ${name}`
-							: (place === "locality"
-								? `🏡 ${name}`
-								: (isGuidepost ? `⬆️ ${name}` : name)),
+						text: labelText,
 						priority,
 						minZoom,
 						isPeak: natural === "peak",
@@ -490,12 +581,23 @@
 					}
 					if (points.length < 2) continue;
 
-					let color = "#596965";
-					let weight = 2;
-					if (tags.has("waterway")) color = "#3e7db2";
-					if (tags.has("railway")) color = "#282828";
-					if (tags.get("highway") === "path" || tags.get("highway") === "track") color = "#9a6d2a";
-					if (tags.get("highway") === "motorway" || tags.get("highway") === "trunk") weight = 3;
+					let color = wayRender.defaultColor;
+					let weight = wayRender.defaultWeight;
+					if (tags.has("waterway")) {
+						color = wayRender.waterway.color;
+						weight = wayRender.waterway.weight;
+					}
+					if (tags.has("railway")) {
+						color = wayRender.railway.color;
+						weight = wayRender.railway.weight;
+					}
+					if (tags.get("highway") === "path" || tags.get("highway") === "track") {
+						color = wayRender.pathTrack.color;
+						weight = wayRender.pathTrack.weight;
+					}
+					if (tags.get("highway") === "motorway" || tags.get("highway") === "trunk") {
+						weight = wayRender.motorwayTrunk.weight;
+					}
 
 					ways.push({ points, color, weight });
 
@@ -504,22 +606,26 @@
 						const h = tags.get("highway");
 						const isNamedMainWay = tags.has("railway")
 							|| tags.has("waterway")
-							|| ["motorway", "trunk", "primary", "secondary", "tertiary", "path", "track"].includes(h);
+							|| namedWayConfig.includeHighways.includes(h);
 						if (isNamedMainWay) {
 							const mid = points[Math.floor(points.length / 2)];
-							let minZoom = 14;
-							if (h === "motorway" || h === "trunk") minZoom = 12;
-							else if (h === "primary") minZoom = 13;
-							else if (h === "secondary") minZoom = 13;
-							else if (h === "tertiary") minZoom = 14;
-							else if (h === "path" || h === "track") minZoom = 15;
-							if (tags.has("railway") || tags.has("waterway")) minZoom = 14;
+							let minZoom = namedWayConfig.defaultMinZoom;
+							if (h && namedWayConfig.minZoomByHighway[h] !== undefined) {
+								minZoom = namedWayConfig.minZoomByHighway[h];
+							}
+							if (tags.has("railway") || tags.has("waterway")) {
+								minZoom = namedWayConfig.railOrWaterMinZoom;
+							}
+							let wayPriority = namedWayConfig.defaultPriority;
+							if (h && namedWayConfig.priorityByHighway[h] !== undefined) {
+								wayPriority = namedWayConfig.priorityByHighway[h];
+							}
 
 							labels.push({
 								lat: mid[0],
 								lng: mid[1],
 								text: wayName,
-								priority: (h === "motorway" || h === "trunk") ? 3 : 2,
+								priority: wayPriority,
 								minZoom,
 								isPeak: false,
 								isLocality: false,
@@ -539,7 +645,7 @@
 					if (seen.has(key)) continue;
 					seen.add(key);
 					unique.push(label);
-					if (unique.length >= 380) break;
+					if (unique.length >= appConfig.labels.uniqueCap) break;
 				}
 
 				return { ways, labels: unique };
@@ -550,12 +656,20 @@
 				const candidates = osmData.labels.filter((label) => zoom >= label.minZoom);
 				if (!candidates.length) return [];
 
-				const cell = zoom >= 16 ? 42 : (zoom >= 14 ? 54 : 66);
+				const cell = zoom >= 16
+					? labelVisibility.cellByZoom.z16
+					: (zoom >= 14 ? labelVisibility.cellByZoom.z14 : labelVisibility.cellByZoom.base);
 				const used = new Set();
 				const output = [];
 				const sorted = [...candidates].sort((a, b) => {
-					const ap = a.priority + (a.isPeak ? 2 : 0) + (a.isLocality ? 1 : 0);
-					const bp = b.priority + (b.isPeak ? 2 : 0) + (b.isLocality ? 1 : 0);
+					const ap = a.priority
+						+ (a.isPeak ? labelVisibility.scoreBonuses.peak : 0)
+						+ (a.isLocality ? labelVisibility.scoreBonuses.locality : 0)
+						+ (a.isGuidepost ? labelVisibility.scoreBonuses.guidepost : 0);
+					const bp = b.priority
+						+ (b.isPeak ? labelVisibility.scoreBonuses.peak : 0)
+						+ (b.isLocality ? labelVisibility.scoreBonuses.locality : 0)
+						+ (b.isGuidepost ? labelVisibility.scoreBonuses.guidepost : 0);
 					return bp - ap;
 				});
 
@@ -567,7 +681,7 @@
 					if (used.has(`${cx}:${cy}`)) continue;
 					used.add(`${cx}:${cy}`);
 					output.push(label);
-					if (output.length >= 220) break;
+					if (output.length >= labelVisibility.visibleCap) break;
 				}
 
 				return output;
@@ -581,11 +695,28 @@
 
 				if (!showLabelsEl.checked) return 0;
 				const labels = getVisibleLabelsByZoomAndDensity(osmData);
+				function getLabelPointStyle(label) {
+					if (label.isPeak) {
+						return { color: "#8a4f18", fillColor: "#ffd391" };
+					}
+					if (label.isLocality) {
+						return { color: "#2f6c3c", fillColor: "#c6efcf" };
+					}
+					if (label.isGuidepost) {
+						return { color: "#2f5f9f", fillColor: "#cde0ff" };
+					}
+					return { color: "#24332f", fillColor: "#f6f6f6" };
+				}
+
 				for (const label of labels) {
+					const pointStyle = getLabelPointStyle(label);
 					const marker = L.circleMarker([label.lat, label.lng], {
-						radius: 0,
-						opacity: 0,
-						fillOpacity: 0,
+						radius: 3,
+						weight: 1.5,
+						opacity: 1,
+						fillOpacity: 1,
+						color: pointStyle.color,
+						fillColor: pointStyle.fillColor,
 						interactive: false,
 					});
 					marker.bindTooltip(escapeHtml(label.text), {
@@ -637,8 +768,8 @@
 			}
 
 			async function loadDefaultRoute() {
-				const res = await fetch(DEFAULT_GPX_PATH, { cache: "no-cache" });
-				if (!res.ok) throw new Error(`No se encontro ${DEFAULT_GPX_PATH}`);
+				const res = await fetch(appConfig.defaults.gpxPath, { cache: "no-cache" });
+				if (!res.ok) throw new Error(`No se encontro ${appConfig.defaults.gpxPath}`);
 				const text = await res.text();
 				loadRouteFromText(text, ".gpx");
 				setStatus(`Ruta por defecto cargada (${routePoints.length} puntos)`);
@@ -649,8 +780,8 @@
 				if (osmFileEl.files && osmFileEl.files[0]) {
 					text = await osmFileEl.files[0].text();
 				} else {
-					const res = await fetch(DEFAULT_OSM_PATH, { cache: "no-cache" });
-					if (!res.ok) throw new Error(`No se encontro ${DEFAULT_OSM_PATH}`);
+					const res = await fetch(appConfig.defaults.osmPath, { cache: "no-cache" });
+					if (!res.ok) throw new Error(`No se encontro ${appConfig.defaults.osmPath}`);
 					text = await res.text();
 				}
 				osmParsedData = parseOsmXmlData(text);
@@ -675,8 +806,8 @@
 				}
 
 				if (mapModeEl.value === "osm") {
-					baseLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-						maxZoom: 19,
+					baseLayer = L.tileLayer(defaultsConfig.tileUrl, {
+						maxZoom: defaultsConfig.tileMaxZoom,
 						attribution: "&copy; OpenStreetMap contributors"
 					}).addTo(map);
 					setStatus("Modo online OSM activo");

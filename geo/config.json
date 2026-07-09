@@ -1,0 +1,64 @@
+{
+  "defaults": {
+    "gpxPath": "./gpx/nuria-coma-de-vaca-queralbs.gpx",
+    "osmPath": "./mapa/map.osm",
+    "mapMode": "osm",
+    "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "tileMaxZoom": 19,
+    "initialView": {
+      "lat": 42.35,
+      "lng": 2.17,
+      "zoom": 12
+    }
+  },
+  "labels": {
+    "uniqueCap": 1200,
+    "places": {
+      "city": { "priority": 6, "minZoom": 10, "emoji": "🏢 " },
+      "town": { "priority": 5, "minZoom": 11, "emoji": "" },
+      "village": { "priority": 4, "minZoom": 12, "emoji": "🏢 " },
+      "hamlet": { "priority": 4, "minZoom": 12, "emoji": "" },
+      "locality": { "priority": 4, "minZoom": 12, "emoji": "🏡 " }
+    },
+    "naturals": {
+      "peak": { "priority": 4, "minZoom": 12, "emoji": "⛰️ " },
+      "saddle": { "priority": 4, "minZoom": 12, "emoji": "" }
+    },
+    "guidepost": { "priority": 1, "minZoom": 14, "emoji": "⬆️ " },
+    "poi": { "priority": 2, "minZoom": 13, "emoji": "" },
+    "visibility": {
+      "visibleCap": 700,
+      "cellByZoom": { "base": 66, "z14": 32, "z16": 18 },
+      "scoreBonuses": { "peak": 2, "locality": 1, "guidepost": 0 }
+    }
+  },
+  "ways": {
+    "render": {
+      "defaultColor": "#596965",
+      "defaultWeight": 2,
+      "waterway": { "color": "#3e7db2", "weight": 2 },
+      "railway": { "color": "#282828", "weight": 2 },
+      "pathTrack": { "color": "#9a6d2a", "weight": 2 },
+      "motorwayTrunk": { "weight": 3 }
+    },
+    "named": {
+      "includeHighways": ["motorway", "trunk", "primary", "secondary", "tertiary", "path", "track"],
+      "defaultMinZoom": 13,
+      "railOrWaterMinZoom": 14,
+      "minZoomByHighway": {
+        "motorway": 12,
+        "trunk": 12,
+        "primary": 13,
+        "secondary": 13,
+        "tertiary": 14,
+        "path": 14,
+        "track": 14
+      },
+      "defaultPriority": 2,
+      "priorityByHighway": {
+        "motorway": 3,
+        "trunk": 3
+      }
+    }
+  }
+}
