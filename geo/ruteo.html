@@ -48,6 +48,27 @@
 			backdrop-filter: blur(6px);
 		}
 
+		.gps-center-btn {
+			position: fixed;
+			top: max(12px, env(safe-area-inset-top));
+			right: 12px;
+			z-index: 1000;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			background: rgba(18, 31, 27, 0.9);
+			color: #ecf4f1;
+			border-radius: 50%;
+			width: 42px;
+			height: 42px;
+			padding: 0;
+			font-size: 20px;
+			line-height: 1;
+			font-weight: 800;
+			cursor: pointer;
+			backdrop-filter: blur(6px);
+			display: grid;
+			place-items: center;
+		}
+
 		details.controls {
 			position: fixed;
 			left: 10px;
@@ -197,6 +218,7 @@
 	<div id="map" role="application" aria-label="Mapa principal"></div>
 
 	<div class="distance-pill" id="distancePill">Distancia a ruta: -</div>
+	<button class="gps-center-btn" id="gpsCenterBtn" type="button" aria-label="Centrar en mi posicion GPS" title="Centrar en mi posicion GPS">🎯</button>
 
 	<details class="controls" id="controls" open>
 		<summary>
@@ -366,6 +388,7 @@
 			const showLabelsEl = document.getElementById("showLabels");
 			const startBtn = document.getElementById("startBtn");
 			const stopBtn = document.getElementById("stopBtn");
+			const gpsCenterBtn = document.getElementById("gpsCenterBtn");
 			const statusEl = document.getElementById("status");
 			const distancePillEl = document.getElementById("distancePill");
 
@@ -873,6 +896,52 @@
 				setStatus("GPS detenido");
 			}
 
+			function centerMapOnLatLng(lat, lng) {
+				const targetZoom = Math.max(map.getZoom(), 15);
+				map.setView([lat, lng], targetZoom, { animate: true });
+			}
+
+			function centerOnUserPosition() {
+				if (!navigator.geolocation) {
+					setStatus("Geolocalizacion no soportada");
+					return;
+				}
+
+				if (userMarker) {
+					const p = userMarker.getLatLng();
+					centerMapOnLatLng(p.lat, p.lng);
+					setStatus("Centrado en tu ultima posicion GPS");
+					return;
+				}
+
+				navigator.geolocation.getCurrentPosition((pos) => {
+					const lat = pos.coords.latitude;
+					const lng = pos.coords.longitude;
+					const latlng = [lat, lng];
+
+					if (!userMarker) {
+						userMarker = L.circleMarker(latlng, {
+							radius: 7,
+							color: "#17302a",
+							fillColor: "#f5fffb",
+							fillOpacity: 1,
+							weight: 3
+						}).addTo(map);
+					} else {
+						userMarker.setLatLng(latlng);
+					}
+
+					centerMapOnLatLng(lat, lng);
+					setStatus("Centrado en tu posicion GPS");
+				}, (err) => {
+					setStatus(`No se pudo centrar GPS: ${err.message}`);
+				}, {
+					enableHighAccuracy: true,
+					maximumAge: 2000,
+					timeout: 10000
+				});
+			}
+
 			routeFileEl.addEventListener("change", async (e) => {
 				const file = e.target.files && e.target.files[0];
 				if (!file) return;
@@ -905,6 +974,7 @@
 			});
 			startBtn.addEventListener("click", startGps);
 			stopBtn.addEventListener("click", stopGps);
+			gpsCenterBtn.addEventListener("click", centerOnUserPosition);
 			controlsEl.addEventListener("toggle", updateSummaryHint);
 
 			updateSummaryHint();
