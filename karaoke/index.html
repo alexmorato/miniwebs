@@ -179,50 +179,28 @@
   <div id="counter"></div>
   <div id="grid"></div>
   <div id="empty">No se encontraron canciones.</div>
-
-  <script type="application/json" id="songs-data">
-[
-    {
-        "title" : "Red",
-        "artist" : "Kylie Cantrall",
-        "url" : "https://es.lyricstraining.com/play/kylie-cantrall/red/gYNA9pmz1Y",
-        "lang" : "en",
-        "difficulty" : "hard",
-        "img" : "https://img.youtube.com/vi/mIuiMgefKBk/mqdefault.jpg",
-        "date" : "2024-09-01",
-        "tags" : ["disney", "descendants", "descendants4"]
-    },
-    {
-        "title" : "Perfect Princess",
-        "artist" : "Descendants Wicked Wonderland - Cast",
-        "url" : "https://es.lyricstraining.com/play/descendants-wicked-wonderland-cast/perfect-princess-disneyland-park-version/geCaJ3mzme",
-        "lang" : "en",
-        "difficulty" : "medium",
-        "img" : "https://img.youtube.com/vi/tLjW2DMkg2s/mqdefault.jpg",
-        "tags" : ["disney", "descendants", "descendants5"]
-    },
-    {
-        "title" : "Dancing With A Stranger",
-        "artist" : "Sam Smith & Normani",
-        "url" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
-        "img" : "https://img.youtube.com/vi/nCkpzqqog4k/mqdefault.jpg",
-        "lang" : "en",
-        "difficulty" : "hard",
-        "tags" : ["pop", "sam smith", "normani"]
-    }
-]
-  </script>
+  <div id="fetch-error" style="display:none;text-align:center;padding:60px 16px;color:#f87171;font-size:.9rem;line-height:1.7">
+    ⚠️ No se pudo cargar <code>assets/songs.json</code>.<br>
+    Abre la carpeta con un servidor local, por ejemplo:<br>
+    <code style="color:#a78bfa">python -m http.server</code>
+  </div>
 
   <script>
     let songs = [];
     let currentSort = 'title';
     let sortAsc = true;
 
-    // ── Load JSON (embedded — works con file://) ──
-    const SONGS_RAW = document.getElementById('songs-data').textContent;
-    songs = JSON.parse(SONGS_RAW);
-    populateLangs();
-    render();
+    // ── Load JSON from file ──
+    fetch('assets/songs.json')
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(data => {
+        songs = data;
+        populateLangs();
+        render();
+      })
+      .catch(() => {
+        document.getElementById('fetch-error').style.display = 'block';
+      });
 
     // ── Populate language filter ──
     function populateLangs() {

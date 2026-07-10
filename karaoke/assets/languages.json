@@ -1,7 +1,13 @@
 [
     {
         "code" : "en",
-        "name" : "English"
+        "name" : "English",
+        "variant" : "UK"
+    },
+    {
+        "code" : "us",
+        "name" : "English",
+        "variant" : "US"
     },
     {
         "code" : "ca",

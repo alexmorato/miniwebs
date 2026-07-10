@@ -1,30 +1,77 @@
 [
-    {
-        "title" : "Red",
-        "artist" : "Kylie Cantrall",
-        "url" : "https://es.lyricstraining.com/play/kylie-cantrall/red/gYNA9pmz1Y",
-        "lang" : "en",
-        "difficulty" : "hard",
-        "img" : "https://img.youtube.com/vi/mIuiMgefKBk/mqdefault.jpg",
-        "date" : "202-09-01",
-        "tags" : ["disney", "descendants", "descendants4"]
-    },
-    {
-        "title" : "Perfect Princess",
-        "artist" : "Descendants Wicked Wonderland - Cast",
-        "url" : "https://es.lyricstraining.com/play/descendants-wicked-wonderland-cast/perfect-princess-disneyland-park-version/geCaJ3mzme",
-        "lang" : "en",
-        "difficulty" : "medium",
-        "img" : "https://img.youtube.com/vi/tLjW2DMkg2s/mqdefault.jpg",
-        "tags" : ["disney", "descendants", "descendants5"]
-    },
-    {
-        "title" : "Dancing With A Stranger",
-        "artist" : "Sam Smith & Normani",
-        "url" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
-        "img" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
-        "lang" : "en",
-        "difficulty" : "hard",
-        "tags" : ["pop", "sam smith", "normani"]
-    }
+{
+    "title" : "Red",
+    "artist" : "Kylie Cantrall",
+    "url" : "https://es.lyricstraining.com/play/kylie-cantrall/red/gYNA9pmz1Y",
+    "lang" : "en",
+    "difficulty" : "hard",
+    "img" : "https://img.youtube.com/vi/mIuiMgefKBk/mqdefault.jpg",
+    "date" : "202-09-01",
+    "tags" : ["disney", "descendants", "descendants4"]
+},
+{
+    "title" : "Perfect Princess",
+    "artist" : "Descendants Wicked Wonderland - Cast",
+    "url" : "https://es.lyricstraining.com/play/descendants-wicked-wonderland-cast/perfect-princess-disneyland-park-version/geCaJ3mzme",
+    "lang" : "en",
+    "difficulty" : "medium",
+    "img" : "https://img.youtube.com/vi/tLjW2DMkg2s/mqdefault.jpg",
+    "tags" : ["disney", "descendants", "descendants5"]
+},
+{
+    "title": "Un Mon Més Real",
+    "artist": "La Clika",
+    "url": "https://es.lyricstraining.com/play/la-clika/un-mon-mes-real/gK5ofqmzgK",
+    "lang": "ca",
+    "difficulty": "hard",
+    "img": "https://img.youtube.com/vi/UQYdj2HQIPE/mqdefault.jpg"
+},
+{
+    "title": "SOMNI",
+    "artist": "La Clika",
+    "url": "https://es.lyricstraining.com/play/la-clika/somni/gxsilzmz2x",
+    "lang": "ca",
+    "difficulty": "medium",
+    "img": "https://img.youtube.com/vi/iNi_zAaOQ_8/mqdefault.jpg"
+},
+{
+    "title": "Capità",
+    "artist": "La Clika",
+    "url": "https://es.lyricstraining.com/play/la-clika/capita/gYNA9pmzgY",
+    "lang": "ca",
+    "difficulty": "medium",
+    "img": "https://img.youtube.com/vi/DHUgdr9XZf0/mqdefault.jpg"
+},
+{
+    "title": "Suéltalo",
+    "artist": "Gisela",
+    "url": "https://es.lyricstraining.com/play/gisela/sueltalo/gX6w0ZmzgX",
+    "lang": "es",
+    "difficulty": "easy",
+    "img": "https://img.youtube.com/vi/50vRlmr04iU/mqdefault.jpg"
+},
+{
+    "title": "Resultat",
+    "artist": "El Petit Príncep",
+    "url": "https://es.lyricstraining.com/play/el-petit-princep/resultat/gGuRFPmz2G",
+    "lang": "ca",
+    "difficulty": "hard",
+    "img": "https://img.youtube.com/vi/ou7pxocJp4Q/mqdefault.jpg"
+},
+{
+    "title": "Good To Be Bad",
+    "artist": "Jadah Marie",
+    "url": "https://es.lyricstraining.com/play/jadah-marie-dove-cameron-cameron-boyce-booboo-stewart-descendants-cast-sofia-carson-anna-cat/good-to-be-bad/gA9pBOmlZA",
+    "lang": "us",
+    "difficulty": "easy",
+    "img": "https://img.youtube.com/vi/lvjkBcBBrmE/mqdefault.jpg"
+},
+{
+    "title": "Fight Of Our Lives",
+    "artist": "Kylie Cantrall",
+    "url": "https://es.lyricstraining.com/play/kylie-cantrall-malia-baker-descendants-cast/fight-of-our-lives/gOeCaJmshO",
+    "lang": "us",
+    "difficulty": "medium",
+    "img": "https://img.youtube.com/vi/YngL2-pk8rY/mqdefault.jpg"
+}
 ]

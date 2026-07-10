@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Converter – LyricsTraining → JSON</title>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --surface: #1a1a24;
+      --surface2: #22222f;
+      --accent: #7c6af7;
+      --accent2: #a78bfa;
+      --text: #e2e2f0;
+      --muted: #888899;
+      --border: #2e2e40;
+      --green: #4ade80;
+      --radius: 10px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      color: var(--accent2);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+    .field { margin-bottom: 16px; }
+
+    textarea, input[type=text], input[type=date], select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+    textarea:focus, input:focus, select:focus { border-color: var(--accent); }
+    #html-input { min-height: 200px; font-size: 0.78rem; font-family: monospace; }
+
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .row .field { flex: 1 1 160px; }
+
+    button {
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    button:hover { opacity: .85; }
+    #btn-convert { background: var(--accent); color: #fff; width: 100%; margin-bottom: 20px; }
+    #btn-copy    { background: var(--surface2); color: var(--accent2); border: 1px solid var(--border); }
+
+    #output-wrap { display: none; }
+    #output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    #output-header span { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+    #output {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--green);
+      white-space: pre;
+      overflow-x: auto;
+    }
+    #copied-msg {
+      color: var(--green);
+      font-size: 0.8rem;
+      display: none;
+      margin-left: 10px;
+    }
+
+    .error { color: #f87171; font-size: 0.85rem; margin-top: 8px; display: none; }
+  </style>
+</head>
+<body>
+  <h1>🔄 Converter</h1>
+  <p class="subtitle">Pega el HTML de LyricsTraining y genera el JSON para songs.json</p>
+
+  <div class="field">
+    <label>HTML del list-item</label>
+    <textarea id="html-input" placeholder='Pega aquí el <div class="list-item lyrics-card …">…</div>'></textarea>
+    <div class="error" id="error-msg"></div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label>Tags (separados por coma)</label>
+      <input type="text" id="tags-input" placeholder="pop, disney, rock…">
+    </div>
+    <div class="field">
+      <label>Fecha</label>
+      <input type="date" id="date-input">
+    </div>
+  </div>
+
+  <button id="btn-convert" onclick="convert()">⚡ Convertir</button>
+
+  <div id="output-wrap">
+    <div id="output-header">
+      <span>Resultado</span>
+      <div>
+        <button id="btn-copy" onclick="copyResult()">📋 Copiar</button>
+        <span id="copied-msg">¡Copiado!</span>
+      </div>
+    </div>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    // Flag class → ISO 639-1 language code
+    const FLAG_MAP = {
+      en: 'en', es: 'es', es_ct: 'ca', fr: 'fr', de: 'de',
+      it: 'it', pt: 'pt', nl: 'nl', pl: 'pl', ru: 'ru',
+      ja: 'ja', ko: 'ko', zh: 'zh', ar: 'ar', tr: 'tr',
+      sv: 'sv', da: 'da', fi: 'fi', nb: 'no', el: 'el',
+    };
+
+    function convert() {
+      const raw   = document.getElementById('html-input').value.trim();
+      const tags  = document.getElementById('tags-input').value
+                      .split(',').map(t => t.trim()).filter(Boolean);
+      const date  = document.getElementById('date-input').value;
+      const err   = document.getElementById('error-msg');
+      err.style.display = 'none';
+
+      if (!raw) { showError('Pega el HTML primero.'); return; }
+
+      let doc;
+      try {
+        const parser = new DOMParser();
+        doc = parser.parseFromString(raw, 'text/html');
+      } catch (e) {
+        showError('HTML inválido.'); return;
+      }
+
+      // ── Extract fields ──
+      const titleEl  = doc.querySelector('h3 a');
+      const artistEl = doc.querySelector('h4 a');
+      const videoEl  = doc.querySelector('a.video');
+      const imgEl    = doc.querySelector('a.video img');
+      const langTag  = doc.querySelector('[class*="lang-tag"]');
+
+      const title  = titleEl  ? titleEl.textContent.trim()  : '';
+      const artist = artistEl ? artistEl.textContent.trim() : '';
+      const href   = videoEl  ? videoEl.getAttribute('href') : '';
+      const url    = href ? 'https://es.lyricstraining.com' + href : '';
+      const img    = imgEl ? imgEl.getAttribute('src') : '';
+
+      // difficulty from lang-tag class: "lang-tag hard" / "lang-tag medium" / "lang-tag easy"
+      let difficulty = '';
+      if (langTag) {
+        const cls = langTag.className;
+        if (cls.includes('hard'))   difficulty = 'hard';
+        else if (cls.includes('medium')) difficulty = 'medium';
+        else if (cls.includes('easy'))   difficulty = 'easy';
+      }
+
+      // lang from flag span class, e.g. "flag es_ct r" → key "es_ct"
+      let lang = '';
+      const flagEl = doc.querySelector('[class*="flag"]');
+      if (flagEl) {
+        const classes = flagEl.className.split(/\s+/);
+        const flagCls = classes.find(c => c !== 'flag' && c !== 'r' && c !== 'l' && FLAG_MAP[c]);
+        if (flagCls) lang = FLAG_MAP[flagCls];
+        else {
+          // fallback: use first non-flag, non-r class
+          const fallback = classes.find(c => c !== 'flag' && c !== 'r' && c !== 'l');
+          if (fallback) lang = fallback;
+        }
+      }
+
+      if (!title && !url) { showError('No se pudo extraer título ni URL. ¿Es el HTML correcto?'); return; }
+
+      // ── Build JSON entry ──
+      const entry = {};
+      if (title)      entry.title      = title;
+      if (artist)     entry.artist     = artist;
+      if (url)        entry.url        = url;
+      if (lang)       entry.lang       = lang;
+      if (difficulty) entry.difficulty = difficulty;
+      if (img)        entry.img        = img;
+      if (date)       entry.date       = date;
+      if (tags.length) entry.tags      = tags;
+
+      const json = JSON.stringify(entry, null, 4)
+        .replace(/^{/, '{')  // keep as-is, pretty printed
+        + ',';
+
+      document.getElementById('output').textContent = json;
+      document.getElementById('output-wrap').style.display = 'block';
+    }
+
+    function copyResult() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById('copied-msg');
+        msg.style.display = 'inline';
+        setTimeout(() => msg.style.display = 'none', 2000);
+      });
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
