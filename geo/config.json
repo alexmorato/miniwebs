@@ -13,6 +13,7 @@
   },
   "gpx": {
     "defaultEmoji": "📍 ",
+    "elevationProfileMaxPoints": 50,
     "waypointEmojiByType": {
       "lodge": "🛖 ",
       "lodging": "🛖 ",

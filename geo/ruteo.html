@@ -388,6 +388,7 @@
 			},
 			gpx: {
 				defaultEmoji: "📍 ",
+				elevationProfileMaxPoints: 100,
 				waypointEmojiByType: {
 					lodge: "🛖 ",
 					lodging: "🛖 ",
@@ -762,6 +763,30 @@
 				return bestIdx;
 			}
 
+			function simplifyElevationIndexed(elevIndexed, maxPoints) {
+				const validMax = Number.isFinite(maxPoints) ? Math.max(4, Math.floor(maxPoints)) : 100;
+				if (elevIndexed.length <= validMax) return elevIndexed;
+
+				let minPos = 0;
+				let maxPos = 0;
+				for (let i = 1; i < elevIndexed.length; i += 1) {
+					if (elevIndexed[i].ele < elevIndexed[minPos].ele) minPos = i;
+					if (elevIndexed[i].ele > elevIndexed[maxPos].ele) maxPos = i;
+				}
+
+				const picked = new Set([0, elevIndexed.length - 1, minPos, maxPos]);
+				const remaining = Math.max(0, validMax - picked.size);
+				for (let i = 0; i < remaining; i += 1) {
+					const pos = Math.round(((i + 1) * (elevIndexed.length - 1)) / (remaining + 1));
+					if (picked.has(pos)) continue;
+					picked.add(pos);
+				}
+
+				return [...picked]
+					.sort((a, b) => a - b)
+					.map((i) => elevIndexed[i]);
+			}
+
 			function renderElevationProfile() {
 				const elevPoints = routePoints.filter((p) => Number.isFinite(p.ele));
 				hasElevationProfile = elevPoints.length > 1;
@@ -796,27 +821,39 @@
 
 				const eleRange = Math.max(1, maxEle - minEle);
 				const xDen = Math.max(1, totalDist);
-				const pathPoints = routePoints
-					.filter((p) => Number.isFinite(p.ele))
-					.map((p, idx) => {
-						let routeIdx = idx;
-						for (let j = 0; j < routePoints.length; j += 1) {
-							if (routePoints[j] === p) {
-								routeIdx = j;
-								break;
-							}
-						}
-						const x = (cumulative[routeIdx] / xDen) * 100;
-						const y = 100 - (((p.ele - minEle) / eleRange) * 88 + 6);
-						return `${x.toFixed(2)},${y.toFixed(2)}`;
-					})
-					.join(" ");
+				const maxProfilePoints = Number(gpxConfig.elevationProfileMaxPoints ?? FALLBACK_CONFIG.gpx.elevationProfileMaxPoints ?? 100);
+				const elevIndexed = [];
+				for (let i = 0; i < routePoints.length; i += 1) {
+					const p = routePoints[i];
+					if (Number.isFinite(p.ele)) elevIndexed.push({ idx: i, ele: p.ele });
+				}
+				const reducedElevIndexed = simplifyElevationIndexed(elevIndexed, maxProfilePoints);
+
+				const pointsFor = (items) => items.map((item) => {
+					const x = (cumulative[item.idx] / xDen) * 100;
+					const y = 100 - (((item.ele - minEle) / eleRange) * 88 + 6);
+					return { x, y };
+				});
+
+				const profilePts = pointsFor(reducedElevIndexed);
+				const profilePoints = profilePts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
+
+				const firstX = profilePts[0].x;
+				const lastX = profilePts[profilePts.length - 1].x;
+				const areaPoints = [`${firstX.toFixed(2)},100`, profilePoints, `${lastX.toFixed(2)},100`].join(" ");
+
+				const area = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+				area.setAttribute("points", areaPoints);
+				area.setAttribute("fill", "rgba(15, 122, 103, 0.18)");
+				elevationChartEl.appendChild(area);
 
 				const profile = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-				profile.setAttribute("points", pathPoints);
+				profile.setAttribute("points", profilePoints);
 				profile.setAttribute("fill", "none");
 				profile.setAttribute("stroke", "#0f7a67");
 				profile.setAttribute("stroke-width", "1.8");
+				profile.setAttribute("stroke-linecap", "round");
+				profile.setAttribute("stroke-linejoin", "round");
 				elevationChartEl.appendChild(profile);
 
 				if (latestGps) {
@@ -824,6 +861,32 @@
 					if (idx >= 0 && Number.isFinite(routePoints[idx].ele)) {
 						const x = (cumulative[idx] / xDen) * 100;
 						const y = 100 - (((routePoints[idx].ele - minEle) / eleRange) * 88 + 6);
+
+						const progressItems = reducedElevIndexed.filter((p) => p.idx <= idx);
+						if (progressItems.length > 1) {
+							const progressPts = pointsFor(progressItems)
+								.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`)
+								.join(" ");
+							const progress = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+							progress.setAttribute("points", progressPts);
+							progress.setAttribute("fill", "none");
+							progress.setAttribute("stroke", "#cf2f2f");
+							progress.setAttribute("stroke-width", "2.4");
+							progress.setAttribute("stroke-linecap", "round");
+							progress.setAttribute("stroke-linejoin", "round");
+							elevationChartEl.appendChild(progress);
+						}
+
+						const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
+						guide.setAttribute("x1", x.toFixed(2));
+						guide.setAttribute("y1", "100");
+						guide.setAttribute("x2", x.toFixed(2));
+						guide.setAttribute("y2", y.toFixed(2));
+						guide.setAttribute("stroke", "rgba(207, 47, 47, 0.45)");
+						guide.setAttribute("stroke-width", "1");
+						guide.setAttribute("stroke-dasharray", "2 2");
+						elevationChartEl.appendChild(guide);
+
 						const marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 						marker.setAttribute("cx", x.toFixed(2));
 						marker.setAttribute("cy", y.toFixed(2));
