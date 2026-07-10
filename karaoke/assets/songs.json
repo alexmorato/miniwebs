@@ -1,0 +1,30 @@
+[
+    {
+        "title" : "Red",
+        "artist" : "Kylie Cantrall",
+        "url" : "https://es.lyricstraining.com/play/kylie-cantrall/red/gYNA9pmz1Y",
+        "lang" : "en",
+        "difficulty" : "hard",
+        "img" : "https://img.youtube.com/vi/mIuiMgefKBk/mqdefault.jpg",
+        "date" : "202-09-01",
+        "tags" : ["disney", "descendants", "descendants4"]
+    },
+    {
+        "title" : "Perfect Princess",
+        "artist" : "Descendants Wicked Wonderland - Cast",
+        "url" : "https://es.lyricstraining.com/play/descendants-wicked-wonderland-cast/perfect-princess-disneyland-park-version/geCaJ3mzme",
+        "lang" : "en",
+        "difficulty" : "medium",
+        "img" : "https://img.youtube.com/vi/tLjW2DMkg2s/mqdefault.jpg",
+        "tags" : ["disney", "descendants", "descendants5"]
+    },
+    {
+        "title" : "Dancing With A Stranger",
+        "artist" : "Sam Smith & Normani",
+        "url" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
+        "img" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
+        "lang" : "en",
+        "difficulty" : "hard",
+        "tags" : ["pop", "sam smith", "normani"]
+    }
+]

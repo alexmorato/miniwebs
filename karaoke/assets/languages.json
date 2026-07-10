@@ -1,0 +1,14 @@
+[
+    {
+        "code" : "en",
+        "name" : "English"
+    },
+    {
+        "code" : "ca",
+        "name" : "Català"
+    },
+    {
+        "code" : "es",
+        "name" : "Español"
+    }
+]

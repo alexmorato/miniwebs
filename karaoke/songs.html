@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Songs</title>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --surface: #1a1a24;
+      --surface2: #22222f;
+      --accent: #7c6af7;
+      --accent2: #a78bfa;
+      --text: #e2e2f0;
+      --muted: #888899;
+      --border: #2e2e40;
+      --radius: 10px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      color: var(--accent2);
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+
+    /* ── Filters bar ── */
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    #controls input, #controls select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    #controls input { flex: 1 1 200px; }
+    #controls select { flex: 0 1 140px; }
+    #controls input:focus, #controls select:focus {
+      border-color: var(--accent);
+    }
+
+    .sort-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .sort-btn:hover { background: var(--surface); }
+    .sort-btn.active { border-color: var(--accent); color: var(--accent2); }
+
+    /* ── Counter ── */
+    #counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── Grid ── */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: transform .15s, border-color .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(124,106,247,.25);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-artist {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+    .badge-lang   { background: #1e3a5f; color: #7eb8f7; }
+    .badge-diff-easy   { background: #14402a; color: #4ade80; }
+    .badge-diff-medium { background: #3b2a08; color: #fbbf24; }
+    .badge-diff-hard   { background: #3b1010; color: #f87171; }
+    .badge-tag    { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #000;
+    }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: auto;
+    }
+
+    #empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 60px 0;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎵 Songs</h1>
+
+  <div id="controls">
+    <input type="search" id="search" placeholder="Buscar título, artista, tag…">
+    <select id="filterLang">
+      <option value="">Todos los idiomas</option>
+    </select>
+    <select id="filterDiff">
+      <option value="">Todas las dificultades</option>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <button class="sort-btn active" data-sort="title">A–Z</button>
+    <button class="sort-btn" data-sort="date">Fecha</button>
+  </div>
+
+  <div id="counter"></div>
+  <div id="grid"></div>
+  <div id="empty">No se encontraron canciones.</div>
+
+  <script type="application/json" id="songs-data">
+[
+    {
+        "title" : "Red",
+        "artist" : "Kylie Cantrall",
+        "url" : "https://es.lyricstraining.com/play/kylie-cantrall/red/gYNA9pmz1Y",
+        "lang" : "en",
+        "difficulty" : "hard",
+        "img" : "https://img.youtube.com/vi/mIuiMgefKBk/mqdefault.jpg",
+        "date" : "2024-09-01",
+        "tags" : ["disney", "descendants", "descendants4"]
+    },
+    {
+        "title" : "Perfect Princess",
+        "artist" : "Descendants Wicked Wonderland - Cast",
+        "url" : "https://es.lyricstraining.com/play/descendants-wicked-wonderland-cast/perfect-princess-disneyland-park-version/geCaJ3mzme",
+        "lang" : "en",
+        "difficulty" : "medium",
+        "img" : "https://img.youtube.com/vi/tLjW2DMkg2s/mqdefault.jpg",
+        "tags" : ["disney", "descendants", "descendants5"]
+    },
+    {
+        "title" : "Dancing With A Stranger",
+        "artist" : "Sam Smith & Normani",
+        "url" : "https://es.lyricstraining.com/play/sam-smith/dancing-with-a-stranger/0gY9pmz1Y",
+        "img" : "https://img.youtube.com/vi/nCkpzqqog4k/mqdefault.jpg",
+        "lang" : "en",
+        "difficulty" : "hard",
+        "tags" : ["pop", "sam smith", "normani"]
+    }
+]
+  </script>
+
+  <script>
+    let songs = [];
+    let currentSort = 'title';
+    let sortAsc = true;
+
+    // ── Load JSON (embedded — works con file://) ──
+    const SONGS_RAW = document.getElementById('songs-data').textContent;
+    songs = JSON.parse(SONGS_RAW);
+    populateLangs();
+    render();
+
+    // ── Populate language filter ──
+    function populateLangs() {
+      const langs = [...new Set(songs.map(s => s.lang).filter(Boolean))].sort();
+      const sel = document.getElementById('filterLang');
+      langs.forEach(l => {
+        const o = document.createElement('option');
+        o.value = l; o.textContent = l.toUpperCase();
+        sel.appendChild(o);
+      });
+    }
+
+    // ── Render ──
+    function render() {
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      const lang = document.getElementById('filterLang').value;
+      const diff = document.getElementById('filterDiff').value;
+
+      let list = songs.filter(s => {
+        if (lang && s.lang !== lang) return false;
+        if (diff && s.difficulty !== diff) return false;
+        if (q) {
+          const haystack = [s.title, s.artist, ...(s.tags || [])].join(' ').toLowerCase();
+          if (!q.split(' ').every(w => haystack.includes(w))) return false;
+        }
+        return true;
+      });
+
+      list.sort((a, b) => {
+        let va, vb;
+        if (currentSort === 'date') {
+          va = a.date || '0000';
+          vb = b.date || '0000';
+        } else {
+          va = (a.title || '').toLowerCase();
+          vb = (b.title || '').toLowerCase();
+        }
+        if (va < vb) return sortAsc ? -1 : 1;
+        if (va > vb) return sortAsc ? 1 : -1;
+        return 0;
+      });
+
+      const grid = document.getElementById('grid');
+      const empty = document.getElementById('empty');
+      grid.innerHTML = '';
+
+      document.getElementById('counter').textContent =
+        `${list.length} canción${list.length !== 1 ? 'es' : ''} encontrada${list.length !== 1 ? 's' : ''}`;
+
+      if (list.length === 0) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+
+      list.forEach(song => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.title = `${song.title} – ${song.artist}`;
+
+        const diffClass = song.difficulty ? `badge-diff-${song.difficulty}` : 'badge-tag';
+        const tags = (song.tags || []).map(t => `<span class="badge badge-tag">${t}</span>`).join('');
+
+        card.innerHTML = `
+          ${song.img ? `<img class="card-thumb" src="${song.img}" alt="${song.title}" loading="lazy">` : ''}
+          <div class="card-title">${song.title}</div>
+          <div class="card-artist">${song.artist || ''}</div>
+          <div class="card-meta">
+            ${song.lang ? `<span class="badge badge-lang">${song.lang.toUpperCase()}</span>` : ''}
+            ${song.difficulty ? `<span class="badge ${diffClass}">${song.difficulty}</span>` : ''}
+            ${tags}
+          </div>
+          ${song.date ? `<div class="card-date">📅 ${song.date}</div>` : ''}
+        `;
+
+        card.addEventListener('click', () => openSong(song));
+        grid.appendChild(card);
+      });
+    }
+
+    // ── Open song in new tab ──
+    function openSong(song) {
+      const params = new URLSearchParams({
+        url:   song.url,
+        title: `${song.title} – ${song.artist}`
+      });
+      window.open(`player.html?${params}`, '_blank');
+    }
+
+    // ── Events ──
+    document.getElementById('search').addEventListener('input', render);
+    document.getElementById('filterLang').addEventListener('change', render);
+    document.getElementById('filterDiff').addEventListener('change', render);
+
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentSort === btn.dataset.sort) {
+          sortAsc = !sortAsc;
+        } else {
+          currentSort = btn.dataset.sort;
+          sortAsc = true;
+        }
+        document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        btn.textContent = btn.dataset.sort === 'title'
+          ? (sortAsc ? 'A–Z' : 'Z–A')
+          : (sortAsc ? 'Fecha ↑' : 'Fecha ↓');
+        render();
+      });
+    });
+  </script>
+</body>
+</html>
