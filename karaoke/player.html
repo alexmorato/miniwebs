@@ -44,7 +44,11 @@
     }
 
     #close-btn {
-      background: transparent;
+      position: fixed;
+      top: 10px;
+      right: 14px;
+      z-index: 9999;
+      background: rgba(26, 26, 36, .92);
       color: #ccc;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -55,8 +59,10 @@
       font-family: system-ui, sans-serif;
       transition: background .2s, color .2s;
       white-space: nowrap;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
-    #close-btn:hover { background: rgba(180, 40, 40, .85); color: #fff; border-color: transparent; }
+    #close-btn:hover { background: rgba(180, 40, 40, .92); color: #fff; border-color: transparent; }
 
     #frame-wrap {
       flex: 1;
@@ -75,8 +81,8 @@
 <body>
   <div id="topbar">
     <span id="topbar-title">🎵 Mi Karaoke</span>
-    <button id="close-btn" onclick="window.close()">✕ Cerrar</button>
   </div>
+  <button id="close-btn" onclick="window.close()">✕ Cerrar</button>
   <div id="frame-wrap">
     <iframe id="frame" allowfullscreen></iframe>
   </div>
