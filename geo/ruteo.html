@@ -157,7 +157,7 @@
 
 		.elevation-chart {
 			width: 100%;
-			height: 110px;
+			height: 310px;
 			display: block;
 			border: 1px solid rgba(0, 0, 0, 0.12);
 			border-radius: 8px;
@@ -324,7 +324,7 @@
 		<button id="menuElevationBtn" type="button" role="menuitem">📈 Ver elevacion GPX</button>
 	</div>
 
-	<details class="controls" id="controls" open>
+	<details class="controls" id="controls">
 		<summary>
 			Comandos
 			<span class="summary-right" id="summaryInfo">Toca para colapsar</span>
@@ -375,7 +375,7 @@
 		</div>
 		<div class="elevation-strip-body" id="elevationStripBody">
 			<div id="elevationMeta" class="elevation-meta"></div>
-			<svg id="elevationChart" class="elevation-chart" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Perfil elevacion"></svg>
+			<svg id="elevationChart" class="elevation-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-label="Perfil elevacion"></svg>
 			<div id="elevationEmpty" class="elevation-empty">Sin datos de elevacion cargados.</div>
 		</div>
 	</section>
@@ -390,6 +390,10 @@
 			gpx: {
 				defaultEmoji: "📍 ",
 				elevationProfileMaxPoints: 100,
+				elevationGrid: {
+					lineCount: 5,
+					showLabels: true
+				},
 				waypointEmojiByType: {
 					lodge: "🛖 ",
 					lodging: "🛖 ",
@@ -823,6 +827,9 @@
 				const eleRange = Math.max(1, maxEle - minEle);
 				const xDen = Math.max(1, totalDist);
 				const maxProfilePoints = Number(gpxConfig.elevationProfileMaxPoints ?? FALLBACK_CONFIG.gpx.elevationProfileMaxPoints ?? 100);
+				const elevationGridConfig = gpxConfig.elevationGrid || FALLBACK_CONFIG.gpx.elevationGrid || {};
+				const gridLineCount = Math.max(2, Math.floor(Number(elevationGridConfig.lineCount ?? 5)));
+				const showGridLabels = elevationGridConfig.showLabels !== false;
 				const elevIndexed = [];
 				for (let i = 0; i < routePoints.length; i += 1) {
 					const p = routePoints[i];
@@ -843,6 +850,36 @@
 				const lastX = profilePts[profilePts.length - 1].x;
 				const areaPoints = [`${firstX.toFixed(2)},100`, profilePoints, `${lastX.toFixed(2)},100`].join(" ");
 
+				for (let i = 0; i < gridLineCount; i += 1) {
+					const t = gridLineCount === 1 ? 0 : (i / (gridLineCount - 1));
+					const y = 100 - (t * 88 + 6);
+					const alt = minEle + (t * eleRange);
+
+					const grid = document.createElementNS("http://www.w3.org/2000/svg", "line");
+					grid.setAttribute("x1", "0");
+					grid.setAttribute("y1", y.toFixed(2));
+					grid.setAttribute("x2", "100");
+					grid.setAttribute("y2", y.toFixed(2));
+					grid.setAttribute("stroke", "rgba(0, 0, 0, 0.18)");
+					grid.setAttribute("stroke-width", "0.4");
+					grid.setAttribute("stroke-dasharray", "1.5 1.5");
+					elevationChartEl.appendChild(grid);
+
+					if (showGridLabels) {
+						const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+						label.setAttribute("x", "1");
+						label.setAttribute("y", (y - 0.8).toFixed(2));
+						label.setAttribute("font-size", "4.2");
+						label.setAttribute("font-weight", "700");
+						label.setAttribute("paint-order", "stroke");
+						label.setAttribute("stroke", "rgba(248, 243, 232, 0.96)");
+						label.setAttribute("stroke-width", "0.55");
+						label.setAttribute("fill", "rgba(0, 0, 0, 0.62)");
+						label.textContent = `${Math.round(alt)}m`;
+						elevationChartEl.appendChild(label);
+					}
+				}
+
 				const area = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 				area.setAttribute("points", areaPoints);
 				area.setAttribute("fill", "rgba(15, 122, 103, 0.18)");
@@ -852,7 +889,7 @@
 				profile.setAttribute("points", profilePoints);
 				profile.setAttribute("fill", "none");
 				profile.setAttribute("stroke", "#0f7a67");
-				profile.setAttribute("stroke-width", "1.8");
+				profile.setAttribute("stroke-width", "1.1");
 				profile.setAttribute("stroke-linecap", "round");
 				profile.setAttribute("stroke-linejoin", "round");
 				elevationChartEl.appendChild(profile);
@@ -872,7 +909,7 @@
 							progress.setAttribute("points", progressPts);
 							progress.setAttribute("fill", "none");
 							progress.setAttribute("stroke", "#cf2f2f");
-							progress.setAttribute("stroke-width", "2.4");
+							progress.setAttribute("stroke-width", "1.4");
 							progress.setAttribute("stroke-linecap", "round");
 							progress.setAttribute("stroke-linejoin", "round");
 							elevationChartEl.appendChild(progress);

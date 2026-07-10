@@ -13,7 +13,11 @@
   },
   "gpx": {
     "defaultEmoji": "📍 ",
-    "elevationProfileMaxPoints": 50,
+    "elevationProfileMaxPoints": 100,
+    "elevationGrid": {
+      "lineCount": 5,
+      "showLabels": true
+    },
     "waypointEmojiByType": {
       "lodge": "🛖 ",
       "lodging": "🛖 ",
