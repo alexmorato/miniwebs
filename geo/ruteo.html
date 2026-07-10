@@ -1025,10 +1025,29 @@
 						marker.setAttribute("stroke", "#ffffff");
 						marker.setAttribute("stroke-width", "1");
 						elevationChartEl.appendChild(marker);
+
+						if (Number.isFinite(latestGps.altitude)) {
+							const gpsLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+							const labelX = Math.min(96, x + 1.3);
+							const labelY = Math.max(5, y - 1.2);
+							gpsLabel.setAttribute("x", labelX.toFixed(2));
+							gpsLabel.setAttribute("y", labelY.toFixed(2));
+							gpsLabel.setAttribute("font-size", "3.4");
+							gpsLabel.setAttribute("font-weight", "700");
+							gpsLabel.setAttribute("paint-order", "stroke");
+							gpsLabel.setAttribute("stroke", "rgba(248, 243, 232, 0.96)");
+							gpsLabel.setAttribute("stroke-width", "0.45");
+							gpsLabel.setAttribute("fill", "#922121");
+							gpsLabel.textContent = `GPS ${Math.round(latestGps.altitude)}m`;
+							elevationChartEl.appendChild(gpsLabel);
+						}
 					}
 				}
 
-				elevationMetaEl.textContent = `Dist ${metersText(totalDist)} | Min ${Math.round(minEle)} m | Max ${Math.round(maxEle)} m | +${Math.round(gain)} m`;
+				const gpsAltitudeText = Number.isFinite(latestGps?.altitude)
+					? ` | GPS ${Math.round(latestGps.altitude)} m${Number.isFinite(latestGps?.altitudeAccuracy) ? ` ±${Math.round(latestGps.altitudeAccuracy)}m` : ""}`
+					: "";
+				elevationMetaEl.textContent = `Dist ${metersText(totalDist)} | Min ${Math.round(minEle)} m | Max ${Math.round(maxEle)} m | +${Math.round(gain)} m${gpsAltitudeText}`;
 			}
 
 			function drawRoute() {
@@ -1429,7 +1448,12 @@
 				watchId = navigator.geolocation.watchPosition((pos) => {
 					const lat = pos.coords.latitude;
 					const lng = pos.coords.longitude;
-					latestGps = { lat, lng };
+					latestGps = {
+						lat,
+						lng,
+						altitude: pos.coords.altitude,
+						altitudeAccuracy: pos.coords.altitudeAccuracy
+					};
 					const latlng = [lat, lng];
 
 					if (!userMarker) {
@@ -1500,7 +1524,12 @@
 					} else {
 						userMarker.setLatLng(latlng);
 					}
-					latestGps = { lat, lng };
+					latestGps = {
+						lat,
+						lng,
+						altitude: pos.coords.altitude,
+						altitudeAccuracy: pos.coords.altitudeAccuracy
+					};
 					if (isElevationStripOpen && hasElevationProfile) renderElevationProfile();
 
 					centerMapOnLatLng(lat, lng);
