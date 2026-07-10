@@ -49,7 +49,7 @@
             font-size: 0.7rem;
 		}
 
-		.gps-center-btn {
+		.quick-menu-btn {
 			position: fixed;
 			top: max(12px, env(safe-area-inset-top));
 			right: 12px;
@@ -68,6 +68,104 @@
 			backdrop-filter: blur(6px);
 			display: grid;
 			place-items: center;
+		}
+
+		.quick-menu-popup {
+			position: fixed;
+			top: calc(max(12px, env(safe-area-inset-top)) + 48px);
+			right: 12px;
+			z-index: 1002;
+			background: rgba(248, 243, 232, 0.97);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 8px;
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+			display: none;
+			min-width: 210px;
+		}
+
+		.quick-menu-popup.open {
+			display: grid;
+			gap: 6px;
+		}
+
+		.quick-menu-popup button {
+			text-align: left;
+			padding: 9px 10px;
+		}
+
+		.elevation-strip {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 1001;
+			background: rgba(248, 243, 232, 0.97);
+			border-top: 1px solid var(--border);
+			box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.2);
+			padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+			transform: translateY(110%);
+			transition: transform .2s ease;
+		}
+
+		.elevation-strip.is-open {
+			transform: translateY(0);
+		}
+
+		.elevation-strip-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			margin-bottom: 6px;
+		}
+
+		.elevation-strip-title {
+			font-size: 12px;
+			font-weight: 800;
+			color: var(--ink);
+		}
+
+		.elevation-strip-close {
+			width: 30px;
+			height: 30px;
+			border-radius: 999px;
+			border: 1px solid var(--border);
+			background: #fff;
+			color: var(--ink);
+			font-size: 18px;
+			line-height: 1;
+			padding: 0;
+			display: grid;
+			place-items: center;
+		}
+
+		.elevation-strip-body {
+			display: grid;
+			gap: 6px;
+		}
+
+		.elevation-meta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			font-size: 12px;
+			font-weight: 700;
+			color: var(--muted);
+		}
+
+		.elevation-chart {
+			width: 100%;
+			height: 110px;
+			display: block;
+			border: 1px solid rgba(0, 0, 0, 0.12);
+			border-radius: 8px;
+			background: linear-gradient(180deg, rgba(17, 160, 136, 0.16) 0%, rgba(17, 160, 136, 0.03) 100%);
+		}
+
+		.elevation-empty {
+			font-size: 12px;
+			color: var(--muted);
 		}
 
 		details.controls {
@@ -219,7 +317,11 @@
 	<div id="map" role="application" aria-label="Mapa principal"></div>
 
 	<div class="distance-pill" id="distancePill">Ruta: -</div>
-	<button class="gps-center-btn" id="gpsCenterBtn" type="button" aria-label="Centrar en mi posicion GPS" title="Centrar en mi posicion GPS">🎯</button>
+	<button class="quick-menu-btn" id="quickMenuBtn" type="button" aria-label="Abrir menu" title="Menu">☰</button>
+	<div id="quickMenuPopup" class="quick-menu-popup" role="menu" aria-label="Acciones rapidas">
+		<button id="menuCenterGpsBtn" type="button" role="menuitem">🎯 Posicionar GPS</button>
+		<button id="menuElevationBtn" type="button" role="menuitem">📈 Ver elevacion GPX</button>
+	</div>
 
 	<details class="controls" id="controls" open>
 		<summary>
@@ -264,6 +366,18 @@
 			<div class="status" id="status">Listo</div>
 		</div>
 	</details>
+
+	<section id="elevationStrip" class="elevation-strip" aria-label="Perfil de elevacion" aria-hidden="true">
+		<div class="elevation-strip-header">
+			<div class="elevation-strip-title">Perfil de elevacion</div>
+			<button id="elevationStripCloseBtn" class="elevation-strip-close" type="button" aria-label="Cerrar perfil de elevacion" title="Cerrar">X</button>
+		</div>
+		<div class="elevation-strip-body" id="elevationStripBody">
+			<div id="elevationMeta" class="elevation-meta"></div>
+			<svg id="elevationChart" class="elevation-chart" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Perfil elevacion"></svg>
+			<div id="elevationEmpty" class="elevation-empty">Sin datos de elevacion cargados.</div>
+		</div>
+	</section>
 
 	<script>
 		const FALLBACK_CONFIG = {
@@ -419,11 +533,19 @@
 			const mapModeEl = document.getElementById("mapMode");
 			const osmFileEl = document.getElementById("osmFile");
 			const showLabelsEl = document.getElementById("showLabels");
+			const quickMenuBtn = document.getElementById("quickMenuBtn");
+			const quickMenuPopup = document.getElementById("quickMenuPopup");
+			const menuCenterGpsBtn = document.getElementById("menuCenterGpsBtn");
+			const menuElevationBtn = document.getElementById("menuElevationBtn");
 			const startBtn = document.getElementById("startBtn");
 			const stopBtn = document.getElementById("stopBtn");
-			const gpsCenterBtn = document.getElementById("gpsCenterBtn");
 			const statusEl = document.getElementById("status");
 			const distancePillEl = document.getElementById("distancePill");
+			const elevationStripEl = document.getElementById("elevationStrip");
+			const elevationMetaEl = document.getElementById("elevationMeta");
+			const elevationChartEl = document.getElementById("elevationChart");
+			const elevationEmptyEl = document.getElementById("elevationEmpty");
+			const elevationStripCloseBtn = document.getElementById("elevationStripCloseBtn");
 
 			const placeRules = appConfig.labels.places;
 			const naturalRules = appConfig.labels.naturals;
@@ -451,9 +573,25 @@
 			let watchId = null;
 			let routePoints = [];
 			let currentGpxWaypoints = [];
+			let isElevationStripOpen = false;
+			let hasElevationProfile = false;
+			let latestGps = null;
 
 			function setStatus(msg) {
 				statusEl.textContent = msg;
+			}
+
+			function closeQuickMenu() {
+				quickMenuPopup.classList.remove("open");
+			}
+
+			function setElevationStripOpen(open) {
+				isElevationStripOpen = Boolean(open);
+				elevationStripEl.classList.toggle("is-open", isElevationStripOpen);
+				elevationStripEl.setAttribute("aria-hidden", isElevationStripOpen ? "false" : "true");
+				menuElevationBtn.textContent = isElevationStripOpen
+					? "📉 Ocultar elevacion GPX"
+					: "📈 Ver elevacion GPX";
 			}
 
 			function updateSummaryHint() {
@@ -492,7 +630,8 @@
 				if (parserError) throw new Error("GPX invalido");
 				const routePts = Array.from(xml.querySelectorAll("trkpt, rtept")).map((n) => ({
 					lat: Number(n.getAttribute("lat")),
-					lng: Number(n.getAttribute("lon"))
+					lng: Number(n.getAttribute("lon")),
+					ele: Number(n.querySelector("ele")?.textContent)
 				})).filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
 				if (routePts.length < 2) throw new Error("GPX sin suficientes puntos");
 
@@ -606,6 +745,97 @@
 				scan(data);
 				if (out.length < 2) throw new Error("GeoJSON sin linea util");
 				return out;
+			}
+
+			function findNearestRouteIndex(lat, lng) {
+				if (!routePoints.length) return -1;
+				let bestIdx = -1;
+				let bestDist = Infinity;
+				for (let i = 0; i < routePoints.length; i += 1) {
+					const p = routePoints[i];
+					const d = haversineMeters(lat, lng, p.lat, p.lng);
+					if (d < bestDist) {
+						bestDist = d;
+						bestIdx = i;
+					}
+				}
+				return bestIdx;
+			}
+
+			function renderElevationProfile() {
+				const elevPoints = routePoints.filter((p) => Number.isFinite(p.ele));
+				hasElevationProfile = elevPoints.length > 1;
+
+				elevationChartEl.innerHTML = "";
+				elevationMetaEl.textContent = "";
+
+				if (!hasElevationProfile) {
+					elevationEmptyEl.textContent = "No hay elevacion util en la ruta cargada.";
+					elevationEmptyEl.style.display = "block";
+					return;
+				}
+
+				elevationEmptyEl.style.display = "none";
+
+				const minEle = Math.min(...elevPoints.map((p) => p.ele));
+				const maxEle = Math.max(...elevPoints.map((p) => p.ele));
+				let gain = 0;
+				let totalDist = 0;
+				const cumulative = [0];
+				for (let i = 1; i < routePoints.length; i += 1) {
+					const prev = routePoints[i - 1];
+					const cur = routePoints[i];
+					const seg = haversineMeters(prev.lat, prev.lng, cur.lat, cur.lng);
+					totalDist += seg;
+					cumulative.push(totalDist);
+					if (Number.isFinite(prev.ele) && Number.isFinite(cur.ele)) {
+						const dEle = cur.ele - prev.ele;
+						if (dEle > 0) gain += dEle;
+					}
+				}
+
+				const eleRange = Math.max(1, maxEle - minEle);
+				const xDen = Math.max(1, totalDist);
+				const pathPoints = routePoints
+					.filter((p) => Number.isFinite(p.ele))
+					.map((p, idx) => {
+						let routeIdx = idx;
+						for (let j = 0; j < routePoints.length; j += 1) {
+							if (routePoints[j] === p) {
+								routeIdx = j;
+								break;
+							}
+						}
+						const x = (cumulative[routeIdx] / xDen) * 100;
+						const y = 100 - (((p.ele - minEle) / eleRange) * 88 + 6);
+						return `${x.toFixed(2)},${y.toFixed(2)}`;
+					})
+					.join(" ");
+
+				const profile = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+				profile.setAttribute("points", pathPoints);
+				profile.setAttribute("fill", "none");
+				profile.setAttribute("stroke", "#0f7a67");
+				profile.setAttribute("stroke-width", "1.8");
+				elevationChartEl.appendChild(profile);
+
+				if (latestGps) {
+					const idx = findNearestRouteIndex(latestGps.lat, latestGps.lng);
+					if (idx >= 0 && Number.isFinite(routePoints[idx].ele)) {
+						const x = (cumulative[idx] / xDen) * 100;
+						const y = 100 - (((routePoints[idx].ele - minEle) / eleRange) * 88 + 6);
+						const marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+						marker.setAttribute("cx", x.toFixed(2));
+						marker.setAttribute("cy", y.toFixed(2));
+						marker.setAttribute("r", "2.6");
+						marker.setAttribute("fill", "#cf2f2f");
+						marker.setAttribute("stroke", "#ffffff");
+						marker.setAttribute("stroke-width", "1");
+						elevationChartEl.appendChild(marker);
+					}
+				}
+
+				elevationMetaEl.textContent = `Dist ${metersText(totalDist)} | Min ${Math.round(minEle)} m | Max ${Math.round(maxEle)} m | +${Math.round(gain)} m`;
 			}
 
 			function drawRoute() {
@@ -935,6 +1165,7 @@
 					routePoints = parseGeoJson(text);
 					renderGpxWaypoints([]);
 				}
+				renderElevationProfile();
 
 				drawRoute();
 				distancePillEl.textContent = "Ruta: esperando GPS";
@@ -1005,6 +1236,7 @@
 				watchId = navigator.geolocation.watchPosition((pos) => {
 					const lat = pos.coords.latitude;
 					const lng = pos.coords.longitude;
+					latestGps = { lat, lng };
 					const latlng = [lat, lng];
 
 					if (!userMarker) {
@@ -1021,6 +1253,7 @@
 
 					const d = distanceToRoute(lat, lng);
 					distancePillEl.textContent = `Ruta: ${metersText(d)}`;
+					if (isElevationStripOpen && hasElevationProfile) renderElevationProfile();
 				}, (err) => {
 					setStatus(`Error GPS: ${err.message}`);
 				}, {
@@ -1074,6 +1307,8 @@
 					} else {
 						userMarker.setLatLng(latlng);
 					}
+					latestGps = { lat, lng };
+					if (isElevationStripOpen && hasElevationProfile) renderElevationProfile();
 
 					centerMapOnLatLng(lat, lng);
 					setStatus("Centrado en tu posicion GPS");
@@ -1115,6 +1350,31 @@
 				const mode = showGpxWaypointsEl.checked ? "visibles" : "ocultos";
 				setStatus(`POI GPX ${mode} (${currentGpxWaypoints.length})`);
 			});
+			quickMenuBtn.addEventListener("click", (ev) => {
+				ev.stopPropagation();
+				quickMenuPopup.classList.toggle("open");
+			});
+			menuCenterGpsBtn.addEventListener("click", () => {
+				closeQuickMenu();
+				centerOnUserPosition();
+			});
+			menuElevationBtn.addEventListener("click", () => {
+				closeQuickMenu();
+				if (!hasElevationProfile) {
+					setStatus("La ruta actual no tiene elevacion GPX usable");
+					return;
+				}
+				setElevationStripOpen(!isElevationStripOpen);
+				if (isElevationStripOpen) renderElevationProfile();
+			});
+			document.addEventListener("click", (ev) => {
+				if (!quickMenuPopup.contains(ev.target) && !quickMenuBtn.contains(ev.target)) {
+					closeQuickMenu();
+				}
+			});
+			elevationStripCloseBtn.addEventListener("click", () => {
+				setElevationStripOpen(false);
+			});
 			map.on("zoomend", () => {
 				if (mapModeEl.value === "osmxml" && osmParsedData) {
 					const shown = renderOsmLabels(osmParsedData);
@@ -1123,10 +1383,13 @@
 			});
 			startBtn.addEventListener("click", startGps);
 			stopBtn.addEventListener("click", stopGps);
-			gpsCenterBtn.addEventListener("click", centerOnUserPosition);
 			controlsEl.addEventListener("toggle", updateSummaryHint);
+			window.addEventListener("resize", () => {
+				if (isElevationStripOpen && hasElevationProfile) renderElevationProfile();
+			});
 
 			updateSummaryHint();
+			setElevationStripOpen(false);
 			applyBaseMap();
 			loadDefaultRoute().catch((err) => {
 				setStatus(`No se pudo cargar la ruta por defecto: ${err.message}`);
