@@ -989,8 +989,9 @@
 				if (latestGps) {
 					const idx = findNearestRouteIndex(latestGps.lat, latestGps.lng);
 					if (idx >= 0 && Number.isFinite(routePoints[idx].ele)) {
+						const nearestRouteEle = routePoints[idx].ele;
 						const x = (cumulative[idx] / xDen) * 100;
-						const y = 100 - (((routePoints[idx].ele - minEle) / eleRange) * 88 + 6);
+						const y = 100 - (((nearestRouteEle - minEle) / eleRange) * 88 + 6);
 
 						const progressItems = reducedElevIndexed.filter((p) => p.idx <= idx);
 						if (progressItems.length > 1) {
@@ -1038,16 +1039,24 @@
 							gpsLabel.setAttribute("stroke", "rgba(248, 243, 232, 0.96)");
 							gpsLabel.setAttribute("stroke-width", "0.45");
 							gpsLabel.setAttribute("fill", "#922121");
-							gpsLabel.textContent = `GPS ${Math.round(latestGps.altitude)}m`;
+							gpsLabel.textContent = `GPS ${Math.round(latestGps.altitude)}m | Ruta ${Math.round(nearestRouteEle)}m`;
 							elevationChartEl.appendChild(gpsLabel);
 						}
+					}
+				}
+
+				let nearestRouteAltitudeText = "";
+				if (latestGps && Number.isFinite(latestGps.lat) && Number.isFinite(latestGps.lng)) {
+					const nearestIdx = findNearestRouteIndex(latestGps.lat, latestGps.lng);
+					if (nearestIdx >= 0 && Number.isFinite(routePoints[nearestIdx].ele)) {
+						nearestRouteAltitudeText = ` | Ruta ${Math.round(routePoints[nearestIdx].ele)} m`;
 					}
 				}
 
 				const gpsAltitudeText = Number.isFinite(latestGps?.altitude)
 					? ` | GPS ${Math.round(latestGps.altitude)} m${Number.isFinite(latestGps?.altitudeAccuracy) ? ` ±${Math.round(latestGps.altitudeAccuracy)}m` : ""}`
 					: "";
-				elevationMetaEl.textContent = `Dist ${metersText(totalDist)} | Min ${Math.round(minEle)} m | Max ${Math.round(maxEle)} m | +${Math.round(gain)} m${gpsAltitudeText}`;
+				elevationMetaEl.textContent = `Dist ${metersText(totalDist)} | Min ${Math.round(minEle)} m | Max ${Math.round(maxEle)} m | +${Math.round(gain)} m${gpsAltitudeText}${nearestRouteAltitudeText}`;
 			}
 
 			function drawRoute() {
