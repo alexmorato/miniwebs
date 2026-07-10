@@ -1,6 +1,6 @@
 {
   "defaults": {
-    "gpxPath": "./gpx/nuria-coma-de-vaca-queralbs.gpx",
+    "gpxPath": "./gpx/OK_nuria_refugi_pic_refugi_queralbs.gpx",
     "osmPath": "./mapa/map.osm",
     "mapMode": "osm",
     "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -9,6 +9,18 @@
       "lat": 42.35,
       "lng": 2.17,
       "zoom": 12
+    }
+  },
+  "gpx": {
+    "defaultEmoji": "📍 ",
+    "waypointEmojiByType": {
+      "lodge": "🛖 ",
+      "lodging": "🛖 ",
+      "crossing": "🧭 ",
+      "drinking water": "💧 ",
+      "summit": "⛰️ ",
+      "peak": "⛰️ ",
+      "refuge": "🛖 "
     }
   },
   "labels": {

@@ -233,6 +233,11 @@
 				<input id="routeFile" type="file" accept=".gpx,.kml,.geojson,.json" />
 			</div>
 
+			<label class="toggle" for="showGpxWaypoints">
+				<input id="showGpxWaypoints" type="checkbox" checked>
+				Mostrar puntos de interes del GPX
+			</label>
+
 			<div>
 				<label for="mapMode">Mapa base</label>
 				<select id="mapMode">
@@ -263,9 +268,21 @@
 	<script>
 		const FALLBACK_CONFIG = {
 			defaults: {
-				gpxPath: "./gpx/nuria-coma-de-vaca-queralbs.gpx",
+				gpxPath: "./gpx/OK_nuria_refugi_pic_refugi_queralbs.gpx",
 				osmPath: "./mapa/map.osm",
 				mapMode: "osm"
+			},
+			gpx: {
+				defaultEmoji: "📍 ",
+				waypointEmojiByType: {
+					lodge: "🛖 ",
+					lodging: "🛖 ",
+					crossing: "🧭 ",
+					"drinking water": "💧 ",
+					summit: "⛰️ ",
+					peak: "⛰️ ",
+					refuge: "🛖 "
+				}
 			},
 			labels: {
 				uniqueCap: 380,
@@ -398,6 +415,7 @@
 			const controlsEl = document.getElementById("controls");
 			const summaryInfoEl = document.getElementById("summaryInfo");
 			const routeFileEl = document.getElementById("routeFile");
+			const showGpxWaypointsEl = document.getElementById("showGpxWaypoints");
 			const mapModeEl = document.getElementById("mapMode");
 			const osmFileEl = document.getElementById("osmFile");
 			const showLabelsEl = document.getElementById("showLabels");
@@ -417,6 +435,7 @@
 			const wayRender = appConfig.ways.render;
 			const namedWayConfig = appConfig.ways.named;
 			const defaultsConfig = appConfig.defaults;
+			const gpxConfig = appConfig.gpx || FALLBACK_CONFIG.gpx;
 
 			const iv = defaultsConfig.initialView || { lat: 42.35, lng: 2.17, zoom: 12 };
 			const map = L.map("map", { zoomControl: true }).setView([iv.lat, iv.lng], iv.zoom);
@@ -426,10 +445,12 @@
 			let osmVectorLayer = null;
 			let osmLabelLayer = null;
 			let osmParsedData = null;
+			let gpxWaypointLayer = null;
 			let routeLine = null;
 			let userMarker = null;
 			let watchId = null;
 			let routePoints = [];
+			let currentGpxWaypoints = [];
 
 			function setStatus(msg) {
 				statusEl.textContent = msg;
@@ -469,12 +490,76 @@
 				const xml = new DOMParser().parseFromString(text, "application/xml");
 				const parserError = xml.querySelector("parsererror");
 				if (parserError) throw new Error("GPX invalido");
-				const pts = Array.from(xml.querySelectorAll("trkpt, rtept")).map((n) => ({
+				const routePts = Array.from(xml.querySelectorAll("trkpt, rtept")).map((n) => ({
 					lat: Number(n.getAttribute("lat")),
 					lng: Number(n.getAttribute("lon"))
 				})).filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
-				if (pts.length < 2) throw new Error("GPX sin suficientes puntos");
-				return pts;
+				if (routePts.length < 2) throw new Error("GPX sin suficientes puntos");
+
+				const waypoints = Array.from(xml.querySelectorAll("wpt")).map((n) => ({
+					lat: Number(n.getAttribute("lat")),
+					lng: Number(n.getAttribute("lon")),
+					name: (n.querySelector("name")?.textContent || "").trim(),
+					type: (n.querySelector("type")?.textContent || "").trim(),
+					sym: (n.querySelector("sym")?.textContent || "").trim(),
+					cmt: (n.querySelector("cmt")?.textContent || "").trim(),
+					desc: (n.querySelector("desc")?.textContent || "").trim()
+				})).filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
+
+				return { routePts, waypoints };
+			}
+
+			function normalizeTypeKey(value) {
+				return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
+			}
+
+			function getGpxWaypointEmoji(wpt) {
+				const mapByType = gpxConfig.waypointEmojiByType || {};
+				const typeKey = normalizeTypeKey(wpt.type);
+				const symKey = normalizeTypeKey(wpt.sym);
+				return mapByType[typeKey] || mapByType[symKey] || gpxConfig.defaultEmoji || "📍 ";
+			}
+
+			function renderGpxWaypoints(waypoints) {
+				currentGpxWaypoints = Array.isArray(waypoints) ? waypoints : [];
+				if (gpxWaypointLayer) {
+					map.removeLayer(gpxWaypointLayer);
+				}
+				gpxWaypointLayer = L.layerGroup();
+				if (!showGpxWaypointsEl.checked) return;
+
+				for (const wpt of currentGpxWaypoints) {
+					const emoji = getGpxWaypointEmoji(wpt);
+					const waypointName = wpt.name || "Punto sin nombre";
+					const labelText = `${emoji}${waypointName}`;
+
+					const marker = L.circleMarker([wpt.lat, wpt.lng], {
+						radius: 4,
+						weight: 1.5,
+						color: "#1f2f2b",
+						fillColor: "#ffffff",
+						fillOpacity: 1
+					});
+
+					marker.bindTooltip(escapeHtml(labelText), {
+						permanent: true,
+						direction: "top",
+						offset: [0, -6],
+						className: "osm-label-tooltip"
+					});
+
+					const popupBits = [`Nombre: ${waypointName}`];
+					if (wpt.type) popupBits.push(`Type: ${wpt.type}`);
+					if (wpt.sym) popupBits.push(`Sym: ${wpt.sym}`);
+					if (wpt.cmt) popupBits.push(wpt.cmt);
+					if (wpt.desc) popupBits.push(wpt.desc);
+					marker.bindPopup(escapeHtml(popupBits.join(" | ")));
+					marker.addTo(gpxWaypointLayer);
+				}
+
+				if (currentGpxWaypoints.length > 0) {
+					gpxWaypointLayer.addTo(map);
+				}
 			}
 
 			function parseKml(text) {
@@ -837,20 +922,31 @@
 
 			function loadRouteFromText(text, sourceExt) {
 				const lower = sourceExt.toLowerCase();
-				if (lower.endsWith(".gpx")) routePoints = parseGpx(text);
-				else if (lower.endsWith(".kml")) routePoints = parseKml(text);
-				else routePoints = parseGeoJson(text);
+				let waypointCount = 0;
+				if (lower.endsWith(".gpx")) {
+					const parsed = parseGpx(text);
+					routePoints = parsed.routePts;
+					renderGpxWaypoints(parsed.waypoints);
+					waypointCount = parsed.waypoints.length;
+				} else if (lower.endsWith(".kml")) {
+					routePoints = parseKml(text);
+					renderGpxWaypoints([]);
+				} else {
+					routePoints = parseGeoJson(text);
+					renderGpxWaypoints([]);
+				}
 
 				drawRoute();
 				distancePillEl.textContent = "Ruta: esperando GPS";
+				return waypointCount;
 			}
 
 			async function loadDefaultRoute() {
 				const res = await fetch(appConfig.defaults.gpxPath, { cache: "no-cache" });
 				if (!res.ok) throw new Error(`No se encontro ${appConfig.defaults.gpxPath}`);
 				const text = await res.text();
-				loadRouteFromText(text, ".gpx");
-				setStatus(`Ruta por defecto cargada (${routePoints.length} puntos)`);
+				const wptCount = loadRouteFromText(text, ".gpx");
+				setStatus(`Ruta por defecto cargada (${routePoints.length} puntos, ${wptCount} elementos GPX)`);
 			}
 
 			async function loadOsmVectorMap() {
@@ -996,8 +1092,8 @@
 
 				try {
 					const text = await file.text();
-					loadRouteFromText(text, file.name);
-					setStatus(`Ruta cargada (${routePoints.length} puntos)`);
+					const wptCount = loadRouteFromText(text, file.name);
+					setStatus(`Ruta cargada (${routePoints.length} puntos, ${wptCount} elementos GPX)`);
 				} catch (err) {
 					setStatus(`Error al cargar ruta: ${err.message}`);
 				}
@@ -1013,6 +1109,11 @@
 					const mode = showLabelsEl.checked ? "activadas" : "ocultas";
 					setStatus(`Etiquetas ${mode} (${shown} visibles)`);
 				}
+			});
+			showGpxWaypointsEl.addEventListener("change", () => {
+				renderGpxWaypoints(currentGpxWaypoints);
+				const mode = showGpxWaypointsEl.checked ? "visibles" : "ocultos";
+				setStatus(`POI GPX ${mode} (${currentGpxWaypoints.length})`);
 			});
 			map.on("zoomend", () => {
 				if (mapModeEl.value === "osmxml" && osmParsedData) {
