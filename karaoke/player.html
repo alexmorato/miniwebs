@@ -64,6 +64,27 @@
     }
     #close-btn:hover { background: rgba(180, 40, 40, .92); color: #fff; border-color: transparent; }
 
+    #fullscreen-btn {
+      position: fixed;
+      top: 10px;
+      right: 120px;
+      z-index: 9999;
+      background: rgba(26, 26, 36, .92);
+      color: #ccc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: system-ui, sans-serif;
+      transition: background .2s, color .2s;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    #fullscreen-btn:hover { background: rgba(60, 60, 120, .92); color: #fff; border-color: transparent; }
+
     #frame-wrap {
       flex: 1;
       padding: 12px;
@@ -83,6 +104,7 @@
     <span id="topbar-title">🎵 Mi Karaoke</span>
   </div>
   <button id="close-btn" onclick="window.close()">✕ Cerrar</button>
+  <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Pantalla completa</button>
   <div id="frame-wrap">
     <iframe id="frame" allowfullscreen></iframe>
   </div>
@@ -94,6 +116,27 @@
 
     if (title) document.title = title;
     if (url)   document.getElementById('frame').src = url;
+
+    function toggleFullscreen() {
+      const btn = document.getElementById('fullscreen-btn');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        btn.textContent = '⛶ Salir pantalla completa';
+      } else {
+        document.exitFullscreen();
+        btn.textContent = '⛶ Pantalla completa';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('fullscreen-btn');
+      btn.textContent = document.fullscreenElement ? '⛶ Salir pantalla completa' : '⛶ Pantalla completa';
+    });
+
+    // Fullscreen automático al cargar
+    window.addEventListener('load', () => {
+      document.documentElement.requestFullscreen().catch(() => {});
+    });
   </script>
 </body>
 </html>
