@@ -319,13 +319,37 @@
             display: block;
         }
 
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
         .recent-title {
             color: rgba(255, 255, 255, 0.8);
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 10px;
             font-weight: 600;
+        }
+
+        .recent-manage-btn {
+            font-size: 0.78em;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .recent-manage-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.24);
+            transform: translateY(-1px);
         }
 
         .recent-tags {
@@ -396,6 +420,8 @@
             font-size: 0.8em;
             cursor: pointer;
             transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .played-clear-btn:hover {
@@ -521,14 +547,17 @@
         </div>
 
         <div class="recent-section" id="recentSection">
-            <div class="recent-title">🕑 Búsquedas recientes</div>
+            <div class="recent-header">
+                <div class="recent-title">🕑 Búsquedas recientes</div>
+                <a href="gestiobusquedas.html" class="recent-manage-btn">⚙️ Gestionar</a>
+            </div>
             <div class="recent-tags" id="recentTags"></div>
         </div>
 
         <div class="played-section" id="playedSection">
             <div class="played-section-header">
                 <span class="played-section-title">🎮 Últimas canciones jugadas</span>
-                <button class="played-clear-btn" id="playedClearBtn">Borrar historial</button>
+                <a href="gestionjugadas.html" class="played-clear-btn" id="playedClearBtn">⚙️ Gestionar jugadas</a>
             </div>
             <div class="played-grid" id="playedGrid"></div>
         </div>
@@ -564,10 +593,7 @@
         const playedSection = document.getElementById('playedSection');
         const playedGrid   = document.getElementById('playedGrid');
 
-        document.getElementById('playedClearBtn').addEventListener('click', () => {
-            localStorage.removeItem(PLAYED_KEY);
-            renderPlayed();
-        });
+        // El borrado directo se ha trasladado a gestionjugadas.html
 
         document.getElementById('openMode').addEventListener('change', (e) => {
             localStorage.setItem(OPENMODE_KEY, e.target.value);

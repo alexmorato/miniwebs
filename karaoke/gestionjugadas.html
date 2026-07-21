@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Historial de Reproducciones - LingoClip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-3px);
+        }
+
+        .title-section h1 {
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-box input:focus {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.95em;
+            opacity: 0.7;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .clear-all-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-all-btn:hover:not(:disabled) {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff8787;
+        }
+
+        .clear-all-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Custom Scrollbar for list */
+        .song-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .song-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .song-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .song-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .song-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .song-thumbnail {
+            width: 80px;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .song-details {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .song-title {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-artist {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.7em;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-level {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .badge-level.easy { background: rgba(74, 222, 128, 0.25); color: #4ade80; }
+        .badge-level.medium { background: rgba(251, 191, 36, 0.25); color: #fbbf24; }
+        .badge-level.hard { background: rgba(248, 113, 113, 0.25); color: #f87171; }
+
+        .song-count {
+            font-size: 0.78em;
+            background: rgba(102, 126, 234, 0.35);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            padding: 1px 7px;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #c3dafe;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .delete-btn {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            color: #ff8787;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .empty-state.active {
+            display: flex;
+        }
+
+        .empty-icon {
+            font-size: 3em;
+            opacity: 0.8;
+            animation: bounce 2s infinite;
+        }
+
+        .empty-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.05em;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: #252438;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .modal-desc {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-confirm {
+            padding: 10px 16px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-confirm:hover {
+            background: #ff5252;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 20px auto;
+            }
+            .panel {
+                padding: 16px;
+            }
+            .song-thumbnail {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title-section">
+                <h1>Canciones Jugadas</h1>
+            </div>
+            <a href="index.html" class="back-btn">⬅️ Volver</a>
+        </header>
+
+        <div class="panel">
+            <div id="contentSection">
+                <div class="search-box">
+                    <input type="text" id="filterInput" placeholder="Filtrar por título o artista..." autocomplete="off">
+                </div>
+
+                <div class="meta-info">
+                    <span id="resultsCount">Cargando reproducciones...</span>
+                    <button class="clear-all-btn" id="clearAllBtn">🗑️ Borrar todo</button>
+                </div>
+
+                <div class="song-list" id="songList"></div>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🎤</div>
+                <div class="empty-text">Aún no has reproducido ninguna canción.</div>
+                <a href="index.html" class="back-btn" style="margin-top: 10px;">Buscar canciones</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-title">¿Borrar todo el historial?</div>
+            <div class="modal-desc">Esta acción eliminará de forma permanente todas tus canciones reproducidas del historial. No se puede deshacer.</div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="modalCancelBtn">Cancelar</button>
+                <button class="btn-confirm" id="modalConfirmBtn">Borrar todo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PLAYED_KEY = 'lingoclip_played_songs';
+
+        const filterInput = document.getElementById('filterInput');
+        const resultsCount = document.getElementById('resultsCount');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const songList = document.getElementById('songList');
+        const contentSection = document.getElementById('contentSection');
+        const emptyState = document.getElementById('emptyState');
+
+        // Modal Elements
+        const confirmModal = document.getElementById('confirmModal');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+        let playedSongs = [];
+
+        function loadSongs() {
+            try {
+                playedSongs = JSON.parse(localStorage.getItem(PLAYED_KEY)) || [];
+            } catch {
+                playedSongs = [];
+            }
+        }
+
+        function saveSongs() {
+            localStorage.setItem(PLAYED_KEY, JSON.stringify(playedSongs));
+        }
+
+        function renderList() {
+            const filterValue = filterInput.value.trim().toLowerCase();
+            const filtered = playedSongs.filter(song => 
+                song.title.toLowerCase().includes(filterValue) || 
+                song.artist.toLowerCase().includes(filterValue)
+            );
+
+            if (playedSongs.length === 0) {
+                contentSection.style.display = 'none';
+                emptyState.classList.add('active');
+                return;
+            }
+
+            contentSection.style.display = 'block';
+            emptyState.classList.remove('active');
+
+            songList.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                songList.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6);">No se encontraron canciones que coincidan.</div>';
+                resultsCount.textContent = '0 resultados';
+                clearAllBtn.disabled = true;
+                return;
+            }
+
+            clearAllBtn.disabled = false;
+            resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'canción' : 'canciones'}`;
+
+            filtered.forEach(song => {
+                const levelClass = (song.level || '').toLowerCase();
+                const levelText = song.level || 'Normal';
+                
+                const item = document.createElement('div');
+                item.className = 'song-item';
+                item.innerHTML = `
+                    <img class="song-thumbnail" src="https://img.youtube.com/vi/${song.yt_video_id}/default.jpg" alt="${escapeHtml(song.title)}">
+                    <div class="song-details">
+                        <span class="song-title" title="${escapeHtml(song.title)}">${escapeHtml(song.title)}</span>
+                        <span class="song-artist" title="${escapeHtml(song.artist)}">${escapeHtml(song.artist)}</span>
+                        <div class="song-meta">
+                            <span class="song-count">▶ ${song.count}</span>
+                            ${song.level ? `<span class="badge badge-level ${levelClass}">${levelText}</span>` : ''}
+                            ${song.duration ? `<span class="badge" style="background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.8);">${formatDuration(song.duration)}</span>` : ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" aria-label="Eliminar del historial">✕</button>
+                `;
+
+                // Add delete individual click handler
+                const delBtn = item.querySelector('.delete-btn');
+                delBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteSong(song.lyrics_id);
+                });
+
+                songList.appendChild(item);
+            });
+        }
+
+        function deleteSong(lyricsId) {
+            playedSongs = playedSongs.filter(song => song.lyrics_id !== lyricsId);
+            saveSongs();
+            renderList();
+        }
+
+        function formatDuration(ms) {
+            if (!ms) return '0:00';
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Event Listeners
+        filterInput.addEventListener('input', renderList);
+
+        clearAllBtn.addEventListener('click', () => {
+            confirmModal.classList.add('active');
+        });
+
+        modalCancelBtn.addEventListener('click', () => {
+            confirmModal.classList.remove('active');
+        });
+
+        // Close modal if clicking outside the modal content
+        confirmModal.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.classList.remove('active');
+            }
+        });
+
+        modalConfirmBtn.addEventListener('click', () => {
+            playedSongs = [];
+            saveSongs();
+            confirmModal.classList.remove('active');
+            renderList();
+        });
+
+        // Init
+        loadSongs();
+        renderList();
+        filterInput.focus();
+    </script>
+</body>
+</html>
