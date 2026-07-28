@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor de Letras - LingoClip</title>
+  <style>
+    :root {
+      --bg: #0b0813;
+      --surface: rgba(26, 20, 44, 0.6);
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #a78bfa;
+      --accent-glow: rgba(167, 139, 250, 0.3);
+      --text: #f3f4f6;
+      --text-muted: rgba(255, 255, 255, 0.35);
+      --text-active: #ffffff;
+      --header-h: 70px;
+      --footer-h: 90px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1b1437 0%, #080511 100%);
+      color: var(--text);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── HEADER ── */
+    header {
+      height: var(--header-h);
+      background: rgba(11, 8, 19, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .song-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      max-width: 40%;
+      min-width: 0;
+    }
+
+    .song-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-active);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .song-artist {
+      font-size: 0.85rem;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .header-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-fullscreen {
+      color: #e2e8f0;
+    }
+
+    .btn-close {
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #fff;
+    }
+
+    /* ── LYRICS AREA ── */
+    #lyrics-viewport {
+      flex: 1;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40vh 20px; /* Generoso padding vertical para permitir centrado perfecto */
+      position: relative;
+    }
+
+    /* Ocultar scrollbar por estética */
+    #lyrics-viewport::-webkit-scrollbar {
+      display: none;
+    }
+    #lyrics-viewport {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    .lyrics-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      text-align: center;
+    }
+
+    .lyric-line {
+      font-size: 1.45rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: 500;
+      min-height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lyric-line:hover {
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .lyric-line.active {
+      font-size: 2.1rem;
+      color: var(--text-active);
+      font-weight: 700;
+      text-shadow: 0 0 15px var(--accent-glow), 0 0 3px rgba(255, 255, 255, 0.5);
+      transform: scale(1.03);
+      letter-spacing: -0.5px;
+    }
+
+    /* ── FOOTER CONTROLS ── */
+    footer {
+      height: var(--footer-h);
+      background: rgba(11, 8, 19, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 30px;
+      z-index: 100;
+      position: relative;
+    }
+
+    .timeline-container {
+      position: absolute;
+      top: -6px;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .timeline-bg {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      transition: height 0.2s;
+    }
+
+    .timeline-container:hover .timeline-bg {
+      height: 6px;
+    }
+
+    .timeline-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent) 0%, #c084fc 100%);
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .timeline-handle {
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      left: 0%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform 0.15s;
+    }
+
+    .timeline-container:hover .timeline-handle {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .controls-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .time-display {
+      font-size: 0.9rem;
+      font-family: monospace;
+      color: rgba(255, 255, 255, 0.6);
+      width: 120px;
+    }
+
+    .playback-buttons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-control {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .btn-control:hover {
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .btn-control:active {
+      transform: scale(0.95);
+    }
+
+    .btn-play-pause {
+      background: white;
+      color: #0b0813;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3);
+    }
+
+    .btn-play-pause:hover {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .btn-play-pause svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .btn-skip svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .controls-right {
+      width: 120px; /* Equilibrar la distribución */
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* ── LOADING & ERROR BANNERS ── */
+    .status-container {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0b0813;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 99;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .status-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(167, 139, 250, 0.15);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.1);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-card {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .error-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fca5a5;
+      margin-bottom: 12px;
+    }
+
+    .error-desc {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .song-info {
+        max-width: 55%;
+      }
+      .song-title {
+        font-size: 1rem;
+      }
+      .lyric-line {
+        font-size: 1.15rem;
+        padding: 6px 12px;
+        gap: 16px;
+      }
+      .lyric-line.active {
+        font-size: 1.6rem;
+      }
+      .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      .time-display {
+        font-size: 0.8rem;
+        width: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING & ERROR STATES -->
+  <div id="statusOverlay" class="status-container">
+    <div id="loadingSpinner" class="spinner"></div>
+    <div id="errorCard" class="error-card" style="display: none;">
+      <div class="error-title">Error al cargar la canción</div>
+      <div class="error-desc" id="errorMessage">No se pudo recuperar la letra de la canción. Por favor, inténtalo de nuevo.</div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn" onclick="retryLoad()">🔄 Reintentar</button>
+        <button class="btn btn-close" onclick="closePage()">Volver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="song-info">
+      <span class="song-title" id="headerSongTitle">Cargando...</span>
+      <span class="song-artist" id="headerSongArtist">Por favor espera</span>
+    </div>
+    <div class="header-center">
+      <button class="btn btn-fullscreen" id="fullscreenBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        <span>Pantalla completa</span>
+      </button>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-close" id="closeBtn">✕ Cerrar</button>
+    </div>
+  </header>
+
+  <!-- LYRICS AREA -->
+  <div id="lyrics-viewport">
+    <div class="lyrics-container" id="lyricsContainer">
+      <!-- Las líneas de la letra se inyectarán aquí -->
+    </div>
+  </div>
+
+  <!-- FOOTER CONTROLS -->
+  <footer>
+    <div class="timeline-container" id="timelineContainer">
+      <div class="timeline-bg">
+        <div class="timeline-progress" id="timelineProgress"></div>
+        <div class="timeline-handle" id="timelineHandle"></div>
+      </div>
+    </div>
+
+    <div class="controls-inner">
+      <div class="time-display">
+        <span id="currentTime">00:00.0</span> / <span id="totalTime">00:00</span>
+      </div>
+
+      <div class="playback-buttons">
+        <button class="btn-control btn-skip" id="prevBtn" title="Línea anterior">
+          <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6L18 6v12z"/></svg>
+        </button>
+
+        <button class="btn-control btn-play-pause" id="playPauseBtn" title="Reproducir/Pausar (Espacio)">
+          <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+
+        <button class="btn-control btn-skip" id="nextBtn" title="Siguiente línea">
+          <svg viewBox="0 0 24 24"><path d="M6 18V6l8.5 6L6 18zm9-12h2v12h-2z"/></svg>
+        </button>
+      </div>
+
+      <div class="controls-right">
+        <!-- Espaciador para centrar los botones de reproducción -->
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_URL = 'https://api.lingoclip.com/lyrics/';
+    
+    // Params
+    const urlParams = new URLSearchParams(window.location.search);
+    const lyricsId = urlParams.get('id') || 'WEKadJm'; // Por defecto la de prueba del request
+
+    // State
+    let songData = null;
+    let lyrics = [];
+    let isPlaying = false;
+    let currentTime = 0; // segundos
+    let duration = 0; // segundos
+    let activeIndex = -1;
+    let lastTimestamp = 0;
+    let requestFrameId = null;
+
+    // DOM Elements
+    const statusOverlay = document.getElementById('statusOverlay');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const errorCard = document.getElementById('errorCard');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    const headerSongTitle = document.getElementById('headerSongTitle');
+    const headerSongArtist = document.getElementById('headerSongArtist');
+    const lyricsContainer = document.getElementById('lyricsContainer');
+    const lyricsViewport = document.getElementById('lyrics-viewport');
+    
+    const timelineContainer = document.getElementById('timelineContainer');
+    const timelineProgress = document.getElementById('timelineProgress');
+    const timelineHandle = document.getElementById('timelineHandle');
+    
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const totalTimeDisplay = document.getElementById('totalTime');
+    
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    // ── DATA INGESTION & PARSING ──
+    async function loadSong() {
+      try {
+        showLoading();
+        const response = await fetch(`${API_URL}${lyricsId}`);
+        if (!response.ok) {
+          throw new Error(`Error en servidor: ${response.status}`);
+        }
+        songData = await response.json();
+        
+        // Mapear datos
+        headerSongTitle.textContent = songData.title;
+        headerSongArtist.textContent = songData.artist;
+        document.title = `${songData.title} - Letra`;
+        
+        duration = songData.duration ? songData.duration / 1000 : 0;
+        
+        // Parsear letras
+        lyrics = parseLyrics(songData.text_lines);
+        
+        if (lyrics.length === 0) {
+          throw new Error('La canción no tiene letras estructuradas disponibles.');
+        }
+
+        // Si la API no devolvió duración válida, usar el tiempo de la última línea + 10s
+        if (duration <= 0 && lyrics.length > 0) {
+          duration = lyrics[lyrics.length - 1].time + 10;
+        }
+
+        totalTimeDisplay.textContent = formatTimeMMSS(duration);
+
+        renderLyrics();
+        hideStatus();
+        updateActiveLine(0, false); // Apuntar a la primera línea por defecto
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    function parseLyrics(text_lines) {
+      if (!text_lines) return [];
+      const lines = text_lines.split('\n');
+      const parsed = [];
+      const timeRegex = /^\[(\d{2}):(\d{2})[.:](\d{2,3})\](.*)/;
+
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+        const match = line.match(timeRegex);
+        if (match) {
+          const min = parseInt(match[1], 10);
+          const sec = parseInt(match[2], 10);
+          const msStr = match[3];
+          const ms = parseInt(msStr, 10);
+          // Si tiene 3 dígitos son milisegundos, si tiene 2 son centésimas
+          const msFraction = msStr.length === 3 ? ms / 1000 : ms / 100;
+          const time = min * 60 + sec + msFraction;
+          const text = match[4].trim();
+          parsed.push({ time, text });
+        }
+      }
+      return parsed.sort((a, b) => a.time - b.time);
+    }
+
+    function renderLyrics() {
+      lyricsContainer.innerHTML = '';
+      lyrics.forEach((line, index) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'lyric-line';
+        lineDiv.id = `lyric-line-${index}`;
+        // Si no hay texto, colocar un separador sutil para marcar pausas musicales
+        lineDiv.textContent = line.text || '•  •  •';
+        
+        lineDiv.addEventListener('click', () => {
+          jumpToTime(line.time);
+          if (!isPlaying) {
+            startPlayback();
+          }
+        });
+        
+        lyricsContainer.appendChild(lineDiv);
+      });
+    }
+
+    // ── STATUS VIEWS ──
+    function showLoading() {
+      statusOverlay.classList.remove('hidden');
+      loadingSpinner.style.display = 'block';
+      errorCard.style.display = 'none';
+    }
+
+    function hideStatus() {
+      statusOverlay.classList.add('hidden');
+    }
+
+    function showError(msg) {
+      statusOverlay.classList.remove('hidden');
+      loadingSpinner.style.display = 'none';
+      errorCard.style.display = 'block';
+      errorMessage.textContent = msg;
+    }
+
+    function retryLoad() {
+      loadSong();
+    }
+
+    function closePage() {
+      if (window.opener) {
+        window.close();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ── PLAYBACK ENGINE ──
+    function startPlayback() {
+      if (isPlaying) return;
+      isPlaying = true;
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      lastTimestamp = performance.now();
+      requestFrameId = requestAnimationFrame(tick);
+    }
+
+    function pausePlayback() {
+      if (!isPlaying) return;
+      isPlaying = false;
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      if (requestFrameId) {
+        cancelAnimationFrame(requestFrameId);
+      }
+    }
+
+    function togglePlayback() {
+      if (isPlaying) {
+        pausePlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    function tick(now) {
+      if (!isPlaying) return;
+
+      const elapsed = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      currentTime += elapsed;
+
+      if (currentTime >= duration) {
+        currentTime = duration;
+        pausePlayback();
+      }
+
+      updateUI();
+      
+      if (isPlaying) {
+        requestFrameId = requestAnimationFrame(tick);
+      }
+    }
+
+    function jumpToTime(targetTime) {
+      currentTime = Math.max(0, Math.min(targetTime, duration));
+      updateUI(false); // Update active line and scroll, no smooth-scroll delay
+    }
+
+    function updateUI(smoothScroll = true) {
+      // Formatear tiempo actual
+      currentTimeDisplay.textContent = formatTimeMMSSFF(currentTime);
+      
+      // Actualizar Timeline progress
+      const pct = (currentTime / duration) * 100;
+      timelineProgress.style.width = `${pct}%`;
+      timelineHandle.style.left = `${pct}%`;
+      
+      // Encontrar la línea activa actual
+      let currentActive = -1;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          currentActive = i;
+        } else {
+          break;
+        }
+      }
+
+      // Si no ha empezado el tiempo y estamos antes de la primera línea, marcar la primera
+      if (currentActive === -1 && lyrics.length > 0) {
+        currentActive = 0;
+      }
+
+      if (currentActive !== activeIndex && currentActive !== -1) {
+        updateActiveLine(currentActive, smoothScroll);
+      }
+    }
+
+    function updateActiveLine(index, smoothScroll = true) {
+      // Quitar active de la anterior
+      if (activeIndex !== -1) {
+        const oldActive = document.getElementById(`lyric-line-${activeIndex}`);
+        if (oldActive) oldActive.classList.remove('active');
+      }
+
+      activeIndex = index;
+
+      const newActive = document.getElementById(`lyric-line-${activeIndex}`);
+      if (newActive) {
+        newActive.classList.add('active');
+        
+        // Centrar elemento
+        newActive.scrollIntoView({
+          behavior: smoothScroll ? 'smooth' : 'auto',
+          block: 'center'
+        });
+      }
+    }
+
+    // ── CONTROLS & TIMELINE INTERACTION ──
+    timelineContainer.addEventListener('click', (e) => {
+      const rect = timelineContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percentage = clickX / rect.width;
+      jumpToTime(percentage * duration);
+    });
+
+    // Soporte para arrastrar en el timeline (Timeline scrubbing)
+    let isDragging = false;
+    timelineContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      handleTimelineDrag(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        handleTimelineDrag(e);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    function handleTimelineDrag(e) {
+      const rect = timelineContainer.getBoundingClientRect();
+      const clickX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      const percentage = clickX / rect.width;
+      jumpToTime(percentage * duration);
+    }
+
+    // Skip line buttons
+    prevBtn.addEventListener('click', () => {
+      if (activeIndex > 0) {
+        jumpToTime(lyrics[activeIndex - 1].time);
+      } else {
+        jumpToTime(0);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (activeIndex < lyrics.length - 1) {
+        jumpToTime(lyrics[activeIndex + 1].time);
+      }
+    });
+
+    playPauseBtn.addEventListener('click', togglePlayback);
+
+    // Fullscreen toggling
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    function toggleFullscreen() {
+      const icon = fullscreenBtn.querySelector('svg');
+      const text = fullscreenBtn.querySelector('span');
+      
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          text.textContent = 'Salir pantalla completa';
+          icon.innerHTML = '<path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+        }).catch(err => {
+          console.error('Error al entrar a Fullscreen:', err);
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          text.textContent = 'Pantalla completa';
+          icon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+        });
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const icon = fullscreenBtn.querySelector('svg');
+      const text = fullscreenBtn.querySelector('span');
+      if (document.fullscreenElement) {
+        text.textContent = 'Salir pantalla completa';
+        icon.innerHTML = '<path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      } else {
+        text.textContent = 'Pantalla completa';
+        icon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      }
+    });
+
+    closeBtn.addEventListener('click', closePage);
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        togglePlayback();
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (activeIndex < lyrics.length - 1) {
+          jumpToTime(lyrics[activeIndex + 1].time);
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (activeIndex > 0) {
+          jumpToTime(lyrics[activeIndex - 1].time);
+        } else {
+          jumpToTime(0);
+        }
+      }
+    });
+
+    // ── HELPER FORMATTERS ──
+    // Formato mm:ss.d para visualización rápida del avance
+    function formatTimeMMSSFF(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      const ms = Math.floor((seconds % 1) * 10);
+      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}.${ms}`;
+    }
+
+    // Formato mm:ss para el total
+    function formatTimeMMSS(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    // Inicializar
+    loadSong();
+  </script>
+</body>
+</html>

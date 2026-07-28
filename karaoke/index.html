@@ -542,6 +542,7 @@
             <select class="open-mode-select" id="openMode">
                 <option value="youtube">▶ YouTube</option>
                 <option value="player">🎤 Player local</option>
+                <option value="onlylyrics">📖 Solo Letra</option>
                 <option value="lingouClip">🎵 LingouClip</option>
             </select>
         </div>
@@ -771,6 +772,8 @@
                 return `https://www.youtube.com/watch?v=${song.yt_video_id}`;
             } else if (mode === 'player') {
                 return `player.html?url=${encodeURIComponent(lingouClipUrl)}`;
+            } else if (mode === 'onlylyrics') {
+                return `onlyLyrics.html?id=${song.lyrics_id}`;
             } else {
                 return lingouClipUrl;
             }
