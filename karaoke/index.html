@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Canciones - LingoClip</title>
+    <title>Buscador de Canciones</title>
     <style>
         * {
             margin: 0;
@@ -526,7 +526,7 @@
     <div class="container">
         <header>
             <h1>🎵 Buscador de Canciones</h1>
-            <p>Encuentra tus canciones favoritas en LingoClip</p>
+            <p>Encuentra tus canciones favoritas</p>
         </header>
 
         <div class="search-section">
@@ -542,7 +542,7 @@
             <select class="open-mode-select" id="openMode">
                 <option value="youtube">▶ YouTube</option>
                 <option value="player">🎤 Player local</option>
-                <option value="lingoclip">🎵 LingoClip</option>
+                <option value="lingouClip">🎵 LingouClip</option>
             </select>
         </div>
 
@@ -575,9 +575,9 @@
 
     <script>
         const API_URL     = 'https://api.lingoclip.com/search';
-        const STORAGE_KEY  = 'lingoclip_recent_searches';
-        const PLAYED_KEY   = 'lingoclip_played_songs';
-        const OPENMODE_KEY = 'lingoclip_open_mode';
+        const STORAGE_KEY  = 'mykaraoke_recent_searches';
+        const PLAYED_KEY   = 'mykaraoke_played_songs';
+        const OPENMODE_KEY = 'mykaraoke_open_mode';
         const MAX_RECENT   = 15;
         const MAX_PLAYED   = 15;
 
@@ -766,13 +766,13 @@
 
         function getOpenUrl(song) {
             const mode = document.getElementById('openMode').value;
-            const lingoClipUrl = `https://lingoclip.app/lyrics/${song.lyrics_id}#game`;
+            const lingouClipUrl = `https://lingoclip.app/lyrics/${song.lyrics_id}#game`;
             if (mode === 'youtube') {
                 return `https://www.youtube.com/watch?v=${song.yt_video_id}`;
             } else if (mode === 'player') {
-                return `player.html?url=${encodeURIComponent(lingoClipUrl)}`;
+                return `player.html?url=${encodeURIComponent(lingouClipUrl)}`;
             } else {
-                return lingoClipUrl;
+                return lingouClipUrl;
             }
         }
 
