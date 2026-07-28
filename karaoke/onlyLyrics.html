@@ -823,15 +823,55 @@
       }
     }
 
+    // --- Screen Wake Lock API ---
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Screen Wake Lock activo');
+        } catch (err) {
+          console.warn(`No se pudo obtener Wake Lock: ${err.message}`);
+        }
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLock) {
+        wakeLock.release()
+          .then(() => {
+            wakeLock = null;
+            console.log('Screen Wake Lock liberado');
+          })
+          .catch(err => {
+            console.error(`Error al liberar Wake Lock: ${err.message}`);
+          });
+      }
+    }
+
     document.addEventListener('fullscreenchange', () => {
       const icon = fullscreenBtn.querySelector('svg');
       const text = fullscreenBtn.querySelector('span');
       if (document.fullscreenElement) {
         text.textContent = 'Salir pantalla completa';
         icon.innerHTML = '<path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+        
+        // Bloquear suspensión del teléfono en pantalla completa
+        requestWakeLock();
       } else {
         text.textContent = 'Pantalla completa';
         icon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+        
+        // Permitir suspensión del teléfono al salir
+        releaseWakeLock();
+      }
+    });
+
+    // Re-adquirir Wake Lock si la pestaña vuelve a ser visible y sigue en pantalla completa
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && document.fullscreenElement) {
+        requestWakeLock();
       }
     });
 
