@@ -53,19 +53,50 @@
             gap: 10px;
         }
 
-        .search-input-group input {
+        .search-input-wrapper {
+            position: relative;
             flex: 1;
-            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
         }
 
-        .search-input-group input:focus {
+        .search-input-wrapper input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-clear-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            color: #aaa;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, background-color 0.2s;
+            width: 24px;
+            height: 24px;
+            z-index: 5;
+        }
+
+        .search-clear-btn:hover {
+            color: #666;
+            background-color: #f0f0f0;
         }
 
         .search-btn {
@@ -110,6 +141,57 @@
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-options {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .history-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #444;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+        }
+
+        .history-checkbox-label input {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+
+        .played-load-more-btn {
+            display: block;
+            margin: 20px auto 0 auto;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .played-load-more-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+        }
+
+        .played-load-more-btn:active {
+            transform: translateY(0);
         }
 
         .loading {
@@ -501,9 +583,23 @@
 
             .search-section {
                 flex-direction: column;
+                padding: 15px;
             }
 
             .search-input-group {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .search-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .open-mode-select {
+                width: 100%;
                 min-width: auto;
             }
 
@@ -519,6 +615,19 @@
             .song-title {
                 font-size: 0.9em;
             }
+
+            .played-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .played-card-info {
+                padding: 12px;
+            }
+
+            .played-card-title {
+                font-size: 0.8em;
+            }
         }
     </style>
 </head>
@@ -531,20 +640,29 @@
 
         <div class="search-section">
             <div class="search-input-group">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Busca por artista, canción, palabra clave..."
-                    autocomplete="off"
-                >
+                <div class="search-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Busca por artista, canción, palabra clave..."
+                        autocomplete="off"
+                    >
+                    <button class="search-clear-btn" id="searchClearBtn" aria-label="Limpiar búsqueda">✕</button>
+                </div>
                 <button class="search-btn" id="searchBtn">Buscar</button>
             </div>
-            <select class="open-mode-select" id="openMode">
-                <option value="youtube">▶ YouTube</option>
-                <option value="player">🎤 Player local</option>
-                <option value="onlylyrics">📖 Solo Letra</option>
-                <option value="lingouClip">🎵 LingouClip</option>
-            </select>
+            <div class="search-options">
+                <select class="open-mode-select" id="openMode">
+                    <option value="youtube">▶ YouTube</option>
+                    <option value="player">🎤 Player local</option>
+                    <option value="onlylyrics">📖 Solo Letra</option>
+                    <option value="lingouClip">🎵 LingouClip</option>
+                </select>
+                <label class="history-checkbox-label">
+                    <input type="checkbox" id="saveHistory" checked>
+                    <span>Guardar histórico</span>
+                </label>
+            </div>
         </div>
 
         <div class="recent-section" id="recentSection">
@@ -579,10 +697,12 @@
         const STORAGE_KEY  = 'mykaraoke_recent_searches';
         const PLAYED_KEY   = 'mykaraoke_played_songs';
         const OPENMODE_KEY = 'mykaraoke_open_mode';
+        const SAVE_HISTORY_KEY = 'mykaraoke_save_history';
         const MAX_RECENT   = 15;
-        const MAX_PLAYED   = 15;
+        const MAX_PLAYED   = 24;
 
         const searchInput  = document.getElementById('searchInput');
+        const searchClearBtn = document.getElementById('searchClearBtn');
         const searchBtn    = document.getElementById('searchBtn');
         const grid         = document.getElementById('grid');
         const loading      = document.getElementById('loading');
@@ -594,10 +714,27 @@
         const playedSection = document.getElementById('playedSection');
         const playedGrid   = document.getElementById('playedGrid');
 
+        let playedLimit = 8;
+
         // El borrado directo se ha trasladado a gestionjugadas.html
 
         document.getElementById('openMode').addEventListener('change', (e) => {
             localStorage.setItem(OPENMODE_KEY, e.target.value);
+        });
+
+        // --- Search Clear Button logic ---
+        searchInput.addEventListener('input', () => {
+            if (searchInput.value.trim().length > 0) {
+                searchClearBtn.style.display = 'flex';
+            } else {
+                searchClearBtn.style.display = 'none';
+            }
+        });
+
+        searchClearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchClearBtn.style.display = 'none';
+            searchInput.focus();
         });
 
         // --- Played songs (localStorage) ---
@@ -607,6 +744,7 @@
         }
 
         function registerPlayed(song) {
+            if (!document.getElementById('saveHistory').checked) return;
             let list = getPlayed();
             const idx = list.findIndex(item => item.lyrics_id === song.lyrics_id);
             if (idx !== -1) {
@@ -636,7 +774,11 @@
             }
             playedSection.classList.add('active');
             playedGrid.innerHTML = '';
-            list.forEach(song => {
+            
+            // Paginación: solo mostrar las primeras 'playedLimit' canciones
+            const visibleSongs = list.slice(0, playedLimit);
+            
+            visibleSongs.forEach(song => {
                 const card = document.createElement('div');
                 card.className = 'played-card';
                 card.innerHTML = `
@@ -653,6 +795,28 @@
                 });
                 playedGrid.appendChild(card);
             });
+
+            // Control del botón "Mostrar más"
+            let loadMoreBtn = document.getElementById('playedLoadMoreBtn');
+            if (list.length > playedLimit) {
+                if (!loadMoreBtn) {
+                    loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.id = 'playedLoadMoreBtn';
+                    loadMoreBtn.className = 'played-load-more-btn';
+                    loadMoreBtn.textContent = 'Mostrar más';
+                    loadMoreBtn.addEventListener('click', () => {
+                        playedLimit += 8;
+                        renderPlayed();
+                    });
+                    playedSection.appendChild(loadMoreBtn);
+                } else {
+                    loadMoreBtn.style.display = 'block';
+                }
+            } else {
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
         }
 
         // --- Recent searches (localStorage) ---
@@ -667,6 +831,7 @@
         }
 
         function registerSearch(query) {
+            if (!document.getElementById('saveHistory').checked) return;
             const normalized = query.trim().toLowerCase();
             let list = getRecent();
             const idx = list.findIndex(item => item.q === normalized);
@@ -696,6 +861,7 @@
                 tag.innerHTML = `${escapeHtml(item.q)} <span class="tag-count">${item.count}</span>`;
                 tag.addEventListener('click', () => {
                     searchInput.value = item.q;
+                    searchClearBtn.style.display = 'flex';
                     search();
                 });
                 recentTags.appendChild(tag);
@@ -853,6 +1019,22 @@
         window.addEventListener('load', () => {
             const savedMode = localStorage.getItem(OPENMODE_KEY);
             if (savedMode) document.getElementById('openMode').value = savedMode;
+
+            // Inicializar el checkbox de historial
+            const saveHistoryCheckbox = document.getElementById('saveHistory');
+            const savedHistoryOpt = localStorage.getItem(SAVE_HISTORY_KEY);
+            if (savedHistoryOpt !== null) {
+                saveHistoryCheckbox.checked = savedHistoryOpt === 'true';
+            }
+            saveHistoryCheckbox.addEventListener('change', (e) => {
+                localStorage.setItem(SAVE_HISTORY_KEY, e.target.checked);
+            });
+
+            // Comprobar si hay texto al cargar
+            if (searchInput.value.trim().length > 0) {
+                searchClearBtn.style.display = 'flex';
+            }
+
             renderRecent();
             renderPlayed();
             searchInput.focus();
