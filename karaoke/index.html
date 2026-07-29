@@ -715,6 +715,7 @@
         const playedGrid   = document.getElementById('playedGrid');
 
         let playedLimit = 8;
+        let recentLimit = 8;
 
         // El borrado directo se ha trasladado a gestionjugadas.html
 
@@ -844,6 +845,7 @@
             list.sort((a, b) => b.count - a.count);
             list = list.slice(0, MAX_RECENT);
             saveRecent(list);
+            recentLimit = 8; // Resetear el límite al registrar nueva búsqueda
             renderRecent();
         }
 
@@ -855,7 +857,11 @@
             }
             recentSection.classList.add('active');
             recentTags.innerHTML = '';
-            list.forEach(item => {
+            
+            // Mostrar solo los primeros 'recentLimit' elementos
+            const visibleSearches = list.slice(0, recentLimit);
+            
+            visibleSearches.forEach(item => {
                 const tag = document.createElement('span');
                 tag.className = 'recent-tag';
                 tag.innerHTML = `${escapeHtml(item.q)} <span class="tag-count">${item.count}</span>`;
@@ -866,6 +872,28 @@
                 });
                 recentTags.appendChild(tag);
             });
+
+            // Control del botón "Mostrar más"
+            let loadMoreBtn = document.getElementById('recentLoadMoreBtn');
+            if (list.length > recentLimit) {
+                if (!loadMoreBtn) {
+                    loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.id = 'recentLoadMoreBtn';
+                    loadMoreBtn.className = 'played-load-more-btn';
+                    loadMoreBtn.textContent = 'Mostrar más';
+                    loadMoreBtn.addEventListener('click', () => {
+                        recentLimit = list.length;
+                        renderRecent();
+                    });
+                    recentSection.appendChild(loadMoreBtn);
+                } else {
+                    loadMoreBtn.style.display = 'block';
+                }
+            } else {
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
         }
 
         // Permite buscar al presionar Enter
