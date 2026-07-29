@@ -391,6 +391,108 @@
       line-height: 1.4;
     }
 
+    /* ── STARTUP MODAL ── */
+    .startup-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 5, 17, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: opacity 0.3s ease;
+    }
+
+    .startup-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .startup-card {
+      background: rgba(26, 20, 44, 0.95);
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      border-radius: 20px;
+      padding: 40px 48px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(167, 139, 250, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .startup-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-active);
+    }
+
+    .startup-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: -16px;
+    }
+
+    .startup-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .startup-check-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .startup-check-label:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .startup-check-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .startup-btn {
+      background: linear-gradient(135deg, var(--accent) 0%, #c084fc 100%);
+      border: none;
+      color: #0b0813;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 4px 20px rgba(167, 139, 250, 0.35);
+      letter-spacing: 0.3px;
+    }
+
+    .startup-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(167, 139, 250, 0.5);
+    }
+
+    .startup-btn:active {
+      transform: translateY(0);
+    }
+
     /* Responsive */
     @media (max-width: 600px) {
       .song-info {
@@ -419,6 +521,27 @@
   </style>
 </head>
 <body>
+
+  <!-- STARTUP MODAL -->
+  <div id="startupModal" class="startup-modal">
+    <div class="startup-card">
+      <div>
+        <div class="startup-title">🎤 Visor de Letras</div>
+        <div class="startup-subtitle">Configura cómo quieres empezar</div>
+      </div>
+      <div class="startup-options">
+        <label class="startup-check-label">
+          <input type="checkbox" id="autoStartCheck">
+          <span>▶ Iniciar automáticamente</span>
+        </label>
+        <label class="startup-check-label">
+          <input type="checkbox" id="fullscreenCheck">
+          <span>⛶ Iniciar en pantalla completa</span>
+        </label>
+      </div>
+      <button class="startup-btn" id="startupBtn">Iniciar</button>
+    </div>
+  </div>
 
   <!-- LOADING & ERROR STATES -->
   <div id="statusOverlay" class="status-container">
@@ -494,6 +617,7 @@
 
   <script>
     const API_URL = 'https://api.lingoclip.com/lyrics/';
+    const STARTUP_PREFS_KEY = 'onlylyrics_startup_prefs';
     
     // Params
     const urlParams = new URLSearchParams(window.location.search);
@@ -501,6 +625,7 @@
 
     // State
     let songData = null;
+    let songLoaded = false;
     let lyrics = [];
     let isPlaying = false;
     let currentTime = 0; // segundos
@@ -534,6 +659,51 @@
     const nextBtn = document.getElementById('nextBtn');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const closeBtn = document.getElementById('closeBtn');
+    const startupModal = document.getElementById('startupModal');
+    const startupBtn = document.getElementById('startupBtn');
+    const autoStartCheck = document.getElementById('autoStartCheck');
+    const fullscreenCheck = document.getElementById('fullscreenCheck');
+
+    // ── STARTUP MODAL ──
+    function loadStartupPrefs() {
+      try { return JSON.parse(localStorage.getItem(STARTUP_PREFS_KEY)) || {}; }
+      catch { return {}; }
+    }
+
+    function saveStartupPrefs() {
+      localStorage.setItem(STARTUP_PREFS_KEY, JSON.stringify({
+        autoStart: autoStartCheck.checked,
+        fullscreen: fullscreenCheck.checked
+      }));
+    }
+
+    // Cargar preferencias guardadas
+    (function initStartupModal() {
+      const prefs = loadStartupPrefs();
+      autoStartCheck.checked = prefs.autoStart || false;
+      fullscreenCheck.checked = prefs.fullscreen || false;
+    })();
+
+    startupBtn.addEventListener('click', () => {
+      saveStartupPrefs();
+      startupModal.classList.add('hidden');
+
+      const doAutoStart = autoStartCheck.checked;
+      const doFullscreen = fullscreenCheck.checked;
+
+      if (doFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
+      if (songLoaded && doAutoStart) {
+        startPlayback();
+      } else if (songLoaded) {
+        // ya cargado, no autostart: no hacer nada
+      } else {
+        // Esperar a que cargue y luego aplicar autostart
+        window._pendingAutoStart = doAutoStart;
+      }
+    });
 
     // ── DATA INGESTION & PARSING ──
     async function loadSong() {
@@ -569,6 +739,13 @@
         renderLyrics();
         hideStatus();
         updateActiveLine(0, false); // Apuntar a la primera línea por defecto
+        songLoaded = true;
+
+        // Si el modal ya fue cerrado con autostart pendiente, iniciar ahora
+        if (window._pendingAutoStart) {
+          window._pendingAutoStart = false;
+          startPlayback();
+        }
       } catch (err) {
         showError(err.message);
       }
@@ -913,7 +1090,7 @@
       return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }
 
-    // Inicializar
+    // Inicializar: cargar canción en background mientras el modal está visible
     loadSong();
   </script>
 </body>
