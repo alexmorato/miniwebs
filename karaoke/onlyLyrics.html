@@ -493,6 +493,68 @@
       transform: translateY(0);
     }
 
+    /* ── END POPUP ── */
+    .end-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 5, 17, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: opacity 0.3s ease;
+    }
+
+    .end-popup-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .end-popup-card {
+      background: rgba(26, 20, 44, 0.95);
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      border-radius: 20px;
+      padding: 40px 48px;
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(167, 139, 250, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .end-popup-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-active);
+      letter-spacing: -0.5px;
+    }
+
+    .end-popup-text span {
+      color: var(--accent);
+    }
+
+    .end-popup-cancel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 28px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .end-popup-cancel:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.3);
+    }
+
     /* Responsive */
     @media (max-width: 600px) {
       .song-info {
@@ -521,6 +583,14 @@
   </style>
 </head>
 <body>
+
+  <!-- END POPUP -->
+  <div id="endPopup" class="end-popup-overlay hidden">
+    <div class="end-popup-card">
+      <div class="end-popup-text">Finalizado <span id="endCountdown">5</span></div>
+      <button class="end-popup-cancel" id="endCancelBtn">Cancelar</button>
+    </div>
+  </div>
 
   <!-- STARTUP MODAL -->
   <div id="startupModal" class="startup-modal">
@@ -865,6 +935,7 @@
       if (currentTime >= duration) {
         currentTime = duration;
         pausePlayback();
+        showEndPopup();
       }
 
       updateUI();
@@ -1050,6 +1121,32 @@
       if (document.visibilityState === 'visible' && document.fullscreenElement) {
         requestWakeLock();
       }
+    });
+
+    // ── END POPUP ──
+    const endPopup = document.getElementById('endPopup');
+    const endCountdown = document.getElementById('endCountdown');
+    const endCancelBtn = document.getElementById('endCancelBtn');
+    let endCountdownInterval = null;
+
+    function showEndPopup() {
+      let count = 5;
+      endCountdown.textContent = count;
+      endPopup.classList.remove('hidden');
+
+      endCountdownInterval = setInterval(() => {
+        count--;
+        endCountdown.textContent = count;
+        if (count <= 0) {
+          clearInterval(endCountdownInterval);
+          closePage();
+        }
+      }, 1000);
+    }
+
+    endCancelBtn.addEventListener('click', () => {
+      clearInterval(endCountdownInterval);
+      endPopup.classList.add('hidden');
     });
 
     closeBtn.addEventListener('click', closePage);
