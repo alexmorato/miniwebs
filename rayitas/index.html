@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frases Lara</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8a5c2 0%, #f7d794 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP NAV */
+    nav {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      color: #c0392b;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.95);
+      transform: scale(1.1);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    #counter {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #c0392b;
+      min-width: 80px;
+      text-align: center;
+      background: rgba(255,255,255,0.6);
+      border-radius: 20px;
+      padding: 6px 16px;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    #frase {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #2c2c54;
+      transition: opacity 0.35s ease;
+    }
+
+    #frase.fade {
+      opacity: 0;
+    }
+
+    /* POPUP OVERLAY */
+    #popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .popup {
+      background: white;
+      border-radius: 20px;
+      padding: 36px 32px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+
+    .popup h2 {
+      font-size: 1.4rem;
+      color: #2c2c54;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      color: #555;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .popup-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary {
+      background: #e84393;
+      color: white;
+    }
+
+    .btn-primary:hover { background: #c0357a; }
+
+    .btn-secondary {
+      background: #eee;
+      color: #444;
+    }
+
+    .btn-secondary:hover { background: #ddd; }
+
+    .btn:active { transform: scale(0.96); }
+
+    /* Wake lock indicator */
+    #wakelock-icon {
+      position: fixed;
+      bottom: 14px;
+      right: 16px;
+      font-size: 1.3rem;
+      opacity: 0.5;
+      display: none;
+      title: 'Pantalla activa';
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FULLSCREEN POPUP -->
+  <div id="popup-overlay">
+    <div class="popup">
+      <h2>🌟 Frases de Lara</h2>
+      <p>¿Quieres ver la app en pantalla completa?<br>La pantalla permanecerá activa mientras la usas.</p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-yes">Sí, pantalla completa</button>
+        <button class="btn btn-secondary" id="btn-no">No, gracias</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP NAV -->
+  <nav>
+    <button class="nav-btn" id="btn-prev" title="Anterior">&#8592;</button>
+    <span id="counter">1 / 1</span>
+    <button class="nav-btn" id="btn-next" title="Siguiente">&#8594;</button>
+    <button class="nav-btn" id="btn-font-down" title="Reducir letra" style="font-size:1rem;font-weight:700;">A&#8315;</button>
+    <button class="nav-btn" id="btn-font-up" title="Agrandar letra" style="font-size:1rem;font-weight:700;">A&#8314;</button>
+  </nav>
+
+  <!-- PHRASE CARD -->
+  <main>
+    <div class="card">
+      <p id="frase">Cargando...</p>
+    </div>
+  </main>
+
+  <span id="wakelock-icon" title="Pantalla activa">🔆</span>
+
+  <script>
+    let frases = [];
+    let currentIndex = 0;
+    let wakeLock = null;
+    let fontSize = 1.4; // rem
+
+    // --- Load JSON ---
+    async function loadFrases() {
+      try {
+        const res = await fetch('frases_lara.json');
+        const data = await res.json();
+        frases = data.frases;
+        currentIndex = Math.floor(Math.random() * frases.length);
+        renderFrase();
+      } catch (e) {
+        document.getElementById('frase').textContent = 'Error al cargar las frases.';
+      }
+    }
+
+    // --- Render ---
+    function renderFrase(direction = 0) {
+      const el = document.getElementById('frase');
+      el.classList.add('fade');
+      setTimeout(() => {
+        el.textContent = frases[currentIndex];
+        document.getElementById('counter').textContent = `${currentIndex + 1} / ${frases.length}`;
+        el.classList.remove('fade');
+      }, 180);
+    }
+
+    // --- Navigation ---
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      currentIndex = (currentIndex - 1 + frases.length) % frases.length;
+      renderFrase(-1);
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      currentIndex = (currentIndex + 1) % frases.length;
+      renderFrase(1);
+    });
+
+    // --- Font size ---
+    document.getElementById('btn-font-up').addEventListener('click', () => {
+      fontSize = Math.min(fontSize + 0.2, 4);
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+    });
+
+    document.getElementById('btn-font-down').addEventListener('click', () => {
+      fontSize = Math.max(fontSize - 0.2, 0.6);
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+    });
+
+    // Swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        if (dx < 0) document.getElementById('btn-next').click();
+        else document.getElementById('btn-prev').click();
+      }
+    }, { passive: true });
+
+    // --- Wake Lock ---
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          document.getElementById('wakelock-icon').style.display = 'inline';
+          wakeLock.addEventListener('release', () => {
+            document.getElementById('wakelock-icon').style.display = 'none';
+          });
+        } catch (err) {
+          console.warn('Wake lock no disponible:', err);
+        }
+      }
+    }
+
+    // Re-acquire wake lock when page becomes visible again
+    document.addEventListener('visibilitychange', async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    });
+
+    // --- Fullscreen popup ---
+    document.getElementById('btn-yes').addEventListener('click', async () => {
+      document.getElementById('popup-overlay').style.display = 'none';
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.warn('Fullscreen no disponible:', e);
+      }
+      await requestWakeLock();
+    });
+
+    document.getElementById('btn-no').addEventListener('click', () => {
+      document.getElementById('popup-overlay').style.display = 'none';
+    });
+
+    // --- Init ---
+    loadFrases();
+  </script>
+</body>
+</html>
