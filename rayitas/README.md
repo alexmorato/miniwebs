@@ -210,7 +210,7 @@ Estas claves estan centralizadas en `ls.js`:
 
 ## Apertura local
 
-Para usar correctamente la carga de JSON, conviene abrir la carpeta con un servidor local simple en vez de abrir el HTML directamente con `file://`.
+Para usar correctamente la carga de JSON, conviene abrir la carpeta con un servidor local simple en vez de abrir el HTML directamente con `file://`. 
 
 Ejemplo con Python:
 
