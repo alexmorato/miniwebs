@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Rayitas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f1f2f6 0%, #dfe4ea 100%);
+      color: #2f3542;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .panel {
+      width: min(680px, 100%);
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      padding: 26px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      border: 1px solid #e6e8ec;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .row label {
+      font-weight: 600;
+    }
+
+    .status {
+      font-size: 0.95rem;
+      color: #57606f;
+      margin-bottom: 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    a.button-link {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    #save-btn {
+      background: #2ed573;
+      color: #1e272e;
+      font-weight: 700;
+    }
+
+    a.button-link {
+      background: #3742fa;
+      color: #ffffff;
+    }
+
+    #toast {
+      min-height: 24px;
+      margin-top: 12px;
+      color: #2f9e44;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <section class="panel">
+    <h1>Configuracion de admin</h1>
+
+    <p class="status" id="status-text">Cargando...</p>
+
+    <div class="row">
+      <label for="show-font-controls">Mostrar botones A+ / A- en index</label>
+      <input type="checkbox" id="show-font-controls" />
+    </div>
+
+    <div class="row">
+      <label>Tamano de letra guardado</label>
+      <strong id="font-size-value">--</strong>
+    </div>
+
+    <div class="actions">
+      <button id="save-btn" type="button">Guardar</button>
+      <a class="button-link" href="index.html">Ir a frases</a>
+    </div>
+
+    <p id="toast"></p>
+  </section>
+
+  <script src="ls.js"></script>
+  <script>
+    const checkbox = document.getElementById('show-font-controls');
+    const statusText = document.getElementById('status-text');
+    const saveBtn = document.getElementById('save-btn');
+    const toast = document.getElementById('toast');
+    const fontSizeValue = document.getElementById('font-size-value');
+
+    function refreshStatus() {
+      const enabled = LS.getBool(LS_KEYS.showFontControls, true);
+      const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
+      checkbox.checked = enabled;
+      fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
+      statusText.textContent = enabled
+        ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
+        : 'Ahora mismo: los botones A+ / A- NO se muestran en index.';
+    }
+
+    saveBtn.addEventListener('click', () => {
+      LS.setBool(LS_KEYS.showFontControls, checkbox.checked);
+      refreshStatus();
+      toast.textContent = 'Configuracion guardada en localStorage.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1600);
+    });
+
+    refreshStatus();
+  </script>
+</body>
+</html>

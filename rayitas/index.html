@@ -175,7 +175,6 @@
       font-size: 1.3rem;
       opacity: 0.5;
       display: none;
-      title: 'Pantalla activa';
     }
   </style>
 </head>
@@ -211,11 +210,13 @@
 
   <span id="wakelock-icon" title="Pantalla activa">🔆</span>
 
+  <script src="ls.js"></script>
   <script>
+    const DEFAULT_FONT_SIZE = 1.4;
     let frases = [];
     let currentIndex = 0;
     let wakeLock = null;
-    let fontSize = 1.4; // rem
+    let fontSize = DEFAULT_FONT_SIZE;
 
     // --- Load JSON ---
     async function loadFrases() {
@@ -257,13 +258,29 @@
     // --- Font size ---
     document.getElementById('btn-font-up').addEventListener('click', () => {
       fontSize = Math.min(fontSize + 0.2, 4);
-      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+      applyFontSize();
     });
 
     document.getElementById('btn-font-down').addEventListener('click', () => {
       fontSize = Math.max(fontSize - 0.2, 0.6);
-      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+      applyFontSize();
     });
+
+    function applyFontSize() {
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+      LS.setNumber(LS_KEYS.fontSizeRem, fontSize);
+    }
+
+    function restoreFontSize() {
+      fontSize = LS.getNumber(LS_KEYS.fontSizeRem, DEFAULT_FONT_SIZE);
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+    }
+
+    function applyFontControlVisibility() {
+      const showControls = LS.getBool(LS_KEYS.showFontControls, true);
+      document.getElementById('btn-font-up').style.display = showControls ? 'flex' : 'none';
+      document.getElementById('btn-font-down').style.display = showControls ? 'flex' : 'none';
+    }
 
     // Swipe support
     let touchStartX = 0;
@@ -314,6 +331,8 @@
     });
 
     // --- Init ---
+    applyFontControlVisibility();
+    restoreFontSize();
     loadFrases();
   </script>
 </body>
