@@ -222,4 +222,4 @@ python3 -m http.server 8000
 Luego abrir en el navegador:
 
 - `http://localhost:8000/admin.html`
-- `http://localhost:8000/index.html`
+- `http://localhost:8000/index.html` 
