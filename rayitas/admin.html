@@ -63,6 +63,36 @@
       flex-wrap: wrap;
     }
 
+    .column-row {
+      display: block;
+    }
+
+    .column-row label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #progress-summary {
+      font-weight: 700;
+      color: #57606f;
+      margin-bottom: 10px;
+    }
+
+    #completed-phrases-list {
+      margin-left: 18px;
+      color: #2f3542;
+    }
+
+    #completed-phrases-list li {
+      margin-bottom: 8px;
+    }
+
+    #reset-progress-btn {
+      background: #ff6b81;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
     button,
     a.button-link {
       border: none;
@@ -127,9 +157,21 @@
       </select>
     </div>
 
+    <div class="row">
+      <label for="session-phrase-count">Cuantas frases por sesion</label>
+      <input id="session-phrase-count" type="number" min="1" step="1" value="4" />
+    </div>
+
+    <div class="row column-row">
+      <label>Frases realizadas de la nina activa</label>
+      <p id="progress-summary">Cargando progreso...</p>
+      <ol id="completed-phrases-list"></ol>
+    </div>
+
     <div class="actions">
       <button id="save-btn" type="button">Guardar</button>
-      <a class="button-link" href="index.html">Ir a frases</a>
+      <button id="reset-progress-btn" type="button">Resetear progreso</button>
+      <a class="button-link" id="start-session-link" href="index.html?count=4">Ir a frases</a>
     </div>
 
     <p id="toast"></p>
@@ -145,17 +187,34 @@
     const girlsCount = document.getElementById('girls-count');
     const activeGirlNameSelect = document.getElementById('active-girl-name');
     const controlModeSelect = document.getElementById('control-mode');
+    const sessionPhraseCountInput = document.getElementById('session-phrase-count');
+    const startSessionLink = document.getElementById('start-session-link');
+    const progressSummary = document.getElementById('progress-summary');
+    const completedPhrasesList = document.getElementById('completed-phrases-list');
+    const resetProgressBtn = document.getElementById('reset-progress-btn');
+    let phraseGroups = {};
 
     function refreshStatus() {
       const enabled = LS.getBool(LS_KEYS.showFontControls, true);
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
       const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
+      const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
       checkbox.checked = enabled;
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
       controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
+      sessionPhraseCountInput.value = String(savedSessionPhraseCount);
+      updateStartSessionLink();
       statusText.textContent = enabled
         ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
         : 'Ahora mismo: los botones A+ / A- NO se muestran en index.';
+    }
+
+    function getSessionPhraseCountValue() {
+      return Math.max(1, Math.floor(Number(sessionPhraseCountInput.value) || 1));
+    }
+
+    function updateStartSessionLink() {
+      startSessionLink.href = 'index.html?count=' + getSessionPhraseCountValue();
     }
 
     function getPhraseGroups(data) {
@@ -174,8 +233,8 @@
       try {
         const response = await fetch('frases_lara.json');
         const data = await response.json();
-        const groups = getPhraseGroups(data);
-        const names = Object.keys(groups);
+        phraseGroups = getPhraseGroups(data);
+        const names = Object.keys(phraseGroups);
         const savedName = LS.getValue(LS_KEYS.activeGirlName, names[0] || '');
 
         activeGirlNameSelect.innerHTML = '';
@@ -192,11 +251,42 @@
         if (names.length > 0 && !names.includes(savedName)) {
           activeGirlNameSelect.value = names[0];
         }
+
+        renderCompletedPhrases();
       } catch (error) {
         girlsCount.textContent = 'Error';
         activeGirlNameSelect.innerHTML = '<option value="">No se pudo cargar</option>';
         activeGirlNameSelect.disabled = true;
+        progressSummary.textContent = 'No se pudo cargar el progreso.';
       }
+    }
+
+    function getProgressState() {
+      return LS.getValue(LS_KEYS.phraseProgress, {});
+    }
+
+    function renderCompletedPhrases() {
+      const activeGirlName = activeGirlNameSelect.value;
+      const progressState = getProgressState();
+      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], currentIndex: null };
+      const completedIndexes = Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [];
+      const phrases = phraseGroups[activeGirlName] || [];
+
+      completedPhrasesList.innerHTML = '';
+      progressSummary.textContent = completedIndexes.length + ' de ' + phrases.length + ' frases realizadas.';
+
+      if (completedIndexes.length === 0) {
+        const item = document.createElement('li');
+        item.textContent = 'Todavia no hay frases realizadas.';
+        completedPhrasesList.appendChild(item);
+        return;
+      }
+
+      completedIndexes.forEach((index) => {
+        const item = document.createElement('li');
+        item.textContent = phrases[index] || 'Frase #' + (index + 1);
+        completedPhrasesList.appendChild(item);
+      });
     }
 
     saveBtn.addEventListener('click', () => {
@@ -205,11 +295,30 @@
         LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
       }
       LS.setValue(LS_KEYS.controlMode, controlModeSelect.value);
+      LS.setNumber(LS_KEYS.sessionPhraseCount, getSessionPhraseCountValue());
+      updateStartSessionLink();
       refreshStatus();
       toast.textContent = 'Configuracion guardada en localStorage.';
       setTimeout(() => {
         toast.textContent = '';
       }, 1600);
+    });
+
+    sessionPhraseCountInput.addEventListener('input', () => {
+      updateStartSessionLink();
+    });
+
+    activeGirlNameSelect.addEventListener('change', () => {
+      renderCompletedPhrases();
+    });
+
+    resetProgressBtn.addEventListener('click', () => {
+      LS.setValue(LS_KEYS.phraseProgress, {});
+      renderCompletedPhrases();
+      toast.textContent = 'Progreso reseteado. Se vuelve a empezar con todas las frases.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1800);
     });
 
     refreshStatus();

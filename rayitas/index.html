@@ -250,6 +250,21 @@
       font-weight: 600;
     }
 
+    #completion-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 120;
+      padding: 20px;
+    }
+
+    #completion-popup-overlay.open {
+      display: flex;
+    }
+
     /* Wake lock indicator */
     #wakelock-icon {
       position: fixed;
@@ -305,6 +320,16 @@
     </div>
   </div>
 
+  <div id="completion-popup-overlay">
+    <div class="popup">
+      <h2>Felicidades</h2>
+      <p>Has completado todas las frases de esta sesion.</p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-completion-close">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <span id="wakelock-icon" title="Pantalla activa">🔆</span>
 
   <script src="ls.js"></script>
@@ -313,13 +338,41 @@
     const CONTROL_MODE_NAVIGATION = 'navigation';
     const CONTROL_MODE_DONE = 'done';
     let frases = [];
+    let sessionPhraseIndexes = [];
     let preguntas = [];
     let currentIndex = 0;
     let activeGirlName = '';
     let controlMode = CONTROL_MODE_NAVIGATION;
     let wakeLock = null;
     let fontSize = DEFAULT_FONT_SIZE;
+    let sessionTargetCount = null;
+    let sessionCompletedCount = 0;
     const selectedQuestions = new Set();
+
+    function getProgressState() {
+      return LS.getValue(LS_KEYS.phraseProgress, {});
+    }
+
+    function getGirlProgress() {
+      const progressState = getProgressState();
+      return progressState[activeGirlName] || { completedIndexes: [], currentIndex: null };
+    }
+
+    function setGirlProgress(nextGirlProgress) {
+      const progressState = getProgressState();
+      progressState[activeGirlName] = nextGirlProgress;
+      LS.setValue(LS_KEYS.phraseProgress, progressState);
+    }
+
+    function getRequestedSessionCount() {
+      const url = new URL(window.location.href);
+      const paramCount = Number(url.searchParams.get('count'));
+      if (Number.isFinite(paramCount) && paramCount > 0) {
+        return Math.floor(paramCount);
+      }
+
+      return Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
+    }
 
     // --- Load JSON ---
     async function loadFrases() {
@@ -347,7 +400,17 @@
           throw new Error('La nina activa no tiene frases.');
         }
 
-        currentIndex = Math.floor(Math.random() * frases.length);
+        prepareSession();
+
+        const savedProgress = getGirlProgress();
+        if (sessionPhraseIndexes.length > 0) {
+          const savedIndexIsInSession = sessionPhraseIndexes.includes(savedProgress.currentIndex);
+          currentIndex = savedIndexIsInSession ? savedProgress.currentIndex : sessionPhraseIndexes[0];
+        } else if (Number.isInteger(savedProgress.currentIndex) && savedProgress.currentIndex >= 0 && savedProgress.currentIndex < frases.length) {
+          currentIndex = savedProgress.currentIndex;
+        } else {
+          currentIndex = Math.floor(Math.random() * frases.length);
+        }
         renderFrase();
       } catch (e) {
         document.getElementById('frase').textContent = 'Error al cargar las frases.';
@@ -383,8 +446,31 @@
       }
     }
 
+    function prepareSession() {
+      const requestedCount = getRequestedSessionCount();
+      const completedIndexes = getGirlProgress().completedIndexes || [];
+      const pendingIndexes = frases
+        .map((_, index) => index)
+        .filter((index) => !completedIndexes.includes(index));
+      const sourceIndexes = pendingIndexes.length > 0 ? pendingIndexes : frases.map((_, index) => index);
+
+      sessionTargetCount = Math.min(requestedCount, sourceIndexes.length);
+      sessionPhraseIndexes = sourceIndexes.slice(0, sessionTargetCount);
+      sessionCompletedCount = 0;
+    }
+
     function getNextIndex() {
-      return (currentIndex + 1) % frases.length;
+      if (sessionPhraseIndexes.length === 0) {
+        return (currentIndex + 1) % frases.length;
+      }
+
+      const currentSessionPosition = sessionPhraseIndexes.indexOf(currentIndex);
+      if (currentSessionPosition === -1) {
+        return sessionPhraseIndexes[0];
+      }
+
+      const nextSessionPosition = (currentSessionPosition + 1) % sessionPhraseIndexes.length;
+      return sessionPhraseIndexes[nextSessionPosition];
     }
 
     // --- Render ---
@@ -393,9 +479,52 @@
       el.classList.add('fade');
       setTimeout(() => {
         el.textContent = frases[currentIndex];
-        document.getElementById('counter').textContent = `${currentIndex + 1} / ${frases.length}`;
+        if (sessionPhraseIndexes.length > 0) {
+          const sessionPosition = sessionPhraseIndexes.indexOf(currentIndex);
+          document.getElementById('counter').textContent = `${sessionPosition + 1} / ${sessionPhraseIndexes.length}`;
+        } else {
+          document.getElementById('counter').textContent = `${currentIndex + 1} / ${frases.length}`;
+        }
+        persistCurrentIndex();
         el.classList.remove('fade');
       }, 180);
+    }
+
+    function persistCurrentIndex() {
+      const girlProgress = getGirlProgress();
+      setGirlProgress({
+        completedIndexes: Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [],
+        currentIndex
+      });
+    }
+
+    function markCurrentPhraseCompleted() {
+      const girlProgress = getGirlProgress();
+      const completedIndexes = Array.isArray(girlProgress.completedIndexes)
+        ? [...girlProgress.completedIndexes]
+        : [];
+
+      if (!completedIndexes.includes(currentIndex)) {
+        completedIndexes.push(currentIndex);
+        completedIndexes.sort((a, b) => a - b);
+      }
+
+      setGirlProgress({
+        completedIndexes,
+        currentIndex
+      });
+
+      if (sessionPhraseIndexes.includes(currentIndex)) {
+        sessionCompletedCount += 1;
+      }
+    }
+
+    function isSessionCompleted() {
+      return sessionPhraseIndexes.length > 0 && sessionCompletedCount >= sessionPhraseIndexes.length;
+    }
+
+    function showCompletionPopup() {
+      document.getElementById('completion-popup-overlay').classList.add('open');
     }
 
     // --- Navigation ---
@@ -432,10 +561,21 @@
       }
 
       document.getElementById('question-feedback').textContent = '';
+      markCurrentPhraseCompleted();
       selectedQuestions.clear();
       document.getElementById('control-popup-overlay').classList.remove('open');
+
+      if (isSessionCompleted()) {
+        showCompletionPopup();
+        return;
+      }
+
       currentIndex = getNextIndex();
       renderFrase(1);
+    });
+
+    document.getElementById('btn-completion-close').addEventListener('click', () => {
+      document.getElementById('completion-popup-overlay').classList.remove('open');
     });
 
     function renderQuestionButtons() {

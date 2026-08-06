@@ -3,7 +3,9 @@
     showFontControls: 'rayitas.showFontControls',
     fontSizeRem: 'rayitas.fontSizeRem',
     activeGirlName: 'rayitas.activeGirlName',
-    controlMode: 'rayitas.controlMode'
+    controlMode: 'rayitas.controlMode',
+    phraseProgress: 'rayitas.phraseProgress',
+    sessionPhraseCount: 'rayitas.sessionPhraseCount'
   };
 
   function setValue(key, value) {

@@ -10,7 +10,7 @@
     ],
     "Naia": [
       { "texto": "Somriure", "tipo": "positivo" },
-      { "texto": "Jugar amb carinyo", "tipo": "positivo" },
+      { "texto": "Jugar tranquila", "tipo": "positivo" },
       { "texto": "Compartir", "tipo": "positivo" },
       { "texto": "Cridar", "tipo": "negativo" },
       { "texto": "Pegar", "tipo": "negativo" },
