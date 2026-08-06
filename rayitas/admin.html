@@ -135,6 +135,11 @@
     </div>
 
     <div class="row">
+      <label for="force-phrase-uppercase">Forzar frase en mayusculas</label>
+      <input type="checkbox" id="force-phrase-uppercase" />
+    </div>
+
+    <div class="row">
       <label>Tamano de letra guardado</label>
       <strong id="font-size-value">--</strong>
     </div>
@@ -180,6 +185,7 @@
   <script src="ls.js"></script>
   <script>
     const checkbox = document.getElementById('show-font-controls');
+    const forcePhraseUppercaseCheckbox = document.getElementById('force-phrase-uppercase');
     const statusText = document.getElementById('status-text');
     const saveBtn = document.getElementById('save-btn');
     const toast = document.getElementById('toast');
@@ -196,10 +202,12 @@
 
     function refreshStatus() {
       const enabled = LS.getBool(LS_KEYS.showFontControls, true);
+      const forcePhraseUppercase = LS.getBool(LS_KEYS.forcePhraseUppercase, false);
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
       const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
       const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
       checkbox.checked = enabled;
+      forcePhraseUppercaseCheckbox.checked = forcePhraseUppercase;
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
       controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
       sessionPhraseCountInput.value = String(savedSessionPhraseCount);
@@ -291,6 +299,7 @@
 
     saveBtn.addEventListener('click', () => {
       LS.setBool(LS_KEYS.showFontControls, checkbox.checked);
+      LS.setBool(LS_KEYS.forcePhraseUppercase, forcePhraseUppercaseCheckbox.checked);
       if (activeGirlNameSelect.value) {
         LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
       }

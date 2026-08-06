@@ -490,7 +490,9 @@
       const el = document.getElementById('frase');
       el.classList.add('fade');
       setTimeout(() => {
-        el.textContent = frases[currentIndex];
+        const phraseText = frases[currentIndex] || '';
+        const shouldForceUppercase = LS.getBool(LS_KEYS.forcePhraseUppercase, false);
+        el.textContent = shouldForceUppercase ? phraseText.toUpperCase() : phraseText;
         if (sessionPhraseIndexes.length > 0) {
           const sessionPosition = sessionPhraseIndexes.indexOf(currentIndex);
           document.getElementById('counter').textContent = `${sessionPosition + 1} / ${sessionPhraseIndexes.length}`;

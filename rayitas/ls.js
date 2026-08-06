@@ -1,6 +1,7 @@
 (function () {
   const LS_KEYS = {
     showFontControls: 'rayitas.showFontControls',
+    forcePhraseUppercase: 'rayitas.forcePhraseUppercase',
     fontSizeRem: 'rayitas.fontSizeRem',
     activeGirlName: 'rayitas.activeGirlName',
     controlMode: 'rayitas.controlMode',
