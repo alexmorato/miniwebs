@@ -364,6 +364,17 @@
       LS.setValue(LS_KEYS.phraseProgress, progressState);
     }
 
+    function updateDoneButtonLabel() {
+      const doneButton = document.getElementById('btn-done');
+
+      if (sessionPhraseIndexes.length > 0) {
+        doneButton.textContent = `Hecho ${sessionCompletedCount}/${sessionPhraseIndexes.length}`;
+        return;
+      }
+
+      doneButton.textContent = 'Hecho';
+    }
+
     function getRequestedSessionCount() {
       const url = new URL(window.location.href);
       const paramCount = Number(url.searchParams.get('count'));
@@ -457,6 +468,7 @@
       sessionTargetCount = Math.min(requestedCount, sourceIndexes.length);
       sessionPhraseIndexes = sourceIndexes.slice(0, sessionTargetCount);
       sessionCompletedCount = 0;
+      updateDoneButtonLabel();
     }
 
     function getNextIndex() {
@@ -516,6 +528,7 @@
 
       if (sessionPhraseIndexes.includes(currentIndex)) {
         sessionCompletedCount += 1;
+        updateDoneButtonLabel();
       }
     }
 
