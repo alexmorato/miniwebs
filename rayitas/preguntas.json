@@ -1,0 +1,20 @@
+{
+  "ninas": {
+    "Lara": [
+      { "texto": "Hablar con respeto", "tipo": "positivo" },
+      { "texto": "Dar las gracias", "tipo": "positivo" },
+      { "texto": "Obedecer a la primera", "tipo": "positivo" },
+      { "texto": "Contestar mal", "tipo": "negativo" },
+      { "texto": "Protestar por todo", "tipo": "negativo" },
+      { "texto": "Ignorar a los demas", "tipo": "negativo" }
+    ],
+    "Naia": [
+      { "texto": "Somriure", "tipo": "positivo" },
+      { "texto": "Jugar amb carinyo", "tipo": "positivo" },
+      { "texto": "Compartir", "tipo": "positivo" },
+      { "texto": "Cridar", "tipo": "negativo" },
+      { "texto": "Pegar", "tipo": "negativo" },
+      { "texto": "Enfadar-se", "tipo": "negativo" }
+    ]
+  }
+}

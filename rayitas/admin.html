@@ -109,6 +109,24 @@
       <strong id="font-size-value">--</strong>
     </div>
 
+    <div class="row">
+      <label>Numero de ninas en el JSON</label>
+      <strong id="girls-count">--</strong>
+    </div>
+
+    <div class="row">
+      <label for="active-girl-name">Nina activa para renderizar</label>
+      <select id="active-girl-name"></select>
+    </div>
+
+    <div class="row">
+      <label for="control-mode">Modo de control en index</label>
+      <select id="control-mode">
+        <option value="navigation">Navegacion libre</option>
+        <option value="done">Boton Hecho</option>
+      </select>
+    </div>
+
     <div class="actions">
       <button id="save-btn" type="button">Guardar</button>
       <a class="button-link" href="index.html">Ir a frases</a>
@@ -124,19 +142,69 @@
     const saveBtn = document.getElementById('save-btn');
     const toast = document.getElementById('toast');
     const fontSizeValue = document.getElementById('font-size-value');
+    const girlsCount = document.getElementById('girls-count');
+    const activeGirlNameSelect = document.getElementById('active-girl-name');
+    const controlModeSelect = document.getElementById('control-mode');
 
     function refreshStatus() {
       const enabled = LS.getBool(LS_KEYS.showFontControls, true);
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
+      const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
       checkbox.checked = enabled;
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
+      controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
       statusText.textContent = enabled
         ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
         : 'Ahora mismo: los botones A+ / A- NO se muestran en index.';
     }
 
+    function getPhraseGroups(data) {
+      if (data && data.ninas && typeof data.ninas === 'object') {
+        return data.ninas;
+      }
+
+      if (data && Array.isArray(data.frases)) {
+        return { Lara: data.frases };
+      }
+
+      return {};
+    }
+
+    async function loadGirls() {
+      try {
+        const response = await fetch('frases_lara.json');
+        const data = await response.json();
+        const groups = getPhraseGroups(data);
+        const names = Object.keys(groups);
+        const savedName = LS.getValue(LS_KEYS.activeGirlName, names[0] || '');
+
+        activeGirlNameSelect.innerHTML = '';
+        girlsCount.textContent = String(names.length);
+
+        names.forEach((name) => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          option.selected = name === savedName;
+          activeGirlNameSelect.appendChild(option);
+        });
+
+        if (names.length > 0 && !names.includes(savedName)) {
+          activeGirlNameSelect.value = names[0];
+        }
+      } catch (error) {
+        girlsCount.textContent = 'Error';
+        activeGirlNameSelect.innerHTML = '<option value="">No se pudo cargar</option>';
+        activeGirlNameSelect.disabled = true;
+      }
+    }
+
     saveBtn.addEventListener('click', () => {
       LS.setBool(LS_KEYS.showFontControls, checkbox.checked);
+      if (activeGirlNameSelect.value) {
+        LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
+      }
+      LS.setValue(LS_KEYS.controlMode, controlModeSelect.value);
       refreshStatus();
       toast.textContent = 'Configuracion guardada en localStorage.';
       setTimeout(() => {
@@ -145,6 +213,7 @@
     });
 
     refreshStatus();
+    loadGirls();
   </script>
 </body>
 </html>

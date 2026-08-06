@@ -167,6 +167,89 @@
 
     .btn:active { transform: scale(0.96); }
 
+    #btn-done {
+      display: none;
+      background: #2ecc71;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    }
+
+    #btn-done:hover {
+      background: #27ae60;
+    }
+
+    #control-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 110;
+      padding: 20px;
+    }
+
+    #control-popup-overlay.open {
+      display: flex;
+    }
+
+    .question-popup {
+      max-width: 560px;
+      width: min(560px, 100%);
+    }
+
+    .question-popup p {
+      margin-bottom: 16px;
+    }
+
+    #question-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .question-btn {
+      border: 2px solid #dfe4ea;
+      background: #f8f9fb;
+      color: #2f3542;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.2s, border-color 0.2s;
+    }
+
+    .question-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .question-btn.selected-positive {
+      background: #d4efdf;
+      border-color: #27ae60;
+      color: #1e8449;
+    }
+
+    .question-btn.selected-negative {
+      background: #f9d6d5;
+      border-color: #c0392b;
+      color: #922b21;
+    }
+
+    #question-feedback {
+      min-height: 24px;
+      margin-bottom: 16px;
+      color: #c0392b;
+      font-weight: 600;
+    }
+
     /* Wake lock indicator */
     #wakelock-icon {
       position: fixed;
@@ -197,6 +280,7 @@
     <button class="nav-btn" id="btn-prev" title="Anterior">&#8592;</button>
     <span id="counter">1 / 1</span>
     <button class="nav-btn" id="btn-next" title="Siguiente">&#8594;</button>
+    <button id="btn-done" type="button">Hecho</button>
     <button class="nav-btn" id="btn-font-down" title="Reducir letra" style="font-size:1rem;font-weight:700;">A&#8315;</button>
     <button class="nav-btn" id="btn-font-up" title="Agrandar letra" style="font-size:1rem;font-weight:700;">A&#8314;</button>
   </nav>
@@ -208,27 +292,99 @@
     </div>
   </main>
 
+  <div id="control-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Antes de continuar</h2>
+      <p>Marca solo las acciones buenas que si vas a hacer.</p>
+      <div id="question-buttons"></div>
+      <p id="question-feedback"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-control-continue">Aceptar</button>
+        <button class="btn btn-secondary" id="btn-control-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
   <span id="wakelock-icon" title="Pantalla activa">🔆</span>
 
   <script src="ls.js"></script>
   <script>
     const DEFAULT_FONT_SIZE = 1.4;
+    const CONTROL_MODE_NAVIGATION = 'navigation';
+    const CONTROL_MODE_DONE = 'done';
     let frases = [];
+    let preguntas = [];
     let currentIndex = 0;
+    let activeGirlName = '';
+    let controlMode = CONTROL_MODE_NAVIGATION;
     let wakeLock = null;
     let fontSize = DEFAULT_FONT_SIZE;
+    const selectedQuestions = new Set();
 
     // --- Load JSON ---
     async function loadFrases() {
       try {
         const res = await fetch('frases_lara.json');
         const data = await res.json();
-        frases = data.frases;
+        const grupos = getPhraseGroups(data);
+        const names = Object.keys(grupos);
+
+        if (names.length === 0) {
+          throw new Error('No hay ninas configuradas.');
+        }
+
+        activeGirlName = LS.getValue(LS_KEYS.activeGirlName, names[0]);
+        if (!names.includes(activeGirlName)) {
+          activeGirlName = names[0];
+          LS.setValue(LS_KEYS.activeGirlName, activeGirlName);
+        }
+
+        frases = grupos[activeGirlName] || [];
+        updateGirlTitle();
+        await loadQuestions();
+
+        if (frases.length === 0) {
+          throw new Error('La nina activa no tiene frases.');
+        }
+
         currentIndex = Math.floor(Math.random() * frases.length);
         renderFrase();
       } catch (e) {
         document.getElementById('frase').textContent = 'Error al cargar las frases.';
       }
+    }
+
+    async function loadQuestions() {
+      try {
+        const res = await fetch('preguntas.json');
+        const data = await res.json();
+        const grupos = getPhraseGroups(data);
+        preguntas = grupos[activeGirlName] || [];
+      } catch (error) {
+        preguntas = [];
+      }
+    }
+
+    function getPhraseGroups(data) {
+      if (data && data.ninas && typeof data.ninas === 'object') {
+        return data.ninas;
+      }
+
+      if (data && Array.isArray(data.frases)) {
+        return { Lara: data.frases };
+      }
+
+      return {};
+    }
+
+    function updateGirlTitle() {
+      if (activeGirlName) {
+        document.title = 'Frases ' + activeGirlName;
+      }
+    }
+
+    function getNextIndex() {
+      return (currentIndex + 1) % frases.length;
     }
 
     // --- Render ---
@@ -251,9 +407,106 @@
 
     document.getElementById('btn-next').addEventListener('click', () => {
       if (frases.length === 0) return;
-      currentIndex = (currentIndex + 1) % frases.length;
+      currentIndex = getNextIndex();
       renderFrase(1);
     });
+
+    document.getElementById('btn-done').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      renderQuestionButtons();
+      document.getElementById('question-feedback').textContent = '';
+      document.getElementById('control-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-control-cancel').addEventListener('click', () => {
+      document.getElementById('control-popup-overlay').classList.remove('open');
+      document.getElementById('question-feedback').textContent = '';
+    });
+
+    document.getElementById('btn-control-continue').addEventListener('click', () => {
+      const validationError = getQuestionValidationError();
+
+      if (validationError) {
+        document.getElementById('question-feedback').textContent = validationError;
+        return;
+      }
+
+      document.getElementById('question-feedback').textContent = '';
+      selectedQuestions.clear();
+      document.getElementById('control-popup-overlay').classList.remove('open');
+      currentIndex = getNextIndex();
+      renderFrase(1);
+    });
+
+    function renderQuestionButtons() {
+      const container = document.getElementById('question-buttons');
+      container.innerHTML = '';
+      selectedQuestions.clear();
+
+      if (preguntas.length === 0) {
+        const fallback = document.createElement('p');
+        fallback.textContent = 'No hay preguntas configuradas para esta nina.';
+        container.appendChild(fallback);
+        return;
+      }
+
+      preguntas.forEach((pregunta, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'question-btn';
+        button.textContent = pregunta.texto;
+        button.addEventListener('click', () => {
+          if (selectedQuestions.has(index)) {
+            selectedQuestions.delete(index);
+          } else {
+            selectedQuestions.add(index);
+          }
+
+          syncQuestionButtons();
+          document.getElementById('question-feedback').textContent = '';
+        });
+        container.appendChild(button);
+      });
+
+      syncQuestionButtons();
+    }
+
+    function syncQuestionButtons() {
+      const buttons = document.querySelectorAll('.question-btn');
+      buttons.forEach((button, index) => {
+        const pregunta = preguntas[index];
+        button.classList.remove('selected-positive', 'selected-negative');
+
+        if (!selectedQuestions.has(index)) {
+          return;
+        }
+
+        if (pregunta.tipo === 'positivo') {
+          button.classList.add('selected-positive');
+        } else {
+          button.classList.add('selected-negative');
+        }
+      });
+    }
+
+    function getQuestionValidationError() {
+      for (const index of selectedQuestions) {
+        const pregunta = preguntas[index];
+        if (pregunta && pregunta.tipo === 'negativo') {
+          return 'Seguro que vas a hacer: ' + pregunta.texto;
+        }
+      }
+
+      const positiveQuestion = preguntas.find((pregunta, index) => {
+        return pregunta.tipo === 'positivo' && !selectedQuestions.has(index);
+      });
+
+      if (positiveQuestion) {
+        return 'Seguro que no vas a hacer: ' + positiveQuestion.texto;
+      }
+
+      return '';
+    }
 
     // --- Font size ---
     document.getElementById('btn-font-up').addEventListener('click', () => {
@@ -282,10 +535,23 @@
       document.getElementById('btn-font-down').style.display = showControls ? 'flex' : 'none';
     }
 
+    function applyControlMode() {
+      controlMode = LS.getValue(LS_KEYS.controlMode, CONTROL_MODE_NAVIGATION);
+      const isDoneMode = controlMode === CONTROL_MODE_DONE;
+
+      document.getElementById('btn-prev').style.display = isDoneMode ? 'none' : 'flex';
+      document.getElementById('btn-next').style.display = isDoneMode ? 'none' : 'flex';
+      document.getElementById('counter').style.display = isDoneMode ? 'none' : 'inline-block';
+      document.getElementById('btn-done').style.display = isDoneMode ? 'inline-block' : 'none';
+    }
+
     // Swipe support
     let touchStartX = 0;
     document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
     document.addEventListener('touchend', e => {
+      if (controlMode === CONTROL_MODE_DONE) {
+        return;
+      }
       const dx = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(dx) > 50) {
         if (dx < 0) document.getElementById('btn-next').click();
@@ -331,6 +597,7 @@
     });
 
     // --- Init ---
+    applyControlMode();
     applyFontControlVisibility();
     restoreFontSize();
     loadFrases();

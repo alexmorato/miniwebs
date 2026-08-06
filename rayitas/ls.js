@@ -1,7 +1,9 @@
 (function () {
   const LS_KEYS = {
     showFontControls: 'rayitas.showFontControls',
-    fontSizeRem: 'rayitas.fontSizeRem'
+    fontSizeRem: 'rayitas.fontSizeRem',
+    activeGirlName: 'rayitas.activeGirlName',
+    controlMode: 'rayitas.controlMode'
   };
 
   function setValue(key, value) {
