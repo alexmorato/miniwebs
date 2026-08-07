@@ -411,9 +411,6 @@
     <div class="popup">
       <h2>Felicidades</h2>
       <p>Has completado todas las frases de esta sesion.</p>
-      <div class="popup-buttons">
-        <button class="btn btn-primary" id="btn-completion-close">Aceptar</button>
-      </div>
     </div>
   </div>
 
@@ -449,6 +446,9 @@
     let sessionTargetCount = null;
     let sessionCompletedCount = 0;
     let revealedPhraseIndex = null;
+    let celebrationAudioCtx = null;
+    let celebrationAudioIntervalId = null;
+    let celebrationAudioStopTimeoutId = null;
     const selectedQuestions = new Set();
     let currentQuestions = [];
     let settings = {
@@ -803,10 +803,10 @@
 
     function showCompletionPopup() {
       document.getElementById('completion-popup-overlay').classList.add('open');
-      playCelebrationSound();
+      const durationMs = settings.confettiDurationSeconds * 1000;
+      playCelebrationSound(durationMs);
 
       if (typeof confetti === 'function') {
-        const durationMs = settings.confettiDurationSeconds * 1000;
         const startedAt = Date.now();
 
         const intervalId = setInterval(() => {
@@ -831,17 +831,9 @@
       }
     }
 
-    function playCelebrationSound() {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-
-      const audioCtx = new AudioCtx();
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
+    function scheduleCelebrationMelody(audioCtx, startTime) {
       const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 880.0, 1174.66];
-      let time = audioCtx.currentTime;
+      let time = startTime;
 
       notes.forEach((freq) => {
         const osc = audioCtx.createOscillator();
@@ -861,10 +853,47 @@
         osc.stop(time + 0.24);
         time += 0.14;
       });
+    }
 
-      setTimeout(() => {
-        audioCtx.close();
-      }, 2200);
+    function stopCelebrationSound() {
+      if (celebrationAudioIntervalId) {
+        clearInterval(celebrationAudioIntervalId);
+        celebrationAudioIntervalId = null;
+      }
+
+      if (celebrationAudioStopTimeoutId) {
+        clearTimeout(celebrationAudioStopTimeoutId);
+        celebrationAudioStopTimeoutId = null;
+      }
+
+      if (celebrationAudioCtx) {
+        celebrationAudioCtx.close();
+        celebrationAudioCtx = null;
+      }
+    }
+
+    function playCelebrationSound(durationMs) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+
+      stopCelebrationSound();
+
+      celebrationAudioCtx = new AudioCtx();
+      if (celebrationAudioCtx.state === 'suspended') {
+        celebrationAudioCtx.resume();
+      }
+
+      scheduleCelebrationMelody(celebrationAudioCtx, celebrationAudioCtx.currentTime);
+
+      // Re-launch melody blocks until confetti duration ends.
+      celebrationAudioIntervalId = setInterval(() => {
+        if (!celebrationAudioCtx) return;
+        scheduleCelebrationMelody(celebrationAudioCtx, celebrationAudioCtx.currentTime + 0.02);
+      }, 980);
+
+      celebrationAudioStopTimeoutId = setTimeout(() => {
+        stopCelebrationSound();
+      }, durationMs + 400);
     }
 
     // --- Navigation ---
@@ -915,10 +944,6 @@
       revealedPhraseIndex = null;
       currentIndex = getNextIndex();
       renderFrase(1);
-    });
-
-    document.getElementById('btn-completion-close').addEventListener('click', () => {
-      document.getElementById('completion-popup-overlay').classList.remove('open');
     });
 
     document.getElementById('btn-reveal-phrase').addEventListener('click', () => {
