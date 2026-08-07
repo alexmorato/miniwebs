@@ -221,6 +221,26 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.14);
     }
 
+    #btn-admin-gear {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      color: #2f3542;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    #btn-admin-gear:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+
     #btn-repeat-tts:disabled,
     #btn-done:disabled {
       opacity: 0.6;
@@ -323,6 +343,37 @@
       display: flex;
     }
 
+    #admin-access-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 140;
+      padding: 20px;
+    }
+
+    #admin-access-popup-overlay.open {
+      display: flex;
+    }
+
+    #admin-password-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dfe4ea;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    #admin-access-feedback {
+      min-height: 24px;
+      margin-bottom: 14px;
+      color: #c0392b;
+      font-weight: 600;
+    }
+
     #reveal-password-input {
       width: 100%;
       padding: 10px 12px;
@@ -361,6 +412,7 @@
   </style>
 </head>
 <body>
+  <button id="btn-admin-gear" type="button" title="Ir a admin">⚙️</button>
 
   <!-- FULLSCREEN POPUP -->
   <div id="popup-overlay">
@@ -423,6 +475,18 @@
       <div class="popup-buttons">
         <button class="btn btn-primary" id="btn-reveal-confirm">Ver frase</button>
         <button class="btn btn-secondary" id="btn-reveal-close">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-access-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Acceso a admin</h2>
+      <input id="admin-password-input" type="password" placeholder="Introduce la contrasena" />
+      <p id="admin-access-feedback"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-admin-access-confirm">Ir a admin</button>
+        <button class="btn btn-secondary" id="btn-admin-access-cancel">Cancelar</button>
       </div>
     </div>
   </div>
@@ -494,7 +558,7 @@
 
     function getGirlProgress() {
       const progressState = getProgressState();
-      return progressState[activeGirlName] || { completedIndexes: [], currentIndex: null };
+      return progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
     }
 
     function setGirlProgress(nextGirlProgress) {
@@ -783,6 +847,9 @@
       const girlProgress = getGirlProgress();
       setGirlProgress({
         completedIndexes: Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [],
+        completedDatesByIndex: girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+          ? girlProgress.completedDatesByIndex
+          : {},
         currentIndex
       });
     }
@@ -792,14 +859,19 @@
       const completedIndexes = Array.isArray(girlProgress.completedIndexes)
         ? [...girlProgress.completedIndexes]
         : [];
+      const completedDatesByIndex = girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+        ? { ...girlProgress.completedDatesByIndex }
+        : {};
 
       if (!completedIndexes.includes(currentIndex)) {
         completedIndexes.push(currentIndex);
         completedIndexes.sort((a, b) => a - b);
+        completedDatesByIndex[currentIndex] = new Date().toISOString().slice(0, 10);
       }
 
       setGirlProgress({
         completedIndexes,
+        completedDatesByIndex,
         currentIndex
       });
 
@@ -984,6 +1056,28 @@
       document.getElementById('reveal-feedback').textContent = '';
       document.getElementById('revealed-phrase-text').textContent = '';
       document.getElementById('frase').textContent = getDisplayedPhraseText();
+    });
+
+    document.getElementById('btn-admin-gear').addEventListener('click', () => {
+      document.getElementById('admin-password-input').value = '';
+      document.getElementById('admin-access-feedback').textContent = '';
+      document.getElementById('admin-access-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-admin-access-cancel').addEventListener('click', () => {
+      document.getElementById('admin-access-popup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-admin-access-confirm').addEventListener('click', () => {
+      const expectedPassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const enteredPassword = document.getElementById('admin-password-input').value;
+
+      if (enteredPassword !== expectedPassword) {
+        document.getElementById('admin-access-feedback').textContent = 'Contrasena incorrecta.';
+        return;
+      }
+
+      window.location.href = 'admin.html';
     });
 
     document.getElementById('btn-repeat-tts').addEventListener('click', () => {

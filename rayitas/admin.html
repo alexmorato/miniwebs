@@ -93,6 +93,12 @@
       font-weight: 700;
     }
 
+    #clear-completed-btn {
+      background: #ffa502;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
     button,
     a.button-link {
       border: none;
@@ -238,6 +244,7 @@
 
     <div class="actions">
       <button id="save-btn" type="button">Guardar</button>
+      <button id="clear-completed-btn" type="button">Borrar solo realizadas</button>
       <button id="reset-progress-btn" type="button">Resetear progreso</button>
       <a class="button-link" id="start-session-link" href="index.html?count=4">Ir a frases</a>
     </div>
@@ -273,6 +280,7 @@
     const startSessionLink = document.getElementById('start-session-link');
     const progressSummary = document.getElementById('progress-summary');
     const completedPhrasesList = document.getElementById('completed-phrases-list');
+    const clearCompletedBtn = document.getElementById('clear-completed-btn');
     const resetProgressBtn = document.getElementById('reset-progress-btn');
     let phraseGroups = {};
     let availableVoices = [];
@@ -460,8 +468,11 @@
     function renderCompletedPhrases() {
       const activeGirlName = activeGirlNameSelect.value;
       const progressState = getProgressState();
-      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], currentIndex: null };
+      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
       const completedIndexes = Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [];
+      const completedDatesByIndex = girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+        ? girlProgress.completedDatesByIndex
+        : {};
       const phrases = phraseGroups[activeGirlName] || [];
 
       completedPhrasesList.innerHTML = '';
@@ -476,7 +487,9 @@
 
       completedIndexes.forEach((index) => {
         const item = document.createElement('li');
-        item.textContent = phrases[index] || 'Frase #' + (index + 1);
+        const phraseText = phrases[index] || 'Frase #' + (index + 1);
+        const dateText = completedDatesByIndex[index] || 'sin fecha';
+        item.textContent = '[' + dateText + '] ' + phraseText;
         completedPhrasesList.appendChild(item);
       });
     }
@@ -544,6 +557,27 @@
 
     activeGirlNameSelect.addEventListener('change', () => {
       renderCompletedPhrases();
+    });
+
+    clearCompletedBtn.addEventListener('click', () => {
+      const activeGirlName = activeGirlNameSelect.value;
+      if (!activeGirlName) return;
+
+      const progressState = getProgressState();
+      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
+
+      progressState[activeGirlName] = {
+        completedIndexes: [],
+        completedDatesByIndex: {},
+        currentIndex: girlProgress.currentIndex ?? null
+      };
+
+      LS.setValue(LS_KEYS.phraseProgress, progressState);
+      renderCompletedPhrases();
+      toast.textContent = 'Frases realizadas borradas solo para la nina activa.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1800);
     });
 
     resetProgressBtn.addEventListener('click', () => {
