@@ -163,6 +163,54 @@
     </div>
 
     <div class="row">
+      <label for="enable-done-cooldown">Bloquear boton Hecho durante segundos</label>
+      <input type="checkbox" id="enable-done-cooldown" />
+    </div>
+
+    <div class="row">
+      <label for="done-cooldown-seconds">Segundos bloqueo boton Hecho</label>
+      <input id="done-cooldown-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
+    <div class="row">
+      <label for="question-count">Numero de preguntas por intento</label>
+      <input id="question-count" type="number" min="1" step="1" value="3" />
+    </div>
+
+    <div class="row">
+      <label for="enable-tts">Leer frase en voz alta (TTS)</label>
+      <input type="checkbox" id="enable-tts" />
+    </div>
+
+    <div class="row">
+      <label for="tts-voice-select">Voz TTS</label>
+      <select id="tts-voice-select"></select>
+    </div>
+
+    <div class="row">
+      <label for="tts-rate">Tempo TTS</label>
+      <input id="tts-rate" type="number" min="0.5" max="2" step="0.1" value="1" />
+    </div>
+
+    <div class="row">
+      <label for="tts-preview-text">Preview TTS</label>
+      <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
+        <input id="tts-preview-text" type="text" value="Esta es una prueba de voz para las frases." style="min-width:260px;padding:8px;border:1px solid #dfe4ea;border-radius:8px;" />
+        <button id="tts-preview-btn" type="button">Probar voz</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="tts-repeat-cooldown-seconds">Segundos bloqueo boton repetir voz</label>
+      <input id="tts-repeat-cooldown-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
+    <div class="row">
+      <label for="hide-phrase-with-hints">Ocultar frase (mostrar iniciales y guiones)</label>
+      <input type="checkbox" id="hide-phrase-with-hints" />
+    </div>
+
+    <div class="row">
       <label for="session-phrase-count">Cuantas frases por sesion</label>
       <input id="session-phrase-count" type="number" min="1" step="1" value="4" />
     </div>
@@ -194,23 +242,117 @@
     const activeGirlNameSelect = document.getElementById('active-girl-name');
     const controlModeSelect = document.getElementById('control-mode');
     const sessionPhraseCountInput = document.getElementById('session-phrase-count');
+    const enableDoneCooldownCheckbox = document.getElementById('enable-done-cooldown');
+    const doneCooldownSecondsInput = document.getElementById('done-cooldown-seconds');
+    const questionCountInput = document.getElementById('question-count');
+    const enableTtsCheckbox = document.getElementById('enable-tts');
+    const ttsVoiceSelect = document.getElementById('tts-voice-select');
+    const ttsRateInput = document.getElementById('tts-rate');
+    const ttsPreviewTextInput = document.getElementById('tts-preview-text');
+    const ttsPreviewBtn = document.getElementById('tts-preview-btn');
+    const ttsRepeatCooldownSecondsInput = document.getElementById('tts-repeat-cooldown-seconds');
+    const hidePhraseWithHintsCheckbox = document.getElementById('hide-phrase-with-hints');
     const startSessionLink = document.getElementById('start-session-link');
     const progressSummary = document.getElementById('progress-summary');
     const completedPhrasesList = document.getElementById('completed-phrases-list');
     const resetProgressBtn = document.getElementById('reset-progress-btn');
     let phraseGroups = {};
+    let availableVoices = [];
+
+    function formatVoiceLabel(voice) {
+      return `${voice.name} (${voice.lang})`;
+    }
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) {
+        ttsVoiceSelect.innerHTML = '<option value="">TTS no disponible</option>';
+        ttsVoiceSelect.disabled = true;
+        ttsPreviewBtn.disabled = true;
+        return;
+      }
+
+      availableVoices = window.speechSynthesis.getVoices();
+      const savedVoiceURI = LS.getValue(LS_KEYS.ttsVoiceURI, '');
+      ttsVoiceSelect.innerHTML = '';
+
+      if (availableVoices.length === 0) {
+        ttsVoiceSelect.innerHTML = '<option value="">Cargando voces...</option>';
+        return;
+      }
+
+      availableVoices.forEach((voice) => {
+        const option = document.createElement('option');
+        option.value = voice.voiceURI;
+        option.textContent = formatVoiceLabel(voice);
+        option.selected = voice.voiceURI === savedVoiceURI;
+        ttsVoiceSelect.appendChild(option);
+      });
+
+      if (savedVoiceURI && !availableVoices.some((voice) => voice.voiceURI === savedVoiceURI)) {
+        ttsVoiceSelect.selectedIndex = 0;
+      }
+    }
+
+    function getTtsRateValue() {
+      const value = Number(ttsRateInput.value);
+      if (!Number.isFinite(value)) return 1;
+      return Math.min(2, Math.max(0.5, value));
+    }
+
+    function speakPreviewText() {
+      if (!('speechSynthesis' in window)) {
+        return;
+      }
+
+      const text = ttsPreviewTextInput.value.trim() || 'Esta es una prueba de voz.';
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = getTtsRateValue();
+      const selectedURI = ttsVoiceSelect.value;
+      const selectedVoice = window.speechSynthesis
+        .getVoices()
+        .find((voice) => voice.voiceURI === selectedURI);
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      }
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
 
     function refreshStatus() {
       const enabled = LS.getBool(LS_KEYS.showFontControls, true);
       const forcePhraseUppercase = LS.getBool(LS_KEYS.forcePhraseUppercase, false);
+      const enableDoneCooldown = LS.getBool(LS_KEYS.enableDoneCooldown, false);
+      const doneCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.doneCooldownSeconds, 5)));
+      const questionCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.questionCount, 3)));
+      const enableTts = LS.getBool(LS_KEYS.enableTts, false);
+      const ttsRate = Math.min(2, Math.max(0.5, Number(LS.getNumber(LS_KEYS.ttsRate, 1))));
+      const ttsRepeatCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5)));
+      const hidePhraseWithHints = LS.getBool(LS_KEYS.hidePhraseWithHints, false);
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
       const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
       const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
       checkbox.checked = enabled;
       forcePhraseUppercaseCheckbox.checked = forcePhraseUppercase;
+      enableDoneCooldownCheckbox.checked = enableDoneCooldown;
+      doneCooldownSecondsInput.value = String(doneCooldownSeconds);
+      questionCountInput.value = String(questionCount);
+      enableTtsCheckbox.checked = enableTts;
+      ttsRateInput.value = String(ttsRate);
+      ttsRepeatCooldownSecondsInput.value = String(ttsRepeatCooldownSeconds);
+      hidePhraseWithHintsCheckbox.checked = hidePhraseWithHints && enableTts;
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
       controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
       sessionPhraseCountInput.value = String(savedSessionPhraseCount);
+      doneCooldownSecondsInput.disabled = !enableDoneCooldown;
+      ttsVoiceSelect.disabled = !enableTts || availableVoices.length === 0;
+      ttsRateInput.disabled = !enableTts;
+      ttsPreviewTextInput.disabled = !enableTts;
+      ttsPreviewBtn.disabled = !enableTts;
+      ttsRepeatCooldownSecondsInput.disabled = !enableTts;
+      hidePhraseWithHintsCheckbox.disabled = !enableTts;
       updateStartSessionLink();
       statusText.textContent = enabled
         ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
@@ -219,6 +361,18 @@
 
     function getSessionPhraseCountValue() {
       return Math.max(1, Math.floor(Number(sessionPhraseCountInput.value) || 1));
+    }
+
+    function getDoneCooldownSecondsValue() {
+      return Math.max(1, Math.floor(Number(doneCooldownSecondsInput.value) || 1));
+    }
+
+    function getQuestionCountValue() {
+      return Math.max(1, Math.floor(Number(questionCountInput.value) || 1));
+    }
+
+    function getTtsRepeatCooldownSecondsValue() {
+      return Math.max(1, Math.floor(Number(ttsRepeatCooldownSecondsInput.value) || 1));
     }
 
     function updateStartSessionLink() {
@@ -300,6 +454,14 @@
     saveBtn.addEventListener('click', () => {
       LS.setBool(LS_KEYS.showFontControls, checkbox.checked);
       LS.setBool(LS_KEYS.forcePhraseUppercase, forcePhraseUppercaseCheckbox.checked);
+      LS.setBool(LS_KEYS.enableDoneCooldown, enableDoneCooldownCheckbox.checked);
+      LS.setNumber(LS_KEYS.doneCooldownSeconds, getDoneCooldownSecondsValue());
+      LS.setNumber(LS_KEYS.questionCount, getQuestionCountValue());
+      LS.setBool(LS_KEYS.enableTts, enableTtsCheckbox.checked);
+      LS.setValue(LS_KEYS.ttsVoiceURI, ttsVoiceSelect.value || '');
+      LS.setNumber(LS_KEYS.ttsRate, getTtsRateValue());
+      LS.setNumber(LS_KEYS.ttsRepeatCooldownSeconds, getTtsRepeatCooldownSecondsValue());
+      LS.setBool(LS_KEYS.hidePhraseWithHints, enableTtsCheckbox.checked && hidePhraseWithHintsCheckbox.checked);
       if (activeGirlNameSelect.value) {
         LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
       }
@@ -317,6 +479,34 @@
       updateStartSessionLink();
     });
 
+    enableDoneCooldownCheckbox.addEventListener('change', () => {
+      doneCooldownSecondsInput.disabled = !enableDoneCooldownCheckbox.checked;
+    });
+
+    enableTtsCheckbox.addEventListener('change', () => {
+      const enabled = enableTtsCheckbox.checked;
+      ttsVoiceSelect.disabled = !enabled || availableVoices.length === 0;
+      ttsRateInput.disabled = !enabled;
+      ttsPreviewTextInput.disabled = !enabled;
+      ttsPreviewBtn.disabled = !enabled;
+      ttsRepeatCooldownSecondsInput.disabled = !enabled;
+      hidePhraseWithHintsCheckbox.disabled = !enabled;
+      if (!enabled) {
+        hidePhraseWithHintsCheckbox.checked = false;
+      }
+    });
+
+    ttsPreviewBtn.addEventListener('click', () => {
+      speakPreviewText();
+    });
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.addEventListener('voiceschanged', () => {
+        loadVoices();
+        refreshStatus();
+      });
+    }
+
     activeGirlNameSelect.addEventListener('change', () => {
       renderCompletedPhrases();
     });
@@ -330,6 +520,7 @@
       }, 1800);
     });
 
+    loadVoices();
     refreshStatus();
     loadGirls();
   </script>
