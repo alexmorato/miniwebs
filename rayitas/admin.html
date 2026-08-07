@@ -220,6 +220,11 @@
       <input id="session-phrase-count" type="number" min="1" step="1" value="4" />
     </div>
 
+    <div class="row">
+      <label for="confetti-duration-seconds">Segundos de confeti en felicitacion</label>
+      <input id="confetti-duration-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
     <div class="row column-row">
       <label>Frases realizadas de la nina activa</label>
       <p id="progress-summary">Cargando progreso...</p>
@@ -258,6 +263,7 @@
     const ttsRepeatCooldownSecondsInput = document.getElementById('tts-repeat-cooldown-seconds');
     const hidePhraseWithHintsCheckbox = document.getElementById('hide-phrase-with-hints');
     const revealPhrasePasswordInput = document.getElementById('reveal-phrase-password');
+    const confettiDurationSecondsInput = document.getElementById('confetti-duration-seconds');
     const startSessionLink = document.getElementById('start-session-link');
     const progressSummary = document.getElementById('progress-summary');
     const completedPhrasesList = document.getElementById('completed-phrases-list');
@@ -338,6 +344,7 @@
       const ttsRepeatCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5)));
       const hidePhraseWithHints = LS.getBool(LS_KEYS.hidePhraseWithHints, false);
       const revealPhrasePassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const confettiDurationSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.confettiDurationSeconds, 5)));
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
       const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
       const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
@@ -351,6 +358,7 @@
       ttsRepeatCooldownSecondsInput.value = String(ttsRepeatCooldownSeconds);
       hidePhraseWithHintsCheckbox.checked = hidePhraseWithHints && enableTts;
       revealPhrasePasswordInput.value = revealPhrasePassword;
+      confettiDurationSecondsInput.value = String(confettiDurationSeconds);
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
       controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
       sessionPhraseCountInput.value = String(savedSessionPhraseCount);
@@ -382,6 +390,10 @@
 
     function getTtsRepeatCooldownSecondsValue() {
       return Math.max(1, Math.floor(Number(ttsRepeatCooldownSecondsInput.value) || 1));
+    }
+
+    function getConfettiDurationSecondsValue() {
+      return Math.max(1, Math.floor(Number(confettiDurationSecondsInput.value) || 1));
     }
 
     function updateStartSessionLink() {
@@ -472,6 +484,7 @@
       LS.setNumber(LS_KEYS.ttsRepeatCooldownSeconds, getTtsRepeatCooldownSecondsValue());
       LS.setBool(LS_KEYS.hidePhraseWithHints, enableTtsCheckbox.checked && hidePhraseWithHintsCheckbox.checked);
       LS.setValue(LS_KEYS.revealPhrasePassword, revealPhrasePasswordInput.value);
+      LS.setNumber(LS_KEYS.confettiDurationSeconds, getConfettiDurationSecondsValue());
       if (activeGirlNameSelect.value) {
         LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
       }

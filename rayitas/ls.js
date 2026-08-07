@@ -11,6 +11,7 @@
     ttsRepeatCooldownSeconds: 'rayitas.ttsRepeatCooldownSeconds',
     hidePhraseWithHints: 'rayitas.hidePhraseWithHints',
     revealPhrasePassword: 'rayitas.revealPhrasePassword',
+    confettiDurationSeconds: 'rayitas.confettiDurationSeconds',
     fontSizeRem: 'rayitas.fontSizeRem',
     activeGirlName: 'rayitas.activeGirlName',
     controlMode: 'rayitas.controlMode',
