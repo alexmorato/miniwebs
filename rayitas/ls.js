@@ -10,6 +10,7 @@
     ttsRate: 'rayitas.ttsRate',
     ttsRepeatCooldownSeconds: 'rayitas.ttsRepeatCooldownSeconds',
     hidePhraseWithHints: 'rayitas.hidePhraseWithHints',
+    hidePhraseMaskChars: 'rayitas.hidePhraseMaskChars',
     revealPhrasePassword: 'rayitas.revealPhrasePassword',
     confettiDurationSeconds: 'rayitas.confettiDurationSeconds',
     fontSizeRem: 'rayitas.fontSizeRem',

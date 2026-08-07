@@ -461,6 +461,7 @@
       ttsRate: 1,
       ttsRepeatCooldownSeconds: 5,
       hidePhraseWithHints: false,
+      hidePhraseMaskChars: '_',
       confettiDurationSeconds: 5
     };
 
@@ -475,6 +476,7 @@
         ttsRate: Math.min(2, Math.max(0.5, Number(LS.getNumber(LS_KEYS.ttsRate, 1)))),
         ttsRepeatCooldownSeconds: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5))),
         hidePhraseWithHints: LS.getBool(LS_KEYS.hidePhraseWithHints, false),
+        hidePhraseMaskChars: LS.getValue(LS_KEYS.hidePhraseMaskChars, '_'),
         confettiDurationSeconds: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.confettiDurationSeconds, 5)))
       };
 
@@ -523,10 +525,20 @@
     }
 
     function maskPhraseWithHints(text) {
+      const maskChars = Array.from((settings.hidePhraseMaskChars || '_').replace(/\s+/g, ''));
+      const cycleChars = maskChars.length > 0 ? maskChars : ['_'];
       const tokens = text.match(/\s+|[^\s]+/g) || [];
+      let wordCounter = 0;
+
       return tokens.map((token) => {
         if (/^\s+$/u.test(token)) {
           return token;
+        }
+
+        const hasWordChars = /[\p{L}\p{N}]/u.test(token);
+        const currentMaskChar = cycleChars[wordCounter % cycleChars.length];
+        if (hasWordChars) {
+          wordCounter += 1;
         }
 
         let seenLetter = false;
@@ -540,7 +552,7 @@
             return char;
           }
 
-          return '_';
+          return currentMaskChar;
         }).join('');
       }).join('');
     }
