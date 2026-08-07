@@ -208,6 +208,19 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.14);
     }
 
+    #btn-reveal-phrase {
+      display: none;
+      background: #f39c12;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    }
+
     #btn-repeat-tts:disabled,
     #btn-done:disabled {
       opacity: 0.6;
@@ -295,6 +308,47 @@
       display: flex;
     }
 
+    #reveal-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 130;
+      padding: 20px;
+    }
+
+    #reveal-popup-overlay.open {
+      display: flex;
+    }
+
+    #reveal-password-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dfe4ea;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    #reveal-feedback,
+    #revealed-phrase-text {
+      min-height: 24px;
+      margin-bottom: 14px;
+    }
+
+    #reveal-feedback {
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    #revealed-phrase-text {
+      color: #2c2c54;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
     /* Wake lock indicator */
     #wakelock-icon {
       position: fixed;
@@ -327,6 +381,7 @@
     <button class="nav-btn" id="btn-next" title="Siguiente">&#8594;</button>
     <button id="btn-done" type="button">Hecho</button>
     <span id="done-progress">0/0</span>
+    <button id="btn-reveal-phrase" type="button">Ver frase</button>
     <button id="btn-repeat-tts" type="button">Repetir voz</button>
     <button class="nav-btn" id="btn-font-down" title="Reducir letra" style="font-size:1rem;font-weight:700;">A&#8315;</button>
     <button class="nav-btn" id="btn-font-up" title="Agrandar letra" style="font-size:1rem;font-weight:700;">A&#8314;</button>
@@ -362,6 +417,19 @@
     </div>
   </div>
 
+  <div id="reveal-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Ver frase completa</h2>
+      <input id="reveal-password-input" type="password" placeholder="Introduce la contrasena" />
+      <p id="reveal-feedback"></p>
+      <p id="revealed-phrase-text"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-reveal-confirm">Ver frase</button>
+        <button class="btn btn-secondary" id="btn-reveal-close">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <span id="wakelock-icon" title="Pantalla activa">🔆</span>
 
   <script src="ls.js"></script>
@@ -379,6 +447,7 @@
     let fontSize = DEFAULT_FONT_SIZE;
     let sessionTargetCount = null;
     let sessionCompletedCount = 0;
+    let revealedPhraseIndex = null;
     const selectedQuestions = new Set();
     let currentQuestions = [];
     let settings = {
@@ -411,6 +480,7 @@
       }
 
       document.getElementById('btn-repeat-tts').style.display = settings.enableTts ? 'inline-block' : 'none';
+      document.getElementById('btn-reveal-phrase').style.display = settings.hidePhraseWithHints ? 'inline-block' : 'none';
     }
 
     function getProgressState() {
@@ -474,10 +544,14 @@
 
     function getDisplayedPhraseText() {
       const phraseText = applyCaseToPhrase(getCurrentPhraseText());
-      if (settings.hidePhraseWithHints) {
+      if (settings.hidePhraseWithHints && revealedPhraseIndex !== currentIndex) {
         return maskPhraseWithHints(phraseText);
       }
       return phraseText;
+    }
+
+    function getFullPhraseText() {
+      return applyCaseToPhrase(getCurrentPhraseText());
     }
 
     function speakCurrentPhrase() {
@@ -731,12 +805,14 @@
     // --- Navigation ---
     document.getElementById('btn-prev').addEventListener('click', () => {
       if (frases.length === 0) return;
+      revealedPhraseIndex = null;
       currentIndex = (currentIndex - 1 + frases.length) % frases.length;
       renderFrase(-1);
     });
 
     document.getElementById('btn-next').addEventListener('click', () => {
       if (frases.length === 0) return;
+      revealedPhraseIndex = null;
       currentIndex = getNextIndex();
       renderFrase(1);
     });
@@ -771,12 +847,41 @@
         return;
       }
 
+      revealedPhraseIndex = null;
       currentIndex = getNextIndex();
       renderFrase(1);
     });
 
     document.getElementById('btn-completion-close').addEventListener('click', () => {
       document.getElementById('completion-popup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-reveal-phrase').addEventListener('click', () => {
+      document.getElementById('reveal-password-input').value = '';
+      document.getElementById('reveal-feedback').textContent = '';
+      document.getElementById('revealed-phrase-text').textContent = '';
+      document.getElementById('reveal-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-reveal-close').addEventListener('click', () => {
+      document.getElementById('reveal-popup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-reveal-confirm').addEventListener('click', () => {
+      const expectedPassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const enteredPassword = document.getElementById('reveal-password-input').value;
+
+      if (enteredPassword !== expectedPassword) {
+        document.getElementById('reveal-feedback').textContent = 'Contrasena incorrecta.';
+        document.getElementById('revealed-phrase-text').textContent = '';
+        return;
+      }
+
+      revealedPhraseIndex = currentIndex;
+      document.getElementById('reveal-popup-overlay').classList.remove('open');
+      document.getElementById('reveal-feedback').textContent = '';
+      document.getElementById('revealed-phrase-text').textContent = '';
+      document.getElementById('frase').textContent = getDisplayedPhraseText();
     });
 
     document.getElementById('btn-repeat-tts').addEventListener('click', () => {

@@ -10,6 +10,7 @@
     ttsRate: 'rayitas.ttsRate',
     ttsRepeatCooldownSeconds: 'rayitas.ttsRepeatCooldownSeconds',
     hidePhraseWithHints: 'rayitas.hidePhraseWithHints',
+    revealPhrasePassword: 'rayitas.revealPhrasePassword',
     fontSizeRem: 'rayitas.fontSizeRem',
     activeGirlName: 'rayitas.activeGirlName',
     controlMode: 'rayitas.controlMode',

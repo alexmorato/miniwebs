@@ -211,6 +211,11 @@
     </div>
 
     <div class="row">
+      <label for="reveal-phrase-password">Contrasena para ver frase oculta</label>
+      <input id="reveal-phrase-password" type="password" placeholder="Escribe una contrasena" />
+    </div>
+
+    <div class="row">
       <label for="session-phrase-count">Cuantas frases por sesion</label>
       <input id="session-phrase-count" type="number" min="1" step="1" value="4" />
     </div>
@@ -252,6 +257,7 @@
     const ttsPreviewBtn = document.getElementById('tts-preview-btn');
     const ttsRepeatCooldownSecondsInput = document.getElementById('tts-repeat-cooldown-seconds');
     const hidePhraseWithHintsCheckbox = document.getElementById('hide-phrase-with-hints');
+    const revealPhrasePasswordInput = document.getElementById('reveal-phrase-password');
     const startSessionLink = document.getElementById('start-session-link');
     const progressSummary = document.getElementById('progress-summary');
     const completedPhrasesList = document.getElementById('completed-phrases-list');
@@ -331,6 +337,7 @@
       const ttsRate = Math.min(2, Math.max(0.5, Number(LS.getNumber(LS_KEYS.ttsRate, 1))));
       const ttsRepeatCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5)));
       const hidePhraseWithHints = LS.getBool(LS_KEYS.hidePhraseWithHints, false);
+      const revealPhrasePassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
       const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
       const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
       const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
@@ -343,6 +350,7 @@
       ttsRateInput.value = String(ttsRate);
       ttsRepeatCooldownSecondsInput.value = String(ttsRepeatCooldownSeconds);
       hidePhraseWithHintsCheckbox.checked = hidePhraseWithHints && enableTts;
+      revealPhrasePasswordInput.value = revealPhrasePassword;
       fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
       controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
       sessionPhraseCountInput.value = String(savedSessionPhraseCount);
@@ -353,6 +361,7 @@
       ttsPreviewBtn.disabled = !enableTts;
       ttsRepeatCooldownSecondsInput.disabled = !enableTts;
       hidePhraseWithHintsCheckbox.disabled = !enableTts;
+      revealPhrasePasswordInput.disabled = !enableTts;
       updateStartSessionLink();
       statusText.textContent = enabled
         ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
@@ -462,6 +471,7 @@
       LS.setNumber(LS_KEYS.ttsRate, getTtsRateValue());
       LS.setNumber(LS_KEYS.ttsRepeatCooldownSeconds, getTtsRepeatCooldownSecondsValue());
       LS.setBool(LS_KEYS.hidePhraseWithHints, enableTtsCheckbox.checked && hidePhraseWithHintsCheckbox.checked);
+      LS.setValue(LS_KEYS.revealPhrasePassword, revealPhrasePasswordInput.value);
       if (activeGirlNameSelect.value) {
         LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
       }
@@ -491,6 +501,7 @@
       ttsPreviewBtn.disabled = !enabled;
       ttsRepeatCooldownSecondsInput.disabled = !enabled;
       hidePhraseWithHintsCheckbox.disabled = !enabled;
+      revealPhrasePasswordInput.disabled = !enabled;
       if (!enabled) {
         hidePhraseWithHintsCheckbox.checked = false;
       }
