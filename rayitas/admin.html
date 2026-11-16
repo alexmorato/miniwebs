@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Rayitas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f1f2f6 0%, #dfe4ea 100%);
+      color: #2f3542;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .panel {
+      width: min(680px, 100%);
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      padding: 26px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      border: 1px solid #e6e8ec;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .row label {
+      font-weight: 600;
+    }
+
+    .status {
+      font-size: 0.95rem;
+      color: #57606f;
+      margin-bottom: 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .column-row {
+      display: block;
+    }
+
+    .column-row label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #progress-summary {
+      font-weight: 700;
+      color: #57606f;
+      margin-bottom: 10px;
+    }
+
+    #completed-phrases-list {
+      margin-left: 18px;
+      color: #2f3542;
+    }
+
+    #completed-phrases-list li {
+      margin-bottom: 8px;
+    }
+
+    #reset-progress-btn {
+      background: #ff6b81;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    #clear-completed-btn {
+      background: #ffa502;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    button,
+    a.button-link {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    #save-btn {
+      background: #2ed573;
+      color: #1e272e;
+      font-weight: 700;
+    }
+
+    a.button-link {
+      background: #3742fa;
+      color: #ffffff;
+    }
+
+    #toast {
+      min-height: 24px;
+      margin-top: 12px;
+      color: #2f9e44;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <section class="panel">
+    <h1>Configuracion de admin</h1>
+
+    <p class="status" id="status-text">Cargando...</p>
+
+    <div class="row">
+      <label for="show-font-controls">Mostrar botones A+ / A- en index</label>
+      <input type="checkbox" id="show-font-controls" />
+    </div>
+
+    <div class="row">
+      <label for="force-phrase-uppercase">Forzar frase en mayusculas</label>
+      <input type="checkbox" id="force-phrase-uppercase" />
+    </div>
+
+    <div class="row">
+      <label>Tamano de letra guardado</label>
+      <strong id="font-size-value">--</strong>
+    </div>
+
+    <div class="row">
+      <label>Numero de ninas en el JSON</label>
+      <strong id="girls-count">--</strong>
+    </div>
+
+    <div class="row">
+      <label for="active-girl-name">Nina activa para renderizar</label>
+      <select id="active-girl-name"></select>
+    </div>
+
+    <div class="row">
+      <label for="control-mode">Modo de control en index</label>
+      <select id="control-mode">
+        <option value="navigation">Navegacion libre</option>
+        <option value="done">Boton Hecho</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="enable-done-cooldown">Bloquear boton Hecho durante segundos</label>
+      <input type="checkbox" id="enable-done-cooldown" />
+    </div>
+
+    <div class="row">
+      <label for="done-cooldown-seconds">Segundos bloqueo boton Hecho</label>
+      <input id="done-cooldown-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
+    <div class="row">
+      <label for="question-count">Numero de preguntas por intento</label>
+      <input id="question-count" type="number" min="1" step="1" value="3" />
+    </div>
+
+    <div class="row">
+      <label for="enable-tts">Leer frase en voz alta (TTS)</label>
+      <input type="checkbox" id="enable-tts" />
+    </div>
+
+    <div class="row">
+      <label for="tts-voice-select">Voz TTS</label>
+      <select id="tts-voice-select"></select>
+    </div>
+
+    <div class="row">
+      <label for="tts-rate">Tempo TTS</label>
+      <input id="tts-rate" type="number" min="0.5" max="2" step="0.1" value="1" />
+    </div>
+
+    <div class="row">
+      <label for="tts-preview-text">Preview TTS</label>
+      <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;">
+        <input id="tts-preview-text" type="text" value="Esta es una prueba de voz para las frases." style="min-width:260px;padding:8px;border:1px solid #dfe4ea;border-radius:8px;" />
+        <button id="tts-preview-btn" type="button">Probar voz</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="tts-repeat-cooldown-seconds">Segundos bloqueo boton repetir voz</label>
+      <input id="tts-repeat-cooldown-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
+    <div class="row">
+      <label for="hide-phrase-with-hints">Ocultar frase (mostrar iniciales y guiones)</label>
+      <input type="checkbox" id="hide-phrase-with-hints" />
+    </div>
+
+    <div class="row">
+      <label for="hide-phrase-mask-chars">Caracteres para ocultar palabras (en bucle)</label>
+      <input id="hide-phrase-mask-chars" type="text" value="_" placeholder="Ejemplo: _-*#" />
+    </div>
+
+    <div class="row">
+      <label for="reveal-phrase-password">Contrasena para ver frase oculta</label>
+      <input id="reveal-phrase-password" type="password" placeholder="Escribe una contrasena" />
+    </div>
+
+    <div class="row">
+      <label for="session-phrase-count">Cuantas frases por sesion</label>
+      <input id="session-phrase-count" type="number" min="1" step="1" value="4" />
+    </div>
+
+    <div class="row">
+      <label for="confetti-duration-seconds">Segundos de confeti en felicitacion</label>
+      <input id="confetti-duration-seconds" type="number" min="1" step="1" value="5" />
+    </div>
+
+    <div class="row column-row">
+      <label>Frases realizadas de la nina activa</label>
+      <p id="progress-summary">Cargando progreso...</p>
+      <ol id="completed-phrases-list"></ol>
+    </div>
+
+    <div class="actions">
+      <button id="save-btn" type="button">Guardar</button>
+      <button id="clear-completed-btn" type="button">Borrar solo realizadas</button>
+      <button id="reset-progress-btn" type="button">Resetear progreso</button>
+      <a class="button-link" id="start-session-link" href="index.html?count=4">Ir a frases</a>
+    </div>
+
+    <p id="toast"></p>
+  </section>
+
+  <script src="ls.js"></script>
+  <script>
+    const checkbox = document.getElementById('show-font-controls');
+    const forcePhraseUppercaseCheckbox = document.getElementById('force-phrase-uppercase');
+    const statusText = document.getElementById('status-text');
+    const saveBtn = document.getElementById('save-btn');
+    const toast = document.getElementById('toast');
+    const fontSizeValue = document.getElementById('font-size-value');
+    const girlsCount = document.getElementById('girls-count');
+    const activeGirlNameSelect = document.getElementById('active-girl-name');
+    const controlModeSelect = document.getElementById('control-mode');
+    const sessionPhraseCountInput = document.getElementById('session-phrase-count');
+    const enableDoneCooldownCheckbox = document.getElementById('enable-done-cooldown');
+    const doneCooldownSecondsInput = document.getElementById('done-cooldown-seconds');
+    const questionCountInput = document.getElementById('question-count');
+    const enableTtsCheckbox = document.getElementById('enable-tts');
+    const ttsVoiceSelect = document.getElementById('tts-voice-select');
+    const ttsRateInput = document.getElementById('tts-rate');
+    const ttsPreviewTextInput = document.getElementById('tts-preview-text');
+    const ttsPreviewBtn = document.getElementById('tts-preview-btn');
+    const ttsRepeatCooldownSecondsInput = document.getElementById('tts-repeat-cooldown-seconds');
+    const hidePhraseWithHintsCheckbox = document.getElementById('hide-phrase-with-hints');
+    const hidePhraseMaskCharsInput = document.getElementById('hide-phrase-mask-chars');
+    const revealPhrasePasswordInput = document.getElementById('reveal-phrase-password');
+    const confettiDurationSecondsInput = document.getElementById('confetti-duration-seconds');
+    const startSessionLink = document.getElementById('start-session-link');
+    const progressSummary = document.getElementById('progress-summary');
+    const completedPhrasesList = document.getElementById('completed-phrases-list');
+    const clearCompletedBtn = document.getElementById('clear-completed-btn');
+    const resetProgressBtn = document.getElementById('reset-progress-btn');
+    let phraseGroups = {};
+    let availableVoices = [];
+
+    function formatVoiceLabel(voice) {
+      return `${voice.name} (${voice.lang})`;
+    }
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) {
+        ttsVoiceSelect.innerHTML = '<option value="">TTS no disponible</option>';
+        ttsVoiceSelect.disabled = true;
+        ttsPreviewBtn.disabled = true;
+        return;
+      }
+
+      availableVoices = window.speechSynthesis.getVoices();
+      const savedVoiceURI = LS.getValue(LS_KEYS.ttsVoiceURI, '');
+      ttsVoiceSelect.innerHTML = '';
+
+      if (availableVoices.length === 0) {
+        ttsVoiceSelect.innerHTML = '<option value="">Cargando voces...</option>';
+        return;
+      }
+
+      availableVoices.forEach((voice) => {
+        const option = document.createElement('option');
+        option.value = voice.voiceURI;
+        option.textContent = formatVoiceLabel(voice);
+        option.selected = voice.voiceURI === savedVoiceURI;
+        ttsVoiceSelect.appendChild(option);
+      });
+
+      if (savedVoiceURI && !availableVoices.some((voice) => voice.voiceURI === savedVoiceURI)) {
+        ttsVoiceSelect.selectedIndex = 0;
+      }
+    }
+
+    function getTtsRateValue() {
+      const value = Number(ttsRateInput.value);
+      if (!Number.isFinite(value)) return 1;
+      return Math.min(2, Math.max(0.5, value));
+    }
+
+    function speakPreviewText() {
+      if (!('speechSynthesis' in window)) {
+        return;
+      }
+
+      const text = ttsPreviewTextInput.value.trim() || 'Esta es una prueba de voz.';
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = getTtsRateValue();
+      const selectedURI = ttsVoiceSelect.value;
+      const selectedVoice = window.speechSynthesis
+        .getVoices()
+        .find((voice) => voice.voiceURI === selectedURI);
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      }
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function refreshStatus() {
+      const enabled = LS.getBool(LS_KEYS.showFontControls, true);
+      const forcePhraseUppercase = LS.getBool(LS_KEYS.forcePhraseUppercase, false);
+      const enableDoneCooldown = LS.getBool(LS_KEYS.enableDoneCooldown, false);
+      const doneCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.doneCooldownSeconds, 5)));
+      const questionCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.questionCount, 3)));
+      const enableTts = LS.getBool(LS_KEYS.enableTts, false);
+      const ttsRate = Math.min(2, Math.max(0.5, Number(LS.getNumber(LS_KEYS.ttsRate, 1))));
+      const ttsRepeatCooldownSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5)));
+      const hidePhraseWithHints = LS.getBool(LS_KEYS.hidePhraseWithHints, false);
+      const hidePhraseMaskChars = LS.getValue(LS_KEYS.hidePhraseMaskChars, '_');
+      const revealPhrasePassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const confettiDurationSeconds = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.confettiDurationSeconds, 5)));
+      const savedFontSize = LS.getNumber(LS_KEYS.fontSizeRem, 1.4);
+      const savedControlMode = LS.getValue(LS_KEYS.controlMode, 'navigation');
+      const savedSessionPhraseCount = Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
+      checkbox.checked = enabled;
+      forcePhraseUppercaseCheckbox.checked = forcePhraseUppercase;
+      enableDoneCooldownCheckbox.checked = enableDoneCooldown;
+      doneCooldownSecondsInput.value = String(doneCooldownSeconds);
+      questionCountInput.value = String(questionCount);
+      enableTtsCheckbox.checked = enableTts;
+      ttsRateInput.value = String(ttsRate);
+      ttsRepeatCooldownSecondsInput.value = String(ttsRepeatCooldownSeconds);
+      hidePhraseWithHintsCheckbox.checked = hidePhraseWithHints && enableTts;
+      hidePhraseMaskCharsInput.value = hidePhraseMaskChars || '_';
+      revealPhrasePasswordInput.value = revealPhrasePassword;
+      confettiDurationSecondsInput.value = String(confettiDurationSeconds);
+      fontSizeValue.textContent = savedFontSize.toFixed(1) + ' rem';
+      controlModeSelect.value = savedControlMode === 'done' ? 'done' : 'navigation';
+      sessionPhraseCountInput.value = String(savedSessionPhraseCount);
+      doneCooldownSecondsInput.disabled = !enableDoneCooldown;
+      ttsVoiceSelect.disabled = !enableTts || availableVoices.length === 0;
+      ttsRateInput.disabled = !enableTts;
+      ttsPreviewTextInput.disabled = !enableTts;
+      ttsPreviewBtn.disabled = !enableTts;
+      ttsRepeatCooldownSecondsInput.disabled = !enableTts;
+      hidePhraseWithHintsCheckbox.disabled = !enableTts;
+      hidePhraseMaskCharsInput.disabled = !enableTts;
+      revealPhrasePasswordInput.disabled = !enableTts;
+      updateStartSessionLink();
+      statusText.textContent = enabled
+        ? 'Ahora mismo: los botones A+ / A- SI se muestran en index.'
+        : 'Ahora mismo: los botones A+ / A- NO se muestran en index.';
+    }
+
+    function getSessionPhraseCountValue() {
+      return Math.max(1, Math.floor(Number(sessionPhraseCountInput.value) || 1));
+    }
+
+    function getDoneCooldownSecondsValue() {
+      return Math.max(1, Math.floor(Number(doneCooldownSecondsInput.value) || 1));
+    }
+
+    function getQuestionCountValue() {
+      return Math.max(1, Math.floor(Number(questionCountInput.value) || 1));
+    }
+
+    function getTtsRepeatCooldownSecondsValue() {
+      return Math.max(1, Math.floor(Number(ttsRepeatCooldownSecondsInput.value) || 1));
+    }
+
+    function getConfettiDurationSecondsValue() {
+      return Math.max(1, Math.floor(Number(confettiDurationSecondsInput.value) || 1));
+    }
+
+    function updateStartSessionLink() {
+      startSessionLink.href = 'index.html?count=' + getSessionPhraseCountValue();
+    }
+
+    function getPhraseGroups(data) {
+      if (data && data.ninas && typeof data.ninas === 'object') {
+        return data.ninas;
+      }
+
+      if (data && Array.isArray(data.frases)) {
+        return { Lara: data.frases };
+      }
+
+      return {};
+    }
+
+    async function loadGirls() {
+      try {
+        const response = await fetch('frases_lara.json');
+        const data = await response.json();
+        phraseGroups = getPhraseGroups(data);
+        const names = Object.keys(phraseGroups);
+        const savedName = LS.getValue(LS_KEYS.activeGirlName, names[0] || '');
+
+        activeGirlNameSelect.innerHTML = '';
+        girlsCount.textContent = String(names.length);
+
+        names.forEach((name) => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          option.selected = name === savedName;
+          activeGirlNameSelect.appendChild(option);
+        });
+
+        if (names.length > 0 && !names.includes(savedName)) {
+          activeGirlNameSelect.value = names[0];
+        }
+
+        renderCompletedPhrases();
+      } catch (error) {
+        girlsCount.textContent = 'Error';
+        activeGirlNameSelect.innerHTML = '<option value="">No se pudo cargar</option>';
+        activeGirlNameSelect.disabled = true;
+        progressSummary.textContent = 'No se pudo cargar el progreso.';
+      }
+    }
+
+    function getProgressState() {
+      return LS.getValue(LS_KEYS.phraseProgress, {});
+    }
+
+    function renderCompletedPhrases() {
+      const activeGirlName = activeGirlNameSelect.value;
+      const progressState = getProgressState();
+      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
+      const completedIndexes = Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [];
+      const completedDatesByIndex = girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+        ? girlProgress.completedDatesByIndex
+        : {};
+      const phrases = phraseGroups[activeGirlName] || [];
+
+      completedPhrasesList.innerHTML = '';
+      progressSummary.textContent = completedIndexes.length + ' de ' + phrases.length + ' frases realizadas.';
+
+      if (completedIndexes.length === 0) {
+        const item = document.createElement('li');
+        item.textContent = 'Todavia no hay frases realizadas.';
+        completedPhrasesList.appendChild(item);
+        return;
+      }
+
+      completedIndexes.forEach((index) => {
+        const item = document.createElement('li');
+        const phraseText = phrases[index] || 'Frase #' + (index + 1);
+        const dateText = completedDatesByIndex[index] || 'sin fecha';
+        item.textContent = '[' + dateText + '] ' + phraseText;
+        completedPhrasesList.appendChild(item);
+      });
+    }
+
+    saveBtn.addEventListener('click', () => {
+      LS.setBool(LS_KEYS.showFontControls, checkbox.checked);
+      LS.setBool(LS_KEYS.forcePhraseUppercase, forcePhraseUppercaseCheckbox.checked);
+      LS.setBool(LS_KEYS.enableDoneCooldown, enableDoneCooldownCheckbox.checked);
+      LS.setNumber(LS_KEYS.doneCooldownSeconds, getDoneCooldownSecondsValue());
+      LS.setNumber(LS_KEYS.questionCount, getQuestionCountValue());
+      LS.setBool(LS_KEYS.enableTts, enableTtsCheckbox.checked);
+      LS.setValue(LS_KEYS.ttsVoiceURI, ttsVoiceSelect.value || '');
+      LS.setNumber(LS_KEYS.ttsRate, getTtsRateValue());
+      LS.setNumber(LS_KEYS.ttsRepeatCooldownSeconds, getTtsRepeatCooldownSecondsValue());
+      LS.setBool(LS_KEYS.hidePhraseWithHints, enableTtsCheckbox.checked && hidePhraseWithHintsCheckbox.checked);
+      LS.setValue(LS_KEYS.hidePhraseMaskChars, hidePhraseMaskCharsInput.value || '_');
+      LS.setValue(LS_KEYS.revealPhrasePassword, revealPhrasePasswordInput.value);
+      LS.setNumber(LS_KEYS.confettiDurationSeconds, getConfettiDurationSecondsValue());
+      if (activeGirlNameSelect.value) {
+        LS.setValue(LS_KEYS.activeGirlName, activeGirlNameSelect.value);
+      }
+      LS.setValue(LS_KEYS.controlMode, controlModeSelect.value);
+      LS.setNumber(LS_KEYS.sessionPhraseCount, getSessionPhraseCountValue());
+      updateStartSessionLink();
+      refreshStatus();
+      toast.textContent = 'Configuracion guardada en localStorage.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1600);
+    });
+
+    sessionPhraseCountInput.addEventListener('input', () => {
+      updateStartSessionLink();
+    });
+
+    enableDoneCooldownCheckbox.addEventListener('change', () => {
+      doneCooldownSecondsInput.disabled = !enableDoneCooldownCheckbox.checked;
+    });
+
+    enableTtsCheckbox.addEventListener('change', () => {
+      const enabled = enableTtsCheckbox.checked;
+      ttsVoiceSelect.disabled = !enabled || availableVoices.length === 0;
+      ttsRateInput.disabled = !enabled;
+      ttsPreviewTextInput.disabled = !enabled;
+      ttsPreviewBtn.disabled = !enabled;
+      ttsRepeatCooldownSecondsInput.disabled = !enabled;
+      hidePhraseWithHintsCheckbox.disabled = !enabled;
+      hidePhraseMaskCharsInput.disabled = !enabled;
+      revealPhrasePasswordInput.disabled = !enabled;
+      if (!enabled) {
+        hidePhraseWithHintsCheckbox.checked = false;
+      }
+    });
+
+    ttsPreviewBtn.addEventListener('click', () => {
+      speakPreviewText();
+    });
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.addEventListener('voiceschanged', () => {
+        loadVoices();
+        refreshStatus();
+      });
+    }
+
+    activeGirlNameSelect.addEventListener('change', () => {
+      renderCompletedPhrases();
+    });
+
+    clearCompletedBtn.addEventListener('click', () => {
+      const activeGirlName = activeGirlNameSelect.value;
+      if (!activeGirlName) return;
+
+      const progressState = getProgressState();
+      const girlProgress = progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
+
+      progressState[activeGirlName] = {
+        completedIndexes: [],
+        completedDatesByIndex: {},
+        currentIndex: girlProgress.currentIndex ?? null
+      };
+
+      LS.setValue(LS_KEYS.phraseProgress, progressState);
+      renderCompletedPhrases();
+      toast.textContent = 'Frases realizadas borradas solo para la nina activa.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1800);
+    });
+
+    resetProgressBtn.addEventListener('click', () => {
+      LS.setValue(LS_KEYS.phraseProgress, {});
+      renderCompletedPhrases();
+      toast.textContent = 'Progreso reseteado. Se vuelve a empezar con todas las frases.';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 1800);
+    });
+
+    loadVoices();
+    refreshStatus();
+    loadGirls();
+  </script>
+</body>
+</html>

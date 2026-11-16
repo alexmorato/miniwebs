@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frases Lara</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8a5c2 0%, #f7d794 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP NAV */
+    nav {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      color: #c0392b;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.95);
+      transform: scale(1.1);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    #counter {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #c0392b;
+      min-width: 80px;
+      text-align: center;
+      background: rgba(255,255,255,0.6);
+      border-radius: 20px;
+      padding: 6px 16px;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 1220px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    #frase {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #2c2c54;
+      transition: opacity 0.35s ease;
+    }
+
+    #frase.fade {
+      opacity: 0;
+    }
+
+    /* POPUP OVERLAY */
+    #popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .popup {
+      background: white;
+      border-radius: 20px;
+      padding: 36px 32px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+
+    .popup h2 {
+      font-size: 1.4rem;
+      color: #2c2c54;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      color: #555;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .popup-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary {
+      background: #e84393;
+      color: white;
+    }
+
+    .btn-primary:hover { background: #c0357a; }
+
+    .btn-secondary {
+      background: #eee;
+      color: #444;
+    }
+
+    .btn-secondary:hover { background: #ddd; }
+
+    .btn:active { transform: scale(0.96); }
+
+    #btn-done {
+      display: none;
+      background: #2ecc71;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    }
+
+    #btn-done:hover {
+      background: #27ae60;
+    }
+
+    #done-progress {
+      display: none;
+      background: rgba(255, 255, 255, 0.65);
+      color: #2f3542;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    #btn-repeat-tts {
+      display: none;
+      background: #3498db;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    }
+
+    #btn-reveal-phrase {
+      display: none;
+      background: #f39c12;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    }
+
+    #btn-admin-gear {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      color: #2f3542;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    #btn-admin-gear:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+
+    #btn-repeat-tts:disabled,
+    #btn-done:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #control-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 110;
+      padding: 20px;
+    }
+
+    #control-popup-overlay.open {
+      display: flex;
+    }
+
+    .question-popup {
+      max-width: 560px;
+      width: min(560px, 100%);
+    }
+
+    .question-popup p {
+      margin-bottom: 16px;
+    }
+
+    #question-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .question-btn {
+      border: 2px solid #dfe4ea;
+      background: #f8f9fb;
+      color: #2f3542;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.2s, border-color 0.2s;
+    }
+
+    .question-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .question-btn.selected-positive {
+      background: #d4efdf;
+      border-color: #27ae60;
+      color: #1e8449;
+    }
+
+    .question-btn.selected-negative {
+      background: #d4efdf;
+      border-color: #27ae60;
+      color: #1e8449;
+    }
+
+    #question-feedback {
+      min-height: 24px;
+      margin-bottom: 16px;
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    #completion-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 120;
+      padding: 20px;
+    }
+
+    #completion-popup-overlay.open {
+      display: flex;
+    }
+
+    #reveal-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 130;
+      padding: 20px;
+    }
+
+    #reveal-popup-overlay.open {
+      display: flex;
+    }
+
+    #admin-access-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 140;
+      padding: 20px;
+    }
+
+    #admin-access-popup-overlay.open {
+      display: flex;
+    }
+
+    #admin-password-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dfe4ea;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    #admin-access-feedback {
+      min-height: 24px;
+      margin-bottom: 14px;
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    #reveal-password-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dfe4ea;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    #reveal-feedback,
+    #revealed-phrase-text {
+      min-height: 24px;
+      margin-bottom: 14px;
+    }
+
+    #reveal-feedback {
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    #revealed-phrase-text {
+      color: #2c2c54;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    /* Wake lock indicator */
+    #wakelock-icon {
+      position: fixed;
+      bottom: 14px;
+      right: 16px;
+      font-size: 1.3rem;
+      opacity: 0.5;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button id="btn-admin-gear" type="button" title="Ir a admin">⚙️</button>
+
+  <!-- FULLSCREEN POPUP -->
+  <div id="popup-overlay">
+    <div class="popup">
+      <h2>🌟 Frases de Lara</h2>
+      <p>¿Quieres ver la app en pantalla completa?<br>La pantalla permanecerá activa mientras la usas.</p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-yes">Sí, pantalla completa</button>
+        <button class="btn btn-secondary" id="btn-no">No, gracias</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP NAV -->
+  <nav>
+    <button class="nav-btn" id="btn-prev" title="Anterior">&#8592;</button>
+    <span id="counter">1 / 1</span>
+    <button class="nav-btn" id="btn-next" title="Siguiente">&#8594;</button>
+    <button id="btn-done" type="button">Hecho</button>
+    <span id="done-progress">0/0</span>
+    <button id="btn-reveal-phrase" type="button">Ver frase</button>
+    <button id="btn-repeat-tts" type="button">Repetir voz</button>
+    <button class="nav-btn" id="btn-font-down" title="Reducir letra" style="font-size:1rem;font-weight:700;">A&#8315;</button>
+    <button class="nav-btn" id="btn-font-up" title="Agrandar letra" style="font-size:1rem;font-weight:700;">A&#8314;</button>
+  </nav>
+
+  <!-- PHRASE CARD -->
+  <main>
+    <div class="card">
+      <p id="frase">Cargando...</p>
+    </div>
+  </main>
+
+  <div id="control-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Antes de continuar</h2>
+      <p>Marca solo las acciones buenas que si vas a hacer.</p>
+      <div id="question-buttons"></div>
+      <p id="question-feedback"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-control-continue">Aceptar</button>
+        <button class="btn btn-secondary" id="btn-control-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="completion-popup-overlay">
+    <div class="popup">
+      <h2>Felicidades</h2>
+      <p>Has completado todas las frases de esta sesion.</p>
+    </div>
+  </div>
+
+  <div id="reveal-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Ver frase completa</h2>
+      <input id="reveal-password-input" type="password" placeholder="Introduce la contrasena" />
+      <p id="reveal-feedback"></p>
+      <p id="revealed-phrase-text"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-reveal-confirm">Ver frase</button>
+        <button class="btn btn-secondary" id="btn-reveal-close">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-access-popup-overlay">
+    <div class="popup question-popup">
+      <h2>Acceso a admin</h2>
+      <input id="admin-password-input" type="password" placeholder="Introduce la contrasena" />
+      <p id="admin-access-feedback"></p>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="btn-admin-access-confirm">Ir a admin</button>
+        <button class="btn btn-secondary" id="btn-admin-access-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <span id="wakelock-icon" title="Pantalla activa">🔆</span>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="ls.js"></script>
+  <script>
+    const DEFAULT_FONT_SIZE = 1.4;
+    const CONTROL_MODE_NAVIGATION = 'navigation';
+    const CONTROL_MODE_DONE = 'done';
+    let frases = [];
+    let sessionPhraseIndexes = [];
+    let preguntas = [];
+    let currentIndex = 0;
+    let activeGirlName = '';
+    let controlMode = CONTROL_MODE_NAVIGATION;
+    let wakeLock = null;
+    let fontSize = DEFAULT_FONT_SIZE;
+    let sessionTargetCount = null;
+    let sessionCompletedCount = 0;
+    let revealedPhraseIndex = null;
+    let celebrationAudioCtx = null;
+    let celebrationAudioIntervalId = null;
+    let celebrationAudioStopTimeoutId = null;
+    const selectedQuestions = new Set();
+    let currentQuestions = [];
+    let settings = {
+      forceUppercase: false,
+      enableDoneCooldown: false,
+      doneCooldownSeconds: 5,
+      questionCount: 3,
+      enableTts: false,
+      ttsVoiceURI: '',
+      ttsRate: 1,
+      ttsRepeatCooldownSeconds: 5,
+      hidePhraseWithHints: false,
+      hidePhraseMaskChars: '_',
+      confettiDurationSeconds: 5
+    };
+
+    function loadSettingsFromStorage() {
+      settings = {
+        forceUppercase: LS.getBool(LS_KEYS.forcePhraseUppercase, false),
+        enableDoneCooldown: LS.getBool(LS_KEYS.enableDoneCooldown, false),
+        doneCooldownSeconds: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.doneCooldownSeconds, 5))),
+        questionCount: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.questionCount, 3))),
+        enableTts: LS.getBool(LS_KEYS.enableTts, false),
+        ttsVoiceURI: LS.getValue(LS_KEYS.ttsVoiceURI, ''),
+        ttsRate: Math.min(2, Math.max(0.5, Number(LS.getNumber(LS_KEYS.ttsRate, 1)))),
+        ttsRepeatCooldownSeconds: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.ttsRepeatCooldownSeconds, 5))),
+        hidePhraseWithHints: LS.getBool(LS_KEYS.hidePhraseWithHints, false),
+        hidePhraseMaskChars: LS.getValue(LS_KEYS.hidePhraseMaskChars, '_'),
+        confettiDurationSeconds: Math.max(1, Math.floor(LS.getNumber(LS_KEYS.confettiDurationSeconds, 5)))
+      };
+
+      if (!settings.enableTts) {
+        settings.hidePhraseWithHints = false;
+      }
+
+      document.getElementById('btn-repeat-tts').style.display = settings.enableTts ? 'inline-block' : 'none';
+      document.getElementById('btn-reveal-phrase').style.display = settings.hidePhraseWithHints ? 'inline-block' : 'none';
+    }
+
+    function getProgressState() {
+      return LS.getValue(LS_KEYS.phraseProgress, {});
+    }
+
+    function getGirlProgress() {
+      const progressState = getProgressState();
+      return progressState[activeGirlName] || { completedIndexes: [], completedDatesByIndex: {}, currentIndex: null };
+    }
+
+    function setGirlProgress(nextGirlProgress) {
+      const progressState = getProgressState();
+      progressState[activeGirlName] = nextGirlProgress;
+      LS.setValue(LS_KEYS.phraseProgress, progressState);
+    }
+
+    function updateDoneButtonLabel() {
+      const doneButton = document.getElementById('btn-done');
+      const doneProgress = document.getElementById('done-progress');
+      doneButton.textContent = 'Hecho';
+
+      if (sessionPhraseIndexes.length > 0) {
+        doneProgress.textContent = `${sessionCompletedCount}/${sessionPhraseIndexes.length}`;
+        return;
+      }
+
+      doneProgress.textContent = '0/0';
+    }
+
+    function getCurrentPhraseText() {
+      return frases[currentIndex] || '';
+    }
+
+    function applyCaseToPhrase(text) {
+      return settings.forceUppercase ? text.toUpperCase() : text;
+    }
+
+    function maskPhraseWithHints(text) {
+      const maskChars = Array.from((settings.hidePhraseMaskChars || '_').replace(/\s+/g, ''));
+      const cycleChars = maskChars.length > 0 ? maskChars : ['_'];
+      const tokens = text.match(/\s+|[^\s]+/g) || [];
+      let wordCounter = 0;
+
+      return tokens.map((token) => {
+        if (/^\s+$/u.test(token)) {
+          return token;
+        }
+
+        const hasWordChars = /[\p{L}\p{N}]/u.test(token);
+        const currentMaskChar = cycleChars[wordCounter % cycleChars.length];
+        if (hasWordChars) {
+          wordCounter += 1;
+        }
+
+        let seenLetter = false;
+        return Array.from(token).map((char) => {
+          if (!/[\p{L}\p{N}]/u.test(char)) {
+            return char;
+          }
+
+          if (!seenLetter) {
+            seenLetter = true;
+            return char;
+          }
+
+          return currentMaskChar;
+        }).join('');
+      }).join('');
+    }
+
+    function getDisplayedPhraseText() {
+      const phraseText = applyCaseToPhrase(getCurrentPhraseText());
+      if (settings.hidePhraseWithHints && revealedPhraseIndex !== currentIndex) {
+        return maskPhraseWithHints(phraseText);
+      }
+      return phraseText;
+    }
+
+    function getFullPhraseText() {
+      return applyCaseToPhrase(getCurrentPhraseText());
+    }
+
+    function speakCurrentPhrase() {
+      if (!settings.enableTts || !('speechSynthesis' in window)) {
+        return;
+      }
+
+      const text = getCurrentPhraseText();
+      if (!text) return;
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = settings.ttsRate;
+
+      const selectedVoice = window.speechSynthesis
+        .getVoices()
+        .find((voice) => voice.voiceURI === settings.ttsVoiceURI);
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = activeGirlName === 'Naia' ? 'ca-ES' : 'es-ES';
+      }
+
+      window.speechSynthesis.speak(utterance);
+      startTtsRepeatCooldown();
+    }
+
+    function startTtsRepeatCooldown() {
+      if (!settings.enableTts) {
+        return;
+      }
+
+      const button = document.getElementById('btn-repeat-tts');
+      const baseLabel = 'Repetir voz';
+      let remaining = settings.ttsRepeatCooldownSeconds;
+      button.disabled = true;
+      button.textContent = `${baseLabel} (${remaining})`;
+
+      const intervalId = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+          clearInterval(intervalId);
+          button.disabled = false;
+          button.textContent = baseLabel;
+          return;
+        }
+
+        button.textContent = `${baseLabel} (${remaining})`;
+      }, 1000);
+    }
+
+    function startDoneCooldown() {
+      if (!settings.enableDoneCooldown || controlMode !== CONTROL_MODE_DONE) {
+        return;
+      }
+
+      const doneButton = document.getElementById('btn-done');
+      const doneProgress = document.getElementById('done-progress');
+      let remaining = settings.doneCooldownSeconds;
+      doneButton.disabled = true;
+      doneProgress.textContent = `${sessionCompletedCount}/${sessionPhraseIndexes.length} (${remaining}s)`;
+
+      const intervalId = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+          clearInterval(intervalId);
+          doneButton.disabled = false;
+          updateDoneButtonLabel();
+          return;
+        }
+
+        doneProgress.textContent = `${sessionCompletedCount}/${sessionPhraseIndexes.length} (${remaining}s)`;
+      }, 1000);
+    }
+
+    function getRequestedSessionCount() {
+      const url = new URL(window.location.href);
+      const paramCount = Number(url.searchParams.get('count'));
+      if (Number.isFinite(paramCount) && paramCount > 0) {
+        return Math.floor(paramCount);
+      }
+
+      return Math.max(1, Math.floor(LS.getNumber(LS_KEYS.sessionPhraseCount, 4)));
+    }
+
+    // --- Load JSON ---
+    async function loadFrases() {
+      try {
+        const res = await fetch('frases_lara.json');
+        const data = await res.json();
+        const grupos = getPhraseGroups(data);
+        const names = Object.keys(grupos);
+
+        if (names.length === 0) {
+          throw new Error('No hay ninas configuradas.');
+        }
+
+        activeGirlName = LS.getValue(LS_KEYS.activeGirlName, names[0]);
+        if (!names.includes(activeGirlName)) {
+          activeGirlName = names[0];
+          LS.setValue(LS_KEYS.activeGirlName, activeGirlName);
+        }
+
+        frases = grupos[activeGirlName] || [];
+        updateGirlTitle();
+        await loadQuestions();
+
+        if (frases.length === 0) {
+          throw new Error('La nina activa no tiene frases.');
+        }
+
+        prepareSession();
+
+        const savedProgress = getGirlProgress();
+        if (sessionPhraseIndexes.length > 0) {
+          const savedIndexIsInSession = sessionPhraseIndexes.includes(savedProgress.currentIndex);
+          currentIndex = savedIndexIsInSession ? savedProgress.currentIndex : sessionPhraseIndexes[0];
+        } else if (Number.isInteger(savedProgress.currentIndex) && savedProgress.currentIndex >= 0 && savedProgress.currentIndex < frases.length) {
+          currentIndex = savedProgress.currentIndex;
+        } else {
+          currentIndex = Math.floor(Math.random() * frases.length);
+        }
+        renderFrase();
+      } catch (e) {
+        document.getElementById('frase').textContent = 'Error al cargar las frases.';
+      }
+    }
+
+    async function loadQuestions() {
+      try {
+        const res = await fetch('preguntas.json');
+        const data = await res.json();
+        const grupos = getPhraseGroups(data);
+        preguntas = grupos[activeGirlName] || [];
+      } catch (error) {
+        preguntas = [];
+      }
+    }
+
+    function getPhraseGroups(data) {
+      if (data && data.ninas && typeof data.ninas === 'object') {
+        return data.ninas;
+      }
+
+      if (data && Array.isArray(data.frases)) {
+        return { Lara: data.frases };
+      }
+
+      return {};
+    }
+
+    function updateGirlTitle() {
+      if (activeGirlName) {
+        document.title = 'Frases ' + activeGirlName;
+      }
+    }
+
+    function prepareSession() {
+      const requestedCount = getRequestedSessionCount();
+      const completedIndexes = getGirlProgress().completedIndexes || [];
+      const pendingIndexes = frases
+        .map((_, index) => index)
+        .filter((index) => !completedIndexes.includes(index));
+      const sourceIndexes = pendingIndexes.length > 0 ? pendingIndexes : frases.map((_, index) => index);
+
+      sessionTargetCount = Math.min(requestedCount, sourceIndexes.length);
+      sessionPhraseIndexes = sourceIndexes.slice(0, sessionTargetCount);
+      sessionCompletedCount = 0;
+      updateDoneButtonLabel();
+    }
+
+    function getNextIndex() {
+      if (sessionPhraseIndexes.length === 0) {
+        return (currentIndex + 1) % frases.length;
+      }
+
+      const currentSessionPosition = sessionPhraseIndexes.indexOf(currentIndex);
+      if (currentSessionPosition === -1) {
+        return sessionPhraseIndexes[0];
+      }
+
+      const nextSessionPosition = (currentSessionPosition + 1) % sessionPhraseIndexes.length;
+      return sessionPhraseIndexes[nextSessionPosition];
+    }
+
+    // --- Render ---
+    function renderFrase(direction = 0) {
+      const el = document.getElementById('frase');
+      el.classList.add('fade');
+      setTimeout(() => {
+        el.textContent = getDisplayedPhraseText();
+        if (sessionPhraseIndexes.length > 0) {
+          const sessionPosition = sessionPhraseIndexes.indexOf(currentIndex);
+          document.getElementById('counter').textContent = `${sessionPosition + 1} / ${sessionPhraseIndexes.length}`;
+        } else {
+          document.getElementById('counter').textContent = `${currentIndex + 1} / ${frases.length}`;
+        }
+        persistCurrentIndex();
+        el.classList.remove('fade');
+
+        if (controlMode === CONTROL_MODE_DONE) {
+          startDoneCooldown();
+        }
+
+        if (settings.enableTts) {
+          speakCurrentPhrase();
+        }
+      }, 180);
+    }
+
+    function persistCurrentIndex() {
+      const girlProgress = getGirlProgress();
+      setGirlProgress({
+        completedIndexes: Array.isArray(girlProgress.completedIndexes) ? girlProgress.completedIndexes : [],
+        completedDatesByIndex: girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+          ? girlProgress.completedDatesByIndex
+          : {},
+        currentIndex
+      });
+    }
+
+    function markCurrentPhraseCompleted() {
+      const girlProgress = getGirlProgress();
+      const completedIndexes = Array.isArray(girlProgress.completedIndexes)
+        ? [...girlProgress.completedIndexes]
+        : [];
+      const completedDatesByIndex = girlProgress.completedDatesByIndex && typeof girlProgress.completedDatesByIndex === 'object'
+        ? { ...girlProgress.completedDatesByIndex }
+        : {};
+
+      if (!completedIndexes.includes(currentIndex)) {
+        completedIndexes.push(currentIndex);
+        completedIndexes.sort((a, b) => a - b);
+        completedDatesByIndex[currentIndex] = new Date().toISOString().slice(0, 10);
+      }
+
+      setGirlProgress({
+        completedIndexes,
+        completedDatesByIndex,
+        currentIndex
+      });
+
+      if (sessionPhraseIndexes.includes(currentIndex)) {
+        sessionCompletedCount += 1;
+        updateDoneButtonLabel();
+      }
+    }
+
+    function isSessionCompleted() {
+      return sessionPhraseIndexes.length > 0 && sessionCompletedCount >= sessionPhraseIndexes.length;
+    }
+
+    function showCompletionPopup() {
+      document.getElementById('completion-popup-overlay').classList.add('open');
+      const durationMs = settings.confettiDurationSeconds * 1000;
+      playCelebrationSound(durationMs);
+
+      if (typeof confetti === 'function') {
+        const startedAt = Date.now();
+
+        const intervalId = setInterval(() => {
+          const elapsed = Date.now() - startedAt;
+          if (elapsed >= durationMs) {
+            clearInterval(intervalId);
+            return;
+          }
+
+          confetti({
+            particleCount: Math.floor(12 + Math.random() * 18),
+            spread: Math.floor(50 + Math.random() * 70),
+            startVelocity: Math.floor(30 + Math.random() * 35),
+            decay: 0.93,
+            scalar: 0.8 + Math.random() * 0.6,
+            origin: {
+              x: Math.random(),
+              y: Math.random() * 0.65
+            }
+          });
+        }, 180);
+      }
+    }
+
+    function scheduleCelebrationMelody(audioCtx, startTime) {
+      const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 880.0, 1174.66];
+      let time = startTime;
+
+      notes.forEach((freq) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gain.gain.setValueAtTime(0.0001, time);
+        gain.gain.linearRampToValueAtTime(0.14, time + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(time);
+        osc.stop(time + 0.24);
+        time += 0.14;
+      });
+    }
+
+    function stopCelebrationSound() {
+      if (celebrationAudioIntervalId) {
+        clearInterval(celebrationAudioIntervalId);
+        celebrationAudioIntervalId = null;
+      }
+
+      if (celebrationAudioStopTimeoutId) {
+        clearTimeout(celebrationAudioStopTimeoutId);
+        celebrationAudioStopTimeoutId = null;
+      }
+
+      if (celebrationAudioCtx) {
+        celebrationAudioCtx.close();
+        celebrationAudioCtx = null;
+      }
+    }
+
+    function playCelebrationSound(durationMs) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+
+      stopCelebrationSound();
+
+      celebrationAudioCtx = new AudioCtx();
+      if (celebrationAudioCtx.state === 'suspended') {
+        celebrationAudioCtx.resume();
+      }
+
+      scheduleCelebrationMelody(celebrationAudioCtx, celebrationAudioCtx.currentTime);
+
+      // Re-launch melody blocks until confetti duration ends.
+      celebrationAudioIntervalId = setInterval(() => {
+        if (!celebrationAudioCtx) return;
+        scheduleCelebrationMelody(celebrationAudioCtx, celebrationAudioCtx.currentTime + 0.02);
+      }, 980);
+
+      celebrationAudioStopTimeoutId = setTimeout(() => {
+        stopCelebrationSound();
+      }, durationMs + 400);
+    }
+
+    // --- Navigation ---
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      revealedPhraseIndex = null;
+      currentIndex = (currentIndex - 1 + frases.length) % frases.length;
+      renderFrase(-1);
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      revealedPhraseIndex = null;
+      currentIndex = getNextIndex();
+      renderFrase(1);
+    });
+
+    document.getElementById('btn-done').addEventListener('click', () => {
+      if (frases.length === 0) return;
+      renderQuestionButtons();
+      document.getElementById('question-feedback').textContent = '';
+      document.getElementById('control-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-control-cancel').addEventListener('click', () => {
+      document.getElementById('control-popup-overlay').classList.remove('open');
+      document.getElementById('question-feedback').textContent = '';
+    });
+
+    document.getElementById('btn-control-continue').addEventListener('click', () => {
+      const validationError = getQuestionValidationError();
+
+      if (validationError) {
+        document.getElementById('question-feedback').textContent = validationError;
+        return;
+      }
+
+      document.getElementById('question-feedback').textContent = '';
+      markCurrentPhraseCompleted();
+      selectedQuestions.clear();
+      document.getElementById('control-popup-overlay').classList.remove('open');
+
+      if (isSessionCompleted()) {
+        showCompletionPopup();
+        return;
+      }
+
+      revealedPhraseIndex = null;
+      currentIndex = getNextIndex();
+      renderFrase(1);
+    });
+
+    document.getElementById('btn-reveal-phrase').addEventListener('click', () => {
+      document.getElementById('reveal-password-input').value = '';
+      document.getElementById('reveal-feedback').textContent = '';
+      document.getElementById('revealed-phrase-text').textContent = '';
+      document.getElementById('reveal-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-reveal-close').addEventListener('click', () => {
+      document.getElementById('reveal-popup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-reveal-confirm').addEventListener('click', () => {
+      const expectedPassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const enteredPassword = document.getElementById('reveal-password-input').value;
+
+      if (enteredPassword !== expectedPassword) {
+        document.getElementById('reveal-feedback').textContent = 'Contrasena incorrecta.';
+        document.getElementById('revealed-phrase-text').textContent = '';
+        return;
+      }
+
+      revealedPhraseIndex = currentIndex;
+      document.getElementById('reveal-popup-overlay').classList.remove('open');
+      document.getElementById('reveal-feedback').textContent = '';
+      document.getElementById('revealed-phrase-text').textContent = '';
+      document.getElementById('frase').textContent = getDisplayedPhraseText();
+    });
+
+    document.getElementById('btn-admin-gear').addEventListener('click', () => {
+      document.getElementById('admin-password-input').value = '';
+      document.getElementById('admin-access-feedback').textContent = '';
+      document.getElementById('admin-access-popup-overlay').classList.add('open');
+    });
+
+    document.getElementById('btn-admin-access-cancel').addEventListener('click', () => {
+      document.getElementById('admin-access-popup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('btn-admin-access-confirm').addEventListener('click', () => {
+      const expectedPassword = LS.getValue(LS_KEYS.revealPhrasePassword, '');
+      const enteredPassword = document.getElementById('admin-password-input').value;
+
+      if (enteredPassword !== expectedPassword) {
+        document.getElementById('admin-access-feedback').textContent = 'Contrasena incorrecta.';
+        return;
+      }
+
+      window.location.href = 'admin.html';
+    });
+
+    document.getElementById('btn-repeat-tts').addEventListener('click', () => {
+      speakCurrentPhrase();
+    });
+
+    function renderQuestionButtons() {
+      const container = document.getElementById('question-buttons');
+      container.innerHTML = '';
+      selectedQuestions.clear();
+      currentQuestions = [];
+
+      if (preguntas.length === 0) {
+        const fallback = document.createElement('p');
+        fallback.textContent = 'No hay preguntas configuradas para esta nina.';
+        container.appendChild(fallback);
+        return;
+      }
+
+      const shuffled = [...preguntas];
+      for (let i = shuffled.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      currentQuestions = shuffled.slice(0, Math.min(settings.questionCount, shuffled.length));
+
+      currentQuestions.forEach((pregunta, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'question-btn';
+        button.textContent = pregunta.texto;
+        button.addEventListener('click', () => {
+          if (selectedQuestions.has(index)) {
+            selectedQuestions.delete(index);
+          } else {
+            selectedQuestions.add(index);
+          }
+
+          syncQuestionButtons();
+          document.getElementById('question-feedback').textContent = '';
+        });
+        container.appendChild(button);
+      });
+
+      syncQuestionButtons();
+    }
+
+    function syncQuestionButtons() {
+      const buttons = document.querySelectorAll('.question-btn');
+      buttons.forEach((button, index) => {
+        const pregunta = currentQuestions[index];
+        button.classList.remove('selected-positive', 'selected-negative');
+
+        if (!selectedQuestions.has(index)) {
+          return;
+        }
+
+        if (pregunta.tipo === 'positivo') {
+          button.classList.add('selected-positive');
+        } else {
+          button.classList.add('selected-negative');
+        }
+      });
+    }
+
+    function getQuestionValidationError() {
+      for (const index of selectedQuestions) {
+        const pregunta = currentQuestions[index];
+        if (pregunta && pregunta.tipo === 'negativo') {
+          return 'Seguro que vas a hacer: ' + pregunta.texto;
+        }
+      }
+
+      const positiveQuestion = currentQuestions.find((pregunta, index) => {
+        return pregunta.tipo === 'positivo' && !selectedQuestions.has(index);
+      });
+
+      if (positiveQuestion) {
+        return 'Seguro que no vas a hacer: ' + positiveQuestion.texto;
+      }
+
+      return '';
+    }
+
+    // --- Font size ---
+    document.getElementById('btn-font-up').addEventListener('click', () => {
+      fontSize = Math.min(fontSize + 0.2, 4);
+      applyFontSize();
+    });
+
+    document.getElementById('btn-font-down').addEventListener('click', () => {
+      fontSize = Math.max(fontSize - 0.2, 0.6);
+      applyFontSize();
+    });
+
+    function applyFontSize() {
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+      LS.setNumber(LS_KEYS.fontSizeRem, fontSize);
+    }
+
+    function restoreFontSize() {
+      fontSize = LS.getNumber(LS_KEYS.fontSizeRem, DEFAULT_FONT_SIZE);
+      document.getElementById('frase').style.fontSize = fontSize + 'rem';
+    }
+
+    function applyFontControlVisibility() {
+      const showControls = LS.getBool(LS_KEYS.showFontControls, true);
+      document.getElementById('btn-font-up').style.display = showControls ? 'flex' : 'none';
+      document.getElementById('btn-font-down').style.display = showControls ? 'flex' : 'none';
+    }
+
+    function applyControlMode() {
+      controlMode = LS.getValue(LS_KEYS.controlMode, CONTROL_MODE_NAVIGATION);
+      const isDoneMode = controlMode === CONTROL_MODE_DONE;
+
+      document.getElementById('btn-prev').style.display = isDoneMode ? 'none' : 'flex';
+      document.getElementById('btn-next').style.display = isDoneMode ? 'none' : 'flex';
+      document.getElementById('counter').style.display = isDoneMode ? 'none' : 'inline-block';
+      document.getElementById('btn-done').style.display = isDoneMode ? 'inline-block' : 'none';
+      document.getElementById('done-progress').style.display = isDoneMode ? 'inline-block' : 'none';
+    }
+
+    // Swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      if (controlMode === CONTROL_MODE_DONE) {
+        return;
+      }
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        if (dx < 0) document.getElementById('btn-next').click();
+        else document.getElementById('btn-prev').click();
+      }
+    }, { passive: true });
+
+    // --- Wake Lock ---
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          document.getElementById('wakelock-icon').style.display = 'inline';
+          wakeLock.addEventListener('release', () => {
+            document.getElementById('wakelock-icon').style.display = 'none';
+          });
+        } catch (err) {
+          console.warn('Wake lock no disponible:', err);
+        }
+      }
+    }
+
+    // Re-acquire wake lock when page becomes visible again
+    document.addEventListener('visibilitychange', async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    });
+
+    // --- Fullscreen popup ---
+    document.getElementById('btn-yes').addEventListener('click', async () => {
+      document.getElementById('popup-overlay').style.display = 'none';
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.warn('Fullscreen no disponible:', e);
+      }
+      await requestWakeLock();
+    });
+
+    document.getElementById('btn-no').addEventListener('click', () => {
+      document.getElementById('popup-overlay').style.display = 'none';
+    });
+
+    // --- Init ---
+    loadSettingsFromStorage();
+    applyControlMode();
+    applyFontControlVisibility();
+    restoreFontSize();
+    loadFrases();
+  </script>
+</body>
+</html>
