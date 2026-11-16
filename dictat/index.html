@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#356557">
+  <title>Mi dictado</title>
+  <link rel="stylesheet" href="dictat.css">
+  <script src="dictat.js" defer></script>
+  <script src="player.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Mi dictado<span>Escucha, escribe y aprende</span></a>
+    <a class="nav-link" href="admin.html">Administración</a>
+  </header>
+  <main class="player-layout">
+    <section class="card player-card" aria-labelledby="dictation-title">
+      <span class="eyebrow">UN POQUITO CADA VEZ</span>
+      <h1 id="dictation-title">Prepara tu lápiz</h1>
+      <p class="lead" id="intro">Escucha con calma. Tú decides cuándo seguir.</p>
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div id="error" class="notice error" role="alert" hidden></div>
+      <div class="progress-label"><span id="progress-label">Sin empezar</span><span id="language-label"></span></div>
+      <progress id="progress" value="0" max="1" aria-label="Progreso del dictado"></progress>
+      <div class="playback-grid">
+        <button id="next" class="button primary" disabled><span aria-hidden="true">▶</span> <span id="next-label">Empezar</span></button>
+        <button id="previous" class="button secondary" disabled><span aria-hidden="true">←</span> Fragmento anterior</button>
+        <button id="repeat" class="button secondary" disabled><span aria-hidden="true">↻</span> Repetir lo último</button>
+        <button id="review" class="button secondary" disabled><span aria-hidden="true">↶</span> Repasar hasta aquí</button>
+      </div>
+      <button id="stop" class="button stop-button" disabled>■ Parar la voz</button>
+      <p id="playback-status" class="playback-status" role="status" aria-live="polite">Aquí no se muestra el texto. ¡El reto es escucharlo!</p>
+      <div class="card-footer">
+        <button id="restart" class="text-button" disabled>Volver a empezar</button>
+        <span>Puedes repetir todas las veces que quieras.</span>
+      </div>
+    </section>
+    <p class="footnote">Sin reloj, sin prisas. Un fragmento, una pequeña victoria.</p>
+  </main>
+</body>
+</html>
